@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>学校选修课抢课脚本的简易创建 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言刚到中午13:00便是学校内数以万计的人开始准备抢课，这让第一次抢课的我显得有些手足无措，在其他同学的猛烈攻势下，网课瞬间被掏空了，随即便是那些性价比较高的学科。而我只能当一个🐀人，捡剩下没人,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">学校选修课抢课脚本的简易创建</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">学校选修课抢课脚本的简易创建</h1>
+        <div class="stuff">
+            <span>十二月 23, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>刚到中午<code>13:00</code>便是学校内数以万计的人开始准备抢课，这让第一次抢课的我显得有些手足无措，在其他同学的猛烈攻势下，网课瞬间被掏空了，随即便是那些性价比较高的学科。而我只能当一个🐀人，捡剩下没人要的课程。一番折腾下来只拿到了高数进阶与数学建模….让本来是学工科的我，又多了一些工科….为了改变两个都是工科的现状，我决定用自动化脚本进行捡漏，抢课？都没课了只能捡漏，打算<del>（偷交易课程人的屁股）</del>顺便实践一下学习的<code>requests</code>库的使用。于是在得到学长前代的捡漏脚本后对其进行了部分升级。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>在升级之前，我们可以得知网页选课都是发送请求包给后台，后台判定人是否已经满了，之后再决定你是否选课成功。</p>
+<p>对此我们则使用<code>requests</code>对学校网页端请求得到其对应的<code>Html</code>代码，之后再使用正则表达式找到对应关键部分，进行搜索，判断哪些课程可以捡漏，之后发送对应的请求包，完成此次捡漏<del>（偷屁股）</del>的工作。</p>
+<hr>
+<p><strong>实现代码如下</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">PD</span>(<span class="params"><span class="built_in">id</span>, co, pd</span>):</span></span><br><span class="line">    url = <span class="string">&quot;http://jwgl.cuit.edu.cn/eams/stdElectCourse!batchOperator.action?profileId=&quot;</span> + pd</span><br><span class="line">    op = &#123;</span><br><span class="line">        <span class="string">&quot;optype&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">        <span class="string">&quot;operator0&quot;</span>: <span class="built_in">id</span> + <span class="string">&quot;:true:0&quot;</span>,</span><br><span class="line">        <span class="string">&quot;lesson0&quot;</span>: <span class="built_in">id</span>,</span><br><span class="line">        <span class="string">&quot;schLessonGroup_&quot;</span> + <span class="built_in">id</span>: <span class="string">&quot;undefined&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;cookie&quot;</span>: co,</span><br><span class="line">        <span class="string">&quot;X-Requested-With&quot;</span>: <span class="string">&quot;XMLHttpRequest&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://jwgl.cuit.edu.cn/eams/stdElectCourse!batchOperator.action?profileId=&quot;</span> + pd,</span><br><span class="line">        <span class="string">&quot;user-agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.0 Safari/537.36 Edg/84.0.521.0&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    res = requests.post(url=url, headers=headers, data=op, timeout=<span class="number">5</span>, allow_redirects=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># print(res.text)</span></span><br><span class="line">    ret = re.search(<span class="string">r&quot;margin:auto;\&quot;&gt;\n\t\t\t\t(.*)&lt;\/br&gt;&quot;</span>, res.text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;请不要过快点击&quot;</span> <span class="keyword">in</span> res.text:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Too Fast&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(ret.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    co = <span class="built_in">input</span>(<span class="string">&quot;cookie?&quot;</span>)</span><br><span class="line">    <span class="built_in">id</span> = [<span class="string">&#x27;74017&#x27;</span>]</span><br><span class="line">    pd = <span class="string">&#x27;3016&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建线程池</span></span><br><span class="line">    <span class="keyword">with</span> ThreadPoolExecutor(<span class="number">50</span>) <span class="keyword">as</span> t:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">            t.submit(PD, <span class="built_in">id</span>=<span class="built_in">id</span>, co=co, pd=pd)</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>由于不会验证码绕过的菜鸡，只能自己手动抓取<code>Cookie</code>输入来对其发起<code>Post</code>请求，达到绕过登录的问题。同时加入了线程池，实现对该线程循环请求。（实际上还是单线程，任务链接只有一个）</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
