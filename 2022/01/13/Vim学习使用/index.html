@@ -10,11 +10,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="Vim 模式介绍Vim 具有 6 种基本模式和 5 种派生模式，这里只简单介绍下 6 种基本模式：
+    <meta name="description" content="目录 ：
+[TOC]
+
+Vim 模式介绍Vim 具有 6 种基本模式和 5 种派生模式，这里只简单介绍下 6 种基本模式：
 
 普通模式(Normal mode)
 
-在普通模式中，用的编辑器命令，比如移动光标，删除文本等等。,"> 
+在普通模式中，用的编辑器命令，比如,"> 
     <meta name="author" content="John Doe"> 
     <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -54,7 +57,10 @@
 
         </div>
         <div class="content markdown">
-            <h2 id="Vim-模式介绍"><a href="#Vim-模式介绍" class="headerlink" title="Vim 模式介绍"></a>Vim 模式介绍</h2><p>Vim 具有 6 种基本模式和 5 种派生模式，这里只简单介绍下 6 种基本模式：</p>
+            <p><strong>目录 ：</strong></p>
+<p>[TOC]</p>
+<hr>
+<h2 id="Vim-模式介绍"><a href="#Vim-模式介绍" class="headerlink" title="Vim 模式介绍"></a>Vim 模式介绍</h2><p>Vim 具有 6 种基本模式和 5 种派生模式，这里只简单介绍下 6 种基本模式：</p>
 <ul>
 <li>普通模式(Normal mode)</li>
 </ul>
@@ -345,7 +351,7 @@
 <td>向前搜索&lt;字母&gt;并跳转到第一个匹配位置之后的一个字母(不常用)</td>
 </tr>
 </tbody></table>
-<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2><h4 id="复制及粘贴文本"><a href="#复制及粘贴文本" class="headerlink" title="复制及粘贴文本"></a>复制及粘贴文本</h4><ul>
+<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2><h3 id="复制及粘贴文本"><a href="#复制及粘贴文本" class="headerlink" title="复制及粘贴文本"></a>复制及粘贴文本</h3><ul>
 <li>普通模式中使用 <code>y</code> 复制</li>
 <li>普通模式中，<code>yy</code> 复制游标所在的整行（<code>3yy</code> 表示复制 3 行）</li>
 <li>普通模式中，<code>y^</code> 复制至行首，或 <code>y0</code>。不含光标所在处字符。</li>
@@ -358,9 +364,9 @@
 <li>普通模式中，<code>p</code>(小写)代表粘贴至光标后（下）</li>
 <li>普通模式中，<code>P</code>(大写)代表粘贴至光标前（上）</li>
 </ul>
-<h4 id="剪切及粘贴"><a href="#剪切及粘贴" class="headerlink" title="剪切及粘贴"></a>剪切及粘贴</h4><p>其实前面讲得 <code>dd</code> 删除命令就是剪切，你每次 <code>dd</code> 删除文档内容后，便可以使用 <code>p</code> 来粘贴，也这一点可以让我们实现一个很爽快的功能——交换上下行。</p>
+<h3 id="剪切及粘贴"><a href="#剪切及粘贴" class="headerlink" title="剪切及粘贴"></a>剪切及粘贴</h3><p>其实前面讲得 <code>dd</code> 删除命令就是剪切，你每次 <code>dd</code> 删除文档内容后，便可以使用 <code>p</code> 来粘贴，也这一点可以让我们实现一个很爽快的功能——交换上下行。</p>
 <p><code>ddp</code>即实现了快速交换光标所在行与它下面的行。</p>
-<h2 id="字符的替换及撤销-Undo-操作"><a href="#字符的替换及撤销-Undo-操作" class="headerlink" title="字符的替换及撤销(Undo 操作)"></a>字符的替换及撤销(Undo 操作)</h2><h4 id="替换和撤销-Undo-命令"><a href="#替换和撤销-Undo-命令" class="headerlink" title="替换和撤销(Undo)命令"></a>替换和撤销(Undo)命令</h4><p>替换和 Undo 命令都是针对普通模式下的操作：</p>
+<h2 id="字符的替换及撤销-Undo-操作"><a href="#字符的替换及撤销-Undo-操作" class="headerlink" title="字符的替换及撤销(Undo 操作)"></a>字符的替换及撤销(Undo 操作)</h2><h3 id="替换和撤销-Undo-命令"><a href="#替换和撤销-Undo-命令" class="headerlink" title="替换和撤销(Undo)命令"></a>替换和撤销(Undo)命令</h3><p>替换和 Undo 命令都是针对普通模式下的操作：</p>
 <table>
 <thead>
 <tr>
@@ -405,19 +411,19 @@
 <td>redo，即撤销 undo 的操作</td>
 </tr>
 </tbody></table>
-<h2 id="快速缩进"><a href="#快速缩进" class="headerlink" title="快速缩进"></a>快速缩进</h2><h4 id="使用命令进行快速调整缩进操作"><a href="#使用命令进行快速调整缩进操作" class="headerlink" title="使用命令进行快速调整缩进操作"></a>使用命令进行快速调整缩进操作</h4><ul>
+<h2 id="快速缩进"><a href="#快速缩进" class="headerlink" title="快速缩进"></a>快速缩进</h2><h3 id="使用命令进行快速调整缩进操作"><a href="#使用命令进行快速调整缩进操作" class="headerlink" title="使用命令进行快速调整缩进操作"></a>使用命令进行快速调整缩进操作</h3><ul>
 <li>普通模式下输入 <code>&gt;&gt;</code> 整行将向右缩进</li>
 <li>普通模式下输入 <code>&lt;&lt;</code> 整行向左回退</li>
 <li>普通模式下输入 <code>:</code> 进入命令行模式下对 <code>shiftwidth</code> 值进行设置可以控制缩进和回退的字符数</li>
 </ul>
-<h4 id="shiftwidth-命令"><a href="#shiftwidth-命令" class="headerlink" title="shiftwidth 命令"></a>shiftwidth 命令</h4><p><code>shiftwidth</code> 命令是指上一节 <code>&gt;&gt;</code> 命令产生的缩进（可以简写成<code>sw</code>），普通模式下输入 <code>:</code> 进入命令行模式下对 <code>shiftwidth</code> 值进行设置可以控制缩进和回退的字符数。</p>
+<h3 id="shiftwidth-命令"><a href="#shiftwidth-命令" class="headerlink" title="shiftwidth 命令"></a>shiftwidth 命令</h3><p><code>shiftwidth</code> 命令是指上一节 <code>&gt;&gt;</code> 命令产生的缩进（可以简写成<code>sw</code>），普通模式下输入 <code>:</code> 进入命令行模式下对 <code>shiftwidth</code> 值进行设置可以控制缩进和回退的字符数。</p>
 <p>获取目前的设定值：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:<span class="built_in">set</span> shiftwidth?</span><br></pre></td></tr></table></figure>
 
 <p>设置缩进为 10 个字符：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:<span class="built_in">set</span> shiftwidth=10</span><br></pre></td></tr></table></figure>
 
-<h4 id="调整文本位置"><a href="#调整文本位置" class="headerlink" title="调整文本位置"></a>调整文本位置</h4><p>命令行模式下输入 <code>:ce</code>(center)命令使本行内容居中：</p>
+<h3 id="调整文本位置"><a href="#调整文本位置" class="headerlink" title="调整文本位置"></a>调整文本位置</h3><p>命令行模式下输入 <code>:ce</code>(center)命令使本行内容居中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:ce</span><br></pre></td></tr></table></figure>
 
 <p>命令行模式下输入 <code>:ri</code>(right)命令使本行文本靠右：</p>
@@ -426,15 +432,15 @@
 <p>命令行模式下输入 <code>le</code>(left)命令使本行内容靠左：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:le</span><br></pre></td></tr></table></figure>
 
-<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><h4 id="快速查找"><a href="#快速查找" class="headerlink" title="快速查找"></a>快速查找</h4><p>普通模式下输入 <code>/</code> 然后键入需要查找的字符串，按回车后就会进行查找。<code>?</code> 与<code>/</code> 功能相同，只不过 <code>?</code> 是向上而 <code>/</code> 是向下查找。</p>
+<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><h3 id="快速查找"><a href="#快速查找" class="headerlink" title="快速查找"></a>快速查找</h3><p>普通模式下输入 <code>/</code> 然后键入需要查找的字符串，按回车后就会进行查找。<code>?</code> 与<code>/</code> 功能相同，只不过 <code>?</code> 是向上而 <code>/</code> 是向下查找。</p>
 <p>进入查找之后，输入 <code>n</code> 和 <code>N</code> 可以继续查找。<code>n</code> 是查找下一个内容，<code>N</code> 查找上一个内容。</p>
-<h4 id="高级查找"><a href="#高级查找" class="headerlink" title="高级查找"></a>高级查找</h4><ul>
+<h3 id="高级查找"><a href="#高级查找" class="headerlink" title="高级查找"></a>高级查找</h3><ul>
 <li>普通模式下输入 <code>\*</code> 寻找游标所在处的单词</li>
 <li>普通模式下输入 <code>\#</code> 同上，但 <code>\#</code> 是向前（上）找，<code>\*</code> 则是向后（下）找</li>
 <li>普通模式下输入 <code>g\*</code> 同 <code>\*</code>，但部分符合该单词即可</li>
 <li>普通模式下输入 <code>g\#</code> 同 <code>\#</code>，但部分符合该单词即可</li>
 </ul>
-<h2 id="多文件编辑"><a href="#多文件编辑" class="headerlink" title="多文件编辑"></a>多文件编辑</h2><h4 id="使用-vim-编辑多个文件"><a href="#使用-vim-编辑多个文件" class="headerlink" title="使用 vim 编辑多个文件"></a>使用 vim 编辑多个文件</h4><p>编辑多个文件有两种形式，一种是在进入 vim 前使用的参数就是多个文件。另一种就是进入 vim 后再编辑其他的文件。 同时创建两个新文件并编辑</p>
+<h2 id="多文件编辑"><a href="#多文件编辑" class="headerlink" title="多文件编辑"></a>多文件编辑</h2><h3 id="使用-vim-编辑多个文件"><a href="#使用-vim-编辑多个文件" class="headerlink" title="使用 vim 编辑多个文件"></a>使用 vim 编辑多个文件</h3><p>编辑多个文件有两种形式，一种是在进入 vim 前使用的参数就是多个文件。另一种就是进入 vim 后再编辑其他的文件。 同时创建两个新文件并编辑</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim 1.txt 2.txt</span><br></pre></td></tr></table></figure>
 
 <p>默认进入<code>1.txt</code>文件的编辑界面</p>
@@ -442,7 +448,7 @@
 <li>命令行模式下输入 <code>:n</code> 编辑 2.txt 文件，可以加 <code>!</code> 即 <code>:n!</code> 强制切换，之前一个文件的输入没有保存，仅仅切换到另一个文件</li>
 <li>命令行模式下输入 <code>:N</code> 编辑 1.txt 文件，可以加 <code>!</code> 即 <code>:N!</code> 强制切换，之前文件内的输入没有保存，仅仅是切换到另一个文件</li>
 </ul>
-<h4 id="进入-vim-后打开新文件"><a href="#进入-vim-后打开新文件" class="headerlink" title="进入 vim 后打开新文件"></a>进入 vim 后打开新文件</h4><ul>
+<h3 id="进入-vim-后打开新文件"><a href="#进入-vim-后打开新文件" class="headerlink" title="进入 vim 后打开新文件"></a>进入 vim 后打开新文件</h3><ul>
 <li>命令行模式下输入<code>:e 3.txt</code> 打开新文件 3.txt</li>
 <li>命令行模式下输入<code>:e#</code> 回到前一个文件</li>
 <li>命令行模式下输入<code>:ls</code>可以列出以前编辑过的文档</li>
@@ -452,7 +458,7 @@
 <li>命令行模式下输入<code>:f</code> 显示正在编辑的文件名</li>
 <li>命令行模式下输入<code>:f new.txt</code>，改变正在编辑的文件名字为 new.txt</li>
 </ul>
-<h4 id="恢复文件"><a href="#恢复文件" class="headerlink" title="恢复文件"></a>恢复文件</h4><p>如果因为断电，终端意外关闭等原因造成文档没有保存，可以采用恢复方式。</p>
+<h3 id="恢复文件"><a href="#恢复文件" class="headerlink" title="恢复文件"></a>恢复文件</h3><p>如果因为断电，终端意外关闭等原因造成文档没有保存，可以采用恢复方式。</p>
 <p>vim 在编辑的时候会自动在当前文件目录下生成一个交换文件，一般以 <code>&lt;filename&gt;.swp</code> 的格式保存，如果有多个版本的交换文件，还可能是 <code>.swn</code>，<code>.swm</code> 等字母。注意这个交换文件的更新不是实时的，因为实时的更新会占用磁盘，影响系统其他正常进程的速度。</p>
 <p>当 vim 意外终止且没有保存已编辑的内容时，可以使用交换文件对文件进行恢复，注意需要在编辑这个文件的地方进行编辑，因为交换文件默认在编辑的目录生成。</p>
 <p>例如假设 <code>1.txt</code> 意外关闭，我们可以输入 <code>vim</code> 然后输入 <code>:recover 1.txt</code>。</p>
@@ -461,14 +467,14 @@
 <p>或者输入 <code>vim -r</code> 后直接选择用于恢复的文档的交换文件即可：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim -r 1.txt</span><br></pre></td></tr></table></figure>
 
-<h2 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h2><h4 id="可视模式命令简介"><a href="#可视模式命令简介" class="headerlink" title="可视模式命令简介"></a>可视模式命令简介</h4><ul>
+<h2 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h2><h3 id="可视模式命令简介"><a href="#可视模式命令简介" class="headerlink" title="可视模式命令简介"></a>可视模式命令简介</h3><ul>
 <li>在普通模式下输入 <code>v</code>（小写），进入字符选择模式，就可以移动光标，光标走过的地方就会选取。再次按下 v 后就会取消选取。</li>
 <li>在普通模式下输入 <code>Shift+v</code>（小写），进入行选择模式，按下 V 之后就会把整行选取，您可以上下移动光标选更多的行，同样，再按一次 <code>Shift+v</code> 就可以取消选取。</li>
 <li>在普通模式下输入 <code>Ctrl+v</code>（小写），这是区域选择模式，可以进行矩形区域选择，再按一次 <code>Ctrl+v</code> 取消选取。</li>
 <li>在可视模式下输入 <code>d</code> 删除选取区域内容</li>
 <li>在可视模式下输入 <code>y</code> 复制选取区域内容</li>
 </ul>
-<h2 id="视窗操作"><a href="#视窗操作" class="headerlink" title="视窗操作"></a>视窗操作</h2><h4 id="视窗操作简介"><a href="#视窗操作简介" class="headerlink" title="视窗操作简介"></a>视窗操作简介</h4><p>vim 可以在一个界面里打开多个窗口进行编辑，这些编辑窗口称为 vim 的视窗。 打开方法有很多种，例如可以使用在命令行模式下输入 <code>:new</code> 打开一个新的 vim 视窗，并进入视窗编辑一个新文件（普通模式下输入 <code>Ctrl+w</code> 也可以），除了 <code>:new</code> 命令，下述列举的多种方法也可以在命令模式或普通模式下打开新的视窗：</p>
+<h2 id="视窗操作"><a href="#视窗操作" class="headerlink" title="视窗操作"></a>视窗操作</h2><h3 id="视窗操作简介"><a href="#视窗操作简介" class="headerlink" title="视窗操作简介"></a>视窗操作简介</h3><p>vim 可以在一个界面里打开多个窗口进行编辑，这些编辑窗口称为 vim 的视窗。 打开方法有很多种，例如可以使用在命令行模式下输入 <code>:new</code> 打开一个新的 vim 视窗，并进入视窗编辑一个新文件（普通模式下输入 <code>Ctrl+w</code> 也可以），除了 <code>:new</code> 命令，下述列举的多种方法也可以在命令模式或普通模式下打开新的视窗：</p>
 <ul>
 <li>命令行模式下输入 <code>:sp 1.txt</code> 打开新的水平分屏视窗来编辑 1.txt</li>
 <li>命令行模式下输入 <code>:vsp 2.txt</code> 打开新的垂直分屏视窗来编辑 2.txt</li>
@@ -487,7 +493,7 @@
 <li>普通模式下 <code>Ctrl+w -</code> 减小视窗的高度</li>
 <li>普通模式下 <code>Ctrl+w +</code> 增加视窗的高度</li>
 </ul>
-<h2 id="文档加密"><a href="#文档加密" class="headerlink" title="文档加密"></a>文档加密</h2><h4 id="创建加密文档"><a href="#创建加密文档" class="headerlink" title="创建加密文档"></a>创建加密文档</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim -x file1</span><br></pre></td></tr></table></figure>
+<h2 id="文档加密"><a href="#文档加密" class="headerlink" title="文档加密"></a>文档加密</h2><h3 id="创建加密文档"><a href="#创建加密文档" class="headerlink" title="创建加密文档"></a>创建加密文档</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim -x file1</span><br></pre></td></tr></table></figure>
 
 <p>输入您的密码，确认密码，这样在下一次打开时，vim 就会要求你输入密码。</p>
 <h2 id="在-vim-执行外部命令"><a href="#在-vim-执行外部命令" class="headerlink" title="在 vim 执行外部命令"></a>在 vim 执行外部命令</h2><p>在命令行模式中输入 <code>!</code> 可以执行外部的 shell 命令。</p>
@@ -496,20 +502,20 @@
 <li><code>:!rm FILENAME</code> 用于删除名为 FILENAME 的文件</li>
 <li><code>:w FILENAME</code> 可将当前 VIM 中正在编辑的文件另存为 FILENAME 文件</li>
 </ul>
-<h2 id="帮助系统"><a href="#帮助系统" class="headerlink" title="帮助系统"></a>帮助系统</h2><h4 id="vim-中的查看帮助"><a href="#vim-中的查看帮助" class="headerlink" title="vim 中的查看帮助"></a>vim 中的查看帮助</h4><ul>
+<h2 id="帮助系统"><a href="#帮助系统" class="headerlink" title="帮助系统"></a>帮助系统</h2><h3 id="vim-中的查看帮助"><a href="#vim-中的查看帮助" class="headerlink" title="vim 中的查看帮助"></a>vim 中的查看帮助</h3><ul>
 <li>普通模式下按 <code>F1</code> 打开 <code>vim</code> 自己预设的帮助文档</li>
 <li>命令行模式下输入 <code>:h shiftwidth</code> 打开名为 <code>shiftwidth</code> 的帮助文件</li>
 <li>命令行模式下输入 <code>:ver</code> 显示版本及参数</li>
 </ul>
-<h2 id="功能设定"><a href="#功能设定" class="headerlink" title="功能设定"></a>功能设定</h2><h4 id="vim-的功能设定"><a href="#vim-的功能设定" class="headerlink" title="vim 的功能设定"></a>vim 的功能设定</h4><p>可以在编辑文件的时候进行功能设定，如命令行模式下输入 <code>:set nu</code>（显示行数），设定值退出 vim 后不会保存。要永久保存配置需要修改 vim 配置文件。</p>
+<h2 id="功能设定"><a href="#功能设定" class="headerlink" title="功能设定"></a>功能设定</h2><h3 id="vim-的功能设定"><a href="#vim-的功能设定" class="headerlink" title="vim 的功能设定"></a>vim 的功能设定</h3><p>可以在编辑文件的时候进行功能设定，如命令行模式下输入 <code>:set nu</code>（显示行数），设定值退出 vim 后不会保存。要永久保存配置需要修改 vim 配置文件。</p>
 <p>vim 的配置文件 <code>~/.vimrc</code>（实验楼环境中配置文件在 <code>/etc/vim/vimrc</code>），可以打开文件进行修改，不过务必小心不要影响 vim 正常使用。</p>
-<h4 id="获取目前的设定"><a href="#获取目前的设定" class="headerlink" title="获取目前的设定"></a>获取目前的设定</h4><ul>
+<h3 id="获取目前的设定"><a href="#获取目前的设定" class="headerlink" title="获取目前的设定"></a>获取目前的设定</h3><ul>
 <li>命令行模式下输入 <code>:set</code> 或者 <code>:se</code> 显示所有修改过的配置</li>
 <li>命令行模式下输入 <code>:set all</code> 显示所有的设定值</li>
 <li>命令行模式下输入 <code>:set &lt;option&gt;?</code> 显示 option 的设定值</li>
 <li>命令行模式下输入 <code>:set nooption</code> 取消当前设定值</li>
 </ul>
-<h4 id="set-功能的说明"><a href="#set-功能的说明" class="headerlink" title="set 功能的说明"></a>set 功能的说明</h4><ul>
+<h3 id="set-功能的说明"><a href="#set-功能的说明" class="headerlink" title="set 功能的说明"></a>set 功能的说明</h3><ul>
 <li>命令行模式下输入 <code>:set autoindent(ai)</code> 设置自动缩进</li>
 <li>命令行模式下输入 <code>:set autowrite(aw)</code> 设置自动存档，默认未打开</li>
 <li>命令行模式下输入 <code>:set background=dark</code> 或 <code>light</code>，设置背景风格</li>
