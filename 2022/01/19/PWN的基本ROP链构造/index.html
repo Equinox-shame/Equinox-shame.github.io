@@ -10,11 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="目录 ：
-[TOC]
-
-查找对应溢出一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址
-可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过,"> 
+    <meta name="description" content="查找对应溢出一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址
+可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存,"> 
     <meta name="author" content="John Doe"> 
     <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -54,10 +51,7 @@
 
         </div>
         <div class="content markdown">
-            <p><strong>目录 ：</strong></p>
-<p>[TOC]</p>
-<hr>
-<h2 id="查找对应溢出"><a href="#查找对应溢出" class="headerlink" title="查找对应溢出"></a>查找对应溢出</h2><p>一般的溢出内容是<code>EIP</code>，因为<code>EIP</code>寄存器存储着我们<code>CPU</code>要读取指令的地址</p>
+            <h2 id="查找对应溢出"><a href="#查找对应溢出" class="headerlink" title="查找对应溢出"></a>查找对应溢出</h2><p>一般的溢出内容是<code>EIP</code>，因为<code>EIP</code>寄存器存储着我们<code>CPU</code>要读取指令的地址</p>
 <p>可以通过 <code>cyclic 数字</code>这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过<code>gdb</code>调试观察EIP寄存器处的 4 位字符，通过指令<code>cyclic -l 对应EIP的4位字符</code>，得到需要填充的溢出字符长度。</p>
 <h2 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h2><p>NX：防止栈上执行 (需要利用到 bss 段)</p>
 <p>Canary：检测是否发生栈溢出 </p>

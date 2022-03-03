@@ -10,10 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="目录 ：
-[TOC]
-
-Regular Expression, 正则表达式, ⼀种使⽤表达式的⽅式对字符串 进⾏匹配的语法规则. 我们抓取到的⽹⻚源代码本质上就是⼀个超⻓的字符串, 想从⾥⾯提 取内,"> 
+    <meta name="description" content="Regular Expression, 正则表达式, ⼀种使⽤表达式的⽅式对字符串 进⾏匹配的语法规则. 我们抓取到的⽹⻚源代码本质上就是⼀个超⻓的字符串, 想从⾥⾯提 取内容.⽤正则再合适不过了.,"> 
     <meta name="author" content="John Doe"> 
     <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -53,10 +50,7 @@ Regular Expression, 正则表达式, ⼀种使⽤表达式的⽅式对字符串 
 
         </div>
         <div class="content markdown">
-            <p><strong>目录 ：</strong></p>
-<p>[TOC]</p>
-<hr>
-<p>Regular Expression, 正则表达式, ⼀种使⽤表达式的⽅式对字符串 进⾏匹配的语法规则. 我们抓取到的⽹⻚源代码本质上就是⼀个超⻓的字符串, 想从⾥⾯提 取内容.⽤正则再合适不过了. 正则的优点: 速度快, 效率⾼, 准确性⾼ 正则的缺点: 新⼿上⼿难度有 点⼉⾼. 不过只要掌握了正则编写的逻辑关系, 写出⼀个提取⻚⾯内容的正则 其实并不复杂 正则的语法: 使⽤元字符进⾏排列组合⽤来匹配字符串 在线测试正 则表达式<a target="_blank" rel="noopener" href="https://tool.oschina.net/regex/">https://tool.oschina.net/regex/</a></p>
+            <p>Regular Expression, 正则表达式, ⼀种使⽤表达式的⽅式对字符串 进⾏匹配的语法规则. 我们抓取到的⽹⻚源代码本质上就是⼀个超⻓的字符串, 想从⾥⾯提 取内容.⽤正则再合适不过了. 正则的优点: 速度快, 效率⾼, 准确性⾼ 正则的缺点: 新⼿上⼿难度有 点⼉⾼. 不过只要掌握了正则编写的逻辑关系, 写出⼀个提取⻚⾯内容的正则 其实并不复杂 正则的语法: 使⽤元字符进⾏排列组合⽤来匹配字符串 在线测试正 则表达式<a target="_blank" rel="noopener" href="https://tool.oschina.net/regex/">https://tool.oschina.net/regex/</a></p>
 <h2 id="常用元字符：具有固定含义的特殊符号"><a href="#常用元字符：具有固定含义的特殊符号" class="headerlink" title="常用元字符：具有固定含义的特殊符号"></a>常用元字符：具有固定含义的特殊符号</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">\w    	 匹配字母数字下划线</span><br><span class="line">\d    	 匹配数字</span><br><span class="line">\s    	 匹配空白符</span><br><span class="line">\t    	 匹配一个制表符</span><br><span class="line"></span><br><span class="line">^     	 匹配字符串的开始</span><br><span class="line">$     	 匹配字符串的结尾</span><br><span class="line"></span><br><span class="line">\W    	 匹配非字母数字下划线</span><br><span class="line">\D    	 匹配数字</span><br><span class="line">\S    	 匹配空白符</span><br><span class="line"></span><br><span class="line">a|b   	 匹配字符a或者b</span><br><span class="line">()    	 匹配括号内的表达式，也表示一个组</span><br><span class="line">[...]    匹配字符串中的字符</span><br><span class="line">[^...]   匹配除了字符组中字符的所有字符</span><br></pre></td></tr></table></figure>
 
 <h2 id="量词：控制前面元字符出现的次数"><a href="#量词：控制前面元字符出现的次数" class="headerlink" title="量词：控制前面元字符出现的次数"></a>量词：控制前面元字符出现的次数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*		   重复零次或者更多次</span><br><span class="line">+		   重复一次或者多次</span><br><span class="line">?		   重复零次或者一次</span><br><span class="line">&#123;n&#125;		   重复n次</span><br><span class="line">&#123;n,&#125;       重复n次或者更多次</span><br><span class="line">&#123;n,m&#125;	   重复n到m次</span><br></pre></td></tr></table></figure>
