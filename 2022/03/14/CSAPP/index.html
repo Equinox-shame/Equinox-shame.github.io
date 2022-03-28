@@ -47,7 +47,7 @@
     <div class='main'>
         <h1 class="title">CSAPP 学习笔记 [ 持续更新中 ]</h1>
         <div class="stuff">
-            <span>三月 12, 2022</span>
+            <span>三月 14, 2022</span>
             
 
         </div>
@@ -278,7 +278,7 @@
 <img src="https://s2.loli.net/2022/03/10/ftHrC5IiGudzap3.png" style="zoom:80%;" />
 
 <p>条件传送中，处理器无需预测测试的结果就可以执行条件攒送。处理器只是读源值 (可能是从内存中)，检查条件码，然后要么更新目的寄存器，要么保存不变。 </p>
-<h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><h4 id="do-while"><a href="#do-while" class="headerlink" title="do-while"></a>do-while</h4><p>一般来说在汇编中会将循环变成低级的测试和条件跳转的组合，以<code>do-while</code>为例：</p>
+<h3 id="循环分支"><a href="#循环分支" class="headerlink" title="循环分支"></a>循环分支</h3><h4 id="do-while"><a href="#do-while" class="headerlink" title="do-while"></a>do-while</h4><p>一般来说在汇编中会将循环变成低级的测试和条件跳转的组合，以<code>do-while</code>为例：</p>
 <img src="https://s2.loli.net/2022/03/12/Up79qhHjelyVv5s.png" style="zoom:80%;" />
 
 <p>可以看出在汇编里采用了条件跳转和低级测试实现的一个<code>do-while</code>循环，最为关键的便是第 7 汇编语句，其决定了是否继续重复和退出循环。</p>
@@ -311,7 +311,7 @@
 <p>程序会先对初始表达式进行求值，然后进入循环，进行测试表达式的结果来判断是否执行循环内容。</p>
 <p>由于<code>for</code>在编译时与<code>while</code>效果相似，在编译成汇编时，会根据优化程度来采用<code>while</code>的两个方式之一来进行转换。</p>
 <h4 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h4><p><code>C语言</code>中的三种形式的循环都可以采用简单的策略来进行翻译，以条件分支和逻辑判断来实现，产生包含一个或多个条件分支的代码。控制的条件转移提供了将循环翻译成机器代码的基本机制。</p>
-<h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><p><code>switch</code>更具一个整数索引值进行多重分支，同时可以通过跳转表 ( 一个数组 ) 来使其更加高效。[ 一般在开关情况过多时 ( 4 个以上 )，并且值的范围跨度比较小时采用跳转表 ] 。</p>
+<h4 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h4><p><code>switch</code>更具一个整数索引值进行多重分支，同时可以通过跳转表 ( 一个数组 ) 来使其更加高效。[ 一般在开关情况过多时 ( 4 个以上 )，并且值的范围跨度比较小时采用跳转表 ] 。</p>
 <p><img src="https://s2.loli.net/2022/03/12/DkTHhPFrw7f16aB.png"></p>
 <p>在上图中我们可以看到在跳过一个不连续的区域时在对应的跳转表里所对应的是<code>default</code>区段，会在对应指向执行<code>def</code>的代码段。</p>
 <blockquote>
@@ -328,9 +328,137 @@
 <img src="https://s2.loli.net/2022/03/12/jER3iozOJVflDdL.png" style="zoom:80%;" />
 
 <p>对应转换出来的<code>C语言</code>代码为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">switcher</span><span class="params">(<span class="keyword">long</span> a,<span class="keyword">long</span> b,<span class="keyword">long</span> c,<span class="keyword">long</span>* dest)</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> val;</span><br><span class="line">	<span class="keyword">switch</span>(a)&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">			c = b ^ <span class="number">15</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">			val = c + <span class="number">112</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">			val = (b+c)*<span class="number">4</span>;<span class="comment">//(b+c)&lt;&lt;2</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			val = b ;</span><br><span class="line">	&#125;</span><br><span class="line">	*dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">switcher</span><span class="params">(<span class="keyword">long</span> a,<span class="keyword">long</span> b,<span class="keyword">long</span> c,<span class="keyword">long</span>* dest)</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> val;</span><br><span class="line">	<span class="keyword">switch</span>(a)&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">			c = b ^ <span class="number">15</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">			val = c + <span class="number">112</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">			val = (b+c)*<span class="number">4</span>;	<span class="comment">//	(b+c)&lt;&lt;2</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			val = b ;</span><br><span class="line">	&#125;</span><br><span class="line">	*dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </blockquote>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p>在<code>x86-64</code>中栈空间向低地址方向增长，同时当<code>x86-64</code>过程需要的存储空间超出寄存器能够存放的大小时，就会在栈上分配空间，这个部分称为过程的栈帧。</p>
+<img src="https://s2.loli.net/2022/03/21/SBEMHFcLKa38tnp.png" style="zoom:80%;" />
+
+<p>当过程<code>P</code>调用过程<code>Q</code>时，会把返回的地址压入栈中，指明当<code>Q</code>返回时，要从<code>P</code>的程序的哪个位置继续执行。我们把返回地址也当作<code>P</code>的栈帧的一部分，因为其存放的是于<code>P</code>相关的状态。而<code>Q</code>代码部分会扩展当前栈的边界，分配其栈帧所需要的空间大小。</p>
+<blockquote>
+<p>简单来说，当<code>S</code>要调用<code>Q</code>函数时，会先将下一条命令的地址压入栈中，并保存相关寄存器的值，然后将<code>Q</code>函数的栈帧压入</p>
+<p>以下图为例，有如下执行顺序：</p>
+<img src="https://s2.loli.net/2022/03/21/5R1M9OJKu4e7aFt.png" style="zoom:67%;" />
+</blockquote>
+<p>在上述的调用过程中大部分的数据传送是通过寄存器完成的，当<code>P</code>调用<code>Q</code>时，<code>P</code>的代码必须先把参数复制到适当的寄存器中，同样的当<code>Q</code>返回到<code>P</code>时，<code>P</code>的代码可以从<code>%rax</code>中取得返回值。</p>
+<img src="https://s2.loli.net/2022/03/21/Z3qogs5GdUPp8l2.png" style="zoom:80%;" />
+
+<p>在<code>x86-64</code>中可以通过寄存器最多传递 6 个整型( 例如整数和指针)参数。当一个函数有大于 6 个整型参数时，超过的部分便需要通过栈来进行传递。同时通过栈来传递参数时，所有数据都向 8 的倍数对齐，当参数到位的时候程序便可以通过<code>call</code>指令来将控制转移到<code>Q</code>。</p>
+<blockquote>
+<img src="https://s2.loli.net/2022/03/21/s4e8yZlx5wNcJtT.png" style="zoom:80%;" />
+
+<p>可以看到<code>1-6</code>的参数值都是通过寄存器传递而多出来的<code>7-n</code>的参数便是在栈顶以 8 的倍数进行压入。</p>
+</blockquote>
+<p>有些时候局部数据必须放在内存中，包括如下情况：</p>
+<ul>
+<li>寄存器不足购房所有的本地数据</li>
+<li>对一个局部变量使用<code>&amp;</code>，因此必须能够为它产生一个地址。</li>
+<li>某些局部变量是数组或者结构，因此必须能通过数组或结构引用被访问到。</li>
+</ul>
+<blockquote>
+<p>栈指针加上某一个数值代表着栈的缩减，而压入数据的时候栈顶指针进行减数值，栈空间向上移动。</p>
+</blockquote>
+<p>寄存器是唯一被所有过程共享的资源，虽然是在给定时刻只有一个是活动的但是，我们仍然需要确保一个过程调用另一个过程的时候时，被调用者不会覆盖调用者稍后使用的寄存器的值。</p>
+<p>寄存器<code>%rbp</code>、<code>%rbx</code>和<code>%r12 - %r15</code>被划分为<strong>被调用者保存寄存器</strong>，除了栈指针<code>%rsp</code>都分类为<strong>调用者保存器</strong>。</p>
+<img src="https://s2.loli.net/2022/03/22/59hnlpNxe2DSkgF.png" style="zoom:80%;" />
+
+<p>通过上述例子，可以更好的理解到程序在调用栈的过程中是如何对寄存器的操作的。值得注意的是最后恢复原来的数据的时候是先弹出<code>%rbx</code>再弹出<code>%rbp</code>，体现出栈的先进后出的原则。</p>
+<blockquote>
+<p>下面以习题 3 .34 为例：</p>
+<p>一个函数<code>P</code>生成名为<code>a0 ~ a7</code>的局部变量然后调用函数<code>Q</code></p>
+<p><img src="https://s2.loli.net/2022/03/22/KqiZ4rxfXYydRp7.png"></p>
+<p>从汇编来看我们可以知道在<code>x86-64</code>中可以通过寄存器最多传递 6 个整型，所以<code>a0</code>到<code>a5</code>共 6 个变量是保存在寄存器中的，而<code>a6</code>和<code>a7</code>存储在栈空间里面，对于程序而言，不能把所有变量均存储在寄存器上是因为寄存器不够用，因而无法存取。</p>
+</blockquote>
+<h4 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h4><img src="https://s2.loli.net/2022/03/23/kBP9o86WlVGivSd.png" style="zoom:80%;" />
+
+<p>汇编使用寄存器<code>%rbx</code>来进行保存参数<code>n</code>，先把已有的值保存在栈上( 第二行 )，随后在返回前恢复该值( 第十一行)。根据栈的使用特性和寄存器保存规则，可以保证当递归调用<code>rfact(n-1)</code>返回时( 第九行 )：</p>
+<ul>
+<li>该次调用的结果会保存在寄存器<code>%rax</code>中</li>
+<li>参数<code>n</code>的值仍然在寄存器<code>%rbx</code>中</li>
+</ul>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>通常来说对于一个数组的引用可以通过内存引用的方式来进行简化数组的访问，如果有一个<code>int E[i]</code>，<code>E</code>的地址存放在寄存器<code>%rdx</code>中，而<code>i</code>存放在寄存器<code>%rcx</code>中时，可以利用指令<code>movl (%rdx,%rcx,4),%eax</code>也就是取出<code>%rdx</code>向下<code>4 * %rcx + %rdx</code>的内存位置的值，同理于取出其他数据。而对于引用了指针的数据也是可以进行如上的过程。</p>
+<p><img src="https://s2.loli.net/2022/03/23/toQ12rNWUByzhRq.png"></p>
+<blockquote>
+<p>需要注意的是，对数组的地址进行访问也要乘以字节数</p>
+</blockquote>
+<p>对于多维的数组时，其值时保存在栈空间内部，我们依然可以把其理解为一个线性的空间，同样的可以通过对其地址空间的偏移来取其值。</p>
+<p><img src="https://s2.loli.net/2022/03/23/KhO4kSbe6uaAxiE.png"></p>
+<p>通常要访问多维度的元素，编译器会以数组起始为基地址，然后以偏移量为索引，产生期望的元素偏移量，然后使用对应的<code>mov</code>指令。对于如下声明的一个数组：<code>T D[R][C]</code>，其数组元素<code>D[i][j]</code>的内存地址为$$&amp;D[i][j] = x_D+L(C*i+j)$$。</p>
+<h4 id="定长数组"><a href="#定长数组" class="headerlink" title="定长数组"></a>定长数组</h4><p><code>C语言</code>编译器能优化定长多维数组上的操作代码。编译器可能会去除整数索引，转换为指针间接引用，于此编译器还可能采用某个指针指向对应数组的固定部分，在后续的运算中在这个指针上进行如下图所示</p>
+<img src="https://s2.loli.net/2022/03/23/xRl8DqLgWnItUK4.png" style="zoom:80%;" />
+
+<p>可以看出来<code>GCC</code>生成了一个指针，命名为<code>Aptr</code>指向<code>A</code>的行<code>i</code>中连续的元素，也生成了一个指针，命名为<code>Bptr</code>指向<code>B</code>的列<code>k</code>中连续的元素，利用指针来对其进行运算，同时省去对变量<code>j</code>的定义过程，利用判别式来判断函数停止的条件。</p>
+<h4 id="变长数组"><a href="#变长数组" class="headerlink" title="变长数组"></a>变长数组</h4><p>定义变长数组时不得不用<code>malloc</code>或者<code>calloc</code>函数进行分配存储空间，而不得不显示地编码，用行优先索引将多维数组映射到一维数组，但是在<code>ISOC99</code>允许数组的维度是一个表达式，在数组分配的时候才计算出来。我们声明一个数组<code>A[expr1][expr2]</code>，我们访问该元素的<code>A[i][j]</code>可以编写如下的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">var_ele</span><span class="params">(<span class="keyword">long</span> n,<span class="keyword">int</span> A[n][n],<span class="keyword">long</span> i,<span class="keyword">long</span> j)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> A[i][j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>则在变长数组中会产生如下汇编代码：</p>
+<p><img src="https://s2.loli.net/2022/03/23/fkLiIswK2CHEqV6.png"></p>
+<p>而在<code>GCC</code>的优化下会变成如下：</p>
+<img src="https://s2.loli.net/2022/03/23/6gwsVnRQ9LUJjCH.png" style="zoom:80%;" />
+
+<p>将优化后的<code>C代码</code>进行转换为汇编时程序会采取上述方式对数组进行取值保存，利用指针的变化改变其取值的偏移量，进而进行优化其结构。</p>
+<p><img src="https://s2.loli.net/2022/03/23/EmefX2hib9WVtlD.png"></p>
+<p><img src="https://s2.loli.net/2022/03/23/B2by317m6NlJQGp.png"></p>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><p>结构体可以将多个不同数据组合在一起，与多维数组相似，其在栈空间上是线性存储的，于是我们也可以通过其首地址加上对应的偏移量来取到对应的结构体数据。</p>
+<p>我们声明一个结构体变量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rec</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">int</span> j;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">int</span> *p;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>则其对应的空间分配为如下图：</p>
+<p><img src="https://s2.loli.net/2022/03/23/ditkbVOu3TUIsAj.png"></p>
+<p>假设<code>r</code>存储在寄存器<code>%rdi</code>时，如果我们需要取出<code>i</code>的值时可以直接用偏移量进行取值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movl	(%rdi),%eax		;r-&gt;i</span><br><span class="line">movl	4(%rdi),%eax	;r-&gt;j</span><br></pre></td></tr></table></figure>
+
+<p>而对于存储在结构体中的数组我们可以利用偏移量对其进行取值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">;r in %rdi	i in %rsi</span><br><span class="line">leaq	8(%rdi,%rsi,4),%rax		; Set %rax to &amp;r-&gt;a[i] </span><br></pre></td></tr></table></figure>
+
+<p>如果我们要实现<code>r-&gt;p = &amp;r-&gt;a[r-&gt;i + r-&gt;j]</code>时，也可以l向上述过程中一样将<code>r-&gt;i</code>和<code>r-&gt;j</code>的和相加得到一个偏移量，将结构体的首地址值加上对应的字节长度(<code>r-&gt;i + r-&gt;j</code>)和数据<code>a</code>的字节长度乘以相应长度值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">;r in %rdi</span><br><span class="line">movl	4(%rdi),%eax	; Get r-&gt;j</span><br><span class="line">addl	(%rdi),%eax		; Add r-&gt;i</span><br><span class="line">cltq				    ; Extend to 8 bytes</span><br><span class="line">leaq	8(%rdi,%rax,4),%rax		; Compute &amp;r-&gt;a[r-&gt;i + r-&gt;j]</span><br><span class="line">movq	%rax,16(%rdi)	; Store in r-&gt;p</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>下面以一个结构体为例：</p>
+<p><img src="https://s2.loli.net/2022/03/23/srxG19DImnp5gzL.png"></p>
+</blockquote>
+<h3 id="联合"><a href="#联合" class="headerlink" title="联合"></a>联合</h3><p><code>union</code>与结构体不同，其在栈上分配的空间是定义变量中最大的一个，当在<code>union</code>中进行嵌套多个结构体时，如果需要对某一个结构体中的变量进行调用时，其余的结构体变量则会不占用对应的空间，而<code>union</code>对应的首地址也变成对应调用结构体的首地址。有如下定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">a</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">a0</span>&#123;</span></span><br><span class="line">		<span class="keyword">int</span> a;</span><br><span class="line">         <span class="keyword">int</span> b;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">a1</span>&#123;</span></span><br><span class="line">		<span class="keyword">int</span> c;</span><br><span class="line">		<span class="keyword">int</span> d;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们需要对<code>a1</code>中的<code>c</code>调用时，此时共用体<code>a</code>的首地址变成嵌套结构体<code>a1</code>中<code>c</code>的地址，其偏移量为 0 ，调用<code>a1</code>中<code>d</code>的话其对应的偏移量为 4 。</p>
+<h3 id="数据对齐"><a href="#数据对齐" class="headerlink" title="数据对齐"></a>数据对齐</h3><p>许多计算机系统对基本数据类型的合法地址做出了一些吸纳之，要求某种类型对象的地址必须值<code>K</code>(通常是 2 、4、8 )的倍数。这种方式产生相应的字节对齐必须是<code>K</code>的倍数。在汇编中会出现如下指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.align 8</span><br></pre></td></tr></table></figure>
+
+<p>表示后面的数据会遵循 8 字节的对其长度，而对于结构体，也会在其中进行插入间隙来完成对应的字节对齐。<strong>整个结构体的对齐值一般是结构体中最大数据类型所占的空间</strong>。与此如果一个类型按n字节对齐，那么该类型的变量起始地址必须是n的倍数。</p>
+<p>如果一个结构体变量中最后一个数据不满足字节对齐时编译器也会对其进行补齐，而补齐的空间也造成了内存浪费。</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>指针是<code>C语言</code>中的一个核心特色，以一种统一的方式对不同数据结构中的元素产生引用。</p>
+<ul>
+<li>每一个指针都对应一个类型，表明指针指向的是哪一类对象</li>
+<li>每一个指针都有一个值。这个值是某个指定类型的对象地址。特殊的<code>NULL( 0 )</code>表示该指针没有指向任何地方。</li>
+<li>指针用<code>&amp;</code>运算符创建，<code>leaq</code>指令是设计用来计算内存引用的地址的，<code>&amp;</code>运算符的机器代码实现存储用这个指令来计算表达式的值。</li>
+<li><code>*</code>操作符用于间接引用指针，结果是一个值，间接引用时用内存引用来实现的，要么存储到一个指定的地址，要么时从指定的地址读取。</li>
+<li>指针的强制转换只改变类型不改变值，相当于在指向的时候偏移量发生了变换。如表达式<code>(int *)p + 7</code>则会计算为：<code>p + 28</code></li>
+<li>指针可以指向函数，来对其进行调用。</li>
+</ul>
+<h4 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h4><img src="https://s2.loli.net/2022/03/28/EFg4QNnPiv5Tql2.png"  />
+
+<h3 id="内存越界引用和缓冲区溢出"><a href="#内存越界引用和缓冲区溢出" class="headerlink" title="内存越界引用和缓冲区溢出"></a>内存越界引用和缓冲区溢出</h3><p><code>C</code>对于数组引用不做任何边界检查，而且局部变量和状态信息( 例如保存的寄存器值和返回地址 )都存放在栈中。这两种情况结合到一起就引发严重的程序错误，对越界的数组元素的写操作会破坏存储在栈中的状态信息。当程序使用这个破坏的状态，试图重新加载寄存器或者执行<code>ret</code>时，会发生严重的错误。( PWN 中<code>ret2</code>漏洞 ) </p>
+<p>缓冲区溢出时如果覆盖了返回地址值，那么程序会跳转到对应的地址值处，而不是返回到原来的地址上去，因此可能执行不愿意执行的函数，而引发错误。</p>
+<h3 id="对抗缓冲区溢出"><a href="#对抗缓冲区溢出" class="headerlink" title="对抗缓冲区溢出"></a>对抗缓冲区溢出</h3><h4 id="栈随机化-ASLR"><a href="#栈随机化-ASLR" class="headerlink" title="栈随机化(ASLR)"></a>栈随机化(ASLR)</h4><p>为了在系统中插入攻击代码，攻击者及需要插入代码也需要插入指向这段代码的指针，这个指针也是攻击字符传递一部分。产生这个指针需要知道这个字符串放置的栈地址，而栈随机化在程序开始时，在栈上分配<code>0 ~ n</code>字节之间的随机大小的空间，入使用分配函数<code>alloca</code>在栈上分配指定字节数量的空间，程序并不使用这段空间，但是它会导致程序每次执行的时候栈的地址空间进行了变化，分配的<code>n</code>必须足够打，才能获得足够多的栈地址变化，但也要足够小，避免浪费程序过多的空间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> local;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;local at %p\n&quot;</span>,&amp;local);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述程序中，仅仅只是输出对应的<code>main</code>的地址，但是每次执行时发现输出并不一样，则证明开启了栈地址随机化。</p>
+<p>对于这种防护，攻击者可以在实际攻击的代码前加入很长一段的<code>nop</code>，只要攻击者猜中了这段序列中的某个地址程序就会经过这个序列，到达攻击代码。这个序列常常被称作“空操作雪橇”。</p>
+<blockquote>
+<p>破解的随机化大小  =  枚举的地址长度   *   <code>nop sled</code>长度</p>
+<p>尝试穷尽起始地址次数  =  地址范围  /  <code>nop sled</code>长度</p>
+<p>其中需要保证已经在栈上插入了攻击代码，于此再在栈顶上加入对应的随机化长度的 <code>nop</code></p>
+</blockquote>
+<h4 id="栈破坏检测-Canary"><a href="#栈破坏检测-Canary" class="headerlink" title="栈破坏检测(Canary)"></a>栈破坏检测(Canary)</h4><p>其思想是在栈帧中任何局部缓冲区于栈状态之间存储一个特殊的<code>Canary</code>值，其大小是程序每次运行时随机产生的，程序会对这个值进行检查，如果被某个操作数或者函数改变时会引发异常导致程序终止。</p>
+<p><img src="https://s2.loli.net/2022/03/28/s8XJyunKEHNf91Z.png"></p>
+<p>对于这个的绕过则需要将溢出的数据在<code>Canary</code>处将其还原，然后覆盖到后面的数据。实现溢出。</p>
+<h4 id="限制可执行代码区域-NX"><a href="#限制可执行代码区域-NX" class="headerlink" title="限制可执行代码区域(NX)"></a>限制可执行代码区域(NX)</h4><p>在典型的程序中，只有保存编译器产生的代码的那部分内存才需要是可执行的，其他部分限制为只允许读和写。而<code>NX</code>将读和写的模式进行分开，将栈变为可读可写但是不可执行，减少了损失效率。</p>
+<h3 id="浮点代码"><a href="#浮点代码" class="headerlink" title="浮点代码"></a>浮点代码</h3><p>每个<code>YMM</code>寄存器都是<code>256位(32字节)</code>。当对标量进行数据操作时，这些寄存器只保存浮点数，而且只使用低 32 位( float )或64位( double )。每个<code>XMM</code>都是对应<code>YMM</code>寄存器的低<code>128位</code>。</p>
+<img src="https://s2.loli.net/2022/03/28/SuwnxEqUNmOXVZ5.png" style="zoom:80%;" />
+
+<p>对应浮点传送指令为：</p>
+<img src="https://s2.loli.net/2022/03/28/eSp4zOG7QRuLPhr.png" style="zoom:80%;" />
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
