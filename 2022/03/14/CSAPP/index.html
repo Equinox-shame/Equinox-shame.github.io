@@ -218,7 +218,7 @@
 <p><code>ZF</code>：零标志。最近的操作得出的结果为 0 。</p>
 <p><code>SF</code>：符号标志。最近的操作得到的结果为负数。设置为 1 表示最近运算小于 0 为真，设置为 0 表示最近运算小于 0 为假。</p>
 <p><code>OF</code>：溢出标志。最近的操作导致一个补码溢出——正溢出或者负溢出。设置为 0 表示无溢出。</p>
-<p>指令<code>TEST S1, S2</code>基于<code>S1 &amp; S2</code>，如用<code>testq %rax, %rax</code>来检查<code>%rax</code>是负数还是证书还是零，或其中一个操作数是一个掩码，用来指示奈雪儿为应该被测试。</p>
+<p>指令<code>TEST S1, S2</code>基于<code>S1 &amp; S2</code>，如用<code>testq %rax, %rax</code>来检查<code>%rax</code>是负数还是正数还是零，或其中一个操作数是一个掩码，用来指示哪些位为应该被测试。</p>
 <p>对于逻辑操作，进位标志和溢出标志会被设置成 0 。对于移位操作，进位标志将设置为最后一个被移出的位，而一处标志设置为 0 。<code>INC (加一)</code>和<code>DEC (减一)</code>会设置溢出和零标志，但是不会改变进位标志。同时特殊的<code>CMP 、SUB、AND、TEST</code>指令根据两个操作数的差来设置条件码而不改变其他寄存器。</p>
 <p><img src="https://s2.loli.net/2022/03/08/rY3GajinI8bksZu.png"></p>
 <blockquote>
@@ -344,6 +344,7 @@
 <img src="https://s2.loli.net/2022/03/21/Z3qogs5GdUPp8l2.png" style="zoom:80%;" />
 
 <p>在<code>x86-64</code>中可以通过寄存器最多传递 6 个整型( 例如整数和指针)参数。当一个函数有大于 6 个整型参数时，超过的部分便需要通过栈来进行传递。同时通过栈来传递参数时，所有数据都向 8 的倍数对齐，当参数到位的时候程序便可以通过<code>call</code>指令来将控制转移到<code>Q</code>。</p>
+<p>存放在局部变量的值不需要进行字节对齐，而当值被当作参数传入到函数中时，便需要进行字节对齐。</p>
 <blockquote>
 <img src="https://s2.loli.net/2022/03/21/s4e8yZlx5wNcJtT.png" style="zoom:80%;" />
 
@@ -351,7 +352,7 @@
 </blockquote>
 <p>有些时候局部数据必须放在内存中，包括如下情况：</p>
 <ul>
-<li>寄存器不足购房所有的本地数据</li>
+<li>寄存器不足存放所有的本地数据</li>
 <li>对一个局部变量使用<code>&amp;</code>，因此必须能够为它产生一个地址。</li>
 <li>某些局部变量是数组或者结构，因此必须能通过数组或结构引用被访问到。</li>
 </ul>
@@ -376,6 +377,7 @@
 <li>该次调用的结果会保存在寄存器<code>%rax</code>中</li>
 <li>参数<code>n</code>的值仍然在寄存器<code>%rbx</code>中</li>
 </ul>
+<p>递归调用对程序的栈空间消耗十分大，如果程序中对递归调用的次数过大时，可能会引发溢出。</p>
 <h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>通常来说对于一个数组的引用可以通过内存引用的方式来进行简化数组的访问，如果有一个<code>int E[i]</code>，<code>E</code>的地址存放在寄存器<code>%rdx</code>中，而<code>i</code>存放在寄存器<code>%rcx</code>中时，可以利用指令<code>movl (%rdx,%rcx,4),%eax</code>也就是取出<code>%rdx</code>向下<code>4 * %rcx + %rdx</code>的内存位置的值，同理于取出其他数据。而对于引用了指针的数据也是可以进行如上的过程。</p>
 <p><img src="https://s2.loli.net/2022/03/23/toQ12rNWUByzhRq.png"></p>
 <blockquote>
@@ -458,7 +460,75 @@
 <img src="https://s2.loli.net/2022/03/28/SuwnxEqUNmOXVZ5.png" style="zoom:80%;" />
 
 <p>对应浮点传送指令为：</p>
-<img src="https://s2.loli.net/2022/03/28/eSp4zOG7QRuLPhr.png" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/03/28/eSp4zOG7QRuLPhr.png"  />
+
+<p>对应运算指令：</p>
+<img src="https://s2.loli.net/2022/03/29/V1C3IRsOxLUG8th.png" alt="65.png" style="zoom:80%;" />
+
+<p>对应位级运算：</p>
+<p><img src="https://s2.loli.net/2022/03/29/GevyfdTjLkrFlmV.png"></p>
+<h2 id="第三章总结"><a href="#第三章总结" class="headerlink" title="第三章总结"></a>第三章总结</h2><h3 id="程序的机器级表示-1"><a href="#程序的机器级表示-1" class="headerlink" title="程序的机器级表示"></a>程序的机器级表示</h3><p>在调用一个函数时，寄存器可能会有重复使用的情况发生，因此需要在调用前对寄存器的值进行保存，这里保存策略分为两大类：<code>调用者保存</code>和<code>被调用者保存</code>：</p>
+<img src="https://s2.loli.net/2022/04/01/qgvI4aymRTwJ6Hk.png" alt="67.png" style="zoom: 67%;" />
+
+<p>对应寄存器的保存方式如下：</p>
+<img src="https://s2.loli.net/2022/04/01/guK9LbwJ1dfHAZE.png" style="zoom: 50%;" />
+
+<h3 id="基本类型与内存访问"><a href="#基本类型与内存访问" class="headerlink" title="基本类型与内存访问"></a>基本类型与内存访问</h3><p><code>C语言</code>中对应的基本类型在汇编中的后缀表示：</p>
+<p><img src="https://s2.loli.net/2022/04/01/GRMKwnsAVemhlWN.png"></p>
+<p>一个指令包括<strong>操作码</strong>和<strong>操作数</strong>，同时部分操作码可能没有对应的操作数( 如：ret )，同时可能一个操作码对应的是多个操作数。而在操作数中包含着：<code>立即数</code>、<code>寄存器</code>、<code>内存引用 (一个寄存器加上了括号来表示)</code>。</p>
+<p>对应的内存引用(一般数组会采用如下方式进行取址) ：</p>
+<blockquote>
+<p>内存访问，CPU支持将复杂的访存结果直接作为操作数，不需要先把地址进行计算出来在到内存进行读取</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2022/04/01/3P1IQSZkhl7c5bG.png"></p>
+<h3 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h3><h4 id="寄存器与数据传送指令"><a href="#寄存器与数据传送指令" class="headerlink" title="寄存器与数据传送指令"></a>寄存器与数据传送指令</h4><p>对于<code>MOV</code>指令有如下使用方式：</p>
+<img src="https://s2.loli.net/2022/04/01/cAIu2YRhwPlUedn.png" style="zoom:67%;" />
+
+<p>特别的当源操作数是一个立即数时，该立即数只能是 32 位补码表示，同时程序会对这个立即数进行符号位扩展到<code>64</code>位( 32 -&gt; 64 )，将得到的 64 位数保存到寄存器。</p>
+<blockquote>
+<p>如果操作的立即数是 64 位呢？程序引入了一个新的指令<code>movabsq</code>，该指令的源操作数可以是任意64位立即数，但是目的操作数只能是寄存器。</p>
+</blockquote>
+<p><code>movl</code>的目的操作数是寄存器时，会把该寄存器上的高 4 字节设置为 0.</p>
+<blockquote>
+<p>任何位寄存器生成32位值的指令都会把该寄存器的高位部分设置为 0.</p>
+</blockquote>
+<p>当源操作数的数位小于目的操作数的时候，有对应的<code>mov</code>指令对其进行符号位扩展或者零扩展。</p>
+<blockquote>
+<p>零扩展指令：</p>
+<p><img src="https://s2.loli.net/2022/04/01/Ubp31Mjcq2y4Qw6.png"></p>
+<p>符号位扩展：</p>
+<p><img src="https://s2.loli.net/2022/04/01/DqwEbg7syORmjY3.png"></p>
+<p>同理于零扩展指令，<code>s</code>表示的是符号位扩展(sign的缩写)，最后面两个都是大小指示符(源操作数 - 目的操作数)。</p>
+<p>同时存在一个<code>cltq</code>指令，其源操作数只能是<code>%eax</code>，目的操作数只能是<code>%rax</code>。</p>
+</blockquote>
+<h4 id="栈与数据传送指令"><a href="#栈与数据传送指令" class="headerlink" title="栈与数据传送指令"></a>栈与数据传送指令</h4><p><code>%rdi</code>和<code>%rsi</code>一般用于保存传入的参数的第一位、第二位。</p>
+<p><code>pushq  %rax</code>等价于<code>sub  $8, %rsp  +  movq %rax, (%rsp)</code>两条指令的组合<br><code>popq  %rbx</code>等价于<code>movq (%rsp), %rbx  +  addq $8, %rsp</code>两条指令的组合，但是对应原来栈上的<code>%rbx</code>的值仍然存在，知道下次<code>push</code>操作，此处保存的数值才会被覆盖。</p>
+<h4 id="算术和逻辑运算指令"><a href="#算术和逻辑运算指令" class="headerlink" title="算术和逻辑运算指令"></a>算术和逻辑运算指令</h4><p><code>leaq</code>可以加载一个有效的地址，其中<code>q</code>表示地址的长度，源操作数可以像内存引用一样，通过计算偏移量来进行把对应的有效的地址值保存到目的操作数，需要注意的是，其执行的操作并不是到对应的内存地址处读取数据，而是将这个有效的地址值进行保存到目的操作数。</p>
+<p>同时<code>lea</code>指令也可以完成对应的算术运算：</p>
+<img src="https://s2.loli.net/2022/04/01/xRrocLUPzlDw2VJ.png" style="zoom: 50%;" />
+
+<p>单操作数指令：</p>
+<img src="https://s2.loli.net/2022/04/01/i4gw7rITGLEzvcm.png" style="zoom:50%;" />
+
+<p>移位操作指令：</p>
+<img src="https://s2.loli.net/2022/04/01/wIdCmrc2BW63oyn.png" style="zoom:50%;" />
+
+<blockquote>
+<p>对于移位量<code>k</code>可以是一个立即数，或者存放在寄存器<code>cl</code>中的数，对于移位指令，只允许以特定的寄存器<code>cl</code>作为操作数</p>
+<p><code>cl</code>的长度为 8 个二进制位，意味着最多可以移位的长度位为 255 ，移位对应的数据时采用<code>cl</code>的不同低位来进行保存。</p>
+</blockquote>
+<p>对于此程序在进行乘法时，为什么不直接使用对应的乘法指令？这是因为在使用<code>lea</code>指令进行运算时所开销的时间周期更短，编译器会将程序进行优化，采用时间周期开销更短的进行编译。</p>
+<h3 id="指令与条件码"><a href="#指令与条件码" class="headerlink" title="指令与条件码"></a>指令与条件码</h3><p>执行一个指令时会用到相应的算术逻辑单元(ALU)，ALU重寄存器中读取数据后，执行相应的运算，并设置对应的条件码寄存器。</p>
+<p>条件码寄存器由<code>CPU</code>进行维护长度为单个比特位，用于描述最近操作的属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CF - 进位标志 可以用来进行检测是否发生了正溢出</span><br><span class="line">ZF - 零标志 记录最近的操作结果是否为 0 ，为 0 则将其置为 1</span><br><span class="line">SF - 符号标志 当最近的操作结果小于 0 时，其会置为 1</span><br><span class="line">OF - 溢出标志，针对有符号数，当发生溢出时便会置 1 (发生正/负溢出时)</span><br></pre></td></tr></table></figure>
+
+<p><code>cmp</code>指令和<code>test</code>指令只是设置条件码寄存器，不更新目的寄存器的值。</p>
+<p><img src="https://s2.loli.net/2022/03/08/rY3GajinI8bksZu.png"></p>
+<p>一般程序不会直接对条件码寄存器进行访问，但程序可以通过<code>setx</code>来对条件码寄存器进行间接访问，保存对应的值于一个寄存器中，通过对应寄存器的值进行返回或者判断。(Bool类型)</p>
+<p>对于大于和等于的情况可以直接通过相应的寄存器进行判断，而小于则需要<code>SF ^ OF</code>来进行判断，如不发生溢出时可以通过对应符号寄存器<code>SF</code>进行判断，但是发生溢出时就需要借助<code>OF</code>溢出标志进行判断。</p>
+<h3 id="跳转指令与循环"><a href="#跳转指令与循环" class="headerlink" title="跳转指令与循环"></a>跳转指令与循环</h3><img src="https://s2.loli.net/2022/03/09/OglYsqIVU8MiADB.png" style="zoom:67%;" />
+
+<p>在程序中，使用较多的条件判断语句会使程序的执行效率不高，因为程序通常会对每个分支用分支预测器进行判断每个分支是否会进行，当发生错误的预测时，会浪费较多的时间。程序因此会将其优化，将循环变成低级的测试和条件跳转的组合。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
