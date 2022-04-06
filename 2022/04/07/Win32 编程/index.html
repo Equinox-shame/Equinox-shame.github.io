@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Win 32 编程 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="程序分类控制台应用程序(DOS 程序)本质上是一个DOS程序，本身没有窗口，通过Windows DOS窗口执行
+窗口程序拥有自己的窗口，可以与用户交互
+库程序存放代码数据的程序，执行文件可以从中取出,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Win 32 编程</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Win 32 编程</h1>
+        <div class="stuff">
+            <span>四月 07, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="程序分类"><a href="#程序分类" class="headerlink" title="程序分类"></a>程序分类</h2><h3 id="控制台应用程序-DOS-程序"><a href="#控制台应用程序-DOS-程序" class="headerlink" title="控制台应用程序(DOS 程序)"></a>控制台应用程序(DOS 程序)</h3><p>本质上是一个<code>DOS</code>程序，本身没有窗口，通过<code>Windows DOS</code>窗口执行</p>
+<h3 id="窗口程序"><a href="#窗口程序" class="headerlink" title="窗口程序"></a>窗口程序</h3><p>拥有自己的窗口，可以与用户交互</p>
+<h3 id="库程序"><a href="#库程序" class="headerlink" title="库程序"></a>库程序</h3><p>存放代码数据的程序，执行文件可以从中取出代码执行和获取数据</p>
+<ul>
+<li>静态库程序：扩展名<code>lib</code>，在编译链接程序时，将代码放入到执行文件中，无法执行 ( 没有入口函数 )</li>
+<li>动态库程序：扩展名<code>dll</code>，执行文件时从中获取代码，不能独立运行，需要依附其他程序运行 ( 有入口函数 )</li>
+</ul>
+<h2 id="编译工具"><a href="#编译工具" class="headerlink" title="编译工具"></a>编译工具</h2><p>编译器<code>cl.exe</code>：将源代码编译成目标代码<code>.obj</code><br>链接器<code>link.exe</code>：将目标代码、库链接生成最终文件<br>资源编译器<code>rc.exe</code>：( .rc ) 将资源编译，最终通过链接器存入最终文件 ( 一种脚本语言 )</p>
+<h2 id="库函数"><a href="#库函数" class="headerlink" title="库函数"></a>库函数</h2><p><code>kernel32.dll</code>：提供了核心的<code>API</code>，例如进程、线程、内存管理等<br><code>user32.dll</code>：提供了窗口、消息等<code>API</code><br><code>gdi32.dll</code>：绘图相关的<code>API</code></p>
+<h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><p><code>windows.h</code>：所有<code>Windows</code>头文件的集合<br><code>windef.h</code>：<code>Windows</code>数据类型 ( <code>typdef</code>对基本数据类型取别名实现的 )<br><code>winbase.h</code>：<code>kernel32</code>的<code>API</code><br><code>wingdi.h</code>：<code>gdi32</code>的<code>API</code><br><code>winuser.h</code>：<code>user32</code>的<code>API</code><br><code>winnt.h</code>：<code>Unicode</code>字符集支持</p>
+<blockquote>
+<p>一般写一个<code>Windows.h</code>即可</p>
+</blockquote>
+<h2 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	    	CL.exe</span><br><span class="line">.c/.cpp------------------&gt; .obj |	 LINK.exe</span><br><span class="line">			RC.exe			  | --------------&gt; .exe </span><br><span class="line">.rc----------------------&gt; .res |</span><br></pre></td></tr></table></figure>
+
+<h2 id="宽字节字符"><a href="#宽字节字符" class="headerlink" title="宽字节字符"></a>宽字节字符</h2><p><code>wchar_t</code>每个字符占两个字节，其本质上是<code>unsigned short</code>类型，定义时，需要增加 “L” ，通知编译器按照双字节编译字符串，采用<code>Unicode</code>编码，同时对宽字节字符串操作时需要使用相关支持宽字节的函数。<code>wprintf</code>对<code>Unicode</code>字符打印支持并不完善，在<code>Windows</code>下使用<code>WriteConsole</code>进行输出。</p>
+<h2 id="窗口类"><a href="#窗口类" class="headerlink" title="窗口类"></a>窗口类</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li><p>窗口类包含了窗口的各种参数信息的数据结构</p>
+</li>
+<li><p>每个窗口都具有窗口类，基于窗口类创建窗口</p>
+</li>
+<li><p>每个窗口类都具有一个名称，使用前必须注册到系统</p>
+</li>
+</ul>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>系统窗口类：系统已经定义好的窗口类，所有应用程序都可以直接使用</p>
+<p>应用程序全局窗口类：由用户自己定义，当前应用程序所有模块都可以直接使用</p>
+<p>应用程序局部窗口类：由用户自己定义，当前应用程序中本模块可以使用</p>
+<h2 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h2><h3 id="消息组成"><a href="#消息组成" class="headerlink" title="消息组成"></a>消息组成</h3><p>窗口句柄、消息ID、消息的两个参数( 两个附带信息 )：消息产生的时间、消息产生时的鼠标位置</p>
+<h3 id="消息作用"><a href="#消息作用" class="headerlink" title="消息作用"></a>消息作用</h3><p>当系统通知窗口工作室，就采用消息的方式派发给窗口</p>
+<h3 id="相关消息"><a href="#相关消息" class="headerlink" title="相关消息"></a>相关消息</h3><table>
+<thead>
+<tr>
+<th align="center">消息名</th>
+<th align="center">产生时间</th>
+<th align="center">附带消息</th>
+<th align="center">一般用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">WM_DESTORY</td>
+<td align="center">窗口被销毁时的消息</td>
+<td align="center"><code>wParam</code>为 0 ，<code> IParam</code>为 0</td>
+<td align="center">常用于在窗口被销毁之前，做对应的善后处理，例如资源、内存等。</td>
+</tr>
+<tr>
+<td align="center">WM_SYSCOMMAND</td>
+<td align="center">当点击窗口的最大化、最小化、关闭等</td>
+<td align="center"><code>wParam</code>为具体点击位置，例如关闭SC_CLOSE等 ，<code> IParam</code>为鼠标光标的位置。<code>LOWORD(IParam);//水平位置HIWORD(IParam);//垂直位置</code></td>
+<td align="center">常用在窗口关闭时，提示用户处理</td>
+</tr>
+<tr>
+<td align="center">WM_CREATE</td>
+<td align="center">窗口创建成功但是还未显示时</td>
+<td align="center"><code>wParam</code>为 0 ，<code> IParam</code>为 <code>CREATESTRUCT</code>类型的指针。通过这个指针可以获取<code>CreatWindowEX</code>中全部的12个参数的信息</td>
+<td align="center">常用于初始化窗口的函数、资源等，包括创建子窗口的等</td>
+</tr>
+<tr>
+<td align="center">WM_SIZE</td>
+<td align="center">窗口的大小法神变化后，窗口刚产生时</td>
+<td align="center"><code>wParam</code>为窗口变化的原因 ，<code> IParam</code>为窗口变化后的大小。<code>LOWORD(IParam);//变化后的宽度HIWORD(IParam);//变化后的高度</code></td>
+<td align="center">常用于窗口大小变化后，调整窗口内各个部分的布局</td>
+</tr>
+<tr>
+<td align="center">WM_QUIT</td>
+<td align="center">程序员发送</td>
+<td align="center"><code>wParam</code>为<code>PostQuitMessage</code>传递的参数 ，<code> IParam</code>为 0</td>
+<td align="center">用于结束消息循环，当<code>GetMessage</code>收到这个消息后，返回<code>FALSE</code>，结束<code>while</code>处理，退出消息循环</td>
+</tr>
+<tr>
+<td align="center">….</td>
+<td align="center">….</td>
+<td align="center">….</td>
+<td align="center">…..</td>
+</tr>
+</tbody></table>
+<h3 id="消息的阻塞"><a href="#消息的阻塞" class="headerlink" title="消息的阻塞"></a>消息的阻塞</h3><p><code>GetMessage</code>：从系统获取消息，将消息从系统中移除，阻塞函数。当系统无消息时，会等候下—条消息。<br><code>PeekMessage</code>：以查看的方式从系统获取消息，可以不将消息从系统移除，非阻塞函数。当系统无消息时，返回<code>FALSE</code>，继续执行后续代码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">PeekMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	LPMSG lpMsg,<span class="comment">// message information</span></span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWnd,<span class="comment">// handle to window</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT wMsgFilterMin，<span class="comment">// first message</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT wMsgFilterMax，<span class="comment">// last message</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT wRemoveMsg<span class="comment">//移除标识</span></span></span></span><br><span class="line"><span class="params"><span class="function">	PM_REMOVE/PM_NOREMOVE</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>消息循环：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">	<span class="keyword">if</span>(PeekMessage(&amp;nMsg,<span class="literal">NULL</span>,<span class="number">0</span>,<span class="number">0</span>,PM_NOREMOVE))&#123;</span><br><span class="line">		<span class="comment">//有消息</span></span><br><span class="line">		<span class="keyword">if</span>(GetMessage(&amp;nMsg,<span class="literal">NULL</span>,<span class="number">0</span>,<span class="number">0</span>))&#123;</span><br><span class="line">			TranslateMessage(&amp;nMsg);</span><br><span class="line">			DispatchMessage(&amp;nMsg);<span class="comment">//将消息交给窗口处理函数来处理</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">//无消息</span></span><br><span class="line">		wprintf(<span class="string">L&quot;NO MESSAGE\n&quot;</span>);</span><br><span class="line">		Sleep(<span class="number">100</span>); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h3><p><code>SendMessage</code>：发送消息(直接发送到自己定义的消息处理函数)，会等候消息处理的结果。消息未处理完会造成阻塞。<br><code>PostMessage</code>：投递消息(发送到系统队列)，消息发出后立刻返回，不等候消息执行结果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BOOL SendMessage/PostMessage(</span><br><span class="line">	HWND hWnd,<span class="comment">//消息发送的目的窗口</span></span><br><span class="line">	UINT Msg,<span class="comment">//消息ID</span></span><br><span class="line">	WPARAM wParam,<span class="comment">//消息参数</span></span><br><span class="line">	LPARAM lParam <span class="comment">//消息参数</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>系统消息：ID 范围<code>0 - 0x03FF</code><br>由系统定义好的消息，可以在程序中直接使用。<br>用户自定义消息：ID 范围<code>0x0400 - 0x7FFF(31743)</code><br>由用户自己定义，满足用户自己的需求。由用户自己发出消息，并响应处理。<br>自定义消息宏:<code>WM_USER</code></p>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><h4 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h4><ul>
+<li>消息队列是用于存放消息的队列。</li>
+<li> 消息在队列中先入先出。</li>
+<li>所有窗口程序都具有消息队列。</li>
+<li>程序可以从队列中获取消息。</li>
+</ul>
+<h4 id="分类-1"><a href="#分类-1" class="headerlink" title="分类"></a>分类</h4><p>系统消息队列：由系统维护的消息队列。存放系统产生的消息，例如鼠标、键盘等。<br>程序消息队列：属于每一个应用程序（线程）的消息队列。由应用程序（线程）维护。</p>
+<p>根据消息和消息队列之间使用关系，将消息分成两类：</p>
+<ul>
+<li><p>队列消息 – 消息的发送和获取，都是通过消息队列完成。</p>
+<blockquote>
+<p>队列消息-消息发送后，首先放入系统消息队列，之后分发道程序消息队列，然后通过消息循环，从队列当中获取。</p>
+<p><code>GetMessage</code>：从消息队列中获取消息</p>
+<p><code>PostMessage</code>：将消息投递到消息队列</p>
+<p>常见队列消息：<code>WM_PAINT</code>、键盘、鼠标、定时器。</p>
+</blockquote>
+</li>
+<li><p>非队列消息 – 消息的发送和获取，是直接调用消息的窗口处理完成。</p>
+<blockquote>
+<p>非队列消息–消息发送时，首先查找消息接收窗口的窗口处理函数，直接调用处理函数，完成消息。</p>
+<p><code>SendMessage</code>：直接将消息发送给窗口的处理函数，并等候处理结果。常见消息：<code>WM_CREATE</code>、<code>WM_SIZE</code>等。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> WINAPI <span class="title">WinMain</span><span class="params">( </span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hInstance,		<span class="comment">//当前程序的实例句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hPrevInstance,	<span class="comment">//当前程序前一个实例句柄 (已经废弃)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    LPWSTR    lpCmdLine,		<span class="comment">//命令行参数字符串 (char* 类型)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">int</span>       nCmdShow			<span class="comment">//窗口显示方式 (最大化、最小化、原样显示)</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;	</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>句柄一个拿来找到内存的东西，但不是指针，句柄类型定义以<code>H</code>开头</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">MessageBox</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWnd,				<span class="comment">//父窗口句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR IpText,			<span class="comment">//显示在消息框中的文字</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR IpCaption,		<span class="comment">//显示在标题栏中的文字</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT uType				<span class="comment">//消息框中的按钮、图标显示类型 (unsigned int) </span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;<span class="comment">//返回点击的按钮ID</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>MessageBox</code>是一个阻塞函数，当提示框弹出时便阻塞了，当点击了按钮后终止阻塞</p>
+<p><code>uType</code>按钮参数：</p>
+<table>
+<thead>
+<tr>
+<th>按钮参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MB_OK</td>
+<td>默认值。有一个确认按钮在里面。</td>
+</tr>
+<tr>
+<td>MB_YESNO</td>
+<td>有是和否在里面。</td>
+</tr>
+<tr>
+<td>MB_ABORTRETRYIGNORE</td>
+<td>有Abort（放弃），Retry（重试）和Ignore（跳过）</td>
+</tr>
+<tr>
+<td>MB_YESNOCANCEL</td>
+<td>消息框含有三个按钮：Yes，No和Cancel</td>
+</tr>
+<tr>
+<td>MB_RETRYCANCEL</td>
+<td>有Retry（重试）和Cancel（取消）</td>
+</tr>
+<tr>
+<td>MB_OKCANCEL</td>
+<td>消息框含有两个按钮：OK和Cancel</td>
+</tr>
+</tbody></table>
+<p>图标：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MB_ICONEXCLAMATION</td>
+<td>一个惊叹号出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONWARNING</td>
+<td>一个惊叹号出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONINFORMATION</td>
+<td>一个圆圈中小写字母 i 组成的图标出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONASTERISK</td>
+<td>一个圆圈中小写字母 i 组成的图标出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONQUESTION</td>
+<td>一个问题标记图标出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONSTOP</td>
+<td>一个停止消息图标出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONERROR</td>
+<td>一个停止消息图标出现在消息框</td>
+</tr>
+<tr>
+<td>MB_ICONHAND</td>
+<td>一个停止消息图标出现在消息框</td>
+</tr>
+</tbody></table>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ATOM <span class="title">RegisterClass</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	CONST WNDCLASS* IpWndClass		<span class="comment">//窗口类的数据</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span><span class="comment">//注册成功后，返回一个数标识</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注册窗口类的结构体</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">WNDCLASS</span>&#123;</span></span><br><span class="line">	UINT style;				<span class="comment">//窗口类风格</span></span><br><span class="line">	WNDPROC IpfnWndroc;		<span class="comment">//窗口处理函数</span></span><br><span class="line">	<span class="keyword">int</span> cbClsExtra;			<span class="comment">//窗口类的附加数据buff的大小(开缓冲区大小[字节])</span></span><br><span class="line">	<span class="keyword">int</span> cbWndExtra;			<span class="comment">//窗口的附加数据buff的大小(开缓冲区大小[字节])</span></span><br><span class="line">	HINSTANCE hInstance;	<span class="comment">//当前模块的实例句柄</span></span><br><span class="line">	HICON hIcon;			<span class="comment">//窗口图标句柄</span></span><br><span class="line">	HCURSOR hCursor;		<span class="comment">//鼠标的句柄</span></span><br><span class="line">	HBRUSH hbrBackground;	<span class="comment">//绘制窗口背景的画刷句柄</span></span><br><span class="line">	LPCTSTR IpszMenuName;	<span class="comment">//窗口菜单的资源ID字符串</span></span><br><span class="line">	LPCTSR IpszClassName;	<span class="comment">//窗口类名称</span></span><br><span class="line">&#125;WNDCLASS,*PWNDCLASS;</span><br></pre></td></tr></table></figure>
+
+<p><code>style</code>风格：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CS_HREDRAW - 当窗口水平变化时，窗口重新绘制</span><br><span class="line">CS_VREDRAW - 当窗口垂直变化时，窗口重新绘制</span><br><span class="line">CS_DCLCLKS - 允许窗口接收鼠标双击</span><br><span class="line">CS_NOCLOSE - 窗口没有关闭按钮</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HWND <span class="title">CreateWindowEx</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	DWORD dwExStyle,		<span class="comment">//窗口的扩展风格</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR lpClassName，	<span class="comment">//已经注册的窗口类名称</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR lpWindowName,	<span class="comment">//窗口标题栏的名字</span></span></span></span><br><span class="line"><span class="params"><span class="function">	DWORD dwStyle,			<span class="comment">//窗口的基本风格</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">int</span> x,	<span class="comment">//窗口左上角水平坐标位置</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">int</span> y,	<span class="comment">//窗口左上角垂直坐标位置</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">int</span> nWidth,	<span class="comment">//窗口的宽度</span></span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">int</span> nHeight,	<span class="comment">//窗口的高度</span></span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWndParent,	<span class="comment">//窗口的父窗口句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	HMENU hMenu,	<span class="comment">//窗口菜单句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	HINSTANCE hInstance,	<span class="comment">//应用程序实例句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPVOID lpParam	<span class="comment">//窗口创建时附加参数</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;	<span class="comment">//创建成功返回窗口句</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LRESULT CALLBACK <span class="title">WnfProc</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWnd, <span class="comment">//窗口句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT msgID, <span class="comment">//消息ID</span></span></span></span><br><span class="line"><span class="params"><span class="function">	WPARAM wParam, <span class="comment">//消息参数</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPARAM Iparam<span class="comment">//消息参数</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>消息处理函数，通过用户自定义来对产生的消息进行处理</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">GetMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	LPMSG IpMsg,<span class="comment">//存放获取到的消息BUFF</span></span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWnd,<span class="comment">//窗口句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT wMsgFilterMin,<span class="comment">//获取消息的最小ID</span></span></span></span><br><span class="line"><span class="params"><span class="function">	UINT wMsgFilterMax<span class="comment">//获取消息的最大ID</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>IpMsg</code>：当获取到消息后，将消息的参数存放到<code>MSG</code>结构中<br><code>hWnd</code>：获取<code>hWnd</code>所指定窗口的消息<br><code>wMsgFilterMax</code>和<code>wMsgFilterMin</code>：只能获取到由它们指定的消息范围内的消息，如果都为<code>0</code>，表示没有范围。</p>
+<p>返回值：</p>
+<p>抓到<code>WM_QUIT</code>返回零值，否则返回非零值。<br><code>PostQuitMessage(0)</code>可以发送一个<code>WM_QUIT</code>消息，使其返回</p>
+<p>在程序（线程）消息队列查找消息，如果队列有消息，检查消息是否满足指定条件(HWND,ID范围)，不满足条件就不会取出消息，否则从队列取出消息返回。<br>如果程序（线程）消息队列没有消息，向系统消息队列获取属于本程序的消息。如果系统队列的当前消息属于本程序，系统会将消息转发到程序消息队列中。<br>如果系统消息队列也没有消息，检查当前进程的所有窗口的需要重新绘制的区域，如果发现有需要绘制的区域，产生<code>WM_PAINT</code>消息，取得消息返回处理。<br>如果没有重新绘制区域，检查定时器如果有到时的定时器，产生<code>WM_TIMER</code>,返回处理执行。<br><code>GetMessage</code>会继续等候下一条消息。<code>PeekMessage</code>会返回<code>FALSE</code>，交出程序的控制权。<br>注意：<code>GetMessage</code>如果获取到是<code>WM_QUIT</code>,函数会返回<code>FALSE</code>。<br>如果没有到时的定时器，整理程序的资源、内存等等。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">TranslateMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	CONST MSG* IpMsg	<span class="comment">//要翻译的消息地址</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>翻译消息( 对于可见字符 )，将键盘消息翻译成字符消息。<br>检查消息是否是按键的消息，如果不是按键消息，不做任何处理，继续执行。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LRESULT <span class="title">DispatchMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	CONST MSG* Ipmsg<span class="comment">//要派发的消息</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将消息派发到该消息所属的窗口处理函数上</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
