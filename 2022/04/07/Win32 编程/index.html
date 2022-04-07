@@ -121,9 +121,15 @@
 <td align="center">用于结束消息循环，当<code>GetMessage</code>收到这个消息后，返回<code>FALSE</code>，结束<code>while</code>处理，退出消息循环</td>
 </tr>
 <tr>
-<td align="center">….</td>
-<td align="center">….</td>
-<td align="center">….</td>
+<td align="center">WM_PAINT</td>
+<td align="center">当窗口需要绘制的时候</td>
+<td align="center"><code>wParam</code>为 0 ，<code> IParam</code>为 0</td>
+<td align="center">用于绘图</td>
+</tr>
+<tr>
+<td align="center">…..</td>
+<td align="center">…..</td>
+<td align="center">…..</td>
 <td align="center">…..</td>
 </tr>
 </tbody></table>
@@ -161,6 +167,9 @@
 </blockquote>
 </li>
 </ul>
+<h3 id="键盘消息"><a href="#键盘消息" class="headerlink" title="键盘消息"></a>键盘消息</h3><p><code>WM_KEYDOWN</code> ：按键被按下时产生<br><code>WM_KEYUP</code>：按键被放开时产生<br><code>WM_SYSKEYDOWN</code>：系统键按下时产生比如ALT、F10等<br><code>WM_SYSKEYUP</code>：系统键放开时产生</p>
+<p>附带信息:</p>
+<p><code>WPARAM</code>：按键建Virtual Key<br><code>LPARAM</code>：按键的参数，例如按下次数</p>
 <h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> WINAPI <span class="title">WinMain</span><span class="params">( </span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hInstance,		<span class="comment">//当前程序的实例句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hPrevInstance,	<span class="comment">//当前程序前一个实例句柄 (已经废弃)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    LPWSTR    lpCmdLine,		<span class="comment">//命令行参数字符串 (char* 类型)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">int</span>       nCmdShow			<span class="comment">//窗口显示方式 (最大化、最小化、原样显示)</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;	</span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -273,11 +282,19 @@
 
 <blockquote>
 <p>翻译消息( 对于可见字符 )，将键盘消息翻译成字符消息。<br>检查消息是否是按键的消息，如果不是按键消息，不做任何处理，继续执行。</p>
+<p><code>TranslateMessage</code>在转换<code>WM_KEYDOWN</code>消息时，对于可见字符可以产生<code>WM_CHAR</code>,不可见字符无此消息。</p>
+<p>附带信息∶</p>
+<p><code>WPARAM</code>：输入的字符的<code>ASCII</code>字符编码值<br><code>LPARAM</code>：按键的相关参数</p>
 </blockquote>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LRESULT <span class="title">DispatchMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	CONST MSG* Ipmsg<span class="comment">//要派发的消息</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>将消息派发到该消息所属的窗口处理函数上</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOLL <span class="title">InvalidateRect</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HWND hWnd,<span class="comment">//窗口句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	CONST RECT* IpRect,<span class="comment">//区域的矩形坐标</span></span></span></span><br><span class="line"><span class="params"><span class="function">	BOOL bErase<span class="comment">//重绘前是否先擦除 TURE 表示擦除 FALSE 标识不擦除</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>申明窗口无效区域：需要重新绘制的区域</p>
 </blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
