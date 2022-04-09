@@ -493,6 +493,60 @@
 <p><code>TRUE</code>：表示所有句柄都有信号，才结束等候<br><code>FASLE</code>：表示句柄中只要有一个有信号，就结束等候。</p>
 <p>当线程执行中时，该线程无信号，当线程结束时才产生信号。</p>
 </blockquote>
+<h3 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h3><h4 id="原子锁"><a href="#原子锁" class="headerlink" title="原子锁"></a>原子锁</h4><h5 id="相关问题"><a href="#相关问题" class="headerlink" title="相关问题"></a>相关问题</h5><p>多个线程对同一个数据进行原子操作，会产生结果丢失。比如执行<code>++</code>运算时。</p>
+<h5 id="错误代码分析"><a href="#错误代码分析" class="headerlink" title="错误代码分析"></a>错误代码分析</h5><p>当线程A执行<code>a value++</code>时，如果线程切换时间正好是在线程A将值保存到<code>a value</code>之前，线程B继续执行<code>g_value++</code>，那么当线程A再次被切换回来之后，会将原来线程A保存的值保存到<code>g_value上</code>，线程B进行的加法操作被覆盖。</p>
+<blockquote>
+<p>一般被<code>CPU</code>切换出该线程时，程序会将当前运行状态进行压栈保存( 每个进程都有独立的栈空间 )</p>
+<img src="https://s2.loli.net/2022/04/09/I1lEPyRSDTWdf5o.png" style="zoom:80%;" />
+
+<p>以上图为例，当线程一再执行完语句一后，被<code>CPU</code>切换到线程二，线程一的数据进行压栈保存，线程二完整的执行完了对应的全部代码，此时切换回到线程一，栈中的数据弹出，执行语句三，而导致线程一的语句一的数据未被保存，而导致丢失了数据。</p>
+</blockquote>
+<h5 id="使用原子锁函数"><a href="#使用原子锁函数" class="headerlink" title="使用原子锁函数"></a>使用原子锁函数</h5><p><code>InterlockedIncrement(long*)</code> 对<code>++</code>操作符进行加锁</p>
+<blockquote>
+<p>对传入的数据进行加一运算，当运行时间超过了等待时间，仍然会被操作系统切换到其他线程，当该线程无法进行加锁时会造成阻塞，只能等待切换线程。</p>
+</blockquote>
+<p><code>InterlockedDecrement</code> 对<code>--</code>操作符进行加锁<br><code>InterlockedCompareExchange</code> 对比较进行加锁<br><code>InterlockedExchange</code> 对交换进行加锁</p>
+<h5 id="原子锁的实现"><a href="#原子锁的实现" class="headerlink" title="原子锁的实现"></a>原子锁的实现</h5><p>直接对数据所在的内存操作，并且在任何一个瞬间只能有一个线程访问。</p>
+<h4 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h4><blockquote>
+<p>效率不如原子锁，但是原子锁能实现的互斥锁均能实现</p>
+</blockquote>
+<h5 id="相关的问题"><a href="#相关的问题" class="headerlink" title="相关的问题"></a>相关的问题</h5><p>多线程下代码或资源的共享使用。</p>
+<h5 id="互斥的使用"><a href="#互斥的使用" class="headerlink" title="互斥的使用"></a>互斥的使用</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">CreateMutex</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	LPSECURITY_ATTRIBUTES IpMutexAttributes,<span class="comment">//安全属性</span></span></span></span><br><span class="line"><span class="params"><span class="function">	BOOL bInitialOwner,<span class="comment">//初始的拥有者(哪个线程创建的就被哪个线程拥有) TRUE/FALSE</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR IpName<span class="comment">//命名</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span><span class="comment">//创建成功返回互斥句柄</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在任何时间点上，只能有一个线程拥有互斥，具有独占性和排他性，当任何一个线程不拥有互斥时其拥有信号，但是当拥有互斥时其变为无信号。</p>
+</blockquote>
+<p><code>WaitForSingleObject /  WaitForMultipleObjects</code>互斥的等候遵循谁先等候谁先获取。</p>
+<h5 id="释放互斥"><a href="#释放互斥" class="headerlink" title="释放互斥"></a>释放互斥</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">ReleaseMutex</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hMutex <span class="comment">// handle to mutex</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<h5 id="关闭互斥句柄"><a href="#关闭互斥句柄" class="headerlink" title="关闭互斥句柄"></a>关闭互斥句柄</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">CloseHandle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hObject</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h4><h5 id="相关问题-1"><a href="#相关问题-1" class="headerlink" title="相关问题"></a>相关问题</h5><p>解决程序之间的通知的问题。</p>
+<h5 id="事件的使用"><a href="#事件的使用" class="headerlink" title="事件的使用"></a>事件的使用</h5><p>创建事件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">CreateEvent</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	LPSECURITY_ATTRIBUTES lpEventAttributes,<span class="comment">//安全属性</span></span></span></span><br><span class="line"><span class="params"><span class="function">	BOOL bManualReset,<span class="comment">//事件重置（复位)方式，TRUE手动，FALSE自动</span></span></span></span><br><span class="line"><span class="params"><span class="function">	BOOL bInitialState,<span class="comment">//事件初始状态，TRUE有信号</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR lpName <span class="comment">//事件命名</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span><span class="comment">//创建成功返回事件句柄</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>时间也具备有信号和无信号两个状态</p>
+</blockquote>
+<p>等候事件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WaitForSingleObject / WaitForMultipleObjects</span><br></pre></td></tr></table></figure>
+
+<p>触发事件(将事件设置成有信号状态)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">SetEvent</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hEvent<span class="comment">// handle to event</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>关闭事件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">CloseHandle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hObject</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>注意：小心事件的死锁。</p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><h5 id="相关的问题-1"><a href="#相关的问题-1" class="headerlink" title="相关的问题"></a>相关的问题</h5><p>类似于事件，解决通知的相关问题。但提供一个计数器，可以设置次数。</p>
+<h5 id="信号量的使用"><a href="#信号量的使用" class="headerlink" title="信号量的使用"></a>信号量的使用</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">CreateSemaphore</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,<span class="comment">//安全属性</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LONG lInitialCount,<span class="comment">//初始化信号量数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LONG lMaximumCount,<span class="comment">//信号量的最大值</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPCTSTR lpName<span class="comment">//命名</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span><span class="comment">//创建成功返回信号量句柄</span></span></span><br></pre></td></tr></table></figure>
+
+<h5 id="等候信号量"><a href="#等候信号量" class="headerlink" title="等候信号量"></a>等候信号量</h5><p><code>WaitForSingleObject /  WaitForMultipleObjects</code>每等候通过一次，信号量的信号减1，直到为 0 阻塞</p>
+<h5 id="给信号量指定计数值"><a href="#给信号量指定计数值" class="headerlink" title="给信号量指定计数值"></a>给信号量指定计数值</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">ReleaseSemaphore</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hSemaphore,<span class="comment">//信号量句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LONG lReleaseCount,<span class="comment">//释放数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">	LPLONG lpPreviousCount<span class="comment">//释放前原来信号量的数量，可以为NULL</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>关闭句柄</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">CloseHandle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	HANDLE hObject</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
 <h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> WINAPI <span class="title">WinMain</span><span class="params">( </span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hInstance,		<span class="comment">//当前程序的实例句柄</span></span></span></span><br><span class="line"><span class="params"><span class="function">    HINSTANCE hPrevInstance,	<span class="comment">//当前程序前一个实例句柄 (已经废弃)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    LPWSTR    lpCmdLine,		<span class="comment">//命令行参数字符串 (char* 类型)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">int</span>       nCmdShow			<span class="comment">//窗口显示方式 (最大化、最小化、原样显示)</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;	</span><br></pre></td></tr></table></figure>
 
 <blockquote>
