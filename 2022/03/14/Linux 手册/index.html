@@ -49,7 +49,7 @@ ctrl+s : 暂停当前程序，暂停,">
     <div class='main'>
         <h1 class="title">Linux 手册</h1>
         <div class="stuff">
-            <span>二月 16, 2022</span>
+            <span>三月 14, 2022</span>
             
 
         </div>
@@ -1417,6 +1417,929 @@ ctrl+s : 暂停当前程序，暂停,">
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -L emacs24</span><br></pre></td></tr></table></figure>
 
 <h2 id="二进制文件安装"><a href="#二进制文件安装" class="headerlink" title="二进制文件安装"></a>二进制文件安装</h2><p>对应文件下载下来后将对应的二进制包解压到合适目录，之后将包含可执行的主程序文件的目录添加进<code>PATH</code>环境变量即可。</p>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p>并且每个终端或者说 bash 只能管理当前终端中的 job，不能管理其他终端中的 job。比如我当前存在两个 bash 分别为 bash1、bash2，bash1 只能管理其自己里面的 job 并不能管理 bash2 里面的 job</p>
+<p>我们都知道当一个进程在前台运作时我们可以用 <code>ctrl + c</code> 来终止它，但是若是在后台的话就不行了。</p>
+<p>我们可以通过 <code>&amp;</code> 这个符号，让我们的命令在后台中运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls &amp;</span><br></pre></td></tr></table></figure>
+
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469036077882" alt="实验楼" style="zoom:50%;" />
+
+<p>图中所显示的 <code>[1] 236</code>分别是该 job 的 job number 与该进程的 PID，而最后一行的 Done 表示该命令已经在后台执行完毕。</p>
+<p>我们还可以通过 <code>ctrl + z</code> 使我们的当前工作停止并丢到后台中去</p>
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469036715105" alt="实验楼" style="zoom:50%;" />
+
+<p>被停止并放置在后台的工作我们可以使用这个命令来查看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">jobs</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469037134869" alt="实验楼" style="zoom:50%;" />
+
+<p>其中第一列显示的为被放置后台 job 的编号，而第二列的 <code>＋</code> 表示最近(刚刚、最后)被放置后台的 job，同时也表示预设的工作，也就是若是有什么针对后台 job 的操作，首先对预设的 job，<code>-</code> 表示倒数第二（也就是在预设之前的一个）被放置后台的工作，倒数第三个（再之前的）以后都不会有这样的符号修饰，第三列表示它们的状态，而最后一列表示该进程执行的命令。</p>
+<p>我们可以通过这样的一个命令将后台的工作拿到前台来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 后面不加参数提取预设工作，加参数提取指定工作的编号</span></span><br><span class="line"><span class="comment"># ubuntu 在 zsh 中需要 %，在 bash 中不需要 %</span></span><br><span class="line"><span class="built_in">fg</span> [%jobnumber]</span><br></pre></td></tr></table></figure>
+
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469037555070" alt="实验楼" style="zoom:50%;" />
+
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469037666320" alt="实验楼" style="zoom:50%;" />
+
+<p>之前我们通过 <code>ctrl + z</code> 使得工作停止放置在后台，若是我们想让其在后台运作我们就使用这样一个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#与fg类似，加参则指定，不加参则取预设</span></span><br><span class="line"><span class="built_in">bg</span> [%jobnumber]</span><br></pre></td></tr></table></figure>
+
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469037983282" alt="实验楼" style="zoom:50%;" />
+
+<p>既然有方法将被放置在后台的工作提至前台或者让它从停止变成继续运行在后台，当然也有方法删除一个工作，或者重启等等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kill的使用格式如下</span></span><br><span class="line"><span class="built_in">kill</span> -signal %jobnumber</span><br><span class="line"></span><br><span class="line"><span class="comment"># signal从1-64个信号值可以选择，可以这样查看</span></span><br><span class="line"><span class="built_in">kill</span> －l</span><br></pre></td></tr></table></figure>
+
+<p>其中常用的有这些信号值</p>
+<table>
+<thead>
+<tr>
+<th>信号值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-1</td>
+<td>重新读取参数运行，类似与 restart</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>如同 ctrl+c 的操作退出</td>
+</tr>
+<tr>
+<td>-9</td>
+<td>强制终止该任务</td>
+</tr>
+<tr>
+<td>-15</td>
+<td>正常的方式终止该任务</td>
+</tr>
+</tbody></table>
+<img src="https://dn-simplecloud.shiyanlou.com/1135081469038840624" alt="实验楼" style="zoom:50%;" />
+
+<blockquote>
+<p>若是在使用 kill ＋信号值然后直接加 pid，你将会对 pid 对应的进程进行操作。<br>若是在使用 kill+信号值然后 <code>％jobnumber</code>，这时所操作的对象是 job，这个数字就是就当前 bash 中后台的运行的 job 的 ID。</p>
+</blockquote>
+<h3 id="进程的查看"><a href="#进程的查看" class="headerlink" title="进程的查看"></a>进程的查看</h3><p>Linux下可以使用<code>top</code>来实时的查看进程状态，以及一些系统信息，于此也可以通过<code>ps</code>静态查看当前的进程信息，同时我们还可以使用 <code>pstree</code> 来查看当前活跃进程的树形结构。</p>
+<p>top 是一个在前台执行的程序，所以执行后便进入到这样的一个交互界面，正是因为交互界面我们才可以实时的获取到系统与进程的信息。在交互界面中我们可以通过一些指令来操作和筛选。在此之前我们先来了解显示了哪些信息。</p>
+<p>我们看到 top 显示的第一排，</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>top</td>
+<td>表示当前程序的名称</td>
+</tr>
+<tr>
+<td>11:05:18</td>
+<td>表示当前的系统的时间</td>
+</tr>
+<tr>
+<td>up 8 days,17:12</td>
+<td>表示该机器已经启动了多长时间</td>
+</tr>
+<tr>
+<td>1 user</td>
+<td>表示当前系统中只有一个用户</td>
+</tr>
+<tr>
+<td>load average: 0.29,0.20,0.25</td>
+<td>分别对应 1、5、15 分钟内 cpu 的平均负载</td>
+</tr>
+</tbody></table>
+<p>load average 在 wikipedia 中的解释是 the system load is a measure of the amount of work that a computer system is doing 也就是对当前 CPU 工作量的度量，具体来说也就是指运行队列的平均长度，也就是等待 CPU 的平均进程数相关的一个计算值。</p>
+<p>我们该如何看待这个 load average 数据呢？</p>
+<p>假设我们的系统是单 CPU、单内核的，把它比喻成是一条单向的桥，把 CPU 任务比作汽车。</p>
+<ul>
+<li>load = 0 的时候意味着这个桥上并没有车，cpu 没有任何任务；</li>
+<li>load &lt; 1 的时候意味着桥上的车并不多，一切都还是很流畅的，cpu 的任务并不多，资源还很充足；</li>
+<li>load = 1 的时候就意味着桥已经被车给占满了，没有一点空隙，cpu 已经在全力工作了，所有的资源都被用完了，当然还好，这还在能力范围之内，只是有点慢而已；</li>
+<li>load &gt; 1 的时候就意味着不仅仅是桥上已经被车占满了，就连桥外都被占满了，cpu 已经在全力工作，系统资源的用完了，但是还是有大量的进程在请求，在等待。若是这个值大于 2 表示进程请求超过 CPU 工作能力的 2 倍。而若是这个值大于 5 说明系统已经在超负荷运作了。</li>
+</ul>
+<p>这是单个 CPU 单核的情况，而实际生活中我们需要将得到的这个值除以我们的核数来看。我们可以通过以下的命令来查看 CPU 的个数与核心数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看物理 CPU 的个数</span></span><br><span class="line">cat /proc/cpuinfo | grep <span class="string">&quot;physical id&quot;</span> | sort | uniq |wc -l</span><br><span class="line"></span><br><span class="line"><span class="comment">#每个 cpu 的核心数</span></span><br><span class="line">cat /proc/cpuinfo | grep <span class="string">&quot;physical id&quot;</span> | grep <span class="string">&quot;0&quot;</span> | wc -l</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的指数我们可以得知 load 的临界值为 1 ，但是在实际生活中，比较有经验的运维或者系统管理员会将临界值定为 0.7。这里的指数都是除以核心数以后的值，不要混淆了</p>
+<ul>
+<li>若是 load &lt; 0.7 并不会去关注他；</li>
+<li>若是 0.7&lt; load &lt; 1 的时候我们就需要稍微关注一下了，虽然还可以应付但是这个值已经离临界不远了；</li>
+<li>若是 load = 1 的时候我们就需要警惕了，因为这个时候已经没有更多的资源的了，已经在全力以赴了；</li>
+<li>若是 load &gt; 5 的时候系统已经快不行了，这个时候你需要加班解决问题了</li>
+</ul>
+<p>通常我们都会先看 15 分钟的值来看这个大体的趋势，然后再看 5 分钟的值对比来看是否有下降的趋势。</p>
+<p>查看 busybox 的代码可以知道，数据是每 5 秒钟就检查一次活跃的进程数，然后计算出该值，然后 load 从 <code>/proc/loadavg</code> 中读取的。而这个 load 的值是如何计算的呢，这是 load 的计算的源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSHIFT      11          <span class="comment">/* nr of bits of precision */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FIXED_1     (1&lt;&lt;FSHIFT) <span class="comment">/* 1.0 as fixed-point(定点) */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOAD_FREQ   (5*HZ)      <span class="comment">/* 5 sec intervals，每隔5秒计算一次平均负载值 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CALC_LOAD(load, exp, n)     \</span></span><br><span class="line"><span class="meta">         load *= exp;               \</span></span><br><span class="line"><span class="meta">         load += n*(FIXED_1 - exp); \</span></span><br><span class="line"><span class="meta">         load &gt;&gt;= FSHIFT;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> avenrun[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">EXPORT_SYMBOL(avenrun);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* calc_load - given tick count, update the avenrun load estimates.</span></span><br><span class="line"><span class="comment">* This is called while holding a write_lock on xtime_lock.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">calc_load</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> ticks)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> active_tasks; <span class="comment">/* fixed-point */</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">int</span> count = LOAD_FREQ;</span><br><span class="line">        count -= ticks;</span><br><span class="line">        <span class="keyword">if</span> (count &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                count += LOAD_FREQ;</span><br><span class="line">                active_tasks = count_active_tasks();</span><br><span class="line">                CALC_LOAD(avenrun[<span class="number">0</span>], EXP_1, active_tasks);</span><br><span class="line">                CALC_LOAD(avenrun[<span class="number">1</span>], EXP_5, active_tasks);</span><br><span class="line">                CALC_LOAD(avenrun[<span class="number">2</span>], EXP_15, active_tasks);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>有兴趣的朋友可以研究一下，是如何计算的。代码中的后面这部分相当于它的计算公式。</p>
+</blockquote>
+<p>我们回归正题，来看 top 的第二行数据，基本上第二行是进程的一个情况统计：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tasks: 26 total</td>
+<td>进程总数</td>
+</tr>
+<tr>
+<td>1 running</td>
+<td>1 个正在运行的进程数</td>
+</tr>
+<tr>
+<td>25 sleeping</td>
+<td>25 个睡眠的进程数</td>
+</tr>
+<tr>
+<td>0 stopped</td>
+<td>没有停止的进程数</td>
+</tr>
+<tr>
+<td>0 zombie</td>
+<td>没有僵尸进程数</td>
+</tr>
+</tbody></table>
+<p>来看 top 的第三行数据，这一行基本上是 CPU 的一个使用情况的统计了：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Cpu(s): 1.0%us</code></td>
+<td>用户空间进程占用 CPU 百分比</td>
+</tr>
+<tr>
+<td><code>1.0% sy</code></td>
+<td>内核空间运行占用 CPU 百分比</td>
+</tr>
+<tr>
+<td><code>0.0%ni</code></td>
+<td>用户进程空间内改变过优先级的进程占用 CPU 百分比</td>
+</tr>
+<tr>
+<td><code>97.9%id</code></td>
+<td>空闲 CPU 百分比</td>
+</tr>
+<tr>
+<td><code>0.0%wa</code></td>
+<td>等待输入输出的 CPU 时间百分比</td>
+</tr>
+<tr>
+<td><code>0.1%hi</code></td>
+<td>硬中断(Hardware IRQ)占用 CPU 的百分比</td>
+</tr>
+<tr>
+<td><code>0.0%si</code></td>
+<td>软中断(Software IRQ)占用 CPU 的百分比</td>
+</tr>
+<tr>
+<td><code>0.0%st</code></td>
+<td>(Steal time) 是 hypervisor 等虚拟服务中，虚拟 CPU 等待实际 CPU 的时间的百分比</td>
+</tr>
+</tbody></table>
+<p>CPU 利用率是对一个时间段内 CPU 使用状况的统计，通过这个指标可以看出在某一个时间段内 CPU 被占用的情况，而 Load Average 是 CPU 的 Load，它所包含的信息不是 CPU 的使用率状况，而是在一段时间内 CPU 正在处理以及等待 CPU 处理的进程数情况统计信息，这两个指标并不一样。</p>
+<p>来看 top 的第四行数据，这一行基本上是内存的一个使用情况的统计了：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8176740 total</td>
+<td>物理内存总量</td>
+</tr>
+<tr>
+<td>8032104 used</td>
+<td>使用的物理内存总量</td>
+</tr>
+<tr>
+<td>144636 free</td>
+<td>空闲内存总量</td>
+</tr>
+<tr>
+<td>313088 buffers</td>
+<td>用作内核缓存的内存量</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong></p>
+<blockquote>
+<p>系统中可用的物理内存最大值并不是 free 这个单一的值，而是 free + buffers + swap 中的 cached 的和。</p>
+</blockquote>
+<p>来看 top 的第五行数据，这一行基本上是交换区的一个使用情况的统计了：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>total</td>
+<td>交换区总量</td>
+</tr>
+<tr>
+<td>used</td>
+<td>使用的交换区总量</td>
+</tr>
+<tr>
+<td>free</td>
+<td>空闲交换区总量</td>
+</tr>
+<tr>
+<td>cached</td>
+<td>缓冲的交换区总量，内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖</td>
+</tr>
+</tbody></table>
+<p>再下面就是进程的一个情况了</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PID</td>
+<td>进程 id</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>该进程的所属用户</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>该进程执行的优先级 priority 值</td>
+</tr>
+<tr>
+<td>NI</td>
+<td>该进程的 nice 值</td>
+</tr>
+<tr>
+<td>VIRT</td>
+<td>该进程任务所使用的虚拟内存的总数</td>
+</tr>
+<tr>
+<td>RES</td>
+<td>该进程所使用的物理内存数，也称之为驻留内存数</td>
+</tr>
+<tr>
+<td>SHR</td>
+<td>该进程共享内存的大小</td>
+</tr>
+<tr>
+<td>S</td>
+<td>该进程进程的状态: S=sleep R=running Z=zombie</td>
+</tr>
+<tr>
+<td>%CPU</td>
+<td>该进程 CPU 的利用率</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>该进程内存的利用率</td>
+</tr>
+<tr>
+<td>TIME+</td>
+<td>该进程活跃的总时间</td>
+</tr>
+<tr>
+<td>COMMAND</td>
+<td>该进程运行的名字</td>
+</tr>
+</tbody></table>
+<p><strong>注意:</strong></p>
+<p><strong>NICE 值</strong>叫做静态优先级，是用户空间的一个优先级值，其取值范围是 -20 至 19。这个值越小，表示进程”优先级”越高，而值越大“优先级”越低。nice 值中的 -20 到 19，中 -20 优先级最高， 0 是默认的值，而 19 优先级最低。</p>
+<p><strong>PR 值</strong>表示 Priority 值叫动态优先级，是进程在内核中实际的优先级值，进程优先级的取值范围是通过一个宏定义的，这个宏的名称是 <code>MAX_PRIO</code>，它的值为 140。Linux 实际上实现了 140 个优先级范围，取值范围是从 <code>0-139</code>，这个值越小，优先级越高。而这其中的 <code>0-99</code> 是实时进程的值，而 <code>100-139</code> 是给用户的。</p>
+<p>其中 PR 中的 <code>100 to 139</code> 值部分有这么一个对应 <code>PR = 20 + (-20 to +19)</code>，这里的 <code>-20 to +19</code> 便是 nice 值，所以说两个虽然都是优先级，而且有千丝万缕的关系，但是他们的值，他们的作用范围并不相同。</p>
+<p><strong>VIRT</strong> 任务所使用的虚拟内存的总数，其中包含所有的代码，数据，共享库和被换出 swap 空间的页面等所占据空间的总数。</p>
+<p>在上文我们曾经说过 top 是一个前台程序，所以是一个可以交互的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">常用交互命令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">q</td>
+<td>退出程序</td>
+</tr>
+<tr>
+<td align="center">I</td>
+<td>切换显示平均负载和启动时间的信息</td>
+</tr>
+<tr>
+<td align="center">P</td>
+<td>根据 CPU 使用百分比大小进行排序</td>
+</tr>
+<tr>
+<td align="center">M</td>
+<td>根据驻留内存大小进行排序</td>
+</tr>
+<tr>
+<td align="center">i</td>
+<td>忽略闲置和僵死的进程，这是一个开关式命令</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td>终止一个进程，系统提示输入 PID 及发送的信号值。一般终止进程用 15 信号，不能正常结束则使用 9 信号。安全模式下该命令被屏蔽。</td>
+</tr>
+</tbody></table>
+<p>好好的利用 top 能够很有效的帮助我们观察到系统的瓶颈所在，或者是系统的问题所在。</p>
+<h3 id="ps的使用"><a href="#ps的使用" class="headerlink" title="ps的使用"></a>ps的使用</h3><p>我们来总体了解下会出现哪些信息给我们，这些信息又代表着什么（更多的 keywords 大家可以通过 <code>man ps</code> 了解）。</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>F</code></td>
+<td>进程的标志（process flags），当 flags 值为 1 则表示此子程序只是 fork 但没有执行 exec，为 4 表示此程序使用超级管理员 root 权限</td>
+</tr>
+<tr>
+<td><code>USER</code></td>
+<td>进程的拥有用户</td>
+</tr>
+<tr>
+<td><code>PID</code></td>
+<td>进程的 ID</td>
+</tr>
+<tr>
+<td><code>PPID</code></td>
+<td>其父进程的 PID</td>
+</tr>
+<tr>
+<td><code>SID</code></td>
+<td>session 的 ID</td>
+</tr>
+<tr>
+<td><code>TPGID</code></td>
+<td>前台进程组的 ID</td>
+</tr>
+<tr>
+<td><code>%CPU</code></td>
+<td>进程占用的 CPU 百分比</td>
+</tr>
+<tr>
+<td><code>%MEM</code></td>
+<td>占用内存的百分比</td>
+</tr>
+<tr>
+<td><code>NI</code></td>
+<td>进程的 NICE 值</td>
+</tr>
+<tr>
+<td><code>VSZ</code></td>
+<td>进程使用虚拟内存大小</td>
+</tr>
+<tr>
+<td><code>RSS</code></td>
+<td>驻留内存中页的大小</td>
+</tr>
+<tr>
+<td><code>TTY</code></td>
+<td>终端 ID</td>
+</tr>
+<tr>
+<td><code>S or STAT</code></td>
+<td>进程状态</td>
+</tr>
+<tr>
+<td><code>WCHAN</code></td>
+<td>正在等待的进程资源</td>
+</tr>
+<tr>
+<td><code>START</code></td>
+<td>启动进程的时间</td>
+</tr>
+<tr>
+<td><code>TIME</code></td>
+<td>进程消耗 CPU 的时间</td>
+</tr>
+<tr>
+<td><code>COMMAND</code></td>
+<td>命令的名称和参数</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>TPGID</strong>栏写着-1 的都是没有控制终端的进程，也就是守护进程</p>
+</blockquote>
+<blockquote>
+<p><strong>STAT</strong>表示进程的状态，而进程的状态有很多，如下表所示</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>R</code></td>
+<td>Running.运行中</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>Interruptible Sleep.等待调用</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>Uninterruptible Sleep.不可中断睡眠</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>Stoped.暂停或者跟踪状态</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>Dead.即将被撤销</td>
+</tr>
+<tr>
+<td><code>Z</code></td>
+<td>Zombie.僵尸进程</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Paging.内存交换</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>优先级低的进程</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>优先级高的进程</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>进程的领导者</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>锁定状态</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>多线程状态</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>前台进程</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>其中的 D 是不能被中断睡眠的状态，处在这种状态的进程不接受外来的任何 signal，所以无法使用 kill 命令杀掉处于 D 状态的进程，无论是 <code>kill</code>，<code>kill -9</code> 还是 <code>kill -15</code>，一般处于这种状态可能是进程 I/O 的时候出问题了。</p>
+</blockquote>
+<p>ps 工具有许多的参数，下面给大家解释部分常用的参数。</p>
+<p>使用 <code>-l</code> 参数可以显示自己这次登录的 bash 相关的进程信息罗列出来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -l</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469088103140" alt="实验楼"></p>
+<p>相对来说我们更加常用下面这个命令，他将会罗列出所有的进程信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469089342412" alt="实验楼"></p>
+<p>若是查找其中的某个进程的话，我们还可以配合着 <code>grep</code> 和正则表达式一起使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep zsh</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469089837027" alt="实验楼"></p>
+<p>此外我们还可以查看时，将连同部分的进程呈树状显示出来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps axjf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469090040956" alt="实验楼"></p>
+<p>当然如果你觉得使用这样的此时没有把你想要的信息放在一起，我们也可以是用这样的命令，来自定义我们所需要的参数显示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -afxo user,ppid,pid,pgid,<span class="built_in">command</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469004994601" alt="实验楼"></p>
+<p>这是一个简单而又实用的工具，想要更灵活的使用，想要知道更多的参数我们可以使用 man 来获取更多相关的信息。</p>
+<h3 id="pstree的使用"><a href="#pstree的使用" class="headerlink" title="pstree的使用"></a>pstree的使用</h3><p>通过 <code>pstree</code> 可以很直接的看到相同的进程数量，最主要的还是我们可以看到所有进程之间的相关性。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pstree</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469090893467" alt="实验楼"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pstree -up</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数选择</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-A</td>
+<td>程序树之间以 ASCII 字符连接</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>同时列出每个 process 的 PID</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>同时列出每个 process 的所属账户名称</td>
+</tr>
+</tbody></table>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469091089249" alt="实验楼"></p>
+<h3 id="kill指令的使用"><a href="#kill指令的使用" class="headerlink" title="kill指令的使用"></a>kill指令的使用</h3><p>我们来回顾一下，当一个进程结束的时候或者要异常结束的时候，会向其父进程返回一个或者接收一个 SIGHUP 信号而做出的结束进程或者其他的操作，这个 SIGHUP 信号不仅可以由系统发送，我们可以使用 <code>kill</code> 来发送这个信号来操作进程的结束或者重启等等。</p>
+<p>上节课程我们使用 <code>kill</code> 命令来管理我们的一些 job，这节课我们将尝试用 <code>kill</code> 来操作下一些不属于 job 范畴的进程，直接对 pid 下手。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先我们使用图形界面打开了 gedit、gvim，用 ps 可以查看到</span></span><br><span class="line">ps aux</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 9 这个信号强制结束 gedit 进程</span></span><br><span class="line"><span class="built_in">kill</span> -9 1608</span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们再查找这个进程的时候就找不到了</span></span><br><span class="line">ps aux | grep gedit</span><br></pre></td></tr></table></figure>
+
+<h3 id="进程执行顺序"><a href="#进程执行顺序" class="headerlink" title="进程执行顺序"></a>进程执行顺序</h3><p>我们在使用 ps 命令的时候可以看到大部分的进程都是处于休眠的状态，如果这些进程都被唤醒，那么该谁最先享受 CPU 的服务，后面的进程又该是一个什么样的顺序呢？进程调度的队列又该如何去排列呢？</p>
+<p>当然就是靠该进程的优先级值来判定进程调度的优先级，而优先级的值就是上文所提到的 PR 与 nice 来控制与体现了</p>
+<p>而 nice 的值我们是可以通过 nice 命令来修改的，而需要注意的是 nice 值可以调整的范围是 <code>-20 ~ 19</code>，其中 root 有着至高无上的权力，既可以调整自己的进程也可以调整其他用户的程序，并且是所有的值都可以用，而普通用户只可以调制属于自己的进程，并且其使用的范围只能是 <code>0 ~ 19</code>，因为系统为了避免一般用户抢占系统资源而设置的一个限制</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这个实验在环境中无法做，因为权限不够，可以自己在本地尝试</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开一个程序放在后台，或者用图形界面打开</span></span><br><span class="line">nice -n -5 vim &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用 ps 查看其优先级</span></span><br><span class="line">ps -afxo user,ppid,pid,<span class="built_in">stat</span>,pri,ni,time,<span class="built_in">command</span> | grep vim</span><br></pre></td></tr></table></figure>
+
+<p>我们还可以用 renice 来修改已经存在的进程的优先级，同样因为权限的原因在实验环境中无法尝试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">renice -5 pid</span><br></pre></td></tr></table></figure>
+
+<h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2><p>日志是一个系统管理员，一个运维人员，甚至是开发人员不可或缺的东西，系统用久了偶尔也会出现一些错误，我们需要日志来给系统排错，在一些网络应用服务不能正常工作的时候，我们需要用日志来做问题定位，日志还是过往时间的记录本，我们可以通过它知道我们是否被不明用户登录过等等。</p>
+<p>在 Linux 中大部分的发行版都内置使用 syslog 系统日志，那么通过前期的课程我们了解到常见的日志一般存放在 <code>/var/log</code> 中，我们来看看其中有哪些日志</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469406921904" alt="实验楼"></p>
+<p>根据图中所显示的日志，我们可以根据服务对象粗略的将日志分为两类</p>
+<ul>
+<li>系统日志</li>
+<li>应用日志</li>
+</ul>
+<p>系统日志主要是存放系统内置程序或系统内核之类的日志信息如 <code>alternatives.log</code> 、<code>btmp</code> 等等，应用日志主要是我们装的第三方应用所产生的日志如 <code>tomcat7</code> 、<code>apache2</code> 等等。</p>
+<p>接下来我们来看看常见的系统日志有哪些，他们都记录了怎样的信息</p>
+<table>
+<thead>
+<tr>
+<th>日志名称</th>
+<th>记录信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>alternatives.log</td>
+<td>系统的一些更新替代信息记录</td>
+</tr>
+<tr>
+<td>apport.log</td>
+<td>应用程序崩溃信息记录</td>
+</tr>
+<tr>
+<td>apt/history.log</td>
+<td>使用 apt-get 安装卸载软件的信息记录</td>
+</tr>
+<tr>
+<td>apt/term.log</td>
+<td>使用 apt-get 时的具体操作，如 package 的下载、打开等</td>
+</tr>
+<tr>
+<td>auth.log</td>
+<td>登录认证的信息记录</td>
+</tr>
+<tr>
+<td>boot.log</td>
+<td>系统启动时的程序服务的日志信息</td>
+</tr>
+<tr>
+<td>btmp</td>
+<td>错误的信息记录</td>
+</tr>
+<tr>
+<td>Consolekit/history</td>
+<td>控制台的信息记录</td>
+</tr>
+<tr>
+<td>dist-upgrade</td>
+<td>dist-upgrade 这种更新方式的信息记录</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>启动时，显示屏幕上内核缓冲信息，与硬件有关的信息</td>
+</tr>
+<tr>
+<td>dpkg.log</td>
+<td>dpkg 命令管理包的日志。</td>
+</tr>
+<tr>
+<td>faillog</td>
+<td>用户登录失败详细信息记录</td>
+</tr>
+<tr>
+<td>fontconfig.log</td>
+<td>与字体配置有关的信息记录</td>
+</tr>
+<tr>
+<td>kern.log</td>
+<td>内核产生的信息记录，在自己修改内核时有很大帮助</td>
+</tr>
+<tr>
+<td>lastlog</td>
+<td>用户的最近信息记录</td>
+</tr>
+<tr>
+<td>wtmp</td>
+<td>登录信息的记录。wtmp 可以找出谁正在进入系统，谁使用命令显示这个文件或信息等</td>
+</tr>
+<tr>
+<td>syslog</td>
+<td>系统信息记录</td>
+</tr>
+</tbody></table>
+<p>而在本实验环境中没有 apport.log 是因为 apport 这个应用程序需要读取一些内核的信息来收集判断其他应用程序的信息，从而记录应用程序的崩溃信息。而在本实验环境中我们没有这个权限，所以将 apport 从内置应用值剔除，自然而然就没有它的日志信息了。</p>
+<p>只闻其名，不见其人，我们并不能明白这些日志记录的内容。首先我们来看 <code>alternatives.log</code> 中的信息，在本实验环境中没有任何日志输出是因为刚刚启动的系统中并没有任何的更新迭代。我可以看看从其他地方截取过来的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update-alternatives 2016-07-02 13:36:16: run with --install /usr/bin/x-www-browser x-www-browser /usr/bin/google-chrome-stable 200</span><br><span class="line">update-alternatives 2016-07-02 13:36:16: run with --install /usr/bin/gnome-www-browser gnome-www-browser /usr/bin/google-chrome-stable 200</span><br><span class="line">update-alternatives 2016-07-02 13:36:16: run with --install /usr/bin/google-chrome google-chrome /usr/bin/google-chrome-stable 200</span><br></pre></td></tr></table></figure>
+
+<p>我们可以从中得到的信息有程序作用，日期，命令，成功与否的返回码。</p>
+<p>我们用这样的命令来看看 <code>auth.log</code> 中的信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo less /var/<span class="built_in">log</span>/auth.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469409885670" alt="实验楼"></p>
+<p>我们可以从中得到的信息有日期与 ip 地址的来源以及的用户与工具。</p>
+<p>在 <code>/var/log/apt</code> 文件夹中有两个日志文件 <code>history.log</code> 与 <code>term.log</code>，两个日志文件的区别在于 <code>history.log</code> 主要记录了进行了哪个操作，相关的依赖有哪些，而 <code>term.log</code> 则是较为具体的一些操作，主要就是下载包，打开包，安装包等等的细节操作。</p>
+<p>如果是刚刚开启的新系统，那么按理说这些日志应该都是空的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cat /var/<span class="built_in">log</span>/apt/history.log</span><br><span class="line">sudo cat /var/<span class="built_in">log</span>/apt/term.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://doc.shiyanlou.com/courses/1379/871732/7bc699b28ff48cefee31fa859af518d9-0" alt="图片描述"></p>
+<p>但是在实验环境中因为是启动的我们定制后的环境，所以两个日志中还残留了配置镜像的记录。可以先删除这两个文件然后再执行新的安装命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rm /var/<span class="built_in">log</span>/apt/history.log</span><br><span class="line">sudo rm /var/<span class="built_in">log</span>/apt/term.log</span><br></pre></td></tr></table></figure>
+
+<p>我们来安装 git 这个程序，因为实验环境里已经预装了 git，所以这里真正执行的操作是一个更新的操作，但这并不影响。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://doc.shiyanlou.com/courses/uid871732-20200807-1596779861997" alt="图片描述"></p>
+<p>成功的执行之后我们再来查看两个日志的内容变化：</p>
+<p><img src="https://doc.shiyanlou.com/courses/1379/871732/dc97b5ebc3c1054d4e5a6070fa36773b-0" alt="图片描述"></p>
+<p>其他的日志格式也都类似于之前我们所查看的日志，主要便是时间，操作。而这其中有两个比较特殊的日志，其查看的方式比较与众不同，因为这两个日志并不是 ASCII 文件而是被编码成了二进制文件，所以我们并不能直接使用 less、cat、more 这样的工具来查看，这两个日志文件是 wtmp，lastlog</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469412303087" alt="实验楼"></p>
+<p>我们查看的方法是使用 last 与 lastlog 工具来提取其中的信息</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469412472830" alt="实验楼"></p>
+<p>关于这两个工具的更深入使用我们可以使用前面的学习过的 man 来查看</p>
+<p>这些日志是如何产生的？通过上面的例子我们可以看出大部分的日志信息似乎格式都很类似，并且都出现在这个文件夹中。</p>
+<p>这样的实现可以通过两种方式：</p>
+<ul>
+<li>一种是由软件开发商自己来自定义日志格式然后指定输出日志位置；</li>
+<li>一种方式就是 Linux 提供的日志服务程序，而我们这里系统日志是通过 syslog 来实现，提供日志管理服务。</li>
+</ul>
+<p>syslog 是一个系统日志记录程序，在早期的大部分 Linux 发行版都是内置 syslog，让其作为系统的默认日志收集工具，虽然随着时代的进步与发展，syslog 已经年老体衰跟不上时代的需求，所以他被 rsyslog 所代替了，较新的 Ubuntu、Fedora 等等都是默认使用 rsyslog 作为系统的日志收集工具</p>
+<p>rsyslog 的全称是 rocket-fast system for log，它提供了高性能，高安全功能和模块化设计。rsyslog 能够接受各种各样的来源，将其输入，输出的结果到不同的目的地。rsyslog 可以提供超过每秒一百万条消息给目标文件。</p>
+<p>这样能实时收集日志信息的程序是有其守护进程的，如 rsyslog 的守护进程便是 rsyslogd</p>
+<p>因为一些原因本实验环境中默认并没有打开这个服务，我们可以手动开启这项服务，然后来查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y rsyslog</span><br><span class="line">sudo service rsyslog start</span><br><span class="line">ps aux | grep syslog</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469414492628" alt="实验楼"></p>
+<p>既然它是一个服务，那么它便是可以配置，为我们提供一些我们自定义的服务</p>
+<p>首先我们来看 rsyslog 的配置文件是什么样子的，而 rsyslog 的配置文件有两个，</p>
+<ul>
+<li>一个是 <code>/etc/rsyslog.conf</code></li>
+<li>一个是 <code>/etc/rsyslog.d/50-default.conf</code>。</li>
+</ul>
+<p>第一个主要是配置的环境，也就是 rsyslog 加载什么模块，文件的所属者等；而第二个主要是配置的 Filter Conditions</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rsyslog.conf</span><br><span class="line"></span><br><span class="line">vim /etc/rsyslog.d/50-default.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469414801715" alt="实验楼"></p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469433052645" alt="实验楼"></p>
+<p>也不知道他在写什么，我们还是来看看 rsyslog 的结构框架，数据流的走向吧。</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469416361678" alt="实验楼"></p>
+<p>通过这个简单的流程图我们可以知道 rsyslog 主要是由 Input、Output、Parser 这样三个模块构成的，并且了解到数据的简单走向，首先通过 Input module 来收集消息，然后将得到的消息传给 Parser module，通过分析模块的层层处理，将真正需要的消息传给 Output module，然后便输出至日志文件中。</p>
+<p>上文提到过 rsyslog 号称可以提供超过每秒一百万条消息给目标文件，怎么只是这样简单的结构。我们可以通过下图来做更深入的了解</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469415269198" alt="实验楼"></p>
+<p>（图片来源于<a target="_blank" rel="noopener" href="http://www.rsyslog.com/doc/queues_analogy.html%EF%BC%89">http://www.rsyslog.com/doc/queues_analogy.html）</a></p>
+<p>Rsyslog 架构如图中所示，从图中我们可以很清楚的看见，rsyslog 还有一个核心的功能模块便是 Queue，也正是因为它才能做到如此高的并发。</p>
+<p>第一个模块便是 Input，该模块的主要功能就是从各种各样的来源收集 messages，通过这些接口实现：</p>
+<table>
+<thead>
+<tr>
+<th>接口名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>im3195</td>
+<td>RFC3195 Input Module</td>
+</tr>
+<tr>
+<td>imfile</td>
+<td>Text File Input Module</td>
+</tr>
+<tr>
+<td>imgssapi</td>
+<td>GSSAPI Syslog Input Module</td>
+</tr>
+<tr>
+<td>imjournal</td>
+<td>Systemd Journal Input Module</td>
+</tr>
+<tr>
+<td>imklog</td>
+<td>Kernel Log Input Module</td>
+</tr>
+<tr>
+<td>imkmsg</td>
+<td>/dev/kmsg Log Input Module</td>
+</tr>
+<tr>
+<td>impstats</td>
+<td>Generate Periodic Statistics of Internal Counters</td>
+</tr>
+<tr>
+<td>imptcp</td>
+<td>Plain TCP Syslog</td>
+</tr>
+<tr>
+<td>imrelp</td>
+<td>RELP Input Module</td>
+</tr>
+<tr>
+<td>imsolaris</td>
+<td>Solaris Input Module</td>
+</tr>
+<tr>
+<td>imtcp</td>
+<td>TCP Syslog Input Module</td>
+</tr>
+<tr>
+<td>imudp</td>
+<td>UDP Syslog Input Module</td>
+</tr>
+<tr>
+<td>imuxsock</td>
+<td>Unix Socket Input</td>
+</tr>
+</tbody></table>
+<p>而 Output 中也有许多可用的接口，可以通过 man 或者官方的文档查看</p>
+<p>而这些模块接口的使用需要通过 $ModLoad 指令来加载，那么返回上文的图中，配置生效的头两行可以看懂了，默认加载了 imklog、imuxsock 这两个模块</p>
+<p>在配置中 rsyslog 支持三种配置语法格式：</p>
+<ul>
+<li>sysklogd</li>
+<li>legacy rsyslog</li>
+<li>RainerScript</li>
+</ul>
+<p>sysklogd 是老的简单格式，一些新的语法特性不支持。而 legacy rsyslog 是以 dollar 符($)开头的语法，在 v6 及以上的版本还在支持，就如上文所说的 <code>$ModLoad</code> 还有一些插件和特性只在此语法下支持。而以 <code>$</code> 开头的指令是全局指令，全局指令是 rsyslogd 守护进程的配置指令，每行只能有一个指令。 RainnerScript 是最新的语法。在官网上 rsyslog 大多推荐这个语法格式来配置</p>
+<p>老的语法格式（sysklogd &amp; legacy rsyslog）是以行为单位。新的语法格式（RainnerScript）可以分割多行。</p>
+<p>注释有两种语法:</p>
+<ul>
+<li>井号 #</li>
+<li>C-style <code>/* .. */</code></li>
+</ul>
+<p>执行顺序: 指令在 rsyslog.conf 文件中是从上到下的顺序执行的。</p>
+<p>模板是 rsyslog 一个重要的属性，它可以控制日志的格式，支持类似 template() 语句的基于 string 或 plugin 的模板，通过它我们可以自定义日志格式。</p>
+<p>legacy 格式使用 $template 的语法，不过这个在以后要移除，所以最好使用新格式 template():，以免未来突然不工作了也不知道为什么</p>
+<p>模板定义的形式有四种，适用于不同的输出模块，一般简单的格式，可以使用 string 的形式，复杂的格式，建议使用 list 的形式，使用 list 的形式，可以使用一些额外的属性字段（property statement）</p>
+<p>如果不指定输出模板，rsyslog 会默认使用 RSYSLOG_DEFAULT。若想更深入的学习可以查看<a target="_blank" rel="noopener" href="http://www.rsyslog.com/doc/v8-stable/configuration/index.html">官方文档</a></p>
+<p>了解了 rsyslog 环境的配置文件之后，我们看向 <code>/etc/rsyslog.d/50-default.conf</code> 这个配置文件，这个文件中主要是配置的 Filter Conditions，也就是我们在流程图中所看见的 <code>Parser &amp; Filter Engine</code>，它的名字叫 Selectors 是过滤 syslog 的传统方法，他主要由两部分组成，<code>facility</code> 与 <code>priority</code>，其配置格式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">facility.priority log_location</span><br></pre></td></tr></table></figure>
+
+<p>其中一个 priority 可以指定多个 facility，多个 facility 之间使用逗号 <code>,</code> 分割开</p>
+<p>rsyslog 通过 Facility 的概念来定义日志消息的来源，以便对日志进行分类，Facility 的种类有：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kern</td>
+<td>内核消息</td>
+</tr>
+<tr>
+<td>user</td>
+<td>用户信息</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>邮件系统消息</td>
+</tr>
+<tr>
+<td>daemon</td>
+<td>系统服务消息</td>
+</tr>
+<tr>
+<td>auth</td>
+<td>认证系统</td>
+</tr>
+<tr>
+<td>authpriv</td>
+<td>权限系统</td>
+</tr>
+<tr>
+<td>syslog</td>
+<td>日志系统自身消息</td>
+</tr>
+<tr>
+<td>cron</td>
+<td>计划安排</td>
+</tr>
+<tr>
+<td>news</td>
+<td>新闻信息</td>
+</tr>
+<tr>
+<td>local0~7</td>
+<td>由自定义程序使用</td>
+</tr>
+</tbody></table>
+<p>而另外一部分 priority 也称之为 serverity level，除了日志的来源以外，对统一源产生日志消息还需要进行优先级的划分，而优先级的类别有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>emergency</td>
+<td>系统已经无法使用了</td>
+</tr>
+<tr>
+<td>alert</td>
+<td>必须立即处理的问题</td>
+</tr>
+<tr>
+<td>critical</td>
+<td>很严重了</td>
+</tr>
+<tr>
+<td>error</td>
+<td>错误</td>
+</tr>
+<tr>
+<td>warning</td>
+<td>警告信息</td>
+</tr>
+<tr>
+<td>notice</td>
+<td>系统正常，但是比较重要</td>
+</tr>
+<tr>
+<td>informational</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>debug 的调试信息</td>
+</tr>
+<tr>
+<td>panic</td>
+<td>很严重但是已淘汰不常用</td>
+</tr>
+<tr>
+<td>none</td>
+<td>没有优先级，不记录任何日志消息</td>
+</tr>
+</tbody></table>
+<p>我们来看看系统中的配置</p>
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469433052645" alt="实验楼"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auth,authpriv.*       /var/<span class="built_in">log</span>/auth.log</span><br></pre></td></tr></table></figure>
+
+<p>这里的意思是 auth 与 authpriv 的所有优先级的信息全都输出于 <code>/var/log/auth.log</code> 日志中</p>
+<p>而其中有类似于这样的配置信息意思有细微的差别</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kern.*      -/var/<span class="built_in">log</span>/kern.log</span><br></pre></td></tr></table></figure>
+
+<p><code>-</code> 代表异步写入，也就是日志写入时不需要等待系统缓存的同步，也就是日志还在内存中缓存也可以继续写入无需等待完全写入硬盘后再写入。通常用于写入数据比较大时使用。</p>
+<p>到此我们对 rsyslog 的配置就有了一定的了解，若想更深入学习模板，队列的高级应用，大家可去查看<a target="_blank" rel="noopener" href="http://www.rsyslog.com/doc/v8-stable/index.html">官网的文档</a>，需要注意的是 rsyslog 每个版本之间差异化比较大，学习之前先查看自己所使用的版本，再去查看相关的文档</p>
+<p>与日志相关的还有一个还有常用的命令 <code>logger</code>，<code>logger</code> 是一个 shell 命令接口，可以通过该接口使用 Syslog 的系统日志模块，还可以从命令行直接向系统日志文件写入信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#首先将syslog启动起来</span></span><br><span class="line">sudo service rsyslog start</span><br><span class="line"></span><br><span class="line"><span class="comment">#向 syslog 写入数据</span></span><br><span class="line">ping 127.0.0.1 | logger -it logger_test -p local3.notice &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看是否有数据写入</span></span><br><span class="line">sudo tail -f /var/<span class="built_in">log</span>/syslog</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469474419356" alt="实验楼"></p>
+<p>从图中我们可以看到我们成功的将 ping 的信息写入了 syslog 中，格式也就是使用的 rsyslog 的默认模板</p>
+<p>我们可以通过 man 来查看 logger 的其他用法，</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i</td>
+<td>在每行都记录进程 ID</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>添加 tag 标签</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>设置日志的 facility 与 priority</td>
+</tr>
+</tbody></table>
+<h3 id="日志转储"><a href="#日志转储" class="headerlink" title="日志转储"></a>日志转储</h3><p>在本地的机器中每天都有成百上千条日志被写入文件中，更别说是我们的服务器，每天都会有数十兆甚至更多的日志信息被写入文件中，如果是这样的话，每天看着我们的日志文件不断的膨胀，那岂不是要占用许多的空间，所以有个叫 logrotate 的东西诞生了。</p>
+<p>logrotate 程序是一个日志文件管理工具。用来把旧的日志文件删除，并创建新的日志文件。我们可以根据日志文件的大小，也可以根据其天数来切割日志、管理日志，这个过程又叫做“转储”。</p>
+<p>大多数 Linux 发行版使用 logrotate 或 newsyslog 对日志进行管理。logrotate 程序不但可以压缩日志文件，减少存储空间，还可以将日志发送到指定 E-mail，方便管理员及时查看日志。</p>
+<p>显而易见，logrotate 是基于 CRON 来运行的，其脚本是 /etc/cron.daily/logrotate；同时我们可以在 <code>/etc/logrotate</code> 中找到其配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/logrotate.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://dn-simplecloud.shiyanlou.com/1135081469476364695" alt="实验楼"></p>
+<p>这其中的具体意思是什么呢？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># see &quot;man logrotate&quot; for details  //可以查看帮助文档</span></span><br><span class="line"><span class="comment"># rotate log files weekly</span></span><br><span class="line">weekly                             //设置每周转储一次(daily、weekly、monthly当然可以使用这些参数每天、星期，月 )</span><br><span class="line"><span class="comment"># keep 4 weeks worth of backlogs</span></span><br><span class="line">rotate 4                           //最多转储4次</span><br><span class="line"><span class="comment"># create new (empty) log files after rotating old ones</span></span><br><span class="line">create                             //当转储后文件不存在时创建它</span><br><span class="line"><span class="comment"># uncomment this if you want your log files compressed</span></span><br><span class="line">compress                          //通过gzip压缩方式转储（nocompress可以不压缩）</span><br><span class="line"><span class="comment"># RPM packages drop log rotation information into this directory</span></span><br><span class="line">include /etc/logrotate.d           //其他日志文件的转储方式配置文件，包含在该目录下</span><br><span class="line"><span class="comment"># no packages own wtmp -- we&#x27;ll rotate them here</span></span><br><span class="line">/var/<span class="built_in">log</span>/wtmp &#123;                    //设置/var/<span class="built_in">log</span>/wtmp日志文件的转储参数</span><br><span class="line">    monthly                        //每月转储</span><br><span class="line">    create 0664 root utmp          //转储后文件不存在时创建它，文件所有者为root，所属组为utmp，对应的权限为0664</span><br><span class="line">    rotate 1                       //最多转储一次</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然在 /etc/logrotate.d/ 中有各项应用的 logrotate 配置，还有更多的配置参数，大家可以使用 man 查看，如按文件大小转储，按当前时间格式命名等等参数配置。</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
