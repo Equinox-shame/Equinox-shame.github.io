@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linux 学习的一些总结 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="目录结构图
+预先定义变量$#：表示命令行上的参数个数
+$?：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 )
+$$：表示当前进程进程号
+$!：表示后台命令对应的进程号
+$-：表示由当,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Linux 学习的一些总结</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Linux 学习的一些总结</h1>
+        <div class="stuff">
+            <span>五月 15, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="目录结构图"><a href="#目录结构图" class="headerlink" title="目录结构图"></a>目录结构图</h2><p><img src="https://s2.loli.net/2022/05/15/lCkAJLeE163hKDO.png" alt="Linux目录图.png"></p>
+<h2 id="预先定义变量"><a href="#预先定义变量" class="headerlink" title="预先定义变量"></a>预先定义变量</h2><p><code>$#</code>：表示命令行上的参数个数</p>
+<p><code>$?</code>：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 )</p>
+<p><code>$$</code>：表示当前进程进程号</p>
+<p><code>$!</code>：表示后台命令对应的进程号</p>
+<p><code>$-</code>：表示由当前<code>shell</code>设置的执行标志名著称的字符串</p>
+<p><code>$*</code>：表示命令行给出的实参字符串</p>
+<p><code>$@</code>：与<code>$*</code>类似，但是可以通过<code>for</code>将程序给的实参进行依次输出，<code>$*</code>不能单独输出每个实参，只能整块输出</p>
+<h2 id="Shell-常用通配符"><a href="#Shell-常用通配符" class="headerlink" title="Shell 常用通配符"></a>Shell 常用通配符</h2><table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>*</code></td>
+<td>匹配 0 或多个字符</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>匹配任意一个字符</td>
+</tr>
+<tr>
+<td><code>[list]</code></td>
+<td>匹配 list 中的任意单一字符</td>
+</tr>
+<tr>
+<td><code>[^list]</code></td>
+<td>匹配 除 list 中的任意单一字符以外的字符</td>
+</tr>
+<tr>
+<td><code>[c1-c2]</code></td>
+<td>匹配 c1-c2 中的任意单一字符 如：[0-9][a-z]</td>
+</tr>
+<tr>
+<td><code>&#123;string1,string2,...&#125;</code></td>
+<td>匹配 string1 或 string2 (或更多)其一字符串</td>
+</tr>
+<tr>
+<td><code>&#123;c1..c2&#125;</code></td>
+<td>匹配 c1-c2 中全部字符 如{1..10}</td>
+</tr>
+</tbody></table>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>由单引号括起来的字符都作为普通字符出现</p>
+<p>使用<code>rm</code>指令删除文件后不可恢复</p>
+<p><code>mv</code>可以给程序进行改名</p>
+<p>使用不带参数的<code>cd</code>会跳转到当前用户的主目录</p>
+<p>用户关键信息存放于<code>/etc/shadow</code>中，存放用户账号的文件<code>passwd</code>，外部设备文件存放于<code>/dev</code></p>
+<p>硬盘分区表示：<code>/hda1</code>——第一块硬盘的第一个分区、<code>/hdb2</code>——第二块硬盘的第二个分区</p>
+<p>当一个目录作为一个挂载点被使用后，该目录上的文件被隐藏，待挂载设备卸载后恢复</p>
+<p><img src="https://doc.shiyanlou.com/linux_base/3-10.png"></p>
+<p><code>ifconfig</code>可以修改网卡<code>IP</code>分配地址和子网掩码</p>
+<p><code>Linux</code>系统进程类型：交互进程、批处理进程、守护进程</p>
+<p>更改文件拥有者：<code>chown</code></p>
+<p><code>Linux</code>第一个版本号：0.01</p>
+<p><code>vim</code>编辑器共有 3 种模式</p>
+<p><code>Linux</code>默认分区：<code>EXT3</code></p>
+<p><code>Linux</code>进程信息存放于<code>/proc</code></p>
+<p><code>Linux</code>系统通过<code>write</code>给其他用户发消息</p>
+<p><code>Linux</code>父子进程之间通讯可以采用：通过信号量进行通讯、通过共享内存进行通讯、通过数据库进行通讯</p>
+<p><code>Linux</code>系统内核由：内存管理器、进程管理器、设备驱动程序、虚拟文件系统( VFS )、和网络管理组成，系统一般由：内核、shell、文件系统和应用程序</p>
+<p>前台启动的进程可以使用<code>Ctrl + C </code>终止</p>
+<p>进程运行方式：独立运行、使用父进程运行</p>
+<p><code>Linux</code>中红色文件一般是压缩文件，蓝色为文件夹，白色为普通文件</p>
+<p><code>Linux</code>文件类型：普通文件、设备文件、符号链接文件、管道文件</p>
+<h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><p><code>shutdown</code>：<code>-h</code>——关机、<code>-r</code>——重启</p>
+<p><code>kill all</code>：终止一个用户的所有进程</p>
+<p><code>mkdir</code>：当父目录不存在时先创建父目录可以<code>-p</code></p>
+<h2 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h2><p><code>read</code>是赋值给变量，变量首字母不能为数字</p>
+<p>不换行输出<code>echo -n &quot;XXX&quot;</code></p>
+<p><code>shell</code>有两种环境变量：局部变量和环境变量</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
