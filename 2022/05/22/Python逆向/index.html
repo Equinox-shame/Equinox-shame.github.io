@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Python逆向 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content=".py在这个情况下我们直接拿到了对应的源代码，可以直接通过对源码进行分析，写出对应的逆向算法进行求解
+.pyc.pyc分成两种情况，一种是不带花指令的，另一种是带花指令的
+不带花指令对于不带花指令的,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Python逆向</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Python逆向</h1>
+        <div class="stuff">
+            <span>五月 22, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="py"><a href="#py" class="headerlink" title=".py"></a>.py</h2><p>在这个情况下我们直接拿到了对应的源代码，可以直接通过对源码进行分析，写出对应的逆向算法进行求解</p>
+<h2 id="pyc"><a href="#pyc" class="headerlink" title=".pyc"></a>.pyc</h2><p><code>.pyc</code>分成两种情况，一种是不带花指令的，另一种是带花指令的</p>
+<h3 id="不带花指令"><a href="#不带花指令" class="headerlink" title="不带花指令"></a>不带花指令</h3><p>对于不带花指令的<code>.pyc</code>文件，我们可以直接使用<code>uncompyle6</code>对其进行转换，可以直接得到对应的源代码<code>.py</code>文件</p>
+<p>如下图：</p>
+<p><img src="https://s2.loli.net/2022/05/22/7eH3g2CbGKkYlnr.png"></p>
+<h3 id="带花指令"><a href="#带花指令" class="headerlink" title="带花指令"></a>带花指令</h3><p>对于带花指令的<code>.pyc</code>文件我们如果直接使用<code>uncompyle6</code>对其进行转换会出现如下状况：</p>
+<p><img src="https://s2.loli.net/2022/05/22/DCbWFe1sHVQiRcg.png"></p>
+<p>会提示我们数组发生了越界，证明在这个<code>.pyc</code>文件中添加了一些花指令，让我们无法直接进行转换得到<code>.py</code>，那么应该怎么解决呢？</p>
+<p>我们通过导入<code>dis</code>，<code>marshal</code>两个库来进行查看对应<code>pyc</code>的字节码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dis,marshal</span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;[对应pyc名字]&quot;</span>,<span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">code = marshal.loads(f[<span class="number">8</span>:]) <span class="comment"># 前8个为pyc对应的魔数(好像py2是8，py3是16)</span></span><br><span class="line"><span class="comment"># 我们绕过对应魔数进行加载</span></span><br><span class="line"><span class="built_in">print</span>(dis.dis(code))</span><br></pre></td></tr></table></figure>
+
+<p>通过上述步骤我们可以看到对应的<code>py</code>的字节码，我们可以看到如下图：</p>
+<p><img src="https://s2.loli.net/2022/05/22/7fUYsdyAphHi2vB.png"></p>
+<p>那么我们应该怎么进行反编译呢？答案是看对应的字节码，我们可以在<code>python库</code>里找到对应字节码的含义，对其进行翻译，找到对应的花在的地方，之后再到<code>010</code>中进行修改对应字节码的长度和去除对应字节码<code>(花指令的字节码)</code></p>
+<p>在上图中我们可以看到有一个<code>LOAD_CONST 255</code>可以看到在此处发生了报错，在这个语句前一句有一个<code>JUMP_ABSOLUTE 18</code>，对于这条语句就已经强制跳转到<code>LOAD_CONST 255</code>下一条语句了，因此这个语句被判定为一个花，所以我们需要将其去除。</p>
+<p>我们先使用<code>len(code.co_code)</code>来查看对应的<code>pyc</code>字节码长度，之后减去 3 <code>(Python3 好像不太一样)</code>，那么在哪里减呢？我们需要先找到对应的字节码的编号在对应的<code>opcode.h</code>中进行查找</p>
+<p><img src="https://s2.loli.net/2022/05/22/Go14RNqvAs2FMrp.png"></p>
+<p>查找到后我们在<code>010</code>中进行查找<code>0x71</code>同时比较后面的数字<code>18</code>的十六进制<code>0x12</code>，之后我们可以找到：</p>
+<p><img src="https://s2.loli.net/2022/05/22/v29GHKWY4ATIsmL.png"></p>
+<p>之后我们可以直接确定后面的<code>64 FF 00</code>这三个字节为对应的花位置，我们将这 6 个十六进制进行去除：</p>
+<p><img src="https://s2.loli.net/2022/05/22/ty3wFHkUJoO975n.png"></p>
+<p>我们将<code>0x1B</code>进行修改为<code>0x15</code>，同时将对应的 6 个字节进行删除，并再次保存为<code>.pyc</code>文件，之后使用<code>uncompyle6</code>进行反编译即可。</p>
+<h2 id="txt-里面写有对应的-Python-字节码"><a href="#txt-里面写有对应的-Python-字节码" class="headerlink" title="txt 里面写有对应的 Python 字节码"></a>txt 里面写有对应的 Python 字节码</h2><p>对于这种题目就只能看对应字节码进行还原，通过这样的方式手动还原为对应的<code>py</code>源代码，之后再进行对应的逆向工作。</p>
+<h2 id="Python打包EXE"><a href="#Python打包EXE" class="headerlink" title="Python打包EXE"></a>Python打包EXE</h2><p>对于这个我们通过一个<code>py</code>脚本<code>(pyinstxtractor.py)</code>将其变成结构体和一个<code>pyc</code>文件，需要注意的是，在得到的对应<code>pyc</code>文件中缺少了时间属性和对应版本的魔术字，需要我们进行手动修复，通过找到<code>struct.pyc</code>文件里面的对应的字节，我们复制到我们题目的<code>.pyc</code>文件前，之后便可以使用<code>uncompyle6</code>进行反编译</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
