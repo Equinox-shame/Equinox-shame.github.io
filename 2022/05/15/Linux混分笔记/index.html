@@ -99,33 +99,83 @@ $-：表示由当,">
 <td>匹配 c1-c2 中全部字符 如{1..10}</td>
 </tr>
 </tbody></table>
-<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>由单引号括起来的字符都作为普通字符出现</p>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p><img src="https://doc.shiyanlou.com/linux_base/3-10.png"></p>
+<p>由<code>单引号</code>括起来的字符都作为<code>普通字符</code>出现</p>
 <p>使用<code>rm</code>指令删除文件后不可恢复</p>
 <p><code>mv</code>可以给程序进行改名</p>
+<p><code>Linux</code>系统的开发模型是集市模型</p>
+<p><code>Linux</code>系统中，用户文件描述符 0 表示标准输入设备文件描述符 </p>
 <p>使用不带参数的<code>cd</code>会跳转到当前用户的主目录</p>
 <p>用户关键信息存放于<code>/etc/shadow</code>中，存放用户账号的文件<code>passwd</code>，外部设备文件存放于<code>/dev</code></p>
 <p>硬盘分区表示：<code>/hda1</code>——第一块硬盘的第一个分区、<code>/hdb2</code>——第二块硬盘的第二个分区</p>
 <p>当一个目录作为一个挂载点被使用后，该目录上的文件被隐藏，待挂载设备卸载后恢复</p>
-<p><img src="https://doc.shiyanlou.com/linux_base/3-10.png"></p>
 <p><code>ifconfig</code>可以修改网卡<code>IP</code>分配地址和子网掩码</p>
 <p><code>Linux</code>系统进程类型：交互进程、批处理进程、守护进程</p>
 <p>更改文件拥有者：<code>chown</code></p>
 <p><code>Linux</code>第一个版本号：0.01</p>
-<p><code>vim</code>编辑器共有 3 种模式</p>
-<p><code>Linux</code>默认分区：<code>EXT3</code></p>
+<p><code>vim</code>编辑器共有 <code>3</code> 种模式</p>
+<p><code>Linux</code>默认分区：<code>EXT3</code> ———— 通过<code>VFS</code>来支持多种不同的文件系统</p>
 <p><code>Linux</code>进程信息存放于<code>/proc</code></p>
 <p><code>Linux</code>系统通过<code>write</code>给其他用户发消息</p>
 <p><code>Linux</code>父子进程之间通讯可以采用：通过信号量进行通讯、通过共享内存进行通讯、通过数据库进行通讯</p>
-<p><code>Linux</code>系统内核由：内存管理器、进程管理器、设备驱动程序、虚拟文件系统( VFS )、和网络管理组成，系统一般由：内核、shell、文件系统和应用程序</p>
+<p><code>Linux</code>系统内核由：内存管理器、进程管理器、设备驱动程序、虚拟文件系统<code>(VFS)</code>、和网络管理组成，系统一般由：内核、shell、文件系统和应用程序</p>
 <p>前台启动的进程可以使用<code>Ctrl + C </code>终止</p>
 <p>进程运行方式：独立运行、使用父进程运行</p>
 <p><code>Linux</code>中红色文件一般是压缩文件，蓝色为文件夹，白色为普通文件</p>
 <p><code>Linux</code>文件类型：普通文件、设备文件、符号链接文件、管道文件</p>
+<p><code>Linux</code>每个进程都有<code>4GB</code>的虚拟空间，其中内核空间占用<code>3GB ~ 4GB</code></p>
+<p>显示已经挂载的文件系统磁盘<code>inode</code>使用状况<code>df -i</code></p>
+<p>一个<code>bash</code>脚本的第一行是<code>#!/bin/bash</code></p>
+<p><code>Linux</code>基本命令存放在<code>/bin</code>目录    </p>
+<p>打印机、终端 ———— 字符设备<code>(I/O设备)</code></p>
+<blockquote>
+<p>字符设备（Character device）：这是一个顺序的数据流设备，对这种设备的读写是按字符进行的，而且这些字符是连续地形成一个数据流。他不具备缓冲区，所以对这种设备的读写是实时的，如终端、磁带机等。</p>
+</blockquote>
+<p>硬盘 ———— 块设备<code>(可以随机读写)</code></p>
+<blockquote>
+<p>块设备是一种具有一定结构的随机存取设备，对这种设备的读写是按块进行的，他使用缓冲区来存放暂时的数据，待条件成熟后，从缓存一次性写入设备或从设备中一次性读出放入到缓冲区，如磁盘和文件系统等</p>
+</blockquote>
+<p>假设有文件<code>fileA</code>的对应符号链接<code>(软链接)</code>为<code>fileB</code>，删除<code>fileA</code>后<code>fileB</code>仍然存在，但是属于无效文件</p>
+<blockquote>
+<p>简单记忆硬链接与软链接</p>
+<p><strong>硬链接</strong></p>
+<blockquote>
+<p>硬连接的作用是允许一个文件拥有多个有效路径名，这样用户就可以建立硬连接到重要文件，以防止“误删”的功能</p>
+</blockquote>
+<p>类似于复制粘贴文件到了另一个地方，当所有文件被删除时文件才是真正被删除完毕</p>
+<p><strong>软连接</strong></p>
+<blockquote>
+<p>在符号连接中，文件实际上是一个文本文件，其中包含的有另一文件的位置信息</p>
+</blockquote>
+<p>类似于快捷方式，当源文件不存在时，该软连接文件也失效了，但是仍然存在，属于无效文件</p>
+</blockquote>
+<p><code>NFS</code>是网络文件系统</p>
+<p><code>Linux</code>可以与其他操作系统共存于一个机器上</p>
+<p><code>df</code>：统计磁盘空间或者是文件系统使用情况</p>
+<p><code>du</code>：显示文件目录大小</p>
+<p><code>tar</code>不是压缩指令<code>(文件归档)</code></p>
+<p>在创建文件时，<code>umask</code>设置的值为<code>XXX</code>，则对应文件的权限为<code>666 - XXX</code>，如果创建的是文件夹，那么对应的权限为<code>777 - XXX</code></p>
+<p>运行一个脚本，用户不需要<code>write</code>权限</p>
+<p><strong>Linux系统7个运行级别</strong></p>
+<blockquote>
+<p>0：关机,停机模式、1：单用户模式、2：多用户模式、3：完整的多用户文本模式、4：系统未使用，保留一般不用、5：图形化模式、6：重启模式</p>
+<p>0： 系统停机（关机）模式，系统默认运行级别不能设置为0，否则不能正常启动，一开机就自动关机。<br>1：单用户模式，root权限，用于系统维护，禁止远程登陆，就像Windows下的安全模式登录。<br>2：多用户模式，没有NFS网络支持。<br>3：完整的多用户文本模式，有NFS，登陆后进入控制台命令行模式。<br>4：系统未使用，保留一般不用，在一些特殊情况下可以用它来做一些事情。例如在笔记本电脑的电池用尽时，可以切换到这个模式来做一些设置。<br>5：图形化模式，登陆后进入图形GUI模式或GNOME、KDE图形化界面，如X Window系统。<br>6：重启模式，默认运行级别不能设为6，否则不能正常启动，就会一直开机重启开机重启。</p>
+</blockquote>
 <h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><p><code>shutdown</code>：<code>-h</code>——关机、<code>-r</code>——重启</p>
 <p><code>kill all</code>：终止一个用户的所有进程</p>
 <p><code>mkdir</code>：当父目录不存在时先创建父目录可以<code>-p</code></p>
-<p><code>$&#123;name#pattern&#125;</code>和<code>$&#123;name##pattern&#125;</code>：如果<code>pattern（shell模式）</code>与<code>name</code>值的开头匹配，那么把<code>name</code>值去掉匹配部分后的结果就是该表达式的值，否则<code>name</code>的值就是该表达式的值。其中<code>$&#123;name#pattern&#125;</code>，name值去掉的部分是与<code>pattern</code>匹配最少的部分； <code>$&#123;name##pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最多的部分</p>
-<p><code>$&#123;name%pattern&#125;</code>和<code>$&#123;name%%pattern&#125;</code>：如果<code>pattern（shell模式）</code>与<code>name</code>值的末尾匹配，那么把<code>name</code>值去掉匹配部分后的结果就是该表达式的值，否则name的值就是该表达式的值。其中<code>$&#123;name%pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最少的部分； <code>$&#123;name%%pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最多的部分</p>
+<p><code>$&#123;name#pattern&#125;</code>和<code>$&#123;name##pattern&#125;</code>：</p>
+<p>如果<code>pattern（shell模式）</code>与<code>name</code>值的开头匹配，那么把<code>name</code>值去掉匹配部分后的结果就是该表达式的值，否则<code>name</code>的值就是该表达式的值。</p>
+<p>其中<code>$&#123;name#pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最少的部分； <code>$&#123;name##pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最多的部分</p>
+<p><code>$&#123;name%pattern&#125;</code>和<code>$&#123;name%%pattern&#125;</code>：</p>
+<p>如果<code>pattern（shell模式）</code>与<code>name</code>值的末尾匹配，那么把<code>name</code>值去掉匹配部分后的结果就是该表达式的值，否则name的值就是该表达式的值。</p>
+<p>其中<code>$&#123;name%pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最少的部分； <code>$&#123;name%%pattern&#125;</code>，<code>name</code>值去掉的部分是与<code>pattern</code>匹配最多的部分</p>
+<p><code>ls -all</code>不是列出当前目录中的文件和子目录名，而是列出当前目录下所有文件的详细信息</p>
+<p>字符界面可以使用<code>exit</code>或者是<code>Ctrl + D</code>来注销<code>Linux</code></p>
+<p><code>vi/vim</code>中使用 <code>.</code> 重复上一次对编辑文本进行的操作</p>
+<p><code>Linux</code>下实现热启，应修改<code>/etc/inittab</code>下的<code>ca::ctrlaltdel:/sbin/shutdown -t3 -r now</code></p>
+<p>关闭<code>Linux</code>但不重新启动使用<code>halt</code>命令</p>
+<p><code>top</code>命令可以实时地显示进程状态信息</p>
 <h2 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h2><p><code>read</code>是赋值给变量，变量首字母不能为数字</p>
 <p>不换行输出<code>echo -n &quot;XXX&quot;</code></p>
 <p><code>shell</code>有两种环境变量：局部变量和环境变量</p>
