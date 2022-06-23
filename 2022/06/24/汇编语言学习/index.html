@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>汇编语言学习 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="基本概念一般概念汇编语言能够直接访问计算机硬件
+地址总线是单向的，其他的是双向的。
+
+其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&amp;gt; 空间为2的N次方。
+数据总线的宽度,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">汇编语言学习</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">汇编语言学习</h1>
+        <div class="stuff">
+            <span>六月 24, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="一般概念"><a href="#一般概念" class="headerlink" title="一般概念"></a>一般概念</h3><p>汇编语言能够直接访问计算机硬件</p>
+<p>地址总线是单向的，其他的是双向的。</p>
+<blockquote>
+<p>其中地址总线的数量决定了可寻址的存储单元大小，<code>N</code>根地址总线，对应寻址&gt; 空间为<code>2的N次方</code>。</p>
+<p>数据总线的宽度决定了<code>CPU</code>和未接数据传送的速度。</p>
+<p>控制总线决定了<code>CPU</code>对外部器件的控制能力。</p>
+</blockquote>
+<p>汇编器：将程序转换为机器语言<br>连接器：将汇编器生成的单个文件进行组合为一个可执行程序<br>调试器：使程序员单步执行程序，并检查寄存器和内存状态</p>
+<h3 id="与高级语言区别"><a href="#与高级语言区别" class="headerlink" title="与高级语言区别"></a>与高级语言区别</h3><p>高级语言一条语句会被扩展为多条机器语言，而汇编语指令一条语句对应一条机器语言指令<br>同时高级语言易于移植，编译好的程序几乎能在任何计算机系统中运行，汇编语言不可移植，因为它是为特定处理器系列而设计的。</p>
+<h3 id="汇编语言的优势"><a href="#汇编语言的优势" class="headerlink" title="汇编语言的优势"></a>汇编语言的优势</h3><ol>
+<li>占用内存少，是编写嵌入式程序的理想工具</li>
+<li>允许程序员精确指定程序可执行代码</li>
+<li>可以对计算机硬件进行直接访问，对1要求高速度的代码进行手工优化</li>
+<li>有助于理解计算机硬件、操作系统和应用程序之间的交互</li>
+<li>一些高级语言对其数据进行了抽象，使其对在执行一些底层任务时不如汇编语言方便，如：位控制</li>
+<li>便于编写硬件设备驱动程序</li>
+</ol>
+<h3 id="内存的读写与地址空间"><a href="#内存的读写与地址空间" class="headerlink" title="内存的读写与地址空间"></a>内存的读写与地址空间</h3><p><code>CPU</code>对地址的读写需要进行三类信息的交互：</p>
+<ol>
+<li>存储单元的的地址(地址信息)</li>
+<li>器件的选择，读或写命令(控制信息)</li>
+<li>读或写的数据(数据信息)</li>
+</ol>
+<p>过程：地址线先发送要读取的地址信息，到内存之中，内存找到对应的地址后<code>CPU</code>发送控制信息，进行读或写，随后通过数据线进行读或者写。</p>
+<h3 id="数据表示"><a href="#数据表示" class="headerlink" title="数据表示"></a>数据表示</h3><p><code>十六进制</code>与<code>二进制</code>的加法运算与10进制相似，都是从低位依次相加到高位，大于进制数便进位。需要注意的是可能在加法运算中会发生溢出(最高有效位不足)。</p>
+<p><code>二进制</code>减法可以采用<code>十进制</code>的减法进行运算，同时也可以采用一个较为简单的办法，将<code>被减数</code>的符号位取反，然后两个数相加，忽略掉最高位的进位。</p>
+<h4 id="补码-可逆"><a href="#补码-可逆" class="headerlink" title="补码(可逆)"></a>补码(可逆)</h4><p><code>二进制数的补码</code>计算：取反后加一</p>
+<blockquote>
+<p>00000001 -&gt; 11111110 -&gt; 11111111</p>
+</blockquote>
+<p><code>十六进制数的补码</code>计算：按位取反(用15减去该位上的数字)后加一</p>
+<blockquote>
+<p>6A3D -&gt; 95C2 + 1 -&gt; 95C3</p>
+</blockquote>
+<h4 id="有符号数进制转换"><a href="#有符号数进制转换" class="headerlink" title="有符号数进制转换"></a>有符号数进制转换</h4><p>转为二进制：</p>
+<p>将其绝对值转换为二进制数据，如果原来的数据为负，则对该二进制数据求补码</p>
+<p>转为十六进制：</p>
+<p>将其绝对值转换为十六进制数据，如果原来的数据为负，则对该十六进制数据求补码</p>
+<blockquote>
+<p>通过观察16进制数据的最高位可以判断对应的数据的正负性，如果最高位大于等于8，则该数为负数，最高位小于等于7，则该数为正数</p>
+</blockquote>
+<h2 id="x86架构"><a href="#x86架构" class="headerlink" title="x86架构"></a>x86架构</h2><h3 id="一般概念-1"><a href="#一般概念-1" class="headerlink" title="一般概念"></a>一般概念</h3><p><code>CPU</code>包含寄存器、高频时钟、控制单元、算术逻辑单元</p>
+<p><code>CPU</code>通过控制、地址、数据三种总线与计算机其他部分相联系</p>
+<p>计算机从内存读取数据比从内部寄存器读取数据慢，前者大致消耗<code>4个时钟周期</code>，后者只需要<code>1个时钟周期</code></p>
+<p>指令执行周期：<code>取指 -&gt; 译码 -&gt; 执行</code></p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><blockquote>
+<p>EAX是默认使用的乘除指令。它常常被称为扩展累加器寄存器<br>ECX为CPU默认使用的循环计数器<br>ESP用于寻址堆栈(一种系统内存结构)数据。它极少用于一般算术运算和数据传输，通常被称为扩展堆栈指针寄存器<br>ESI和EDI用于高速存储器传输指令，有时也被称为扩展源变址寄存器和扩展目的变址寄存器<br>EBP在高级语言中用来引用堆栈中的函数参数和局部变量。除了高级编程，它不用于一般算术运算和数据传输。它常常被称为扩展帧指针寄存器。<br>实地址模式中，16位段寄存器表示的是预先分配的内存区域的基址，这个内存区域称为段。保护模式中，段寄存器中存放的是段描述符表指针。一些段中存放程序指令(代码)，其他段存放变量(数据)，还有一个堆栈段存放的是局部函数变量和函数参数。<br>EIP为指令指针寄存器，包含下一条将要执行指令的地址。某些机器指令能控制EIP，使得程序分支转向到一个新位置<br>FFLAGS寄存器包含了独立的二进制位。用干控制CPU的操作，或是反映一些CPU操作的结果。有些指令可以测试和控制这些单独的处理器标志位<br>状态标志位状态标志位反映了CPU执行的算术和逻辑操作的结果。其中包括:溢出位、符号位、零标志位、辅助进位标志位、奇偶校验位和进位标志位。<br>进位标志位(CF)，与目标位置相比，无符号算术运算结果太大时，设置该标志位。<br>溢出标志位(OF)，与目标位置相比，有符号算术运算结果太大或太小时，设置该标志位<br>符号标志位(SF)，算术或逻辑操作产生负结果时，设置该标志位。<br>零标志位(ZF)，算术或逻辑操作产生的结果为零时，设置该标志位。<br>辅助进位标志位(AF)，算术操作在8位操作数中产生了位3向位4的进位时，设置该标志位。<br>奇偶校验标志位(PF)，结果的最低有效字节包含偶数个1时，设置该标志位，否则清除该标志位。一般情况下，如果数据有可能被修改或损坏时，该标志位用于进行错误检测。<br>方向标志位(DF)，控制了串操作指令(MOVS，CMPSSCASLODS与STOS)设置DF标志位将使得串操作指令地址自动递减(从高地址向低地址处理串)。清除DF标志位将使得串操作指令自动递增(从低地址向高地址处理串)。<br>中断允许标志位(IF)，控制处理器对干可屏蔽中断的处理，设置该标志位位可使处理器响应可屏蔽中断；清除则禁止响应可屏蔽中断。<br>跟踪标志位(TF)，设置可启用单步运行模式来调试程序，清除则禁用单步运行模式。</p>
+</blockquote>
+<h3 id="计算机组件"><a href="#计算机组件" class="headerlink" title="计算机组件"></a>计算机组件</h3><p>主板是微型计算机的心脏，它是一个平面电路板，其上集成了CPU、支持处理器、主存、输入输出接口、电源接口和扩展槽。</p>
+<p>BIOS：基本输入输出系统，用于保存系统软件</p>
+<p>基于<code>Intel</code>的系统使用的是几种基础类型内存：</p>
+<ol>
+<li>只读存储器(ROM)：永久烧录在芯片上，并且不能擦除</li>
+<li>可擦除可编程只读存储器(EPROM)：能用紫外线缓慢擦除，并且重新编程</li>
+<li>动态随机访问存储器(DRAM):通常的内存，在程序运行时保存程序和数据的部件。需要每毫秒进行刷新，以避免丢失数据</li>
+<li>静态RAM(SRAM)：主要用于价格高、速度快的<code>cache</code>存储器，不需要刷新</li>
+<li>图像随机存储器(VRAM)：保存视频数据，其为双端口，可以一个端口刷新显示数据，另一个端口将数据写到显示器</li>
+<li>互补金属氧化物半导体(CMOS)RAM：在系统主板上，保存系统设置信息，由电池供电，因此断电后其中的内容仍能够保留</li>
+</ol>
+<h3 id="输入输出系统"><a href="#输入输出系统" class="headerlink" title="输入输出系统"></a>输入输出系统</h3><img src="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png" style="zoom: 67%;" />
+
+<p>与虚拟机概念相似，输入输出是通过不同层次的访问来实现的。库函数在最高层，操作系统是次高层。BIOS(基本输入输出系统)是一组函数，能直接与硬件设备通信。程序也可以直接访问输入输出设备。</p>
+<h2 id="汇编语言基础"><a href="#汇编语言基础" class="headerlink" title="汇编语言基础"></a>汇编语言基础</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wa_junye/article/details/105617238">https://blog.csdn.net/wa_junye/article/details/105617238</a></p>
+</blockquote>
+<h3 id="一般概念-2"><a href="#一般概念-2" class="headerlink" title="一般概念"></a>一般概念</h3><p>数据标号和符号标号的区别</p>
+<blockquote>
+<p>数据标号表示变量的位置它提供了一种简便的方式操作变量，而符号标号表示程序代码的位置，使用冒号结束，通常用于循环与跳转</p>
+</blockquote>
+<p>大小端序</p>
+<blockquote>
+<p>大端序将最高有效字节放在第一个内存地址中，小端序中最低有效字节放在第一个内存地址中</p>
+<p>如存放数据 12345678h 大端序为 12h、34h、56h、78h 小端序为 78h、56h、34h、12h</p>
+</blockquote>
+<p>源文件和列表文件的区别</p>
+<blockquote>
+<p>源文件是ASCII编码的程序源代码， 列表文件包括源文件的副本，行号每条指令的数字地址，每条指令的机器代码字节(十六进制)以及符号表<br>符号表中包含了程序中所使用的所有标识符名称，段和相关信息<br>指令的数字地址是相对程序占用的起点而言的，从<code>0000 0000</code>开始</p>
+</blockquote>
+<p>注释块的编写</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">comment %</span><br><span class="line">	注释内容 [ % 可以用其他字符代替 ]</span><br><span class="line">%</span><br></pre></td></tr></table></figure>
+
+<p>DUP 操作符</p>
+<blockquote>
+<p>DUP可以为多个数据项分配存储空间，可以用于初始化或非初始化数据</p>
+<p>如： Array DWORD 200 DUP(?) ; 分配两百个双字空间，同时不将其初始化</p>
+</blockquote>
+<h3 id="基本语言元素"><a href="#基本语言元素" class="headerlink" title="基本语言元素"></a>基本语言元素</h3><p>整形常量表达式是算术表达式，包括了整数常量、符号常量和算术运算符。<code>优先级</code>是指当表达式有两个或者更多运算时，隐藏的优先执行顺序</p>
+<p>被<code>.code</code>和<code>.data</code>等伪指令所包括起来的叫<code>段</code></p>
+<blockquote>
+<p>有<code>代码段</code>和<code>数据段</code>还有一种叫<code>堆栈</code></p>
+</blockquote>
+<p>整数常量形式： [{ + | - }] digits [ radix ]</p>
+<blockquote>
+<p>其中radix为对应基数，有如下基数：</p>
+<p>h -&gt; 16进制    r -&gt; 编码实数    q/o -&gt; 8进制    t -&gt; 10进制(备用) </p>
+<p>d -&gt; 10进制    y -&gt; 2进制(备用)    b -&gt; 2进制</p>
+</blockquote>
+<p>实数常量格式： [ sign ] integer. [ integer ] [ exponent ]</p>
+<blockquote>
+<p>符号和指数的格式如下：</p>
+<p>sign    { +/- }</p>
+<p>exponent     E[{ +/- }]integer</p>
+<p>其中<code>E</code>表示十的多少次方： 1E5 = 1 * 10^5         1E-5 = 1*10^-5</p>
+</blockquote>
+<p>保留字、标识符伪指令都是不区分大小写的</p>
+<blockquote>
+<p>保留字包括：指令助记符(如：MOV)、寄存器名称、伪指令(如：.data)、属性(如：BYTE、WORD)、运算符、预定义符号(如：@data)</p>
+<p>标识符的一些规则：</p>
+<ul>
+<li>可以包含 1 - 247 个字符</li>
+<li>不区分大小写</li>
+<li>第一个字符必须以字母、下划线、@、？、$。后续字符可以是数字</li>
+<li>标识符不能和汇编器的保留字相同</li>
+</ul>
+<p>伪指令：嵌入源代码中的命令，由汇编器识别和执行，其不在运行时执行，但是可以定义变量、宏和子程序(函数);为内存段分配名称，执行许多其他汇编器相关的日常任务</p>
+</blockquote>
+<p>指令的基本格式： [ label: ] mnemonic [ operands ] [ ;comment ]</p>
+<blockquote>
+<p>指令在程序汇编编译时变得可执行，汇编器将其翻译为机器语言字节，并且在运行时由<code>CPU</code>加载和执行</p>
+</blockquote>
+<h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><p>定义格式： [ name ] directive initializer [ ,initializer ] (例： A BYTE 100 )</p>
+<img src="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png" style="zoom: 67%;" />
+
+<img src="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png" alt="3.png" style="zoom: 67%;" />
+
+<h3 id="32位汇编程序模板"><a href="#32位汇编程序模板" class="headerlink" title="32位汇编程序模板"></a>32位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">; 32位汇编程序模板</span><br><span class="line">.386 ; 表示一个32位程序</span><br><span class="line">.model flat,stdcall ; 确定程序的内存模式(flat)和子程序调用规范</span><br><span class="line">.stack 4096 ;栈空间大小</span><br><span class="line">ExitProcess PROTO,dwExitCode:DWORD ; 设置PROTO关键字的返回值</span><br><span class="line">.data</span><br><span class="line">	; 数据段</span><br><span class="line">.code</span><br><span class="line">main PROC</span><br><span class="line">	; 程序指令</span><br><span class="line">	</span><br><span class="line">	INVOKE ExitProcess,0</span><br><span class="line">main ENDP</span><br><span class="line">END main</span><br></pre></td></tr></table></figure>
+
+<h3 id="64位汇编程序模板"><a href="#64位汇编程序模板" class="headerlink" title="64位汇编程序模板"></a>64位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">; 64位汇编程序模板</span><br><span class="line">ExitProcess PROTO</span><br><span class="line">.data</span><br><span class="line">	; 数据段</span><br><span class="line">.code</span><br><span class="line">main PROC</span><br><span class="line">	; 程序指令</span><br><span class="line">	</span><br><span class="line">	push ecx,0</span><br><span class="line">	call ExitProcess</span><br><span class="line">main ENDP</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据传送、寻址和算术运算"><a href="#数据传送、寻址和算术运算" class="headerlink" title="数据传送、寻址和算术运算"></a>数据传送、寻址和算术运算</h2><h3 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h3><p>操作数有 3 种基本类型：</p>
+<ol>
+<li>寄存器操作数 —— 使用<code>CPU</code>内已命名的寄存器</li>
+<li>立即数 —— 使用数字文本表达式</li>
+<li>内存操作数 —— 引用内存位置</li>
+</ol>
+<img src="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png" style="zoom:67%;" />
+
+<p><code>MOV</code>指令将源操作数复制到目的操作数，<code>MOVZX</code>在传送过程中执行<code>零扩展</code>，<code>MOVSX</code>执行符号位扩展(一般来说十六进制第一位大于等于 8 的便是负数，扩展符号位 1 ，便会得到 FFF…)</p>
+<p><code>LAHF</code>将<code>EFLAGS</code>寄存器的低字节复制到<code>AH</code>，被复制的标志位包括：符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位，而<code>SAHF</code>将<code>AH</code>的内容复制到<code>EFLAGS</code>寄存器低字节</p>
+<p><code>XCHG</code>用于交换两个操作数内容，需要注意两个操作数的字节大小需要相同</p>
+<p>通过<code>数组名 + 偏移量</code>可以取到对应数组在栈中的某个数据，但如果是<code>数组名 + 元素个数 * 类型长度</code>那么可以得到对应的偏移，如果需要去取对应偏移的值，那么需要加上一个中括号(如 <code>[array+2]</code> )</p>
+<h3 id="加法和减法"><a href="#加法和减法" class="headerlink" title="加法和减法"></a>加法和减法</h3><p><code>INC</code>和<code>DEC</code>指令分别对应寄存器或内存操作数加一和减一，需要注意的是这两个指令不会改变进位标志位</p>
+<p><code>ADD</code>指令将<code>长度相同</code>的源操作数和目的操作数进行相加，<code>SUB</code>指令从目的操作数减去源操作数</p>
+<p><code>NEG</code>(非)指令通过把操作数转换为其二进制补码，将操作数的符号取反，可以将整数转为负数</p>
+<h3 id="标志位"><a href="#标志位" class="headerlink" title="标志位"></a>标志位</h3><ul>
+<li><p>进位标志意味着无符号整数溢出 (CF/CY)</p>
+<blockquote>
+<p>如果和数超过了目的操作数的存储大小，就可以认为 CF = 1</p>
+<p>从较小的无符号整数中减去较大的无符号整数时，减法操作就会将进位标志位置 1</p>
+</blockquote>
+</li>
+<li><p>溢出标志意味着有符号整数溢出 (OF/OV)</p>
+<blockquote>
+<p>有符号数算术操作结果与目的操作数相比，如果发生上溢或者下溢，则溢出标志位置 1 </p>
+<p>OF = CF XOR 运算结果最后的二进制最高位</p>
+</blockquote>
+</li>
+<li><p>零标志位意味着操作结果为 0 (/ZR)</p>
+</li>
+<li><p>符号标志位意味着操作产生的结果为负数 (SF/PL)</p>
+<blockquote>
+<p>有符号数算术操作结果为负数，则符号标志位置 1</p>
+</blockquote>
+</li>
+<li><p>奇偶进位标志值在一条算术或者布尔运算执行后，立即判断目的操作数最低有效字节(二进制下的后 8 位)中 1 的个数是否为偶数 (PF/PE)</p>
+<blockquote>
+<p>目的操作数最低有效字节(二进制下的后 8 位)中 1 的个数为偶数时置 1</p>
+</blockquote>
+</li>
+<li><p>辅助进位标志位置 1 ，意味着目的操作数最低有效字节中位 3 有进位 (AC)</p>
+<blockquote>
+<p>主要用于二进制编码的十进制数(BCD)运算</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="与数据相关的运算符和伪指令"><a href="#与数据相关的运算符和伪指令" class="headerlink" title="与数据相关的运算符和伪指令"></a>与数据相关的运算符和伪指令</h3><p><code>OFFSET</code>运算符返回的是一个变量与其所在段起始地址之间的距离</p>
+<p><code>PTR</code>运算符可以重写操作数默认的大小类型</p>
+<p><code>TYPE</code>运算符返回第是一个操作数或数组中每个元素的大小(按字节计算)</p>
+<p><code>LENGTHOF</code>运算符返回的是数组中元素的个数</p>
+<p><code>SIZEOF</code>运算符返回的是数组初始化时使用的字节数</p>
+<p><code>LABEL</code>伪指令可以插入一个标号，并定义它的大小属性，但是不为这个标号分配存储空间</p>
+<blockquote>
+<p>个人理解: <code>LABEL</code>创建了一个对应类型的一个框，不占据任何空间，当有数据被定义时便会放在框内，直到框装满，对应的变量的值便是框内数据</p>
+</blockquote>
+<h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><p><code>JMP</code>无条件跳转到一条指令处，<code>LOOP</code>使用<code>ECX</code>作为计数器，当<code>ECX</code>等于 0 时结束循环，再循环过程中每次<code>ECX</code>会减 1，如果将<code>ECX</code>初始值设置为 0，在第一次循环后减一会造成溢出，产生<code>FFFFFFFF</code>，而形成巨大的循环</p>
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h3 id="堆栈操作"><a href="#堆栈操作" class="headerlink" title="堆栈操作"></a>堆栈操作</h3><p>在<code>堆栈</code>中，新值将被添加到栈顶，删除值也在栈顶移除，被称为<code>LIFO</code>(先进后出)结构，原因是：最后进入堆栈的值也是第一个出堆栈的值</p>
+<p><code>运行时堆栈</code>是内存数组，<code>CPU</code>通过<code>ESP</code>对其进行直接管理，该寄存器也被称为堆栈指针寄存器，<code>ESP</code>存放的是堆栈中某个位置的 32 位偏移量。<code>ESP</code>基本不会直接被程序员控制，反之，它是用<code>CALL</code>、<code>RET</code>、<code>PUSH</code>和<code>POP</code>等指令间接修改</p>
+<p><code>ESP</code>总是指向最后压入堆栈的数据，运行时堆栈在内存中是向下生长的，即从高地址向低地址扩展。数值在弹出堆栈后，栈顶指针增加(按堆栈元素大小)，指向堆栈中下一个最高位置</p>
+<p>运行时堆栈的一些用途：</p>
+<ul>
+<li>当寄存器用于多个目的时，堆栈可以作为寄存器的一个方便的临时保存区。在寄存器被修改后,还可以恢复其初始值</li>
+<li>执行CALL指令时，CPU在堆栈中保存当前过程的返回地址</li>
+<li>调用过程时,输入数值也被称为参数，通过将其压入堆栈实现参数传递。堆栈也为过程局部变量提供了临时存储区域</li>
+</ul>
+<p><code>PUSH</code>指令首先减少<code>ESP</code>的值，再将源操作数复制到堆栈。</p>
+<p><code>POP</code>指令先把<code>ESP</code>指向的堆栈元素内容复制到一个 16 位或 32 位的目的操作数中，再增加<code>ESP</code>的值</p>
+<p><code>PUSHFD</code>将 32 位<code>EFLAGS</code>寄存器内容压入堆栈。<code>POPFD</code>吧栈顶内容弹出到<code>EFLAGS</code>寄存器</p>
+<blockquote>
+<p>不能用<code>MOV</code>指令将标识寄存器内容复制给一个变量，因此，<code>PUSHFD</code>是保护标志位的最佳途径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pushfd	; 保存标志寄存器</span><br><span class="line">;</span><br><span class="line">; 任意语句序列</span><br><span class="line">;</span><br><span class="line">popfd	; 恢复标志寄存器</span><br></pre></td></tr></table></figure>
+
+<p>采用上述方式使用入栈和出栈指令时，必须要确保程序的指向路径不会跳过<code>POPFD</code>指令</p>
+</blockquote>
+<p><code>PUSHAD</code>指令按照<code>EAX</code>、<code>ECX</code>、<code>EDX</code>、<code>EBX</code>、<code>ESP</code>(执行<code>PUSHAD</code>之前的值)、<code>EBP</code>、<code>ESI</code>和<code>EDI</code>的顺序，将所有 32 位通用寄存器压入堆栈。<code>POPAD</code> 指令按照相反顺序将同样的寄存器弹出堆栈。与之相似，<code>PUSHA</code>指令按序(<code>AX</code>、<code>CX</code>、<code>DX</code>、<code>BX</code>、<code>SP</code>、<code>BP</code>、<code>SI</code>和<code>DI</code>)将16位通用寄存器压入堆栈。<code>POPA</code>指令按照相反顺序将同样的寄存器弹出堆栈。</p>
+<p>需要注意的是，过程用一个或者多个寄存器返回结构时不应使用<code>PUSHA</code>和<code>PUSHAD</code>，这两个指令都保存了对应的保存的寄存器值，若中间有过程用寄存器传递可能会丢失数据</p>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">read PROC</span><br><span class="line">	PUSHAD</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	mov eax,return_value</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	POPAD</span><br><span class="line">	ret		; EAX的值被覆盖了</span><br><span class="line">read ENDP</span><br></pre></td></tr></table></figure>
+
+<p>上述调用<code>POPAD</code>将会覆盖<code>EAX</code>的返回值，导致返回数据丢失</p>
+</blockquote>
+<h3 id="定义并使用过程"><a href="#定义并使用过程" class="headerlink" title="定义并使用过程"></a>定义并使用过程</h3><p>汇编语言中经常使用通用寄存器来传递参数</p>
+<p>过程可以非正式地定义为:由返回语句结束的已命名的语句块。过程用<code>PROC</code>和<code>ENDP</code>伪指令来定义，并且必须为其分配一个名字(有效标识符)</p>
+<p><code>PORC</code>和<code>ENDP</code>伪指令来定义一个过程，当在程序启动过程之外创建一个过程时，就用<code>RET</code>指令来结束它。RET强制CPU返回到该过程被调用的位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">main PROC</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	ret</span><br><span class="line">main ENDP</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，标号只在其被定义的过程中可见。解决这个限制可以定义全局标号，即在名字后面加双冒号(::)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Destination ::</span><br></pre></td></tr></table></figure>
+
+<p><code>CALL</code>指令执行时将下一条指令的地址压入栈中，再把被调用过程的地址复制到指令指针寄存器中(EIP)</p>
+<p><code>RET</code>指令执行时先将<code>ESP</code>的值弹道<code>EIP</code>中，然后<code>ESP</code>向高地址移动</p>
+<img src="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png" style="zoom:90%;" />
+
+<img src="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png" style="zoom: 67%;" />
+
+
+
+<p>与<code>PROC</code>伪指令一起使用的<code>USES</code>运算符，列出了过程修改的全部寄存器。汇编器产生代码，在程序开始时将寄存器的内容压人堆栈，并在过程返回前弹出恢复寄存器。</p>
+<p><code>USES</code>运算符与<code>PROC</code>伪指令一起使用，让程序员列出在该过程中修改的所有寄存器名。<code>USES</code>告诉汇编器做两件事情:</p>
+<p>第一，在过程开始时生成<code>PUSH</code>指令，将寄存器保存到堆栈;</p>
+<p>第二，在过程结束时生成<code>POP</code>指令，从堆栈恢复寄存器的值。</p>
+<p><code>USES</code>运算符紧跟在<code>PROC</code>之后，其后是位于同一行上的寄存器列表，表项之间用空格符或制表符(不是逗号)分隔。</p>
+<h3 id="外部连接库"><a href="#外部连接库" class="headerlink" title="外部连接库"></a>外部连接库</h3><p>链接库(<code>.inc</code>)是一种文件，包含了已经汇编为机器代码的过程(子程序)。链接库开始时是一个或者多个源文件，这些文件再被汇编为目标文件</p>
+<p>链接库通过<code>include</code>进行导入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include Irvine32.inc</span><br></pre></td></tr></table></figure>
+
+<p>通过链接库可以直接调用内部现有的功能函数，<code>Irvine32.inc</code>中包含如下过程：</p>
+<img src="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png" style="zoom:70%;" />
+
+
+
+
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
