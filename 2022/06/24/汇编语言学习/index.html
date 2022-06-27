@@ -179,7 +179,7 @@
 
 <img src="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png" alt="3.png" style="zoom: 67%;" />
 
-<h3 id="32位汇编程序模板"><a href="#32位汇编程序模板" class="headerlink" title="32位汇编程序模板"></a>32位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">; 32位汇编程序模板</span><br><span class="line">.386 ; 表示一个32位程序</span><br><span class="line">.model flat,stdcall ; 确定程序的内存模式(flat)和子程序调用规范</span><br><span class="line">.stack 4096 ;栈空间大小</span><br><span class="line">ExitProcess PROTO,dwExitCode:DWORD ; 设置PROTO关键字的返回值</span><br><span class="line">.data</span><br><span class="line">	; 数据段</span><br><span class="line">.code</span><br><span class="line">main PROC</span><br><span class="line">	; 程序指令</span><br><span class="line">	</span><br><span class="line">	INVOKE ExitProcess,0</span><br><span class="line">main ENDP</span><br><span class="line">END main</span><br></pre></td></tr></table></figure>
+<h3 id="32位汇编程序模板"><a href="#32位汇编程序模板" class="headerlink" title="32位汇编程序模板"></a>32位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">; 32位汇编程序模板</span><br><span class="line">.386 ; 表示一个32位程序</span><br><span class="line">.model flat,stdcall ; 确定程序的内存模式(flat)和子程序调用规范</span><br><span class="line">.stack 4096 ;栈空间大小</span><br><span class="line">ExitProcess PROTO, dwExitCode:DWORD ; 设置PROTO关键字的返回值</span><br><span class="line">.data</span><br><span class="line">	; 数据段</span><br><span class="line">.code</span><br><span class="line">main PROC</span><br><span class="line">	; 程序指令</span><br><span class="line">	</span><br><span class="line">	INVOKE ExitProcess,0</span><br><span class="line">main ENDP</span><br><span class="line">END main</span><br></pre></td></tr></table></figure>
 
 <h3 id="64位汇编程序模板"><a href="#64位汇编程序模板" class="headerlink" title="64位汇编程序模板"></a>64位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">; 64位汇编程序模板</span><br><span class="line">ExitProcess PROTO</span><br><span class="line">.data</span><br><span class="line">	; 数据段</span><br><span class="line">.code</span><br><span class="line">main PROC</span><br><span class="line">	; 程序指令</span><br><span class="line">	</span><br><span class="line">	push ecx,0</span><br><span class="line">	call ExitProcess</span><br><span class="line">main ENDP</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
 
@@ -211,7 +211,7 @@
 <p>OF = CF XOR 运算结果最后的二进制最高位</p>
 </blockquote>
 </li>
-<li><p>零标志位意味着操作结果为 0 (/ZR)</p>
+<li><p>零标志位意味着操作结果为 0 (ZF/ZR)</p>
 </li>
 <li><p>符号标志位意味着操作产生的结果为负数 (SF/PL)</p>
 <blockquote>
@@ -223,7 +223,7 @@
 <p>目的操作数最低有效字节(二进制下的后 8 位)中 1 的个数为偶数时置 1</p>
 </blockquote>
 </li>
-<li><p>辅助进位标志位置 1 ，意味着目的操作数最低有效字节中位 3 有进位 (AC)</p>
+<li><p>辅助进位标志位置 1 ，意味着目的操作数最低有效字节中位 3 有进位 (AF/AC)</p>
 <blockquote>
 <p>主要用于二进制编码的十进制数(BCD)运算</p>
 </blockquote>
@@ -294,10 +294,240 @@
 
 <img src="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png" style="zoom:70%;" />
 
+<h2 id="条件处理"><a href="#条件处理" class="headerlink" title="条件处理"></a>条件处理</h2><h3 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h3><p>允许作决策的编程语言使程序员可以改变控制流，使用的技术成为<code>条件分支</code></p>
+<p>通过布尔运算可以很方便的更改一个数字的单个位，布尔指令影响对应的<code>零标志位</code>、<code>进位标志位</code>、<code>符号标志位</code>、<code>溢出标志位</code>和<code>奇偶标志位</code></p>
+<p><code>AND</code>指令将两个数进行<code>与运算</code>，要求对应的两个数的大小相等，操作数可以是8、16、32、64位。</p>
+<blockquote>
+<p>1 and 1 = 1</p>
+<p>0 and 1 = 0</p>
+<p>0 and 0 = 0</p>
+<p>两个数同时为 1 的时候运算结果才为 1 ，反之则为 0</p>
+</blockquote>
+<p><code>OR</code>指令将两个数进行<code>或运算</code>，同样要求两个数的大小相等，操作数可以是8、16、32、64位</p>
+<blockquote>
+<p>1 or 1 = 1</p>
+<p>0 or 1 = 1</p>
+<p>0 or 0 = 0</p>
+<p>两个数中有一个数字为 1 那么运算的结果便为 1</p>
+</blockquote>
+<p><code>XOR</code>指令将两个数进行<code>异或运算</code>，操作数组合和大小与<code>AND</code>和<code>OR</code>指令相同</p>
+<blockquote>
+<p>0 xor 0 = 0</p>
+<p>1 xor 1 = 0</p>
+<p>0 xor 1 = 1</p>
+<p>两个数字不同时进行<code>xor</code>运算的结果为 1 ，两个数字相同时<code>xor</code>结果为 0 ，同时<code>xor</code>具备有可逆性有如下性质：</p>
+<p>A XOR B = C        C XOR B = A        C XOR A = B</p>
+</blockquote>
+<p><code>NOT</code>指令将操作数的所有位进行翻转(0 -&gt; 1 , 1 -&gt; 0)，其结果为反码，需要注意的时<code>NOT</code>指令不会影响标志位</p>
+<p> <code>TEST</code>指令将两个操作数对应位之间进行<code>AND</code>操作，根据其运算结果设置对应的<code>符号标志位</code>、<code>零标志位</code>和<code>奇偶标志位</code>，<code>TEST</code>指令不改变对应的目标操作数，可以用于发现操作数中单个位是否置位(某个位上是否为 1)</p>
+<blockquote>
+<p><code>TEST</code>指令总是清除<code>溢出</code>和<code>进位标志位</code>，其修改<code>符号标志位</code>、<code>零标志位</code>和<code>奇偶标志位</code>的方式与<code>AND</code>指令相同</p>
+</blockquote>
+<p><code>CMP</code>用于比较两个操作数，内部隐含一个减法操作，并且不会修改任何操作数，常常用于创建条件分支</p>
+<h3 id="一些置位方式"><a href="#一些置位方式" class="headerlink" title="一些置位方式"></a>一些置位方式</h3><p>零标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test al,0	; 零标志位置 1</span><br><span class="line">and al,0	; 零标志位置 1</span><br><span class="line">or al,1		; 零标志位清零</span><br></pre></td></tr></table></figure>
 
+<p>符号标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">or al,80h	; 符号标志位置 1 		80h -&gt; 1000 0000</span><br><span class="line">and al,7Fh	; 符号标志位清零	   7F -&gt; 0111 1111</span><br></pre></td></tr></table></figure>
 
+<p>进位标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stc		; 进位标志位置 1</span><br><span class="line">clc		; 进位标志位清零</span><br></pre></td></tr></table></figure>
 
+<p>溢出标志位置 1 ，就把两个正数相加使其产生负的和数；若要清除溢出标志位，则将操作数和 0 进行<code>OR</code>操作</p>
+<h3 id="条件跳转"><a href="#条件跳转" class="headerlink" title="条件跳转"></a>条件跳转</h3><p>第一步先使用<code>CMP</code>、<code>AND</code>或<code>SUB</code>操作改变<code>CPU</code>的状态标志位，随后使用<code>条件跳转指令</code>来对<code>标志位</code>进行测试，而产生新的分支</p>
+<p><img src="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png"></p>
+<img src="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png" style="zoom:80%;" />
 
+<img src="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png" alt="13.png" style="zoom:80%;" />
+
+<h3 id="条件循环指令"><a href="#条件循环指令" class="headerlink" title="条件循环指令"></a>条件循环指令</h3><p><code>LOOPZ</code>(为零跳转）指令的工作和<code>LOOP</code>指令相同，只是有一个附加条件:为零控制转向目的标号，零标志位必须置 1。<code>LOOPE</code>(相等跳转)指令相当于<code>LOOPZ</code>两者有相同的操作码，执行以下任务:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ecx = ecx - 1</span><br><span class="line">if ecx &gt; 0 and zf = 1 </span><br><span class="line">	jump to destination</span><br></pre></td></tr></table></figure>
+
+<p>两者均不改变对应的状态标志位，如果处于 64 位下便采用<code>rcx</code>作为对应循环计数器</p>
+<p><code>LOOPNZ</code>(非零跳转）指令与<code>LOOPZ</code>(为零跳转)相对应。当<code>ECX</code>中无符号数值大于零(减 1 操作之后)且零标志位等于零时,继续循环。<code>LOOPNE</code>(不等跳转)指令相当于<code>LOOPNZ</code>，它们有相同的操作码，执行以下任务:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ecx = ecx - 1</span><br><span class="line">if ecx &gt; 0 and zf =0</span><br><span class="line">	jump to destination</span><br></pre></td></tr></table></figure>
+
+<p>条件循环指令与普通的循环指令相似，不同的是需要额外判断对应<code>CPU</code>中的状态标志位，当两者(ECX != 0 和 条件标志位满足)同时成立时，便发生跳转</p>
+<h3 id="条件分支与循环伪指令"><a href="#条件分支与循环伪指令" class="headerlink" title="条件分支与循环伪指令"></a>条件分支与循环伪指令</h3><p>条件分支(IF语句)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.IF condition1</span><br><span class="line">	statements</span><br><span class="line">.ELSEIF	condition2</span><br><span class="line">	statements</span><br><span class="line">.ENDIF</span><br></pre></td></tr></table></figure>
+
+<p>在<code>condition</code>中可以采用与高级语言同样的关系和逻辑运算符，同时也存在一些特殊运算符：</p>
+<table>
+<thead>
+<tr>
+<th align="center">运算符</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OVERFLOW?</td>
+<td align="center">若溢出标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">CARRY?</td>
+<td align="center">若进位标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">PARITY?</td>
+<td align="center">若奇偶标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">SIGN?</td>
+<td align="center">若符号标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">ZERO?</td>
+<td align="center">若零标志置 1 ，则返回“真”</td>
+</tr>
+</tbody></table>
+<p>循环语句</p>
+<p>do-while</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.REPEAT</span><br><span class="line">	statements</span><br><span class="line">.UNITL condition</span><br></pre></td></tr></table></figure>
+
+<p>while</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.WHILE</span><br><span class="line">	statements</span><br><span class="line">.ENDW</span><br></pre></td></tr></table></figure>
+
+<h2 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h2><h3 id="移位和循环移位指令"><a href="#移位和循环移位指令" class="headerlink" title="移位和循环移位指令"></a>移位和循环移位指令</h3><p>溢出：当一个有符号数进行循环移位时发生了符号位的取反( 0 -&gt; 1 或 1 -&gt; 0 )时，溢出标志位置 1</p>
+<p>逻辑移位：在移位过程中空出来的高位用 0 进行填充</p>
+<p><img src="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png"></p>
+<p>算术移位：在移位过程中空出来的高位用符号位进行填充</p>
+<p><img src="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png"></p>
+<hr>
+<p><code>SHL</code>指令将目的操作数逻辑左移移位，最低位用 0 进行填充，其中最高位会移入进位标志位上，每向左移位一次相当于乘以 2</p>
+<p><img src="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png"></p>
+<p><code>SHR</code>指令将目的操作数逻辑右移移位，最高位用 0 进行填充，其中最后一位被移除的会置于进位标志位上，每向右移位一次相当于除以 2</p>
+<p><img src="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png"></p>
+<hr>
+<p><code>SAL</code>(算术左移)指令与<code>SHL</code>相同，每次移动时将最低为用 0 进行填充，其中最高位会移入进位标志位上</p>
+<p><img src="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png"></p>
+<p><code>SAR</code>进行算术右移，<code>SAL</code>与<code>SAR</code>两者的操作数类型与<code>SHL</code>和<code>SHR</code>完全相同</p>
+<p><img src="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png"></p>
+<hr>
+<p><code>ROL</code>以循环方式来进行移位，该指令将数的一段移动到另一端，并不会丢弃位，当循环计数次数大于 1 时，进位标志位保存的是最后循环位移出<code>MSB</code>的位</p>
+<p><img src="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png"></p>
+<blockquote>
+<p>可以利用该方式将一个数字的高 4 位与低 4 位进行交换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov al,26h</span><br><span class="line">rol al,4	; al = 62h</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><code>ROR</code>(循环右移)指令把所有位都向右移，最低位复制到进位标志位和最高位。该指令格式与SHL指令相同</p>
+<p><img src="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png"></p>
+<p>与之相似的是当循环计数值大于1时，进位标志位保存的是最后循环移出LSB的位</p>
+<hr>
+<p><code>RCL</code>(带进位循环左移)指令把每一位都向左移，进位标志位复制到LSB，而MSB复制到进位标志位</p>
+<p><img src="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png"></p>
+<blockquote>
+<p>此处的<code>带进位</code>指的是进位标志位也参与到移位中</p>
+</blockquote>
+<p><code>RCR</code>(带进位循环右移)指令把每一位都向右移，进位标志位复制到<code>MSB</code>,而<code>LSB</code>复制到进位标志位</p>
+<p><img src="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png"></p>
+<hr>
+<p><code>SHLD</code>(双精度左移)指令将目的操作数向左移动指定位数。移动形成的空位由源操作数的高位填充。源操作数不变，但是符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位会受影响，格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHLD dest,source,count</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png"></p>
+<p><code>SHRD</code>(双精度右移)指令将目的操作数向右移动指定位数。移动形成的空位由源操作数的低位格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHLD dest,source,count</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png"></p>
+<blockquote>
+<p>一般为了在屏幕上进行图像的重定向而将位元组左右移动的时候，可以用<code>SHLD</code>和<code>SHRD</code>来处理位映射图像。或者在数据加密时可以用到两种移位方式。</p>
+</blockquote>
+<h3 id="乘法与除法指令"><a href="#乘法与除法指令" class="headerlink" title="乘法与除法指令"></a>乘法与除法指令</h3><p>32 位模式下，<code>MUL</code>(无符号数乘法)指令有三种类型:第一种执行 8 位操作数与<code>AL</code>寄存器的乘法;第二种执行 16 位操作数与<code>AX</code>寄存器的乘法;第三种执行 32 位操作数与<code>EAX</code>寄存器的乘法。乘数和被乘数的大小必须保持一致，乘积的大小则是它们的一倍。这三种类型都可以使用寄存器和内存操作数,但不能使用立即数</p>
+<p>往往来说两个数相乘可能会产生比其长度大一倍的数字，对此引入了两个寄存器(或者一个)分别保存结果的高位和地位</p>
+<table>
+<thead>
+<tr>
+<th align="center">被乘数</th>
+<th align="center">乘数</th>
+<th align="center">乘积</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AL</td>
+<td align="center">reg/mem8</td>
+<td align="center">AX (AH为高 4 位，AL为低 4 位)</td>
+</tr>
+<tr>
+<td align="center">AX</td>
+<td align="center">reg/mem16</td>
+<td align="center">DX:AX (DX为高 8 位，AX为低 8 位)</td>
+</tr>
+<tr>
+<td align="center">EAX</td>
+<td align="center">reg/mem32</td>
+<td align="center">EDX:EAX (EDX为高 16 位，EAX为低 16 位)</td>
+</tr>
+</tbody></table>
+<p><code>IMUL</code>(有符号数乘法)指令执行有符号整数乘法。与<code>MUL</code>指令不同，<code>IMUL</code>会保留乘积的符号，实现的方法是，将乘积低半部分的最高位符号扩展到高半部分</p>
+<p><code>x86</code>指令集支持三种格式的<code>IMUL</code>指令:单操作数、双操作数和三操作数</p>
+<blockquote>
+<p>一般来说，在单操作数的情况下默认与<code>AL</code>(<code>AX</code>、<code>EAX</code>)相乘</p>
+<p>三操作数时将成绩保存在第一个操作数中，第二个与第三个操作数进行乘法运算</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imul A,B,C     ==     A = B * C</span><br></pre></td></tr></table></figure>
+
+<p>和<code>MUL</code>指令一样，其乘积的存储大小使得溢出不会发生。同时，如果乘积的高半部分不是其低半部分的符号扩展，则进位标志位(CF)和溢出标志位(OF)置 1</p>
+<p>利用这个特点可以决定是否忽略乘积的高半部分。即不是符号位扩展(OF = 1 )：不可以忽略乘积的高半部分</p>
+</blockquote>
+<p>32 位模式下，<code>DIV</code>(无符号除法)指令执行 8 位、16 位和 32 位无符号数除法。</p>
+<table>
+<thead>
+<tr>
+<th align="center">被除数</th>
+<th align="center">除数</th>
+<th align="center">商</th>
+<th align="center">余数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AX</td>
+<td align="center">reg/mem8</td>
+<td align="center">AL</td>
+<td align="center">AH</td>
+</tr>
+<tr>
+<td align="center">DX:AX</td>
+<td align="center">reg/mem16</td>
+<td align="center">AX</td>
+<td align="center">DX</td>
+</tr>
+<tr>
+<td align="center">EDX:EAX</td>
+<td align="center">reg/mem32</td>
+<td align="center">EAX</td>
+<td align="center">EDX</td>
+</tr>
+</tbody></table>
+<p><code>IDIV</code>(有符号除法)指令执行有符号整数除法，其操作数与<code>DIV</code>指令相同。执行 8 位除法之前，被除数(<code>AX</code>)必须完成符号扩展。余数的符号总是与被除数相同。</p>
+<blockquote>
+<p>符号扩展指令：</p>
+<p><code>CBW</code>(字节转字)指令将<code>AL</code>的符号位扩展到<code>AH</code>，保留了数据的符号</p>
+<p><code>CWD</code>(字转双字)指令将<code>AX</code>的符号位扩展到<code>DX</code></p>
+<p><code>CDQ</code>(双字转四字)指令将<code>EAX</code>的符号位扩展到<code>EDX</code></p>
+</blockquote>
+<p>需要注意的是执行<code>DIV</code>和<code>IDIV</code>后所有的算术运算状态标志位的值都不确定</p>
+<p>异常：如果除法运算结果的商目的操作数存储不下时会引发溢出异常，同时如果除以 0 时会引发除零异常机制</p>
+<p>对于溢出异常可以使用 32 位除数和 64 位被除数来减少出现除法溢出条件的可能性</p>
+<blockquote>
+<p>被除数 / 除数 = 商 … 余数</p>
+</blockquote>
+<h3 id="扩展加减法"><a href="#扩展加减法" class="headerlink" title="扩展加减法"></a>扩展加减法</h3><p><code>ADC</code>(带进位加法)指令将源操作数和进位标志位的值都与目的操作数相加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov dl,0</span><br><span class="line">mov al,0FFh</span><br><span class="line">add al,0FFh		; AL = FEh</span><br><span class="line">adc dl,0		; DL/AL = 01FEh</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png"></p>
+<blockquote>
+<p><code>ADC</code>指令相当于在普通的<code>ADD</code>指令的基础上加上了一个进位标志位(<code>CF</code>)，在运行加法运算时是使用高位进行运算</p>
+</blockquote>
+<p><code>SBB</code>(带借位减法)指令从目的操作数中减去源操作数和进位标志位的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov edx,7	; 高 32 位</span><br><span class="line">mov eax,1	; 低 32 位</span><br><span class="line">sub eax,2	; 减 2</span><br><span class="line">sbb edx,0	; 高 32 位减法</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png"></p>
+<blockquote>
+<p><code>SBB</code>指令也是相当于<code>SUB</code>指令的基础上减去了一个进位标志位(<code>CF</code>)，运行减法运算时是使用高位进行运算</p>
+</blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
