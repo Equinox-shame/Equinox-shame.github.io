@@ -49,7 +49,7 @@
     <div class='main'>
         <h1 class="title">汇编语言学习</h1>
         <div class="stuff">
-            <span>六月 24, 2022</span>
+            <span>六月 16, 2022</span>
             
 
         </div>
@@ -528,6 +528,87 @@
 <blockquote>
 <p><code>SBB</code>指令也是相当于<code>SUB</code>指令的基础上减去了一个进位标志位(<code>CF</code>)，运行减法运算时是使用高位进行运算</p>
 </blockquote>
+<h2 id="高级过程"><a href="#高级过程" class="headerlink" title="高级过程"></a>高级过程</h2><p>调用程序向子程序传递的数值被称为<code>实际参数</code>。而被调用的子程序要接收的数值被称为<code>形式参数</code>。</p>
+<h3 id="堆栈帧"><a href="#堆栈帧" class="headerlink" title="堆栈帧"></a>堆栈帧</h3><p><code>堆栈帧</code>是一块堆栈保留区域，用于存放被传递的实际参数、子程序的返回值、局部变量以及被保存的寄存器。</p>
+<p>堆栈帧的创建步骤如下:</p>
+<ol>
+<li>被传递的实际参数。如果有,则压入堆栈</li>
+<li>当子程序被调用时,使该子程序的返回值压入堆栈</li>
+<li>子程序开始执行时,<code>EBP</code>被压入堆栈</li>
+<li>设置<code>EBP</code>等于<code>ESP</code>。从这时开始，EBP就变成了该子程序所有参数的引用基址</li>
+<li>如果有局部变量，修改<code>ESP</code>以便在堆栈中为这些变量预留空间</li>
+<li>如果需要保存寄存器,就将它们压入堆栈</li>
+</ol>
+<p>在过程调用之前，任何存放参数的寄存器需要首先入栈，然后向其分配过程参数，再返回后再恢复起始值，同时当一个参数通过数值传递时，该值的副本会被压入堆栈，对于一个函数而言，其参数入栈的顺序是从右向左进行的。</p>
+<p>一般而言，当一个过程的参数是一个数组时，我们常常将其所对应的地址进行压入堆栈中，节省操作的时间</p>
+<p>访问堆栈中的数据我们可以使用<code>基址 —— 偏移量寻址</code>，用<code>[EBP+X]</code>获取到对应压入栈中的数据，需要注意的是在子程序返回的时候需要将参数从栈中进行删除，否则可能会造成内存泄漏，堆栈就会被破坏。</p>
+<blockquote>
+<p>调用规范：</p>
+<p><strong>C 调用规范</strong></p>
+<p>程序调用子程序时，在CALL指令的后面紧跟一条语句使堆栈指针(<code>ESP</code>)加上一个数，该数的值即为子程序参数所占堆栈空间的总和。一般而言一个参数占用的空间是<code>4 字节</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add esp,X	; X 为 4 的倍数</span><br></pre></td></tr></table></figure>
+
+<p><strong>STDCALL调用规范</strong></p>
+<p><code>STDCALL</code>规范给<code>RET</code>指令添加了一个整数参数，这使得程序在返回到调用过程时，ESP会加上该数值。同时这个添加的整数必须与被调用过程参数占用的堆栈空间字节数相等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret X		; X 为 4 的倍数</span><br></pre></td></tr></table></figure>
+
+<p>上面代码等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add esp,X</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p>要说明的是，<code>STDCALL</code>与<code>C</code>相似，参数是按逆序入栈的。通过在<code>RET</code>指令中添加参数，<code>STDCALL</code>不仅减少了子程序调用产生的代码量(减少了一条指令)，还保证了调用程序永远不会忘记清除堆栈。另一方面，<code>C</code>调用规范则允许子程序声明不同数量的参数，主调程序可以决定传递多少个参数。</p>
+<p><code>C语言</code>的<code>printf</code>函数就是一个例子，它的参数数量取决于初始字符串参数中的格式说明符的个数。</p>
+</blockquote>
+<p>通常子程序在修改寄存器之前就要将它们的值压入栈中进行保存(<code>PUSH</code>)，在子程序返回后恢复原寄存器的值(<code>POP</code>)</p>
+<p>在子过程中，局部变量一般创建于运行时堆栈，通常位于基址指针(<code>EBP</code>)下，我们对其需要将<code>ESP</code>向下开辟对应字节的空间，从子程序退出前也需要将局部变量从堆栈中进行删除</p>
+<p><code>LEA</code>指令返回简介操作数的地址，比如创建了一个局部变量时，不能采用<code>mov esi,OFFSET [EBP-X]</code>的方式将对应的局部变量空间地址赋予给<code>ESI</code>，因为<code>OFFSET</code>只适用于编译时已知的地址。<code>LEA</code>的作用也便是将新开辟的地址空间进行复制操作。</p>
+<p><code>ENTER</code>指令为被调用过程自动创建堆栈帧。它为局部变量保留堆栈空间，把<code>EBP</code>入栈。具体来说,它执行三个操作:</p>
+<ol>
+<li>把EBP入栈(<code>push ebp</code>)</li>
+<li>把EBP设置为堆栈帧的基址(<code>mov ebp,esp</code>)</li>
+<li>为局部变量保留空间(<code>sub esp, numbytes</code>)</li>
+</ol>
+<p>对应结构为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENTER numbytes, nestinglevel</span><br></pre></td></tr></table></figure>
+
+<p>这两个操作数都是立即数。<code>Numbytes</code>总是向上舍入为 4 的倍数，以便<code>ESP</code>对齐双字边界。<code>Nestinglevel</code>确定了从主调过程堆栈帧复制到当前帧的堆栈帧指针的个数。</p>
+<blockquote>
+<p>有如下等价关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enter X,0</span><br></pre></td></tr></table></figure>
+
+<p>等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">push ebp</span><br><span class="line">mov ebp,esp</span><br><span class="line">sub esp,X</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>一般使用<code>ENTER</code>指令时都需要使用<code>LEAVE</code>进行配合使用，<code>LEAVE</code>指令结束一个过程的堆栈帧，反转了<code>ENTER</code>的指令操作，恢复了<code>ESP</code>和<code>EBP</code>的值</p>
+<blockquote>
+<p>有如下等价关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">leave</span><br></pre></td></tr></table></figure>
+
+<p>等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov esp,ebp</span><br><span class="line">pop ebp</span><br></pre></td></tr></table></figure>
+
+<p><code>POP EBP</code>是先把<code>ESP</code>指向的堆栈元素内容复制到<code>EBP</code>中，再增加<code>ESP</code>的值，此时的<code>ESP</code>对应的地址便是返回地址</p>
+</blockquote>
+<p><code>LOCAL</code>伪指令在过程内部声明一个或多个局部变量，它必须紧跟在<code>PROC</code>伪指令的后面。与全局变量相比,局部变量有独特优势:</p>
+<ol>
+<li>对局部变量名和内容的访问可以被限制在包含它的过程之内。局部变量对程序调试也有帮助,因为只有少数几条程序语句才能修改它们。</li>
+<li>局部变量的生命周期受限于包含它的过程的执行范围。局部变量能有效利用内存，因为同样的存储空间还可以被其他变量使用。</li>
+<li>同一个变量名可以被多个过程使用,而不会发生命名冲突。</li>
+<li>递归过程可以用局部变量在堆栈中保存数值。如果使用的是全局变量，那么每次过程调用自身时,这些数值就会被覆盖。</li>
+</ol>
+<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p><code>递归子程序</code>是指直接或简介的调用自身的子程序</p>
+<p>一个简单的递归也会占用大量的堆栈空间，在每次过程调用发生时最占用 4 字节的堆栈空间，因为要把返回地址保存到堆栈(对应<code>CALL</code>语句的下一条语句地址)</p>
+<p>假设完成同样的任务，递归子程序所使用的内存空间通常大于非递归子程序</p>
+<h3 id="INVOKE-和-PROC-指令"><a href="#INVOKE-和-PROC-指令" class="headerlink" title="INVOKE 和 PROC 指令"></a>INVOKE 和 PROC 指令</h3><p><code>INVOKE</code>伪指令(仅限32位模式)能代替<code>CALL</code>指令，它的功能更加强大，可以传递多个参数。用<code>INVOKE</code>伪指令定义过程时，<code>ADDR</code>运算符可以传递指针。</p>
+<blockquote>
+<p><code>ADDR</code>指令用于传递指针，同时只能和<code>INVOKE</code>同时使用，传递给<code>ADDR</code>的参数必须是汇编时常数不能使用<code>[ebp+X]</code>的形式</p>
+</blockquote>
+<p><code>PROC</code>伪指令在声明过程名的同时可以带上已命名参数列表。<code>PROTO</code>伪指令为现有过程创建原型,原型声明过程的名称和参数列表。</p>
+<blockquote>
+<p><code>PROC</code>相当于声明形参，只后会被<code>MASM</code>翻译为对应的汇编语句来开辟对应的栈空间</p>
+</blockquote>
+<p>伪指令的调用先后为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">proto		-&gt;		invoke		-&gt;		proc	-&gt;		endp</span><br><span class="line"></span><br><span class="line">MySub PROTO		; 过程原型</span><br><span class="line">...</span><br><span class="line">INVOKE MySub	; 过程调用</span><br><span class="line">...</span><br><span class="line">MySub PROC		; 过程实现</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">MySub ENDP	</span><br></pre></td></tr></table></figure>
+
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
