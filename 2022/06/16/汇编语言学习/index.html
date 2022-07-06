@@ -557,6 +557,28 @@
 
 <p>要说明的是，<code>STDCALL</code>与<code>C</code>相似，参数是按逆序入栈的。通过在<code>RET</code>指令中添加参数，<code>STDCALL</code>不仅减少了子程序调用产生的代码量(减少了一条指令)，还保证了调用程序永远不会忘记清除堆栈。另一方面，<code>C</code>调用规范则允许子程序声明不同数量的参数，主调程序可以决定传递多少个参数。</p>
 <p><code>C语言</code>的<code>printf</code>函数就是一个例子，它的参数数量取决于初始字符串参数中的格式说明符的个数。</p>
+<hr>
+<p><code>STDCALL</code>与<code>C语言</code>调用规范差异：</p>
+<table>
+<thead>
+<tr>
+<th align="center">c</th>
+<th align="center">stdcall</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">在被调用函数 (<code>Callee</code>) 返回后，由调用方 (<code>Caller</code>) 调整堆栈。 1.调用方的函数调用 2.被调用函数的执行 3.被调用函数的结果返回 4.调用方清除调整堆栈</td>
+<td align="center">在被调用函数 (<code>Callee</code>) 返回前，由被调用函数 (<code>Callee</code>) 调整堆栈。图示： 1.调用方的函数调用 2.被调用函数的执行 3.被调用函数清除调整堆栈 4.被调用函数的结果返回</td>
+</tr>
+<tr>
+<td align="center">因为每个调用的地方都需要生成一段调整堆栈的代码，所以最后生成的文件较大。</td>
+<td align="center">因为调整堆栈的代码只存在在一个地方（被调用函数的代码内），所以最后生成的文件较小。</td>
+</tr>
+<tr>
+<td align="center">函数的参数个数可变(就像 <em><code>printf</code></em> 函数一样)，因为只有调用者才知道它传给被调用函数几个参数，才能在调用结束时适当地调整堆栈。</td>
+<td align="center">函数的参数个数不能是可变的。</td>
+</tr>
+</tbody></table>
 </blockquote>
 <p>通常子程序在修改寄存器之前就要将它们的值压入栈中进行保存(<code>PUSH</code>)，在子程序返回后恢复原寄存器的值(<code>POP</code>)</p>
 <p>在子过程中，局部变量一般创建于运行时堆栈，通常位于基址指针(<code>EBP</code>)下，我们对其需要将<code>ESP</code>向下开辟对应字节的空间，从子程序退出前也需要将局部变量从堆栈中进行删除</p>
@@ -609,6 +631,34 @@
 <p>伪指令的调用先后为：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">proto		-&gt;		invoke		-&gt;		proc	-&gt;		endp</span><br><span class="line"></span><br><span class="line">MySub PROTO		; 过程原型</span><br><span class="line">...</span><br><span class="line">INVOKE MySub	; 过程调用</span><br><span class="line">...</span><br><span class="line">MySub PROC		; 过程实现</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">MySub ENDP	</span><br></pre></td></tr></table></figure>
 
+<h2 id="字符串和数组"><a href="#字符串和数组" class="headerlink" title="字符串和数组"></a>字符串和数组</h2><p><code>X86</code>指令集有五组指令用于处理字节、字和双字数组，其被称为<code>字符串原语</code>，其能够高效执行，因为它们会自动重复并增加数组索引</p>
+<p><img src="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png" alt="28.png"></p>
+<p>就其自身而言，字符串基本指令只能处理一个或一对内存数值。如果加上重复前缀，指令就可以使用<code>ECX</code>寄存器作为计数器重复执行。重复前缀使得单条指令能够处理整个数组</p>
+<p><img src="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png" alt="29.png"></p>
+<blockquote>
+<p>使用方式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REP/PEPZ/...  MOVSB/CMPSB/...</span><br></pre></td></tr></table></figure>
+
+<p>格式为：<code>重复前缀 + 字符串基本指令</code></p>
+</blockquote>
+<p>需要注意的是，再重复指令时，我们需要将方向标志位进行置 1 或者置 0 ，通过不同的置位来告诉对应的<code>ESI</code>和<code>EDI</code>是增加还是减少</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CLD			; 方向标志位清零(正向)</span><br><span class="line">STD			; 方向标志位置 1 (反向)</span><br></pre></td></tr></table></figure>
+
+<p>当方向标志位清零的时候，程序中对应寄存器代表的的地址是是正向增长，当方向标志位置 1 的时候，对应的地址是逐渐减少。</p>
+<h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><p>高级语言在内存中有两种方式存放数组的行和列：<code>行主序</code>和<code>列主序</code></p>
+<p><code>行主序</code>最常用，第一行的数据存放在内存块开始的位置，第一行存放结束后后面紧跟的是第二行的第一个元素，<code>列主序</code>则是第一列的数据存放在内存块开始的位置，在第一列数据结束后后面紧跟的数据是第二列的第一个元素</p>
+<p>对于二维数组的访问我们常常将其抽象为一个一维数组，通过<code>基址 + 变址操作数</code>或<code>基址 + 变址 + 偏移量操作数</code></p>
+<blockquote>
+<p>基址 + 变址操作数</p>
+<p>[ base + index ]</p>
+<p>通过将两个寄存器相加来产生一个偏移地址</p>
+<p>基址 + 变址 + 偏移量操作数</p>
+<p>[ base + index + displacement ]</p>
+<p>displacement[ base + index ]</p>
+<p>采用的是一个偏移量、一个基址寄存器和一个可选的比例因子来生成有效地址</p>
+<hr>
+<p>两种方式都类似于高级语言中已经寻找到了一个数组的首地址，通过一个单字节的指针来进行寻找每一位的数据，每次指针的增加量便是对应的偏移量，如<code>int</code>类型，占用了 4 字节，那么每次偏移往下找数据时增加的量便为 4</p>
+</blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
