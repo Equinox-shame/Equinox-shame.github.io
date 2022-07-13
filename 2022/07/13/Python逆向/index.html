@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Python逆向 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言随着CTF的兴起，有着越来越多样化的逆向题目(各种不会的语言被出出来折磨人)，我们可以比较常见的是C、C++语言的逆向题目，而Python题目出现也算是较为常见，题目多为pyc或者是exe，今天,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Python逆向</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Python逆向</h1>
+        <div class="stuff">
+            <span>七月 13, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着<code>CTF</code>的兴起，有着越来越多样化的逆向题目(<del>各种不会的语言被出出来折磨人</del>)，我们可以比较常见的是<code>C</code>、<code>C++</code>语言的逆向题目，而<code>Python</code>题目出现也算是较为常见，题目多为<code>pyc</code>或者是<code>exe</code>，今天与大家一起分享一下关于<code>Python</code>逆向的一些东西</p>
+<h1 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h1><p>随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Python的语言逆向，文章整体讲解的较为简单，主要涉及到<code>.py</code> /<code>.pyc</code>/<code>.exe（python打包后的程序）</code>三类题型，如有不足还请多多指正。</p>
+<h2 id="py"><a href="#py" class="headerlink" title=".py"></a>.py</h2><p>在这个情况下我们直接拿到了对应的源代码，可以直接通过对源码进行分析，写出对应的逆向算法进行求解</p>
+<p>比如我们现在有如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span>(<span class="params">a</span>):</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">123</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Yes!&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;NO!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">a = <span class="built_in">input</span>(<span class="string">&quot;请输入对应flag：&quot;</span>)</span><br><span class="line">check(<span class="built_in">int</span>(a))</span><br></pre></td></tr></table></figure>
+
+<p>我们可以直接观察到程序的源代码，需要我们输入一个<code>flag</code>进行保存在<code>a</code>中，之后便会对<code>a</code>和<code>123</code>进行比较，如果相同，那么将会输出<code>Yes!</code>如果输入错误那就会输出<code>NO!</code>，我们可以很直观的观察到程序的逻辑，因此我们只需要对程序的加密过程进行求解，像此题中的比较，进行逆向思维求解即可</p>
+<h2 id="pyc"><a href="#pyc" class="headerlink" title=".pyc"></a>.pyc</h2><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><blockquote>
+<p>PYC文件是什么</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a2e3ef5b9546">https://www.jianshu.com/p/a2e3ef5b9546</a></p>
+<p>PYC文件结构</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_35967330/article/details/114390031">https://blog.csdn.net/weixin_35967330/article/details/114390031</a></p>
+</blockquote>
+<h3 id="如何生成pyc"><a href="#如何生成pyc" class="headerlink" title="如何生成pyc"></a>如何生成pyc</h3><blockquote>
+<p>python -m code.py</p>
+</blockquote>
+<p>生成的<code>pyc</code>文件是可以运行的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python code.pyc</span><br></pre></td></tr></table></figure>
+
+<p><code>.pyc</code>分成两种情况，一种是不带花指令的，另一种是带花指令的</p>
+<h3 id="不带花指令"><a href="#不带花指令" class="headerlink" title="不带花指令"></a>不带花指令</h3><p>对于不带花指令的<code>.pyc</code>文件，我们可以直接使用<code>uncompyle6</code>对其进行转换，可以直接得到对应的源代码<code>.py</code>文件</p>
+<p>如下图：</p>
+<p><img src="https://s2.loli.net/2022/05/22/7eH3g2CbGKkYlnr.png"></p>
+<h3 id="带花指令"><a href="#带花指令" class="headerlink" title="带花指令"></a>带花指令</h3><p>对于带花指令的<code>.pyc</code>文件我们如果直接使用<code>uncompyle6</code>对其进行转换会出现如下状况：</p>
+<p><img src="https://s2.loli.net/2022/05/22/DCbWFe1sHVQiRcg.png"></p>
+<p>会提示我们数组发生了越界，证明在这个<code>.pyc</code>文件中添加了一些花指令，让我们无法直接进行转换得到<code>.py</code>，那么应该怎么解决呢？</p>
+<p>我们通过导入<code>dis</code>，<code>marshal</code>两个库来进行查看对应<code>pyc</code>的字节码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dis,marshal</span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;[对应pyc名字]&quot;</span>,<span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">code = marshal.loads(f[<span class="number">8</span>:]) <span class="comment"># 前8个为pyc对应的魔数(好像py2是8，py3是16)</span></span><br><span class="line"><span class="comment"># 我们绕过对应魔数进行加载</span></span><br><span class="line"><span class="built_in">print</span>(dis.dis(code))</span><br></pre></td></tr></table></figure>
+
+<p>通过上述步骤我们可以看到对应的<code>py</code>的字节码，我们可以看到如下图：</p>
+<p><img src="https://s2.loli.net/2022/05/22/7fUYsdyAphHi2vB.png"></p>
+<p>那么我们应该怎么进行反编译呢？答案是看对应的字节码，我们可以在<code>python库</code>里找到对应字节码的含义，对其进行翻译，找到对应的花在的地方，之后再到<code>010</code>中进行修改对应字节码的长度和去除对应字节码<code>(花指令的字节码)</code></p>
+<p>在上图中我们可以看到有一个<code>LOAD_CONST 255</code>可以看到在此处发生了报错，在这个语句前一句有一个<code>JUMP_ABSOLUTE 18</code>，对于这条语句就已经强制跳转到<code>LOAD_CONST 255</code>下一条语句了，因此这个语句被判定为一个花，所以我们需要将其去除。</p>
+<p>我们先使用<code>len(code.co_code)</code>来查看对应的<code>pyc</code>字节码长度，之后减去 3 <code>(Python3 好像不太一样)</code>，那么在哪里减呢？我们需要先找到对应的字节码的编号在对应的<code>opcode.h</code>中进行查找</p>
+<p><img src="https://s2.loli.net/2022/05/22/Go14RNqvAs2FMrp.png"></p>
+<p>查找到后我们在<code>010</code>中进行查找<code>0x71</code>同时比较后面的数字<code>18</code>的十六进制<code>0x12</code>，之后我们可以找到：</p>
+<p><img src="https://s2.loli.net/2022/05/22/v29GHKWY4ATIsmL.png"></p>
+<p>之后我们可以直接确定后面的<code>64 FF 00</code>这三个字节为对应的花位置，我们将这 6 个十六进制进行去除：</p>
+<p><img src="https://s2.loli.net/2022/05/22/ty3wFHkUJoO975n.png"></p>
+<p>我们将<code>0x1B</code>进行修改为<code>0x15</code>，同时将对应的 6 个字节进行删除，并再次保存为<code>.pyc</code>文件，之后使用<code>uncompyle6</code>进行反编译即可。</p>
+<h2 id="txt-里面写有对应的-Python-字节码"><a href="#txt-里面写有对应的-Python-字节码" class="headerlink" title="txt 里面写有对应的 Python 字节码"></a>txt 里面写有对应的 Python 字节码</h2><p>对于这种题目就只能看对应字节码进行还原，通过这样的方式手动还原为对应的<code>py</code>源代码，之后再进行对应的逆向工作。</p>
+<p>如我们有源码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span>(<span class="params">a</span>):</span></span><br><span class="line">	flag = <span class="string">&#x27;123&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> flag == a :</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Yes!&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;NO!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">a = <span class="built_in">input</span>(<span class="string">&quot;请输入对应flag：&quot;</span>)</span><br><span class="line">check(a)</span><br></pre></td></tr></table></figure>
+
+<p>我们通过<code>python</code>将其编译为<code>.pyc</code>文件后导入<code>dis</code>库进行反编译为字节码</p>
+<blockquote>
+<p>与之前转换<code>pyc</code>为字节码相同</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dis,marshal</span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;[对应pyc名字]&quot;</span>,<span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">code = marshal.loads(f[<span class="number">8</span>:]) <span class="comment"># 前8个为pyc对应的魔数(py2是8，py3是16)</span></span><br><span class="line"><span class="comment"># 我们绕过对应魔数进行加载</span></span><br><span class="line"><span class="built_in">print</span>(dis.dis(code))</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>可以得到：</p>
+<p><img src="https://s2.loli.net/2022/07/13/nJ7lUNhOyfLwMK2.png" alt="7.png"></p>
+<p>可以成功的看到我们的<code>pyc</code>转换为对应的字节码了。那么需要怎么逆向呢？</p>
+<p>这个时候就需要借助官方文档了，相对汇编来说<code>Py</code>的字节码相对更好阅读一些，其中<code>python3</code>是每两个字节一个字节码语句，<code>python2</code>是三个字节，之前也提到过</p>
+<p>我们查询对应<code>python</code>的手册，可以查看对应的字节码功能，下面给出一部分例子</p>
+<blockquote>
+<p>LOAD_CONST(<em>consti</em>)</p>
+<p>将 <code>co_consts[consti]</code> 推入栈顶。</p>
+<p><code>MAKE_FUNCTION</code>(<em>flags</em>)</p>
+<p>将一个新函数对象推入栈顶。</p>
+<p>….</p>
+</blockquote>
+<p>同样我们举出一个例子来尝试逆向(下面为<code>python3</code>字节码)：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">	  <span class="number">0</span> LOAD_CONST               <span class="number">1</span> (<span class="number">0</span>)</span><br><span class="line">            <span class="number">2</span> STORE_FAST               <span class="number">1</span> (num)</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>           <span class="number">4</span> SETUP_LOOP              <span class="number">42</span> (to <span class="number">48</span>)</span><br><span class="line">            <span class="number">6</span> LOAD_GLOBAL              <span class="number">0</span> (<span class="built_in">range</span>)</span><br><span class="line">            <span class="number">8</span> LOAD_CONST               <span class="number">2</span> (<span class="number">8</span>)</span><br><span class="line">           <span class="number">10</span> CALL_FUNCTION            <span class="number">1</span></span><br><span class="line">           <span class="number">12</span> GET_ITER</span><br><span class="line">      &gt;&gt;   <span class="number">14</span> FOR_ITER                <span class="number">30</span> (to <span class="number">46</span>)</span><br><span class="line">           <span class="number">16</span> STORE_FAST               <span class="number">2</span> (i)</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>          <span class="number">18</span> LOAD_FAST                <span class="number">1</span> (num)</span><br><span class="line">           <span class="number">20</span> LOAD_CONST               <span class="number">3</span> (<span class="number">7508399208111569251</span>)</span><br><span class="line">           <span class="number">22</span> BINARY_SUBTRACT</span><br><span class="line">           <span class="number">24</span> LOAD_CONST               <span class="number">4</span> (<span class="number">4294967295</span>)</span><br><span class="line">           <span class="number">26</span> BINARY_MODULO</span><br><span class="line">           <span class="number">28</span> STORE_FAST               <span class="number">1</span> (num)</span><br></pre></td></tr></table></figure>
+
+<p>首先我们可以看到程序加载了一个常数加载到<code>num</code>中，即可以转换为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>0 LOAD_CONST               1 (0)<br>2 STORE_FAST               1 (num)</p>
+</blockquote>
+<p>随后其有设置一个循环(<code>SETUP_LOOP</code>)，从 0 到 8</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in range(8):</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  3           4 SETUP_LOOP              42 (to 48)<br>             6 LOAD_GLOBAL              0 (range)<br>             8 LOAD_CONST               2 (8)<br>            10 CALL_FUNCTION            1<br>            12 GET_ITER<br>       &gt;&gt;   14 FOR_ITER                30 (to 46)<br>            16 STORE_FAST               2 (i)</p>
+</blockquote>
+<p>然后我们将一个数字加载到<code>num</code>中，再进行减运算，最后存储到<code>num</code>里</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = (num - 7508399208111569251) % 4294967295</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>BINARY_MODULO</code></p>
+<p>实现 <code>TOS = TOS1 % TOS</code> ,<code>TOS</code>为栈顶 <code>TOS1</code>为栈中下一位数据的值</p>
+</blockquote>
+<blockquote>
+<p> 4          18 LOAD_FAST                1 (num)<br>           20 LOAD_CONST               3 (7508399208111569251)<br>           22 BINARY_SUBTRACT<br>           24 LOAD_CONST               4 (4294967295)<br>           26 BINARY_MODULO<br>           28 STORE_FAST               1 (num)</p>
+</blockquote>
+<p>综上我们可以得到对应的代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">	num = (num - <span class="number">7508399208111569251</span>) % <span class="number">4294967295</span></span><br></pre></td></tr></table></figure>
+
+<p>至此<code>py</code>的字节码逆向就结束了</p>
+<h2 id="Python打包EXE"><a href="#Python打包EXE" class="headerlink" title="Python打包EXE"></a>Python打包EXE</h2><p>对于这个我们通过一个<code>py</code>脚本<code>(pyinstxtractor.py)</code>将其变成结构体和一个<code>pyc</code>文件，需要注意的是，在得到的对应<code>pyc</code>文件中缺少了时间属性和对应版本的魔术字，需要我们进行手动修复，通过找到<code>struct.pyc</code>文件里面的对应的字节，我们复制到我们题目的<code>.pyc</code>文件前，之后便可以使用<code>uncompyle6</code>进行反编译</p>
+<p>假如我们无法直观识别呢？我们直接将其拖入到<code>IDA</code>中进行观察一下：<br><img src="https://s2.loli.net/2022/07/13/FhkOX58WQxyDPnt.png" alt="8.png"></p>
+<p>我们可以注意到在字符串中存在大量的<code>Py</code>开头的东西，这个是一般程序逆向所遇不到的，至此我们便可以识别出来这个程序是一个<code>python</code>所打包构成的<code>exe</code>文件</p>
+<p>我们尝试进行解包，来拿到我们想要的数据：</p>
+<p><img src="https://s2.loli.net/2022/07/13/ZEw2QHj6qBRnert.png" alt="9.png"></p>
+<p>通过执行上述代码我们可以得到一个文件夹：</p>
+<p><img src="https://s2.loli.net/2022/07/13/REYSvc6GzTKs8Le.png" alt="10.png"></p>
+<p>我们在文件夹里面找到题目名字的<code>pyc</code>文件和<code>struct.pyc</code>文件，将其拖入到<code>010</code>(16进制数据查看器)中</p>
+<p><img src="https://s2.loli.net/2022/07/13/id69z3QOcbaHGpq.png" alt="11.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/rpKidDtbP1XUHfj.png" alt="12.png"></p>
+<p>通过观察我们可以发现程序缺少了对应红色框部分的魔数字节，我们复制<code>struct.pyc</code>中的红框内容替换掉<code>login.pyc</code>内红框内容，之后保存<code>login.pyc</code></p>
+<p><img src="https://s2.loli.net/2022/07/13/dKI2SVMatPqcxH4.png" alt="13.png"></p>
+<p>之后我们就可以拿<code>uncompyle6</code>进行反编译啦</p>
+<p><img src="https://s2.loli.net/2022/07/13/gBMesVdQnI5aRJl.png" alt="14.png"></p>
+<p>可以看到我们成功的将其反编译成<code>.py</code>源码了，之后逆向部分就可以参考前文提到的<code>py</code>源码逆向啦</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
