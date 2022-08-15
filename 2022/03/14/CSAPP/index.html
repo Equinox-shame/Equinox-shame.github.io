@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CSAPP 学习笔记 [ 持续更新中 ] - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="CSAPP逻辑运算
+布尔运算支持&amp;amp;对|的分配律：$a&amp;amp;(b|c)=(a&amp;amp;b)|(a&amp;amp;c)$，同时也支持|对&amp;amp;的分配律：$a|(b&amp;amp;c)=(a|b)&amp;a,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">CSAPP 学习笔记 [ 持续更新中 ]</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">CSAPP 学习笔记 [ 持续更新中 ]</h1>
+        <div class="stuff">
+            <span>三月 14, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="CSAPP"><a href="#CSAPP" class="headerlink" title="CSAPP"></a>CSAPP</h1><h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><p><img src="https://s2.loli.net/2022/06/27/KzAgnaxlo1yqP9W.png" alt="1.png"></p>
+<p>布尔运算支持<code>&amp;</code>对<code>|</code>的分配律：$a&amp;(b|c)=(a&amp;b)|(a&amp;c)$，同时也支持<code>|</code>对<code>&amp;</code>的分配律：$a|(b&amp;c)=(a|b)&amp;(a|c)$</p>
+<p><img src="https://s2.loli.net/2022/06/27/ZKoBcG5guWREtVm.png" alt="2.png"></p>
+<p>通过<code>xor</code>我们也可以实现两个数的交换，但是并没有性能上的提升</p>
+<p><img src="https://s2.loli.net/2022/06/27/yHrIt3pafDWRcYT.png" alt="3.png"></p>
+<p>相似的我们可以通过这个方式来实现数组的存储逆转，长度为偶数时函数会得到正确结果，以<code>1234</code>为例程序运行后的结果是<code>4321</code>，但是在长度为奇数个时，便会出现问题。以<code>12345</code>为例，输出的结果是<code>54021</code>。因为在中间到<code>first</code>和<code>last</code>相同时<code>xor</code>的是自己异或自己得到的便会是<code>0</code>，因此出现问题。对此我们只需要把<code>first&lt;=last</code>修改为<code>first&lt;last</code>即可。</p>
+<p>我们可以利用位级和逻辑运算编写一个表达式，使其等价于<code>x==y</code>，即<code>x</code>和<code>y</code>相等时就返回<code>1</code>，否则就返回<code>0</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> ！(x^y) ;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/02/27/eSZgBaf8Qk34woH.png"></p>
+<p>值得注意的是在移位时需要注意参数<code>x</code>的类型，在带符号位时需要对其用操作数的最高位<code>(符号位)</code>来进行补全。而不带符号的参数<code>x</code>则是补<code>0</code>即可。</p>
+<img src="https://s2.loli.net/2022/02/27/ld3rOjY9DEv5WB8.png" style="zoom:80%;" />
+
+<p>对于补码转无符号数我们可以总结出来如下规律：</p>
+<p><img src="https://s2.loli.net/2022/02/27/VWTvf8y21hHcKeG.png"></p>
+<p>相反无符号数转补码为：</p>
+<p><img src="https://s2.loli.net/2022/02/27/MUFrOSuT618LaD3.png"></p>
+<blockquote>
+<p>大致整理如下：</p>
+<ol>
+<li><p>无符号数转换为有符号数：看无符号数的最高位是否为1，如果不为1（即为0），则有符号数就直接等于无符号数；</p>
+</li>
+<li><p>如果无符号数的最高位为1，则将无符号数取补码，得到的数就是有符号数。</p>
+</li>
+<li><p>有符号数转换为无符号数 ：看有符号数的最高位是否为1，如果不为1（即为0），则无符号数就直接等于有符号数；</p>
+</li>
+<li><p>如果有符号数的最高位为1，则将有符号数取补码，得到的数就是无符号数。</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>相关知识点：</strong></p>
+<ol>
+<li><p>在<code>C语言</code>中，一个有符号数与一个无符号数进行运算，那么<code>C语言</code>会将有符号数强制转换为无符号数来执行运算。</p>
+</li>
+<li><p>当一个有符号数从一个较小的数据类型转换成较大的数据类型时，进行符号位扩展，可以保持数值不变</p>
+</li>
+<li><p>当一个有符号数从一个较大的数据类型转换成较小的数据类型时，会丢弃对应高位的数据，保留低位的数据，而可能改变其值。</p>
+<ul>
+<li>无符号数截断相当于对对应<code>2的k次方</code>进行取模</li>
+<li>有符号数截断相当于先将其无符号数对对应<code>2的k次方</code>进行取模，再将其得到的无符号数转为有符号数</li>
+</ul>
+</li>
+<li><p><code>C语言</code>在执行加法时，不会对溢出发生报错，根据两个数的和必定大于两数之中任何一个，对此我们可以编写相关函数来检测是否发生了溢出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">over_flow</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=a+b;</span><br><span class="line">	<span class="keyword">if</span>(sum&gt;=a)&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>对于有符号数加法数据溢出后的结果我们可以分为三类：</p>
+<img src="https://s2.loli.net/2022/02/28/OiTwHsuYl4DXq9v.png" style="zoom: 50%;" /></li>
+</ol>
+<p>发生正数溢出时得到的结果时两个数的和减去对应二进制位长最大能表示的数据，而负数则是加上对应二进制位长最大能表示的数据。</p>
+<ol start="6">
+<li><p>对于减法，我们引用一个概念<code>加法逆元</code> ，我们减去一个数可以理解为加上一个数的相反数，对此我们对无符号数进行求解其逆元可以分为如下两个情况：</p>
+<img src="https://s2.loli.net/2022/02/28/6e2k4dfPMmUvN8J.png" style="zoom: 50%;" /></li>
+</ol>
+<p>而对于有符号数可以分成：</p>
+<img src="https://s2.loli.net/2022/02/28/mYLJcQFUCdTaEOr.png" alt="10.png" style="zoom:50%;" />
+
+<ol start="7">
+<li>两个无符号数相乘可能需要<code>2w</code>位来存储数据，但是<code>C语言</code>中定义了无符号数的乘法所产生的结果是<code>w位</code>，因此，对于计算结果，会对其截断，保留<code>低w位</code>。即运算过程为：$( x * y )%2^w$</li>
+</ol>
+<p>而对于有符号数的相乘于无符号数是相似的，但是需要把结果转换为有符号数，即：$U_2T_w( ( x * y )%2^w )$</p>
+<ol start="8">
+<li><p>对于除法3而言可能会出现小数的情况，对此我们总是将其向<code>0</code>进行取整，与逻辑右移<code>k</code>位是相同的，而对于有符号的数进行除法时，我们需要引入一个偏置来修正不合适的舍入。偏置的值为<code>1左移k位后减去1</code>，而偏置是怎么参与其中的？</p>
+<p>对于<code>x 大于等于 0</code>的情况，我们可以直接进行算术右移，而当<code>x小于0</code>时，我们需要将<code>x 加上对应的偏置</code>后再进行右移。但可惜的是其不能推广到除以任意常数，仅限至于除以<code>2 的 k 次幂</code></p>
+</li>
+<li><p>浮点数的相关二进制位的权重如图：</p>
+<img src="https://s2.loli.net/2022/02/28/sOjnrlWpBq6dube.png" style="zoom: 50%;" /></li>
+</ol>
+<p>但是这个方式无法表示较大的数据，在<code>IEEE</code>中我们引入一个新的方式来进行表示：</p>
+<img src="https://s2.loli.net/2022/02/28/t4fYHoyVlLkAJO6.png" style="zoom:50%;" />
+
+<blockquote>
+<p>s ：符号位    |    exp： 阶码    |    frac：小数字段</p>
+</blockquote>
+<p>其中数值大致可以分为三类：</p>
+<img src="https://s2.loli.net/2022/02/28/plk7hLO1X5exV9f.png" style="zoom:50%;" />
+
+<ul>
+<li><p>规格化的值</p>
+<p>当阶码的二进制位不全为 0 ，且不全为 1 时，此时表示的是规格化的值。</p>
+<img src="https://s2.loli.net/2022/02/28/tEnSAKZu4LGHNzk.png" style="zoom:50%;" />
+
+<p>对于图中<code>E</code>的值并不是解码所对应的值，而是需要其减去一个偏置，对于<code>float</code>和<code>double</code>的偏置是不相同的，则以<code>float</code>为例，其最小最大 E 值如下：$E_{min}=-126\ \ \ \  |  \ \ \ \  E_{max}=127$</p>
+</li>
+</ul>
+<p>在小数字段上，尾数 M 被定义为 <code>1+f</code>，尾数的二进制表示如图：</p>
+<p><img src="https://s2.loli.net/2022/02/28/lzF9vXcJm8hjQRY.png"></p>
+<p>  因为我们可以调整 E 的取指，使得尾数 M 的取值范围大于等于 1 ，小于 2 ，既然第一位总是一，那么就没有必要显示的表示出来，这也就是为什么尾数 M 的值需要加一。</p>
+<ul>
+<li><p>非规格化的值</p>
+<p>当阶码的二进制位全为 0 时，此时表示的是非规格化的值。其大概有两个用途，其一是表示 0 ，其二是表示非常接近 0 的数。</p>
+<img src="https://s2.loli.net/2022/02/28/gA1EdFz4KphNwbJ.png" style="zoom:67%;" />
+
+<p>若表示非常接近 0 的数，则阶码字段全为 0 ，阶码 E 的值等于<code>E = 1 - bias</code>, 尾数 M 的值是 f <code>( M = f )</code>。</p>
+<blockquote>
+<p>+0.0 和 -0.0 在某些方面认为时不同的，而在其他方面是相同的。</p>
+</blockquote>
+</li>
+<li><p>特殊值</p>
+<p>当阶码的二进制位全为 1 时，表示的数值是特殊值。特殊值分为两类，一类表示无穷大或者无穷小，另外一类表示不是一个数。</p>
+<img src="https://s2.loli.net/2022/02/28/hl7m28MvbydHGow.png" style="zoom: 50%;" /></li>
+</ul>
+<p>​    如我们输出下列数据，得到的返回值便是 NaN<code>(不是一个数)</code>，如：$\sqrt{-1}\ \ \ \ | \ \ \ \ \infty-\infty$</p>
+<ol start="10">
+<li>向偶数舍入，取决于那边是偶数位，如 1.5 处于 1 和 2 中间，那么向偶数舍入便是向 2 进行舍入，得到结果 2，再以 2.5 为例子，其处于 2 和 3 中间，向偶数舍入便是 2 。</li>
+<li>浮点数的计算不符合<strong>结合律</strong>和<strong>分配律</strong></li>
+<li>乘法指令运行时需要多个时钟周期，因此运行会十分缓慢，多数情况下技术按及会使用移位加减法来实现对应的乘法运算。也正如第 7 点所提到的，计算机会在溢出时采取截尾的方式来存储数据。</li>
+<li>源码取反加一为补码</li>
+</ol>
+<p>对此我们总结一般不要使用无符号数，并且大多编译器都不支持无符号数，它带来的问题总是比其所具有的优势多，也需要十分小心的使用浮点数运算，因为其只有有限的范围和精度，且补遵守普遍的算术属性，如结合性。</p>
+<h2 id="程序的机器级表示"><a href="#程序的机器级表示" class="headerlink" title="程序的机器级表示"></a>程序的机器级表示</h2><h3 id="MOV-指令"><a href="#MOV-指令" class="headerlink" title="MOV 指令"></a>MOV 指令</h3><p><code>ATT</code>格式的汇编代码中，立即数的书写方式是<code>$</code>后面更衣柜用标准 C 表示的整数，如<code>$-577</code>或者<code>$0x1F</code>。用$r_a$表示任意寄存器<code>a</code>，引用$R[r_a]$来表示其值，用$M_b[Addr]$表示对存储在内存中从地址<code>Adrr</code>开始的 b 字节的引用。</p>
+<p><img src="https://s2.loli.net/2022/03/02/D7yKgTPct3R5dkJ.png"></p>
+<p>操作数格式：<br>操作数可以表示立即数 ( 常数 ) 值 、寄存器值或者是来自内存的值 ，比例因子 s 必须是 1、2、4 或者 8</p>
+<p><code>MOV</code>指令在后面加上对应的字母表示传送不同字节大小的数据，其中<code>b -&gt; 1字节 w -&gt; 2字节 l -&gt; 4字节 q -&gt; 8字节</code></p>
+<p>源操作数指定的值是一个立即数，春促与寄存器或者内存之中。目的操作数指定一个位置，要么是是一个寄存器或者，要么是一个内存地址。<code>MOV</code>指令的两个操作数不能都指向内存地址，将一个值从内存位置复制到另一个内存位置需要两条指令，第一条将源值加载到寄存器中，第二条指令将该寄存器写入目的位置。</p>
+<p><img src="https://s2.loli.net/2022/03/02/DEbO3oLxkXrUKfJ.png"></p>
+<p>在两类数据移动指令中<code>MOVZ</code>类中的指令会把目的中剩余的字节填充为<code>0</code>，而<code>MOVS</code>类中的指令会进行符号位的扩展，即用符号位来填充剩余的字节。</p>
+<p><img src="https://s2.loli.net/2022/03/02/IKgOzWpq6PSxYc8.png"></p>
+<p><img src="https://s2.loli.net/2022/03/02/1HNeCzIV9mwuE4J.png"></p>
+<p><code>3-5</code>中并没有明确指令把 4 字节源值扩展到 8 字节的目的，按逻辑上应该被称为<code>movzlq</code>但是并不存在这样的指令，不过可以通过以寄存器为目的的<code>movl</code>指令来实现。原理是，生成 4 字节值并以寄存器为目的的指令会把高 4 字节设置为 0 。</p>
+<p>我们举一个传送数据的例子来了解一下<code>MOV</code>是如何传递值来改变寄存器的</p>
+<p><img src="https://s2.loli.net/2022/03/02/i7woq4LPV1tC9yf.png"></p>
+<p>可以看到左边是源数据，右边是目的数，将左边的数据传递到右边，在这个过程中，我们需要注意到<code>-1</code>的 16 进制位是<code>FF···F</code>，而对于寄存器<code>rax</code>的结构如下图：</p>
+<p><img src="https://s2.loli.net/2022/03/02/qzL9gxsMjlJaFi3.png"></p>
+<p>可以看到低 8 位是<code>al</code>，在第二行的代码中<code>movb</code>将``-1<code>的值传递给了其低 8 位 ( 低两位字节 ) ，而其余字节保持不变，</code>movw<code>把低 16 位( 低位四字节 ) 设置为了</code>FFFF<code> ，而其余字节保持不变，</code>movl<code>将低 32 位( 低位八字节 )设置为</code>FFFFFFFF<code>同时把高位四字节设置为</code>00000000<code>，而最后的</code>movq<code>把整个寄存器值设置为了</code>FFFFFFFFFFFFFFFF` </p>
+<blockquote>
+<p>习题 3.3</p>
+<p>相关指令的错误使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">movb $0xF,(%ebx) 错误：不能使用%ebx作为地址寄存器</span><br><span class="line">movl %rax,(%rsp) 错误：指令后缀和寄存器id不匹配</span><br><span class="line">movw (%rax),4(%rsp) 错误：不能直接从内存移动到内存</span><br><span class="line">movb %al,%sl 错误：没有叫做%sl的寄存器</span><br><span class="line">movq %rax,$0x123 错误：目的操作数不能是立即数</span><br><span class="line">movl %eax,%rdx 错误：目的操作数大小不正确</span><br><span class="line">movb %si,8(%rbp) 错误：指令后缀和寄存器id不匹配（%si是16bit寄存器）</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><img src="https://s2.loli.net/2022/03/03/vqW5YzsZ34if2cN.png"></p>
+<p>在栈这个数据结构中我们可以使用<code>push</code>将数据压入栈，通过<code>pop</code>把数据删除，其具有一个属性：弹出的值永远是最近被压入而且仍在栈中的值。栈指针 ( <code>%rsp</code> ) ，压栈是减小栈指针的值，并将数据存放到内存中，而出栈是从内存中读取数据，并增加栈指针的值。</p>
+<blockquote>
+<p>  (1）ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</p>
+<p>（2）EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</p>
+</blockquote>
+<h3 id="ADD-指令"><a href="#ADD-指令" class="headerlink" title="ADD 指令"></a>ADD 指令</h3><p><code>ADD</code>指令由四条加法组成：<code>addb、addw、addl、addq</code>分别表示字节加法、字加法、双字加法、和四字加法。通常来说，每个指令都会存在上述对应的<code>b、w、l、q</code>，对应着处理字节、字、双字、四字。</p>
+<img src="https://s2.loli.net/2022/03/03/bK1MvhAsNDuiwPc.png" style="zoom: 67%;" />
+
+<p>上图中大多数指令，既可以用于无符号运算，也可以用于补码运算，同时只有右移操作要求区分有符号数和无符号数，这个特性使得不嘛孕栓成为实现有符号整数运算的一种比较好实现的方法原因之一。</p>
+<p><code>leaq</code>指令是用于加载有效地址，通常用来执行简单的算术操作。本质上算是<code>movq</code>指令的一种变形。其指令形式是从内存读取数据到寄存器，但是它更本上就没有引用内存，其操作数看上去是一个内存引用，但其实际上是将有效地址写入到目的操作数。举个例子设%<code>rdx</code>的值是<code>x</code>那么我们执行<code>leaq 7(%rdx,%rdx,x) , %rax</code>指令则是相当于把<code>%rax</code>的值设置为了<code>5x+7</code>。需要注意的是目的操作数必须是一个寄存器。</p>
+<p>在利用寄存器进行移位操作时，先给出移位量，然后第二位给出要移位的数，可以执行算术 ( 要补符号位 ) 或者逻辑右移( 高位补 0 ) ，位移量可以是一个立即数，或者存放在单字节寄存器<code>%cl</code>里 ( 仅允许把这个寄存器作为操作数 ) 。因为寄存器<code>%cl</code>是单字节的所以在其值为<code>0xFF</code>时拥有最大的位移量，即<code>256-1</code>，此时对应的指令<code>salb</code>会移 7 位，<code>salw</code>会移 15 位，<code>sall</code>会移 31 位，<code>salq</code>会移 63 位。</p>
+<p>左移拥有两个名字<code>sal</code>和<code>shl</code>，两种指令效果是一样的，但是在右移指令的两种形式中却不相同<code>sar</code>是算术右移，会填上符号位，而<code>shr</code>是逻辑右移，是填充 0 。</p>
+<blockquote>
+<p>例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">shift_left4_rightn</span><span class="params">(<span class="keyword">long</span> x, <span class="keyword">long</span> n)</span></span>&#123;</span><br><span class="line">	x&lt;&lt;=<span class="number">4</span>;</span><br><span class="line">	x&gt;&gt;=n;</span><br><span class="line">	<span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//现有 x in %rdi , n in %rsi , 使用算术右移</span></span><br><span class="line"><span class="comment">//则对应汇编代码为:</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">shift_left4_rightn:</span></span><br><span class="line"><span class="comment">	movq %rdi, %rax</span></span><br><span class="line"><span class="comment">	shlq $4, %rax</span></span><br><span class="line"><span class="comment">	movl %esi, %ecx</span></span><br><span class="line"><span class="comment">	sarl %cl, %rax</span></span><br><span class="line"><span class="comment">	ret</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>对于两个 64 位无符号或者有符号的整数相乘是需要 128 位来表示，但是<code>x86-64</code>指令集对<code>128</code>位（ 16字节 ）数的操作提供有限的支持，对此<code>Intel</code>把 16 字节的数称为八字，下图位支持两个 64 位数字的全 128 位乘积以及除法的指令。</p>
+<p><img src="https://s2.loli.net/2022/03/06/rfEtwCk7SH82pRo.png"></p>
+<p>上述指令中<code>mulq</code>和<code>imulq</code>都要求一个参数必须在<code>%rax</code>中，而晾衣杆作为指令的源操作数给出，然后将成绩存放在寄存器<code>%rdx (高64位)</code>和<code>%rax (低64位)</code>中，虽然<code>imulq</code>可以用于两个不同的乘法操作，但是汇编器能够通过计算操作数的数目分辨出想用哪条指令。</p>
+<p>而对于除法或者取模操作，这些操作是由单操作数除法指令来提供的，类似于单操作数乘法指令。有符号除法指令<code>idaivl</code>将寄存器<code>%rdx (高64位)</code>和<code>%rax (低64位)</code>中的 128 位数作为被除数，而除数作为至零点操作数给出。指令将商存储在寄存器<code>%rax</code>中，将余数存储在寄存器<code>%rdx</code>中。</p>
+<p>对于大多数 64 位除法来说，除数也常常是一个 64 位的值。这个值应该存放在<code>%rax</code>中，<code>%rdx</code>的位应该设置位全 0 （无符号运算）或者<code>%rax</code>的符号位（有符号运算）。后面这个操作可以用<code>cqto [Intel 文档中叫做 cqo]</code> 来完成。这条指令不需要操作数，它能隐含读出<code>%rax</code>的符号位，将其复制到<code>%rdx</code>的所有位。</p>
+<blockquote>
+<p> 下面举出乘法的相关实现的例子：</p>
+ <img src="https://s2.loli.net/2022/03/06/k6zIKJi5XFQn8C1.png" alt="27.png" style="zoom: 80%;" />
+
+<p> 可以看到存储乘积需要两个<code>movq</code>指令：一个存储低 8 字节（第 4 行），一个村粗高 8 个字节（第 5 行）。</p>
+<p> 下面举出除法的相关实现的例子：</p>
+<p>  <img src="https://s2.loli.net/2022/03/06/mX1ULjlBSwDOkz8.png"><br>  <img src="https://s2.loli.net/2022/03/06/ef8haPNlus2nLUb.png"></p>
+</blockquote>
+<h3 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h3><p><code>CF</code>：进位标志。最近的操作使最高位产生了进位。可以用来检查无符号操作的溢出。</p>
+<blockquote>
+<p>CF进位标志的作用：<br>1.当两个数相加时，若最高位向上形成进位，则CF=1；<br>2.当两个数相减时，若最高位向上形成借位，则CF=1；<br>3.当两个无符号数相乘时，若乘积的高一半为0，则CF=0；<br>4.当两个带符号数相乘时，若乘积的高一半是低一半的符号扩展，则CF=0.</p>
+</blockquote>
+<p><code>ZF</code>：零标志。最近的操作得出的结果为 0 。</p>
+<p><code>SF</code>：符号标志。最近的操作得到的结果为负数。设置为 1 表示最近运算小于 0 为真，设置为 0 表示最近运算小于 0 为假。</p>
+<p><code>OF</code>：溢出标志。最近的操作导致一个补码溢出——正溢出或者负溢出。设置为 0 表示无溢出。</p>
+<p>指令<code>TEST S1, S2</code>基于<code>S1 &amp; S2</code>，如用<code>testq %rax, %rax</code>来检查<code>%rax</code>是负数还是正数还是零，或其中一个操作数是一个掩码，用来指示哪些位为应该被测试。</p>
+<p>对于逻辑操作，进位标志和溢出标志会被设置成 0 。对于移位操作，进位标志将设置为最后一个被移出的位，而一处标志设置为 0 。<code>INC (加一)</code>和<code>DEC (减一)</code>会设置溢出和零标志，但是不会改变进位标志。同时特殊的<code>CMP 、SUB、AND、TEST</code>指令根据两个操作数的差来设置条件码而不改变其他寄存器。</p>
+<p><img src="https://s2.loli.net/2022/03/08/rY3GajinI8bksZu.png"></p>
+<blockquote>
+<p>值得注意的是<code>setl</code>与<code>setb</code>指令表示小于时设置和低于时设置，而并非设置长字和设置字节。</p>
+<ol>
+<li><p>分析<code>setl</code>。当<code>SF^OF</code>为1时（此条指令代表的是<code>a&lt;b</code>，即为1时有<code>a&lt;b</code>），会将D设置为1，否则设置为0。有两种情况<code>SF^OF</code>为1：<br>a. <code>SF = 1 OF = 0</code>，此时<code>OF = 0</code>即没有发生溢出，那么结果t就是正常结果。<code>SF = 1</code>即结果t是负数，即a-b&lt;0即a&lt;b。符合情况。<br>b. <code>SF = 0 OF = 1</code>，此时OF = 1即发生了溢出，且<code>SF = 0</code>说明结果t为非负数，所以很明显这里是发生的负溢出，所以溢出结果为非负数。a-b&gt;=0这里负溢出，所以两个部分都为负，a为负，-b为负，所以b为正，既然a为负，b为正，那儿必有a&lt;b。符合情况。</p>
+</li>
+<li><p>分析<code>setle</code>。既然<code>SF^OF = 1</code>代表小于且<code>ZF = 1</code>代表等于，那么<code>(SF^OF) | ZF = 1</code>就代表小于或者等于。</p>
+</li>
+<li><p>分析<code>setge</code>。既然SF^OF = 1代表小于，那么整体取反后，<code>~(SF^OF) = 1</code>，就代表大于等于。（小于的反面就是大于等于）</p>
+</li>
+<li><p>分析<code>setg</code>。既然<code>(SF^OF) | ZF = 1</code>就代表小于等于，那么整体取反后，<code>~(SF^OF) &amp; ~ZF = 1</code>（注意取反后或符号变为与符号），就代表大于。</p>
+</li>
+</ol>
+</blockquote>
+<p><code>SET</code>指令的目的操作数是低位单字节寄存器元素之一，或是一个字节的内存位置，指令会将这个字节设置成 0 或者 1 。为了得到一个 32 位或者 64 位结果，我们必须对高位清零。</p>
+<img src="https://s2.loli.net/2022/03/08/9PCte218qMvHW3j.png" style="zoom:80%;" />
+
+<p>对于无符号数比较来说其进行比较时使用的是惊为标志和零标志的组合。大多情况下机器代码对有符号和无符号的运算中的两种情况都是使用一样的指令，因为许多算术运算对无符号和补码算术都有一样的位级行为，而对于右移、除法、乘法时使用的指令和条件码不相同。</p>
+<h3 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h3><p><code>JMP</code>：无条件跳转，跳转目标从寄存器或者内存位置读出。</p>
+<blockquote>
+<p>直接跳转是给出一个标号作为跳转目标的，而间接跳转是<code>*</code>后面跟一个操作数指示符。</p>
+<p><code>jmp *%rax</code>：用寄存器<code>%rax</code>中的中的值作为跳转目标</p>
+<p><code>jmp *(%rax)</code>：以寄存器<code>%rax</code>中的值作为读地址，从内存中读出跳转目标。</p>
+</blockquote>
+<img src="https://s2.loli.net/2022/03/09/OglYsqIVU8MiADB.png" style="zoom:67%;" />
+
+<p>在实现跳转时，目的跳转地址可以通过指令的字节码来计算，目的跳转地址是本行对应 16 进制数据加上下一行指令的地址的和得到对应的跳转地址。举个例子：</p>
+<p><img src="https://s2.loli.net/2022/03/09/XQeoU23KPLhgA1v.png"></p>
+<p>通过如此计算 ( 相对寻址 ) ，程序计数器的值是跳转指令后面的那条指令的地址，而不是跳转指令本身的地址。</p>
+<p>在寻址计算时如果出现了负数时，我们利用<strong>补码等于源码取反加一</strong>的方式来计算所需要减去的值的大小，以上图为例子 <code>f8</code> 的二进制位是<code>1111 1000</code>我们对其求补码可以得到<code>0000 1000</code>此时值为 8 ，那么下一条指令的地址减去该值便是所跳转到的地址。</p>
+<blockquote>
+<p>举个例子：</p>
+<p><img src="https://s2.loli.net/2022/03/10/fnQBDeZ5wdCilHm.png"></p>
+<p>有题目可以知道这个是一个小端序的字节顺序，所以在读取数据时是从右往左进行读取，我们可以看到其为一个负数，而求其跳转地址，我们已知<code>跳转地址=操作数+下一条指令的地址</code>，那么求这个跳转的地址我们可以用两种方式来求解。</p>
+<p>方式一</p>
+<p>我们直接拿<code>4005ed</code>减去<code>0x73</code>可以得到<code>400560</code>，而这个数据也便是我们跳转到的地址。</p>
+<p>方式二</p>
+<p>我们将<code>ff ff ff 73</code>的二进制位列出来可以看到<code>1111 1111 1111 1111 1111 1111 0111 0011</code>，我们对其取反可以得到<code>1000 1100</code>将其转换为 16 进制数据可以得到<code>0x8C</code>我们再对取反后的数据加一，可以得到其补码，便是<code>0x8D</code>我们此时将下一条指令的地址减去对应的补码便可以得到我们跳转到的地址，即<code>400560</code></p>
+</blockquote>
+<h3 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h3><p>在<code>C</code>中我们实现一个<code>if - else</code>的分支结构采用如下方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(test-expr)&#123;</span><br><span class="line">	then-statement</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">else</span>-statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是在汇编语言中其会转变为<code>goto</code>语句来进行分支，来确保不会执行到错误的部分，上述的<code>C</code>代码转换为汇编模式则是（ 我们以C语法描述控制流 ）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	t=test-expr;</span><br><span class="line">	<span class="keyword">if</span>(!t)</span><br><span class="line">		<span class="keyword">goto</span> <span class="literal">false</span>;</span><br><span class="line">	then-statement</span><br><span class="line">	<span class="keyword">goto</span> done;</span><br><span class="line"><span class="literal">false</span>:</span><br><span class="line"><span class="keyword">else</span>-statement</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+
+<p>也就是汇编器为<code>then-statement</code>和<code>else-statement</code>产生各自的代码块。它会插入条件和无条件分支，来确保执行正确的命令。</p>
+<p>上述实现条件操作是一种传统简单但低效的一种方式，在现代处理器上，常常以条件传送来实现，我们同样举出相应的例子来看：</p>
+<img src="https://s2.loli.net/2022/03/10/XC2vSiQRVpB8DxA.png" style="zoom:80%;" />
+
+<p>需要注意的是：使用条件赋值时不会改变<code>lt_cnt</code>或<code>ge_cnt</code>的值，其只是简单地计算函数要返回的值。</p>
+<hr>
+<p>对于分支预测错误的处罚计算：</p>
+<p>假设计算错误的概率是<code>p</code>，如果没有预测错误，执行代码的时间是$T_{ok}$,而预测错误==的处罚是 $T_{MP}$，模式为随机是执行所需要的时间周期为 $T_{ran}$,模式为非常可预测时执行所需要的时间周期为 $T_{OK}$，则有关系式：$T_{MP}  = 2\ ( T_{ran} - T_{OK} )$</p>
+<p>即函数需要的时间范围大约是：$T_{OK}\ \  —\ \  T_{OK} + T_{MP}$</p>
+<hr>
+<img src="https://s2.loli.net/2022/03/10/ftHrC5IiGudzap3.png" style="zoom:80%;" />
+
+<p>条件传送中，处理器无需预测测试的结果就可以执行条件攒送。处理器只是读源值 (可能是从内存中)，检查条件码，然后要么更新目的寄存器，要么保存不变。 </p>
+<h3 id="循环分支"><a href="#循环分支" class="headerlink" title="循环分支"></a>循环分支</h3><h4 id="do-while"><a href="#do-while" class="headerlink" title="do-while"></a>do-while</h4><p>一般来说在汇编中会将循环变成低级的测试和条件跳转的组合，以<code>do-while</code>为例：</p>
+<img src="https://s2.loli.net/2022/03/12/Up79qhHjelyVv5s.png" style="zoom:80%;" />
+
+<p>可以看出在汇编里采用了条件跳转和低级测试实现的一个<code>do-while</code>循环，最为关键的便是第 7 汇编语句，其决定了是否继续重复和退出循环。</p>
+<h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><p><code>while</code>与<code>do-while</code>不同的是<code>while</code>可能一次循环都不会执行，而<code>do-while</code>至少执行一次，对此我们需要先进行测试然后再跳转到对应的循环体里，<code>GCC</code>在生成<code>while</code>循环时常使用两种翻译方式：</p>
+<ul>
+<li><p>跳转到中间</p>
+<p>通常的模板形式是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">goto</span> test;</span><br><span class="line"> loop:</span><br><span class="line">	body-statement</span><br><span class="line"> test:</span><br><span class="line">	t = test-expr;</span><br><span class="line">   	<span class="keyword">if</span>(t)</span><br><span class="line">   		<span class="keyword">goto</span> loop;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>可以看到程序先跳转到的是测试循环成立与否的条件判断处，然后判断成立时再次进行跳转。</p>
+<img src="https://s2.loli.net/2022/03/12/eMcd7rtpNUqL84o.png" style="zoom:80%;" />
+
+<ul>
+<li><p>条件分支</p>
+<p>第二种方式是采用判断条件是否成立，如果不成立则直接跳过循环，把代码转换为<code>do-while</code>循环。大致可以表示成如下形式</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line"><span class="keyword">if</span>(!t)</span><br><span class="line">	<span class="keyword">goto</span> done;</span><br><span class="line"><span class="keyword">do</span> </span><br><span class="line">	body-<span class="function">statement</span></span><br><span class="line"><span class="function"><span class="title">while</span> <span class="params">(test-expr)</span></span>;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+
+<p>相应的还可以翻译成<code>goto</code>代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t = test-expr;</span><br><span class="line"><span class="keyword">if</span>(!t)</span><br><span class="line">	<span class="keyword">goto</span> done;</span><br><span class="line">loop: </span><br><span class="line">	body-statement</span><br><span class="line">	t = test-expr;</span><br><span class="line">  	<span class="keyword">if</span>(t)</span><br><span class="line">  		<span class="keyword">goto</span> loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+
+<img src="https://s2.loli.net/2022/03/12/tpsXLCgUcyuo8AF.png" style="zoom:80%;" /></li>
+</ul>
+<p><img src="https://s2.loli.net/2022/03/12/4X8MrqzUT6fShIu.png"></p>
+<h4 id="for"><a href="#for" class="headerlink" title="for"></a>for</h4><p><code>for</code>循环的行为与<code>while</code>比较相似，<code>for</code>的通用形式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (init-expr; test-expr; update-expr)</span><br><span class="line">	body-statement</span><br></pre></td></tr></table></figure>
+
+<p>对此转换成<code>while</code>可以如下表示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line"><span class="keyword">while</span> (test-expr)&#123;</span><br><span class="line">	body-statement</span><br><span class="line">	update-expr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序会先对初始表达式进行求值，然后进入循环，进行测试表达式的结果来判断是否执行循环内容。</p>
+<p>由于<code>for</code>在编译时与<code>while</code>效果相似，在编译成汇编时，会根据优化程度来采用<code>while</code>的两个方式之一来进行转换。</p>
+<h4 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h4><p><code>C语言</code>中的三种形式的循环都可以采用简单的策略来进行翻译，以条件分支和逻辑判断来实现，产生包含一个或多个条件分支的代码。控制的条件转移提供了将循环翻译成机器代码的基本机制。</p>
+<h4 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h4><p><code>switch</code>更具一个整数索引值进行多重分支，同时可以通过跳转表 ( 一个数组 ) 来使其更加高效。[ 一般在开关情况过多时 ( 4 个以上 )，并且值的范围跨度比较小时采用跳转表 ] 。</p>
+<p><img src="https://s2.loli.net/2022/03/12/DkTHhPFrw7f16aB.png"></p>
+<p>在上图中我们可以看到在跳过一个不连续的区域时在对应的跳转表里所对应的是<code>default</code>区段，会在对应指向执行<code>def</code>的代码段。</p>
+<blockquote>
+<p>&amp;&amp; 创建一个指向代码位置的指针</p>
+</blockquote>
+<p>同时可以注意到上面代码段有一个对<code>index &gt; 6</code>的判断语句，这个是干什么的呢？我们试想一个补码表示的负数会被映射成一个无符号的最正大数，利用这个减少了分支的可能性。转换为汇编则为如下形式：</p>
+<img src="https://s2.loli.net/2022/03/12/p21MT3EPUqGhHfv.png" style="zoom:80%;" />
+
+<p>上述代码的关键是第 16 行的<code>goto</code>跳转语句，转换为汇编便是第 5 行的<code>jmp</code>语句，采用间接跳转来实现，操作数指定一个内存位置，由寄存器<code>%rsi</code>给出，这个寄存器保存着<code>index</code>的值。在跳转表中重复的便是打上相同标号，而对于确实则是采用<code>def标号</code>跳转到对应的<code>default</code>块进行处理。</p>
+<blockquote>
+<p><img src="https://s2.loli.net/2022/03/12/JocSDwCMUfOAE5t.png"></p>
+<p>而寻找多个标号的下标只需要对照后面的<code>L X</code>进行查找，可看到<code>case 2</code>和<code>case 4</code>、<code>case 0</code>和<code>case 7</code>的情况标号相同。</p>
+<p>我们以练习题 <code>3.31</code>的练习题为例，可以根据给出的汇编代码和其相应的跳转表，写出对应的<code>C代码</code>：</p>
+<img src="https://s2.loli.net/2022/03/12/jER3iozOJVflDdL.png" style="zoom:80%;" />
+
+<p>对应转换出来的<code>C语言</code>代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">switcher</span><span class="params">(<span class="keyword">long</span> a,<span class="keyword">long</span> b,<span class="keyword">long</span> c,<span class="keyword">long</span>* dest)</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> val;</span><br><span class="line">	<span class="keyword">switch</span>(a)&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">			c = b ^ <span class="number">15</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">			val = c + <span class="number">112</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">			val = (b+c)*<span class="number">4</span>;	<span class="comment">//	(b+c)&lt;&lt;2</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			val = b ;</span><br><span class="line">	&#125;</span><br><span class="line">	*dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</blockquote>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p>在<code>x86-64</code>中栈空间向低地址方向增长，同时当<code>x86-64</code>过程需要的存储空间超出寄存器能够存放的大小时，就会在栈上分配空间，这个部分称为过程的栈帧。</p>
+<img src="https://s2.loli.net/2022/03/21/SBEMHFcLKa38tnp.png" style="zoom:80%;" />
+
+<p>当过程<code>P</code>调用过程<code>Q</code>时，会把返回的地址压入栈中，指明当<code>Q</code>返回时，要从<code>P</code>的程序的哪个位置继续执行。我们把返回地址也当作<code>P</code>的栈帧的一部分，因为其存放的是于<code>P</code>相关的状态。而<code>Q</code>代码部分会扩展当前栈的边界，分配其栈帧所需要的空间大小。</p>
+<blockquote>
+<p>简单来说，当<code>S</code>要调用<code>Q</code>函数时，会先将下一条命令的地址压入栈中，并保存相关寄存器的值，然后将<code>Q</code>函数的栈帧压入</p>
+<p>以下图为例，有如下执行顺序：</p>
+<img src="https://s2.loli.net/2022/03/21/5R1M9OJKu4e7aFt.png" style="zoom:67%;" />
+</blockquote>
+<p>在上述的调用过程中大部分的数据传送是通过寄存器完成的，当<code>P</code>调用<code>Q</code>时，<code>P</code>的代码必须先把参数复制到适当的寄存器中，同样的当<code>Q</code>返回到<code>P</code>时，<code>P</code>的代码可以从<code>%rax</code>中取得返回值。</p>
+<img src="https://s2.loli.net/2022/03/21/Z3qogs5GdUPp8l2.png" style="zoom:80%;" />
+
+<p>在<code>x86-64</code>中可以通过寄存器最多传递 6 个整型( 例如整数和指针)参数。当一个函数有大于 6 个整型参数时，超过的部分便需要通过栈来进行传递。同时通过栈来传递参数时，所有数据都向 8 的倍数对齐，当参数到位的时候程序便可以通过<code>call</code>指令来将控制转移到<code>Q</code>。</p>
+<p>存放在局部变量的值不需要进行字节对齐，而当值被当作参数传入到函数中时，便需要进行字节对齐。</p>
+<blockquote>
+<img src="https://s2.loli.net/2022/03/21/s4e8yZlx5wNcJtT.png" style="zoom:80%;" />
+
+<p>可以看到<code>1-6</code>的参数值都是通过寄存器传递而多出来的<code>7-n</code>的参数便是在栈顶以 8 的倍数进行压入。</p>
+</blockquote>
+<p>有些时候局部数据必须放在内存中，包括如下情况：</p>
+<ul>
+<li>寄存器不足存放所有的本地数据</li>
+<li>对一个局部变量使用<code>&amp;</code>，因此必须能够为它产生一个地址。</li>
+<li>某些局部变量是数组或者结构，因此必须能通过数组或结构引用被访问到。</li>
+</ul>
+<blockquote>
+<p>栈指针加上某一个数值代表着栈的缩减，而压入数据的时候栈顶指针进行减数值，栈空间向上移动。</p>
+</blockquote>
+<p>寄存器是唯一被所有过程共享的资源，虽然是在给定时刻只有一个是活动的但是，我们仍然需要确保一个过程调用另一个过程的时候时，被调用者不会覆盖调用者稍后使用的寄存器的值。</p>
+<p>寄存器<code>%rbp</code>、<code>%rbx</code>和<code>%r12 - %r15</code>被划分为<strong>被调用者保存寄存器</strong>，除了栈指针<code>%rsp</code>都分类为<strong>调用者保存器</strong>。</p>
+<img src="https://s2.loli.net/2022/03/22/59hnlpNxe2DSkgF.png" style="zoom:80%;" />
+
+<p>通过上述例子，可以更好的理解到程序在调用栈的过程中是如何对寄存器的操作的。值得注意的是最后恢复原来的数据的时候是先弹出<code>%rbx</code>再弹出<code>%rbp</code>，体现出栈的先进后出的原则。</p>
+<blockquote>
+<p>下面以习题 3 .34 为例：</p>
+<p>一个函数<code>P</code>生成名为<code>a0 ~ a7</code>的局部变量然后调用函数<code>Q</code></p>
+<p><img src="https://s2.loli.net/2022/03/22/KqiZ4rxfXYydRp7.png"></p>
+<p>从汇编来看我们可以知道在<code>x86-64</code>中可以通过寄存器最多传递 6 个整型，所以<code>a0</code>到<code>a5</code>共 6 个变量是保存在寄存器中的，而<code>a6</code>和<code>a7</code>存储在栈空间里面，对于程序而言，不能把所有变量均存储在寄存器上是因为寄存器不够用，因而无法存取。</p>
+</blockquote>
+<h4 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h4><img src="https://s2.loli.net/2022/03/23/kBP9o86WlVGivSd.png" style="zoom:80%;" />
+
+<p>汇编使用寄存器<code>%rbx</code>来进行保存参数<code>n</code>，先把已有的值保存在栈上( 第二行 )，随后在返回前恢复该值( 第十一行)。根据栈的使用特性和寄存器保存规则，可以保证当递归调用<code>rfact(n-1)</code>返回时( 第九行 )：</p>
+<ul>
+<li>该次调用的结果会保存在寄存器<code>%rax</code>中</li>
+<li>参数<code>n</code>的值仍然在寄存器<code>%rbx</code>中</li>
+</ul>
+<p>递归调用对程序的栈空间消耗十分大，如果程序中对递归调用的次数过大时，可能会引发溢出。</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>通常来说对于一个数组的引用可以通过内存引用的方式来进行简化数组的访问，如果有一个<code>int E[i]</code>，<code>E</code>的地址存放在寄存器<code>%rdx</code>中，而<code>i</code>存放在寄存器<code>%rcx</code>中时，可以利用指令<code>movl (%rdx,%rcx,4),%eax</code>也就是取出<code>%rdx</code>向下<code>4 * %rcx + %rdx</code>的内存位置的值，同理于取出其他数据。而对于引用了指针的数据也是可以进行如上的过程。</p>
+<p><img src="https://s2.loli.net/2022/03/23/toQ12rNWUByzhRq.png"></p>
+<blockquote>
+<p>需要注意的是，对数组的地址进行访问也要乘以字节数</p>
+</blockquote>
+<p>对于多维的数组时，其值时保存在栈空间内部，我们依然可以把其理解为一个线性的空间，同样的可以通过对其地址空间的偏移来取其值。</p>
+<p><img src="https://s2.loli.net/2022/03/23/KhO4kSbe6uaAxiE.png"></p>
+<p>通常要访问多维度的元素，编译器会以数组起始为基地址，然后以偏移量为索引，产生期望的元素偏移量，然后使用对应的<code>mov</code>指令。对于如下声明的一个数组：<code>T D[R][C]</code>，其数组元素<code>D[i][j]</code>的内存地址为$$&amp;D[i][j] = x_D+L(C*i+j)$$。</p>
+<h4 id="定长数组"><a href="#定长数组" class="headerlink" title="定长数组"></a>定长数组</h4><p><code>C语言</code>编译器能优化定长多维数组上的操作代码。编译器可能会去除整数索引，转换为指针间接引用，于此编译器还可能采用某个指针指向对应数组的固定部分，在后续的运算中在这个指针上进行如下图所示</p>
+<img src="https://s2.loli.net/2022/03/23/xRl8DqLgWnItUK4.png" style="zoom:80%;" />
+
+<p>可以看出来<code>GCC</code>生成了一个指针，命名为<code>Aptr</code>指向<code>A</code>的行<code>i</code>中连续的元素，也生成了一个指针，命名为<code>Bptr</code>指向<code>B</code>的列<code>k</code>中连续的元素，利用指针来对其进行运算，同时省去对变量<code>j</code>的定义过程，利用判别式来判断函数停止的条件。</p>
+<h4 id="变长数组"><a href="#变长数组" class="headerlink" title="变长数组"></a>变长数组</h4><p>定义变长数组时不得不用<code>malloc</code>或者<code>calloc</code>函数进行分配存储空间，而不得不显示地编码，用行优先索引将多维数组映射到一维数组，但是在<code>ISOC99</code>允许数组的维度是一个表达式，在数组分配的时候才计算出来。我们声明一个数组<code>A[expr1][expr2]</code>，我们访问该元素的<code>A[i][j]</code>可以编写如下的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">var_ele</span><span class="params">(<span class="keyword">long</span> n,<span class="keyword">int</span> A[n][n],<span class="keyword">long</span> i,<span class="keyword">long</span> j)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> A[i][j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>则在变长数组中会产生如下汇编代码：</p>
+<p><img src="https://s2.loli.net/2022/03/23/fkLiIswK2CHEqV6.png"></p>
+<p>而在<code>GCC</code>的优化下会变成如下：</p>
+<img src="https://s2.loli.net/2022/03/23/6gwsVnRQ9LUJjCH.png" style="zoom:80%;" />
+
+<p>将优化后的<code>C代码</code>进行转换为汇编时程序会采取上述方式对数组进行取值保存，利用指针的变化改变其取值的偏移量，进而进行优化其结构。</p>
+<p><img src="https://s2.loli.net/2022/03/23/EmefX2hib9WVtlD.png"></p>
+<p><img src="https://s2.loli.net/2022/03/23/B2by317m6NlJQGp.png"></p>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><p>结构体可以将多个不同数据组合在一起，与多维数组相似，其在栈空间上是线性存储的，于是我们也可以通过其首地址加上对应的偏移量来取到对应的结构体数据。</p>
+<p>我们声明一个结构体变量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rec</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">int</span> j;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">int</span> *p;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>则其对应的空间分配为如下图：</p>
+<p><img src="https://s2.loli.net/2022/03/23/ditkbVOu3TUIsAj.png"></p>
+<p>假设<code>r</code>存储在寄存器<code>%rdi</code>时，如果我们需要取出<code>i</code>的值时可以直接用偏移量进行取值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movl	(%rdi),%eax		;r-&gt;i</span><br><span class="line">movl	4(%rdi),%eax	;r-&gt;j</span><br></pre></td></tr></table></figure>
+
+<p>而对于存储在结构体中的数组我们可以利用偏移量对其进行取值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">;r in %rdi	i in %rsi</span><br><span class="line">leaq	8(%rdi,%rsi,4),%rax		; Set %rax to &amp;r-&gt;a[i] </span><br></pre></td></tr></table></figure>
+
+<p>如果我们要实现<code>r-&gt;p = &amp;r-&gt;a[r-&gt;i + r-&gt;j]</code>时，也可以l向上述过程中一样将<code>r-&gt;i</code>和<code>r-&gt;j</code>的和相加得到一个偏移量，将结构体的首地址值加上对应的字节长度(<code>r-&gt;i + r-&gt;j</code>)和数据<code>a</code>的字节长度乘以相应长度值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">;r in %rdi</span><br><span class="line">movl	4(%rdi),%eax	; Get r-&gt;j</span><br><span class="line">addl	(%rdi),%eax		; Add r-&gt;i</span><br><span class="line">cltq				    ; Extend to 8 bytes</span><br><span class="line">leaq	8(%rdi,%rax,4),%rax		; Compute &amp;r-&gt;a[r-&gt;i + r-&gt;j]</span><br><span class="line">movq	%rax,16(%rdi)	; Store in r-&gt;p</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>下面以一个结构体为例：</p>
+<p><img src="https://s2.loli.net/2022/03/23/srxG19DImnp5gzL.png"></p>
+</blockquote>
+<h3 id="联合"><a href="#联合" class="headerlink" title="联合"></a>联合</h3><p><code>union</code>与结构体不同，其在栈上分配的空间是定义变量中最大的一个，当在<code>union</code>中进行嵌套多个结构体时，如果需要对某一个结构体中的变量进行调用时，其余的结构体变量则会不占用对应的空间，而<code>union</code>对应的首地址也变成对应调用结构体的首地址。有如下定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">a</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">a0</span>&#123;</span></span><br><span class="line">		<span class="keyword">int</span> a;</span><br><span class="line">         <span class="keyword">int</span> b;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">a1</span>&#123;</span></span><br><span class="line">		<span class="keyword">int</span> c;</span><br><span class="line">		<span class="keyword">int</span> d;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们需要对<code>a1</code>中的<code>c</code>调用时，此时共用体<code>a</code>的首地址变成嵌套结构体<code>a1</code>中<code>c</code>的地址，其偏移量为 0 ，调用<code>a1</code>中<code>d</code>的话其对应的偏移量为 4 。</p>
+<h3 id="数据对齐"><a href="#数据对齐" class="headerlink" title="数据对齐"></a>数据对齐</h3><p>许多计算机系统对基本数据类型的合法地址做出了一些吸纳之，要求某种类型对象的地址必须值<code>K</code>(通常是 2 、4、8 )的倍数。这种方式产生相应的字节对齐必须是<code>K</code>的倍数。在汇编中会出现如下指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.align 8</span><br></pre></td></tr></table></figure>
+
+<p>表示后面的数据会遵循 8 字节的对其长度，而对于结构体，也会在其中进行插入间隙来完成对应的字节对齐。<strong>整个结构体的对齐值一般是结构体中最大数据类型所占的空间</strong>。与此如果一个类型按n字节对齐，那么该类型的变量起始地址必须是n的倍数。</p>
+<p>如果一个结构体变量中最后一个数据不满足字节对齐时编译器也会对其进行补齐，而补齐的空间也造成了内存浪费。</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>指针是<code>C语言</code>中的一个核心特色，以一种统一的方式对不同数据结构中的元素产生引用。</p>
+<ul>
+<li>每一个指针都对应一个类型，表明指针指向的是哪一类对象</li>
+<li>每一个指针都有一个值。这个值是某个指定类型的对象地址。特殊的<code>NULL( 0 )</code>表示该指针没有指向任何地方。</li>
+<li>指针用<code>&amp;</code>运算符创建，<code>leaq</code>指令是设计用来计算内存引用的地址的，<code>&amp;</code>运算符的机器代码实现存储用这个指令来计算表达式的值。</li>
+<li><code>*</code>操作符用于间接引用指针，结果是一个值，间接引用时用内存引用来实现的，要么存储到一个指定的地址，要么时从指定的地址读取。</li>
+<li>指针的强制转换只改变类型不改变值，相当于在指向的时候偏移量发生了变换。如表达式<code>(int *)p + 7</code>则会计算为：<code>p + 28</code></li>
+<li>指针可以指向函数，来对其进行调用。</li>
+</ul>
+<h4 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h4><img src="https://s2.loli.net/2022/03/28/EFg4QNnPiv5Tql2.png"  />
+
+<h3 id="内存越界引用和缓冲区溢出"><a href="#内存越界引用和缓冲区溢出" class="headerlink" title="内存越界引用和缓冲区溢出"></a>内存越界引用和缓冲区溢出</h3><p><code>C</code>对于数组引用不做任何边界检查，而且局部变量和状态信息( 例如保存的寄存器值和返回地址 )都存放在栈中。这两种情况结合到一起就引发严重的程序错误，对越界的数组元素的写操作会破坏存储在栈中的状态信息。当程序使用这个破坏的状态，试图重新加载寄存器或者执行<code>ret</code>时，会发生严重的错误。( PWN 中<code>ret2</code>漏洞 ) </p>
+<p>缓冲区溢出时如果覆盖了返回地址值，那么程序会跳转到对应的地址值处，而不是返回到原来的地址上去，因此可能执行不愿意执行的函数，而引发错误。</p>
+<h3 id="对抗缓冲区溢出"><a href="#对抗缓冲区溢出" class="headerlink" title="对抗缓冲区溢出"></a>对抗缓冲区溢出</h3><h4 id="栈随机化-ASLR"><a href="#栈随机化-ASLR" class="headerlink" title="栈随机化(ASLR)"></a>栈随机化(ASLR)</h4><p>为了在系统中插入攻击代码，攻击者及需要插入代码也需要插入指向这段代码的指针，这个指针也是攻击字符传递一部分。产生这个指针需要知道这个字符串放置的栈地址，而栈随机化在程序开始时，在栈上分配<code>0 ~ n</code>字节之间的随机大小的空间，入使用分配函数<code>alloca</code>在栈上分配指定字节数量的空间，程序并不使用这段空间，但是它会导致程序每次执行的时候栈的地址空间进行了变化，分配的<code>n</code>必须足够打，才能获得足够多的栈地址变化，但也要足够小，避免浪费程序过多的空间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> local;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;local at %p\n&quot;</span>,&amp;local);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述程序中，仅仅只是输出对应的<code>main</code>的地址，但是每次执行时发现输出并不一样，则证明开启了栈地址随机化。</p>
+<p>对于这种防护，攻击者可以在实际攻击的代码前加入很长一段的<code>nop</code>，只要攻击者猜中了这段序列中的某个地址程序就会经过这个序列，到达攻击代码。这个序列常常被称作“空操作雪橇”。</p>
+<blockquote>
+<p>破解的随机化大小  =  枚举的地址长度   *   <code>nop sled</code>长度</p>
+<p>尝试穷尽起始地址次数  =  地址范围  /  <code>nop sled</code>长度</p>
+<p>其中需要保证已经在栈上插入了攻击代码，于此再在栈顶上加入对应的随机化长度的 <code>nop</code></p>
+</blockquote>
+<h4 id="栈破坏检测-Canary"><a href="#栈破坏检测-Canary" class="headerlink" title="栈破坏检测(Canary)"></a>栈破坏检测(Canary)</h4><p>其思想是在栈帧中任何局部缓冲区于栈状态之间存储一个特殊的<code>Canary</code>值，其大小是程序每次运行时随机产生的，程序会对这个值进行检查，如果被某个操作数或者函数改变时会引发异常导致程序终止。</p>
+<p><img src="https://s2.loli.net/2022/03/28/s8XJyunKEHNf91Z.png"></p>
+<p>对于这个的绕过则需要将溢出的数据在<code>Canary</code>处将其还原，然后覆盖到后面的数据。实现溢出。</p>
+<h4 id="限制可执行代码区域-NX"><a href="#限制可执行代码区域-NX" class="headerlink" title="限制可执行代码区域(NX)"></a>限制可执行代码区域(NX)</h4><p>在典型的程序中，只有保存编译器产生的代码的那部分内存才需要是可执行的，其他部分限制为只允许读和写。而<code>NX</code>将读和写的模式进行分开，将栈变为可读可写但是不可执行，减少了损失效率。</p>
+<h3 id="浮点代码"><a href="#浮点代码" class="headerlink" title="浮点代码"></a>浮点代码</h3><p>每个<code>YMM</code>寄存器都是<code>256位(32字节)</code>。当对标量进行数据操作时，这些寄存器只保存浮点数，而且只使用低 32 位( float )或64位( double )。每个<code>XMM</code>都是对应<code>YMM</code>寄存器的低<code>128位</code>。</p>
+<img src="https://s2.loli.net/2022/03/28/SuwnxEqUNmOXVZ5.png" style="zoom:80%;" />
+
+<p>对应浮点传送指令为：</p>
+<img src="https://s2.loli.net/2022/03/28/eSp4zOG7QRuLPhr.png"  />
+
+<p>对应运算指令：</p>
+<img src="https://s2.loli.net/2022/03/29/V1C3IRsOxLUG8th.png" alt="65.png" style="zoom:80%;" />
+
+<p>对应位级运算：</p>
+<p><img src="https://s2.loli.net/2022/03/29/GevyfdTjLkrFlmV.png"></p>
+<h2 id="第三章总结"><a href="#第三章总结" class="headerlink" title="第三章总结"></a>第三章总结</h2><h3 id="程序的机器级表示-1"><a href="#程序的机器级表示-1" class="headerlink" title="程序的机器级表示"></a>程序的机器级表示</h3><p>在调用一个函数时，寄存器可能会有重复使用的情况发生，因此需要在调用前对寄存器的值进行保存，这里保存策略分为两大类：<code>调用者保存</code>和<code>被调用者保存</code>：</p>
+<img src="https://s2.loli.net/2022/04/01/qgvI4aymRTwJ6Hk.png" alt="67.png" style="zoom: 67%;" />
+
+<p>对应寄存器的保存方式如下：</p>
+<img src="https://s2.loli.net/2022/04/01/guK9LbwJ1dfHAZE.png" style="zoom: 50%;" />
+
+<h3 id="基本类型与内存访问"><a href="#基本类型与内存访问" class="headerlink" title="基本类型与内存访问"></a>基本类型与内存访问</h3><p><code>C语言</code>中对应的基本类型在汇编中的后缀表示：</p>
+<p><img src="https://s2.loli.net/2022/04/01/GRMKwnsAVemhlWN.png"></p>
+<p>一个指令包括<strong>操作码</strong>和<strong>操作数</strong>，同时部分操作码可能没有对应的操作数( 如：ret )，同时可能一个操作码对应的是多个操作数。而在操作数中包含着：<code>立即数</code>、<code>寄存器</code>、<code>内存引用 (一个寄存器加上了括号来表示)</code>。</p>
+<p>对应的内存引用(一般数组会采用如下方式进行取址) ：</p>
+<blockquote>
+<p>内存访问，CPU支持将复杂的访存结果直接作为操作数，不需要先把地址进行计算出来在到内存进行读取</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2022/04/01/3P1IQSZkhl7c5bG.png"></p>
+<h3 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h3><h4 id="寄存器与数据传送指令"><a href="#寄存器与数据传送指令" class="headerlink" title="寄存器与数据传送指令"></a>寄存器与数据传送指令</h4><p>对于<code>MOV</code>指令有如下使用方式：</p>
+<img src="https://s2.loli.net/2022/04/01/cAIu2YRhwPlUedn.png" style="zoom:67%;" />
+
+<p>特别的当源操作数是一个立即数时，该立即数只能是 32 位补码表示，同时程序会对这个立即数进行符号位扩展到<code>64</code>位( 32 -&gt; 64 )，将得到的 64 位数保存到寄存器。</p>
+<blockquote>
+<p>如果操作的立即数是 64 位呢？程序引入了一个新的指令<code>movabsq</code>，该指令的源操作数可以是任意64位立即数，但是目的操作数只能是寄存器。</p>
+</blockquote>
+<p><code>movl</code>的目的操作数是寄存器时，会把该寄存器上的高 4 字节设置为 0.</p>
+<blockquote>
+<p>任何位寄存器生成32位值的指令都会把该寄存器的高位部分设置为 0.</p>
+</blockquote>
+<p>当源操作数的数位小于目的操作数的时候，有对应的<code>mov</code>指令对其进行符号位扩展或者零扩展。</p>
+<blockquote>
+<p>零扩展指令：</p>
+<p><img src="https://s2.loli.net/2022/04/01/Ubp31Mjcq2y4Qw6.png"></p>
+<p>符号位扩展：</p>
+<p><img src="https://s2.loli.net/2022/04/01/DqwEbg7syORmjY3.png"></p>
+<p>同理于零扩展指令，<code>s</code>表示的是符号位扩展(sign的缩写)，最后面两个都是大小指示符(源操作数 - 目的操作数)。</p>
+<p>同时存在一个<code>cltq</code>指令，其源操作数只能是<code>%eax</code>，目的操作数只能是<code>%rax</code>。</p>
+</blockquote>
+<h4 id="栈与数据传送指令"><a href="#栈与数据传送指令" class="headerlink" title="栈与数据传送指令"></a>栈与数据传送指令</h4><p><code>%rdi</code>和<code>%rsi</code>一般用于保存传入的参数的第一位、第二位。</p>
+<p><code>pushq  %rax</code>等价于<code>sub  $8, %rsp  +  movq %rax, (%rsp)</code>两条指令的组合<br><code>popq  %rbx</code>等价于<code>movq (%rsp), %rbx  +  addq $8, %rsp</code>两条指令的组合，但是对应原来栈上的<code>%rbx</code>的值仍然存在，知道下次<code>push</code>操作，此处保存的数值才会被覆盖。</p>
+<h4 id="算术和逻辑运算指令"><a href="#算术和逻辑运算指令" class="headerlink" title="算术和逻辑运算指令"></a>算术和逻辑运算指令</h4><p><code>leaq</code>可以加载一个有效的地址，其中<code>q</code>表示地址的长度，源操作数可以像内存引用一样，通过计算偏移量来进行把对应的有效的地址值保存到目的操作数，需要注意的是，其执行的操作并不是到对应的内存地址处读取数据，而是将这个有效的地址值进行保存到目的操作数。</p>
+<p>同时<code>lea</code>指令也可以完成对应的算术运算：</p>
+<img src="https://s2.loli.net/2022/04/01/xRrocLUPzlDw2VJ.png" style="zoom: 50%;" />
+
+<p>单操作数指令：</p>
+<img src="https://s2.loli.net/2022/04/01/i4gw7rITGLEzvcm.png" style="zoom:50%;" />
+
+<p>移位操作指令：</p>
+<img src="https://s2.loli.net/2022/04/01/wIdCmrc2BW63oyn.png" style="zoom:50%;" />
+
+<blockquote>
+<p>对于移位量<code>k</code>可以是一个立即数，或者存放在寄存器<code>cl</code>中的数，对于移位指令，只允许以特定的寄存器<code>cl</code>作为操作数</p>
+<p><code>cl</code>的长度为 8 个二进制位，意味着最多可以移位的长度位为 255 ，移位对应的数据时采用<code>cl</code>的不同低位来进行保存。</p>
+</blockquote>
+<p>对于此程序在进行乘法时，为什么不直接使用对应的乘法指令？这是因为在使用<code>lea</code>指令进行运算时所开销的时间周期更短，编译器会将程序进行优化，采用时间周期开销更短的进行编译。</p>
+<h3 id="指令与条件码"><a href="#指令与条件码" class="headerlink" title="指令与条件码"></a>指令与条件码</h3><p>执行一个指令时会用到相应的算术逻辑单元(ALU)，ALU重寄存器中读取数据后，执行相应的运算，并设置对应的条件码寄存器。</p>
+<p>条件码寄存器由<code>CPU</code>进行维护长度为单个比特位，用于描述最近操作的属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CF - 进位标志 可以用来进行检测是否发生了正溢出</span><br><span class="line">ZF - 零标志 记录最近的操作结果是否为 0 ，为 0 则将其置为 1</span><br><span class="line">SF - 符号标志 当最近的操作结果小于 0 时，其会置为 1</span><br><span class="line">OF - 溢出标志，针对有符号数，当发生溢出时便会置 1 (发生正/负溢出时)</span><br></pre></td></tr></table></figure>
+
+<p><code>cmp</code>指令和<code>test</code>指令只是设置条件码寄存器，不更新目的寄存器的值。</p>
+<p><img src="https://s2.loli.net/2022/03/08/rY3GajinI8bksZu.png"></p>
+<p>一般程序不会直接对条件码寄存器进行访问，但程序可以通过<code>setx</code>来对条件码寄存器进行间接访问，保存对应的值于一个寄存器中，通过对应寄存器的值进行返回或者判断。(Bool类型)</p>
+<p>对于大于和等于的情况可以直接通过相应的寄存器进行判断，而小于则需要<code>SF ^ OF</code>来进行判断，如不发生溢出时可以通过对应符号寄存器<code>SF</code>进行判断，但是发生溢出时就需要借助<code>OF</code>溢出标志进行判断。</p>
+<h3 id="跳转指令与循环"><a href="#跳转指令与循环" class="headerlink" title="跳转指令与循环"></a>跳转指令与循环</h3><img src="https://s2.loli.net/2022/03/09/OglYsqIVU8MiADB.png" style="zoom:67%;" />
+
+<p>在程序中，使用较多的条件判断语句会使程序的执行效率不高，因为程序通常会对每个分支用分支预测器进行判断每个分支是否会进行，当发生错误的预测时，会浪费较多的时间。程序因此会将其优化，将循环变成低级的测试和条件跳转的组合。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

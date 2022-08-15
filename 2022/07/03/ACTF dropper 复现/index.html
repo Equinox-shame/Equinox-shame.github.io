@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ACTF dropper 复现 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="拿到程序拖入PE中可以发现是一个UPX壳的 64 位程序，我们如果直接upx -d进行脱壳可以发现程序无法运行，因此我们运行x64dbg开始尝试手动脱壳。
+
+脱壳完后的程序在修复一下IAT，之后拖入,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">ACTF dropper 复现</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">ACTF dropper 复现</h1>
+        <div class="stuff">
+            <span>七月 03, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>拿到程序拖入PE中可以发现是一个<code>UPX</code>壳的 64 位程序，我们如果直接<code>upx -d</code>进行脱壳可以发现程序无法运行，因此我们运行<code>x64dbg</code>开始尝试手动脱壳。</p>
+<p><img src="https://s2.loli.net/2022/07/02/ZnrpyagzcRCfSj2.png" alt="1.png"></p>
+<p>脱壳完后的程序在修复一下<code>IAT</code>，之后拖入<code>IDA</code>中,依次进入</p>
+<p><img src="https://s2.loli.net/2022/07/02/oACQvxeyIagtkml.png" alt="2.png"></p>
+<p><img src="https://s2.loli.net/2022/07/02/EkOSMUcPdtZ6u3g.png" alt="3.png"></p>
+<p><img src="https://s2.loli.net/2022/07/02/nAOIXi4FhG9VTc1.png" alt="4.png"></p>
+<p>可以看出来程序创建了一个线程，在运行些什么东西，我们运行原来的程序，打开任务管理器进行查看</p>
+<p><img src="https://s2.loli.net/2022/07/02/17AcWfUKqoP4bSv.png" alt="5.png"></p>
+<p>可以看到多出来一个进程，而且在跑一个可执行的程序，我们对此需要想办法将其<code>dump</code>出来，分析这个子进程的功能，我们再次回到<code>x64dbg</code>中，进行单步调试,在调试过程中我们可以在内存中看到对应的<code>PE</code>文件结构</p>
+<p><img src="https://s2.loli.net/2022/07/02/e8WvlLhcR29qs1Q.png" alt="6.png"></p>
+<p>我们将其<code>dump</code>出来保存为<code>exe</code>，即可得到子进程创建的程序，我们将其拖入<code>IDA</code>进行分析</p>
+<p><img src="https://s2.loli.net/2022/07/03/OHUcLDF2GvI368B.png" alt="7.png"></p>
+<p>在前半截我们动调可以发现程序将内存中的数据进行取反，之后得到<code>flag：</code>这个也就是为什么我们无法直接从内存中进行读取，同时我们可以明显的看到<code>cin</code>和<code>cout</code>，得知这个是一个<code>C++</code>逆向，对于<code>C++</code>逆向在编译中最喜欢套娃和产生一些莫名的函数，对此我们不需要完全分析出每一项函数的作用，只需要推出大致逻辑即可。</p>
+<p><img src="https://s2.loli.net/2022/07/03/kqRYXGHsjL8Fnto.png" alt="8.png"></p>
+<p>在程序下方有一个除 0 异常，在这个异常中我们可以观察到其对虚函数表进行了修改</p>
+<p><img src="https://s2.loli.net/2022/07/03/VWpBTAo5RLxvsQu.png" alt="9.png"></p>
+<p>原来对应虚函数表的操作：</p>
+<p><img src="https://s2.loli.net/2022/07/03/6JwAxzC89Gvgqsy.png" alt="10.png"></p>
+<p>在异常中：</p>
+<p><img src="https://s2.loli.net/2022/07/03/1UtsbLDIBOCj4a3.png" alt="11.png"></p>
+<p>执行触发异常后我们继续<code>F8</code>进行运行，切换至汇编界面，可以发现程序的执行流程被异常改变了，将原先的虚函数表进行了替换操作</p>
+<p><img src="https://s2.loli.net/2022/07/03/CPY9LjANl1d5pZv.png" alt="12.png"></p>
+<p>我们跟进到这个<code>sub_7FF78950C0CF</code>函数中，查看这个新的虚函数对程序的处理，找对应哪些地方将我们的输入进行了处理加密</p>
+<p><img src="https://s2.loli.net/2022/07/03/HY9QBmUDOGNRqpw.png" alt="13.png"></p>
+<p><img src="https://s2.loli.net/2022/07/03/mgVECs2GIKQwNhk.png" alt="14.png"></p>
+<p>分析代码发现程序将对应<code>key</code>进行处理成以万为单位，每 4 个数字一组，进行处理，我们将每一个<code>key</code>通过调试进行<code>dump</code>出来，跟据对应的程序加密，可以判断出程序是将<code>key</code>与我们的输入进行大数运算，之后进行比较函数，判断我们的输入</p>
+<p>因此对应的解密脚本可以编写了，如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">res = <span class="number">834572051814337070469744559761199605121805728622619480039894407167152612470842477813941120780374570205930952883661000998715107231695919001238818879944773516507366865633886966330912156402063735306303966193481658066437563587241718036562480496368592194719092339868512773222711600878782903109949779245500098606570248830570792028831133949440164219842871034275938433</span></span><br><span class="line">res = res + <span class="number">57705573952449699620072104055030025886984180500734382250587152417040141679598894</span></span><br><span class="line">res = res - <span class="number">71119332457202863671922045224905384620742912949065190274173724688764272313900465</span></span><br><span class="line">res = res + <span class="number">55079029772840138145785005601340325789675668817561045403173659223377346727295749</span></span><br><span class="line">res = res - <span class="number">14385283226689171523445844388769467232023411467394422980403729848631619308579599</span></span><br><span class="line">res = res + <span class="number">80793226935699295824618519685638809874579343342564712419235587177713165502121664</span></span><br><span class="line">res = res // <span class="number">7537302706582391238853817483600228733479333152488218477840149847189049516952787</span></span><br><span class="line">res = res - <span class="number">17867047589171477574847737912328753108849304549280205992204587760361310317983607</span></span><br><span class="line">res = res + <span class="number">55440851777679184418972581091796582321001517732868509947716453414109025036506793</span></span><br><span class="line">res = res // <span class="number">11783410410469738048283152171898507679537812634841032055361622989575562121323526</span></span><br><span class="line">res = res - <span class="number">64584540291872516627894939590684951703479643371381420434698676192916126802789388</span></span><br><span class="line"></span><br><span class="line">s = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">while</span> res:</span><br><span class="line">    s += <span class="built_in">chr</span>(res % <span class="number">128</span>)</span><br><span class="line">    res = res // <span class="number">128</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(base64.b64decode(s))</span><br><span class="line"><span class="comment"># ACTF&#123;dr0pp3r_1s_v3ry_int3r3st1ng_1d7a90a63039831c7fcaa53b766d5b2d!!!!!&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

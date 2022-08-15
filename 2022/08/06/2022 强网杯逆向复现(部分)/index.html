@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2022 强网逆向部分题解 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言整个比赛打下来就只有坐牢、坐牢还是坐牢….萌新逆向选手拿到的都是一堆ELF然后进行着一堆奇怪的函数…完全看不懂…或许只有GameMaster算是我能看懂的题目吧….
+GAME MASTER感觉整,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">2022 强网逆向部分题解</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">2022 强网逆向部分题解</h1>
+        <div class="stuff">
+            <span>八月 06, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>整个比赛打下来就只有坐牢、坐牢还是坐牢….萌新逆向选手拿到的都是一堆<code>ELF</code>然后进行着一堆奇怪的函数…完全看不懂…或许只有<code>GameMaster</code>算是我能看懂的题目吧….</p>
+<h2 id="GAME-MASTER"><a href="#GAME-MASTER" class="headerlink" title="GAME MASTER"></a>GAME MASTER</h2><p>感觉整场比赛下来的逆向签到题目，本质上是一个<code>C#</code>编写的一个<code>21点</code>游戏，因为看不懂<code>C#</code>只能连蒙带猜的看，毕竟和<code>C</code>还是长得有些相似，还算好理解…</p>
+<p>我们将其拖入到<code>PE</code>中进行查看</p>
+<p><img src="https://s2.loli.net/2022/08/05/DbzqQuGCViXoRM5.png" alt="1.png"></p>
+<p>可以很明显的发现是一个<code>C#</code>文件，使用<code>dnSpy(32位)</code>进行打开，直接可以找到关键的主函数</p>
+<img src="https://s2.loli.net/2022/08/05/kgCrMAdYGOBh3F8.png" alt="2.png" style="zoom: 67%;" />
+
+<p>可以很明显的发现程序加载了附件中的<code>game message</code>，我们往下翻可以发现下面这些特殊操作：</p>
+<img src="https://s2.loli.net/2022/08/05/pn7hteTDEBK2CQI.png" alt="6.png" style="zoom:80%;" />
+
+<p>程序中似乎可以输入作弊码，同时在<code>goldFunc</code>中我们可以看到每一种作弊码对应的效果，有加钱的有减赌注的…同时我们也发现了几个有点不一样的作弊码，他们对我们之前加载的<code>game message</code>进行了操作，如下图：</p>
+<p><img src="https://s2.loli.net/2022/08/05/z67MLt8aVpsTobR.png" alt="3.png"></p>
+<img src="https://s2.loli.net/2022/08/05/kaCo5rQHNIJFtuh.png" alt="4.png" style="zoom: 80%;" />
+
+<p><img src="https://s2.loli.net/2022/08/05/qCO4j87X6fLg1sA.png" alt="5.png"></p>
+<p>大致可以看出来程序将<code>game message</code>进行了异或以及<code>AES ECB</code>的解密，对此我们尝试输入对应的作弊码，发现<code>game message</code>没有什么变化…不知道是不是因为程序没有将写完后的数据关闭，而导致数据仍然停留在内存中，我也看不懂<code>C#</code>，也不是很清楚…</p>
+<blockquote>
+<p>尝试输入作弊码的师傅可能需要注意一下，第一个大的前缀作弊码输入完后需要再输入一位字符(可以随意输入)，之后再进行输入第二段作弊码</p>
+</blockquote>
+<p>对此我们采取手动进行解密<code>game message</code>的信息，写出如下<code>Python</code>脚本</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> imod</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"></span><br><span class="line">data = <span class="built_in">open</span>(<span class="string">&quot;./gamemessage&quot;</span>,<span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">data = <span class="built_in">list</span>(data)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(data)):</span><br><span class="line">    data[i] ^= <span class="number">34</span></span><br><span class="line"></span><br><span class="line">key = [<span class="number">66</span>,<span class="number">114</span>,<span class="number">97</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">115</span>,<span class="number">116</span>,<span class="number">111</span>,<span class="number">114</span>,<span class="number">109</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">103</span>,<span class="number">33</span>,<span class="number">33</span>,<span class="number">33</span>]</span><br><span class="line">aes = AES.new(<span class="built_in">bytes</span>(key),AES.MODE_ECB)</span><br><span class="line">de_data = aes.decrypt(<span class="built_in">bytes</span>(data))</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;decode&quot;</span>,<span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(de_data)</span><br><span class="line"></span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>之后我们可以将我们的<code>game message</code>拖入到<code>010</code>中进行查看，可以发现整个文件是一个<code>PE</code>文件加上了一堆奇怪的东西</p>
+<img src="https://s2.loli.net/2022/08/05/kiACqYh1xzS7KVQ.png" alt="7.png" style="zoom: 67%;" />
+
+<p>之后我们可以恢复得到一个<code>exe</code>，将其拖入<code>PE</code>，同样发现其是一个<code>C#</code>文件，我们同样直接拖入到<code>dnSpy</code>进行分析查看</p>
+<img src="https://s2.loli.net/2022/08/05/LW8x795VqOhitbs.png" alt="8.png" style="zoom: 67%;" />
+
+<p>我们可以发现其中的主要关键为其中的<code>Check1</code>整个函数，在其中我们缺少对应的<code>x</code>、<code>y</code>、<code>z</code>，如果我们采用手逆的话可能会有些麻烦，我们可以直接利用<code>Z3</code>对其进行约束求解，将解密得到的<code>x</code>、<code>y</code>、<code>z</code>直接应用到下面，按程序逻辑进行执行即可得到对应题目的<code>flag</code>，写出脚本如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> im</span><br><span class="line"><span class="keyword">from</span> z3 <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">s = Solver()</span><br><span class="line">enc = [<span class="number">101</span>, <span class="number">5</span>, <span class="number">80</span>, <span class="number">213</span>, <span class="number">163</span>, <span class="number">26</span>, <span class="number">59</span>, <span class="number">38</span>, <span class="number">19</span>, <span class="number">6</span>, <span class="number">173</span>, <span class="number">189</span>, <span class="number">198</span>, <span class="number">166</span>, <span class="number">140</span>, <span class="number">183</span>, <span class="number">42</span>, <span class="number">247</span>, <span class="number">223</span>,</span><br><span class="line">       <span class="number">24</span>, <span class="number">106</span>, <span class="number">20</span>, <span class="number">145</span>, <span class="number">37</span>, <span class="number">24</span>, <span class="number">7</span>, <span class="number">22</span>, <span class="number">191</span>, <span class="number">110</span>, <span class="number">179</span>, <span class="number">227</span>, <span class="number">5</span>, <span class="number">62</span>, <span class="number">9</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">65</span>, <span class="number">22</span>, <span class="number">37</span>, <span class="number">5</span>]</span><br><span class="line">x = BitVec(<span class="string">&#x27;x&#x27;</span>, <span class="number">64</span>)</span><br><span class="line">y = BitVec(<span class="string">&#x27;y&#x27;</span>, <span class="number">64</span>)</span><br><span class="line">z = BitVec(<span class="string">&#x27;z&#x27;</span>, <span class="number">64</span>)</span><br><span class="line">key = [<span class="number">0</span>]*<span class="number">40</span></span><br><span class="line">num = -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">320</span>):</span><br><span class="line">    x = (((x &gt;&gt; <span class="number">29</span> ^ x &gt;&gt; <span class="number">28</span> ^ x &gt;&gt; <span class="number">25</span> ^ x &gt;&gt; <span class="number">23</span>) &amp; <span class="number">1</span>) | x &lt;&lt; <span class="number">1</span>)</span><br><span class="line">    y = (((y &gt;&gt; <span class="number">30</span> ^ y &gt;&gt; <span class="number">27</span>) &amp; <span class="number">1</span>) | y &lt;&lt; <span class="number">1</span>)</span><br><span class="line">    z = (((z &gt;&gt; <span class="number">31</span> ^ z &gt;&gt; <span class="number">30</span> ^ z &gt;&gt; <span class="number">29</span> ^ z &gt;&gt; <span class="number">28</span> ^ z &gt;&gt; <span class="number">26</span> ^ z &gt;&gt; <span class="number">24</span>) &amp; <span class="number">1</span>) | z &lt;&lt; <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">8</span> == <span class="number">0</span>:</span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    key[num] = ((key[num] &lt;&lt; <span class="number">1</span>) | ((z &gt;&gt; <span class="number">32</span> &amp; <span class="number">1</span> &amp; (x &gt;&gt; <span class="number">30</span> &amp; <span class="number">1</span>))</span><br><span class="line">                ^ (((z &gt;&gt; <span class="number">32</span> &amp; <span class="number">1</span>) ^ <span class="number">1</span>) &amp; (y &gt;&gt; <span class="number">31</span> &amp; <span class="number">1</span>)))) &amp; <span class="number">0xff</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(enc)):</span><br><span class="line">    s.add(key[i] == enc[i])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> s.check() == sat:</span><br><span class="line">    <span class="built_in">print</span>(s.model())</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;error&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># y = 868387187</span></span><br><span class="line"><span class="comment"># x = 156324965</span></span><br><span class="line"><span class="comment"># z = 3131229747</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L = [<span class="number">156324965</span>, <span class="number">868387187</span>, <span class="number">3131229747</span>]</span><br><span class="line">key = [<span class="number">0</span>]*<span class="number">12</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        key[i * <span class="number">4</span> + j] = (L[i] &gt;&gt; j * <span class="number">8</span> &amp; <span class="number">255</span>)</span><br><span class="line"></span><br><span class="line">array5 = [<span class="number">60</span>,<span class="number">100</span>,<span class="number">36</span>,<span class="number">86</span>,<span class="number">51</span>,<span class="number">251</span>,<span class="number">167</span>,<span class="number">108</span>,<span class="number">116</span>,<span class="number">245</span>,<span class="number">207</span>,<span class="number">223</span>,<span class="number">40</span>,<span class="number">103</span>,<span class="number">34</span>,<span class="number">62</span>,<span class="number">22</span>,<span class="number">251</span>,<span class="number">227</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(array5)):</span><br><span class="line">    array5[i] ^= key[i % <span class="built_in">len</span>(key)]</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(array5[i]),end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>之后就可以直接得到<code>flag</code>啦 ~</p>
+<h2 id="EasyRE"><a href="#EasyRE" class="headerlink" title="EasyRE"></a>EasyRE</h2><p>又是一个说自己<code>easy</code>的题目，<code>CTF</code>里面的<code>easy</code>以及<code>baby</code>的题目都不能相信，基本上就是<code>不easy</code>和<code>卑鄙</code>了，当然或许有些题是真的<code>easy</code>以及<code>baby</code>难度</p>
+<p>拿到程序我们将其拖入<code>IDA</code>中，可以看到程序去除了对应的符号表，显得每一个函数十分的难看，这里我们借助一下<code>Finger</code>插件进行恢复一下符号，之后我们可以快速的找到程序的主函数</p>
+<p><img src="https://s2.loli.net/2022/08/06/L759FKZ3JsdwcyT.png" alt="1.png"></p>
+<p>可以看到程序创建了一个子进程<code>re3</code>，我们将写完的程序进行提出来，我们将其拖入进<code>IDA</code>可以发现有大量红色的未反编译出的函数，我们手动修复的同时可以发现在一处出现了我们父进程的那两个数字<code>0xCAFEB055</code>和<code>0xCAFE1055</code>，同时中间的大部分数据无法还原，因此猜测可能是一个<code>SMC</code></p>
+<p><img src="https://s2.loli.net/2022/08/06/M3vsg8kZJXLaHOD.png" alt="3.png"></p>
+<p>我们此时回到父进程进行观察那个循环中<code>if</code>语句对应的操作</p>
+<p><img src="https://s2.loli.net/2022/08/06/qZp9naOx6l5iLI2.png" alt="2.png"></p>
+<p>可以看到函数中存在有<code>sys_ptrace</code>以及两个关键的<code>if</code>判断语句对我们的产生的异常信号进行处理,对于<code>sys_ptrace</code>的一些知识点可以参考</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265924.htm#msg_header_h2_1">https://bbs.pediy.com/thread-265924.htm#msg_header_h2_1</a></p>
+</blockquote>
+<p>其中关键的部分在于对于<code>ptrace</code>的一些参数：</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PTRACE_TRACEME</td>
+<td>进程被其父进程跟踪，其父进程应该希望跟踪子进程。该值仅被tracee使用，其余的request值仅被tracer使用</td>
+</tr>
+<tr>
+<td>PTRACE_PEEKTEXT, PTRACE_PEEKDATA</td>
+<td>从tracee的addr指定的内存地址中读取一个字节作为ptrace()调用的结果</td>
+</tr>
+<tr>
+<td>PTRACE_PEEKUSER</td>
+<td>从tracee的USER区域中便宜为addr处读取一个字节，该值保存了进程的寄存器和其他信息</td>
+</tr>
+<tr>
+<td>PTRACE_POKETEXT, PTRACE_POKEDATA</td>
+<td>向tracee的addr内存地址处复制一个字节数据</td>
+</tr>
+<tr>
+<td>PTRACE_POKEUSER</td>
+<td>向tracee的USER区域中偏移为addr地址处复制一个字节数据</td>
+</tr>
+<tr>
+<td>PTRACE_GETREGS</td>
+<td>复制tracee的通用寄存器到tracer的data处</td>
+</tr>
+<tr>
+<td>PTRACE_GETFPREGS</td>
+<td>复制tracee的浮点寄存器到tracer的data处</td>
+</tr>
+<tr>
+<td>PTRACE_GETREGSET</td>
+<td>读取tracee的寄存器</td>
+</tr>
+<tr>
+<td>PTRACE_SETREGS</td>
+<td>设置tracee的通用寄存器</td>
+</tr>
+<tr>
+<td>PTRACE_SETFPREGS</td>
+<td>设置tracee的浮点寄存器</td>
+</tr>
+<tr>
+<td>PTRACE_CONT</td>
+<td>重新运行stopped状态的tracee进程</td>
+</tr>
+<tr>
+<td>PTRACE_SYSCALL</td>
+<td>重新运行stopped状态的tracee进程，但是使tracee在系统调用的下一个entry或从系统调用退出或在执行一条指令后stop</td>
+</tr>
+<tr>
+<td>PTRACE_SINGLESTEP</td>
+<td>设置单步执行标志</td>
+</tr>
+<tr>
+<td>PTRACE_ATTACH</td>
+<td>跟踪指定pid的进程</td>
+</tr>
+<tr>
+<td>PTRACE_DETACH</td>
+<td>结束跟踪</td>
+</tr>
+</tbody></table>
+<p>通过这个我们可以还原<code>ptrace</code>函数的操作，我们进入到<code>sub_401BB1</code>函数中，观察可以确定其是一个<code>SMC</code>的解密操作</p>
+<p>对此我们可以通过调试时加入断点，来进行提取对应的异或数据值</p>
+<p><img src="https://s2.loli.net/2022/08/06/CqX1NleSUZ6iGI3.png" alt="4.png"></p>
+<p><img src="https://s2.loli.net/2022/08/06/kLFTCBJMImei3ax.png" alt="5.png"></p>
+<p>对此我们可以得到对应的异或数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0x23271ceac9cf88e1, 0x4d9403a34275494c, 0xf1ac2fea63c94ea9, 0xf32554baaf233dcc, 0xad5ea15de7bcf568, 0xabdfc454b2ec9fd0, 0xa5ee2b4680957b2b, 0xaf42f81128b7fb38, 0xca34bde4268cae3, 0x4ee274bc39f2d547, 0x53458e3ea10ab93b, 0x2e5fb32efac34cff, 0x99f8f6faa7a64aec, 0xef38004300eda44d, 0xee67c44e2bcd18fc, 0x9b1c209768ecb41e, 0xfae74344fcba3cdb, 0x62654e739151118d, 0xbfa53d12825ac60, 0x5fda7e9212d8d034, 0xe8e15b2ffd058214, 0x6258db99ec82ff1f, 0xc1f8d40001b68bf6, 0x6211d421f8ab1d50, 0xd25bc129ebbbd366, 0xaea9e2a30d3fcd24, 0x12e2013bc48da1de, 0x1db06bde7ca30286, 0x226499b91812859b, 0xb2b0d80d0f244ce4, 0xfba26ec5f66ad4a5, 0xef4975489b39baa5, 0x75da0adeb0d03511, 0xcbb9c9ef1c68088d, 0xb707f2ec82b077b8, 0x4989b97aadc513bb, 0x74c613b6d47fcde, 0x1d6396837a7ad9d8, 0x7f1a74782535fe54]</span><br></pre></td></tr></table></figure>
+
+<p>之后我们就可以编写一个<code>IDAPython</code>脚本将我们之前得到的<code>re3</code>手动<code>SMC</code>解密回去</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ida_bytes</span><br><span class="line">xorkey = [<span class="number">0x23271ceac9cf88e1</span>, <span class="number">0x4d9403a34275494c</span>, <span class="number">0xf1ac2fea63c94ea9</span>, <span class="number">0xf32554baaf233dcc</span>, <span class="number">0xad5ea15de7bcf568</span>, <span class="number">0xabdfc454b2ec9fd0</span>, <span class="number">0xa5ee2b4680957b2b</span>, <span class="number">0xaf42f81128b7fb38</span>, <span class="number">0xca34bde4268cae3</span>, <span class="number">0x4ee274bc39f2d547</span>, <span class="number">0x53458e3ea10ab93b</span>, <span class="number">0x2e5fb32efac34cff</span>, <span class="number">0x99f8f6faa7a64aec</span>, <span class="number">0xef38004300eda44d</span>, <span class="number">0xee67c44e2bcd18fc</span>, <span class="number">0x9b1c209768ecb41e</span>, <span class="number">0xfae74344fcba3cdb</span>, <span class="number">0x62654e739151118d</span>, <span class="number">0xbfa53d12825ac60</span>, <span class="number">0x5fda7e9212d8d034</span>, <span class="number">0xe8e15b2ffd058214</span>, <span class="number">0x6258db99ec82ff1f</span>, <span class="number">0xc1f8d40001b68bf6</span>, <span class="number">0x6211d421f8ab1d50</span>, <span class="number">0xd25bc129ebbbd366</span>, <span class="number">0xaea9e2a30d3fcd24</span>, <span class="number">0x12e2013bc48da1de</span>, <span class="number">0x1db06bde7ca30286</span>, <span class="number">0x226499b91812859b</span>, <span class="number">0xb2b0d80d0f244ce4</span>, <span class="number">0xfba26ec5f66ad4a5</span>, <span class="number">0xef4975489b39baa5</span>, <span class="number">0x75da0adeb0d03511</span>, <span class="number">0xcbb9c9ef1c68088d</span>, <span class="number">0xb707f2ec82b077b8</span>, <span class="number">0x4989b97aadc513bb</span>, <span class="number">0x74c613b6d47fcde</span>, <span class="number">0x1d6396837a7ad9d8</span>, <span class="number">0x7f1a74782535fe54</span>]</span><br><span class="line">addr = <span class="number">0x220F</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">39</span>):</span><br><span class="line">    data = xorkey[i] ^ ida_bytes.get_qword(addr+<span class="number">16</span>*i)</span><br><span class="line">    ida_bytes.patch_qword(addr+<span class="number">16</span>*i, data)</span><br></pre></td></tr></table></figure>
+
+<p>解密完成后将发送<code>int 3</code>指令等传给父进程的数进行<code>patch</code>处理，随后构建函数，通过一定分析我们可以发现这个函数将我们的输入进行保存，随后进行<code>check</code>，经过一些资料的查找发现这个是一个数织游戏，其将我们的数据进行统计<code>1</code>的个数放在第一位，随后进行<code>check</code>我们的输入</p>
+<p>对于求解这个我们需要注意的是，这个静态下直接提取得到的行列数据是有一定问题的，这行与列是在<code>init</code>被相应修改了，我们可以尝试直接调试拿取数据</p>
+<p><img src="https://s2.loli.net/2022/08/06/7VrsQjeJUMoILHG.png" alt="6.png"></p>
+<p>我们将数据提取，可以直接到在线网站进行求解</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://handsomeone.github.io/Nonogram/#advanced-usages">https://handsomeone.github.io/Nonogram/#advanced-usages</a></p>
+</blockquote>
+<p><img src="https://s2.loli.net/2022/08/06/fqDpcu3beXTgGFj.png" alt="7.png"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

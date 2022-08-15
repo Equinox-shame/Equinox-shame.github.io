@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>upx 手动脱壳 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">upx 手动脱壳</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">upx 手动脱壳</h1>
+        <div class="stuff">
+            <span>七月 01, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近遇到好多<code>UPX</code>类型的题目，大多都是直接使用<code>upx -d</code>进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用<code>upx -d</code>进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。</p>
+<h2 id="准备部分"><a href="#准备部分" class="headerlink" title="准备部分"></a>准备部分</h2><p>我们先准备好<code>upx.exe</code>文件，同时编写一个简单的程序，利用<code>upx.exe</code>对其进行加壳，此处采用一个简单的<code>Hello world</code>来进行练习，代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;Hello world&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>我们将其进行编译，之后利用<code>upx</code>进行加壳，命令为<code>upx [filename]</code></p>
+<p><img src="https://s2.loli.net/2022/07/01/a7velXtmfyJhzi2.png"></p>
+<p>可以成功看到我们已经加上了一个<code>UPX</code>壳，拖入<code>PE</code>查看也可以同样看到<code>UPX</code>的特征</p>
+<p><img src="https://s2.loli.net/2022/07/01/NvycFL2G6ObrKg3.png"></p>
+<p>至此准备工作已经完成，接下来便是尝试手动脱壳</p>
+<h2 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h2><p>我们想要进行手动脱<code>upx</code>壳不太建议拿<code>ida</code>进行，可以拿<code>od</code>或者是<code>xdbg</code>进行脱壳，此处我们采用<code>xdbg64</code>脱壳(PE文件提示是64位的程序)，将程序直接拖入</p>
+<p><img src="https://s2.loli.net/2022/07/01/grbhp46HvRSlkGu.png" alt="3.png"></p>
+<p>可以较为清楚的看到程序就已经进入到调试模式了，接下来我们不断按<code>F8</code>进行跑程序,在这过程中我们需要注意的是当程序有往上跳转的趋势的时候我们需要在下一条语句处点击一下再按<code>F4</code>进行跳过，之后我们会遇到<code>EntryPoint</code></p>
+<p><img src="https://s2.loli.net/2022/07/01/KhuiIzksN4XwTo2.png" alt="4.png"></p>
+<blockquote>
+<p>对于 64 位程序来说没有像 32 位程序的<code>POPAD</code>指令能对所有寄存器进行压栈保存处理，英雌是依次进行<code>push</code>入栈来进行保存</p>
+</blockquote>
+<p>找到<code>EntryPoint</code>后我们将<code>ESP</code>进行设置硬件断点</p>
+<p><img src="https://s2.loli.net/2022/07/01/Frg6k3VKUhjlxDm.png" alt="5.png"></p>
+<p>在设置完后我们按<code>F9</code>进行运行同时观察程序跳转的位置</p>
+<p><img src="https://s2.loli.net/2022/07/01/pTgh384IzO2tXvx.png" alt="6.png"></p>
+<p>找到<code>OEP</code>之后我们按<code>F8</code>进行跳转进入，之后便可以进行<code>dump</code>内存来进行脱壳操作</p>
+<p><img src="https://s2.loli.net/2022/07/01/6dSETqtjMxX9mYA.png" alt="7.png"></p>
+<p><img src="https://s2.loli.net/2022/07/01/sEkuYq35GcOIdD9.png" alt="8.png"></p>
+<blockquote>
+<p>如果中间出现了红叉(×)，可以右键删除，参考下方<code>IAT</code>处修复的图</p>
+</blockquote>
+<p>处理完毕后我们可以得到一个<code>exe</code>文件，此时我们再拖入<code>PE</code>进行查看壳</p>
+<p><img src="https://s2.loli.net/2022/07/01/s65qJ8RWk2YIbct.png" alt="9.png"></p>
+<p>可以成功看到我们已经将壳进行去除了，但是如果我们将程序运行一下，却会发现如下情况：</p>
+<p><img src="https://s2.loli.net/2022/07/01/L7giuSJD6EnGtsV.png" alt="10.png"></p>
+<p>此时我们需要修复对应的<code>IAT</code>才能成功的运行程序</p>
+<h2 id="IAT修复"><a href="#IAT修复" class="headerlink" title="IAT修复"></a>IAT修复</h2><p>我们再次调试到<code>OEP</code>，采用和之前<code>dump</code>一样的方式，此时我们选择下面的<code>fix dump</code>对<code>IAT</code>表进行修复</p>
+<p><img src="https://s2.loli.net/2022/07/01/oxWFtT2QMrEKX5H.png" alt="13.png"></p>
+<p>同时如果修复完成后出现如下错误，注意关闭一下杀毒软件如：360(罪魁祸首)</p>
+<p><img src="https://s2.loli.net/2022/07/01/ZpFBTbDsq1kPuCe.png" alt="14.png"></p>
+<p>之后程序就可以运行起来啦，至此脱壳也就结束了</p>
+<p><img src="https://s2.loli.net/2022/07/01/DabhyPd9vOVxjqQ.png" alt="15.png"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
