@@ -389,6 +389,19 @@ select + 列名(* 代表所有) from + 查询表 + where + 查询内容
 
 <h4 id="过滤-substr-和-mid-等"><a href="#过滤-substr-和-mid-等" class="headerlink" title="过滤 substr() 和 mid() 等"></a>过滤 substr() 和 mid() 等</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left() 、 right() 、 mid() 、 substr() 、 substring() 、 lpad() 、 rpad() 等价</span><br></pre></td></tr></table></figure>
 
+<h3 id="SQL-MOD"><a href="#SQL-MOD" class="headerlink" title="SQL_MOD"></a>SQL_MOD</h3><p><code>SQL_MOD</code>是<code>MySQL</code>支持的基本语法、校验规则</p>
+<p>假如我们有如下查询语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select $_POST[&#x27;query&#x27;] || flag from Flag;</span><br></pre></td></tr></table></figure>
+
+<p>当我们的输入在<code>Flag</code>中查询到时，<code>||</code>(或运算符)的作用下会只有非零数字和<code>flag</code>才可以返回真值</p>
+<p>对此我们可以改变<code>||</code>在<code>sql</code>中的语义，将其转换为连接符</p>
+<blockquote>
+<p>其中<code>PIPES_AS_CONCAT</code>:会将<code>||</code>认为字符串的连接符，而不是或运算符，这时<code>||</code>符号就像<code>concat</code>函数一样</p>
+</blockquote>
+<p>我们使用堆叠注入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1;set sql_mod=PIPES_AS_CONCAT;select 1 </span><br></pre></td></tr></table></figure>
+
+<p>便可以对<code>||</code>进行绕过</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
