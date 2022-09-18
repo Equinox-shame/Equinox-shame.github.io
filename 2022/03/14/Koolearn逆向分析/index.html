@@ -1,329 +1,81 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="BY 混入21de蒟蒻抓包分析过程抓包之路太难了….实验室的网络时有时无，电脑手机都链接不了热点，无奈之下只好开始霍霍室友的安卓手机（没有安卓手机难受） 下载好Packet Capture，开始对应的抓包活动，可以抓到如下数据 ：    在包中我们可以看到请求的相关信息，设备型号，请求方式等。同时我们多次抓包分析可以看到红色框框的地方可能就是对应的签名，每次的长度固定 32 位。 而签名的生成便是">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Koolearn逆向分析">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/Koolearn%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="BY 混入21de蒟蒻抓包分析过程抓包之路太难了….实验室的网络时有时无，电脑手机都链接不了热点，无奈之下只好开始霍霍室友的安卓手机（没有安卓手机难受） 下载好Packet Capture，开始对应的抓包活动，可以抓到如下数据 ：    在包中我们可以看到请求的相关信息，设备型号，请求方式等。同时我们多次抓包分析可以看到红色框框的地方可能就是对应的签名，每次的长度固定 32 位。 而签名的生成便是">
-<meta property="og:locale">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123xbdt.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123xas6.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123x753.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123x04q.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123x9ne.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123x8we.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123x8y4.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123xaqg.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/12pxprp.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/123xa6m.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/23/12yqfqs.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.672Z">
-<meta property="article:modified_time" content="2022-02-28T14:33:42.197Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://obohe.com/i/2021/11/23/123xbdt.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>Koolearn逆向分析 - Autumnal</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Koolearn逆向分析 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="BY 混入21de蒟蒻抓包分析过程抓包之路太难了….实验室的网络时有时无，电脑手机都链接不了热点，无奈之下只好开始霍霍室友的安卓手机（没有安卓手机难受）
+下载好Packet Capture，开始对应,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="Koolearn逆向分析"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Koolearn逆向分析</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          March 14, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.9k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          42 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">Koolearn逆向分析</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Koolearn逆向分析</h1>
+        <div class="stuff">
+            <span>三月 14, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="BY-混入21de蒟蒻"><a href="#BY-混入21de蒟蒻" class="headerlink" title="BY 混入21de蒟蒻"></a>BY 混入21de蒟蒻</h2><h2 id="抓包分析过程"><a href="#抓包分析过程" class="headerlink" title="抓包分析过程"></a><strong>抓包分析过程</strong></h2><p>抓包之路太难了….实验室的网络时有时无，电脑手机都链接不了热点，无奈之下只好开始霍霍室友的安卓手机<del>（没有安卓手机难受）</del></p>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="BY-混入21de蒟蒻"><a href="#BY-混入21de蒟蒻" class="headerlink" title="BY 混入21de蒟蒻"></a>BY 混入21de蒟蒻</h2><h2 id="抓包分析过程"><a href="#抓包分析过程" class="headerlink" title="抓包分析过程"></a><strong>抓包分析过程</strong></h2><p>抓包之路太难了….实验室的网络时有时无，电脑手机都链接不了热点，无奈之下只好开始霍霍室友的安卓手机<del>（没有安卓手机难受）</del></p>
 <p>下载好<code>Packet Capture</code>，开始对应的抓包活动，可以抓到如下数据 ：</p>
-<p><img src="https://obohe.com/i/2021/11/23/123xbdt.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://obohe.com/i/2021/11/23/123xas6.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://obohe.com/i/2021/11/23/123x753.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123xbdt.png"></p>
+<p><img src="https://obohe.com/i/2021/11/23/123xas6.png"></p>
+<p><img src="https://obohe.com/i/2021/11/23/123x753.png"></p>
 <p>在包中我们可以看到请求的相关信息，设备型号，请求方式等。同时我们多次抓包分析可以看到红色框框的地方可能就是对应的签名，每次的长度固定 32 位。</p>
 <p>而签名的生成便是要逆向分析了。</p>
 <h2 id="逆向分析签名生成"><a href="#逆向分析签名生成" class="headerlink" title="逆向分析签名生成"></a><strong>逆向分析签名生成</strong></h2><h3 id="Jeb"><a href="#Jeb" class="headerlink" title="Jeb"></a><strong>Jeb</strong></h3><p>首先按照<code>PDF</code>上的教程开始利用<code>Jeb</code>来逆向安卓软件，利用字符串进行定位分析找到对应的<code>validation</code>。</p>
-<p><img src="https://obohe.com/i/2021/11/23/123x04q.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123x04q.png"></p>
 <p>找到后进行转换伪代码，如下图所示 ：</p>
-<p><img src="https://obohe.com/i/2021/11/23/123x9ne.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123x9ne.png"></p>
 <p>我们根据<code>PDF</code>中的提示继续进行分析，通过<code>PDF</code>的提示我们知道<code>validation</code> 的值是由 <code>generateSign</code> 这个⽅法⽣成的。</p>
-<p><img src="https://obohe.com/i/2021/11/23/123x8we.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123x8we.png"></p>
 <p>双击该⽅法我们可以跳转到该⽅法的实现，再次根据<code>PDF</code>的提示我们可以知道该⽅法被修饰成了 native，该⽅法的具体实现在某个 <code>SO</code> ⽂件⾥⾯，那么我们的重点工作便是逆向分析这个<code>SO</code>文件。然而定义的<code>native</code>和 <code>so</code>在一个类里，通过此方式我们定位对应的<code>SO</code>文件，打开我们逆向<code>SO</code>的新大门。</p>
-<p><img src="https://obohe.com/i/2021/11/23/123x8y4.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123x8y4.png"></p>
 <p>找到对应的<code>SO</code>后我们拖入<code>IDA</code>分析。</p>
 <h3 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a><strong>IDA</strong></h3><p>进入<code>SO</code>后我们直接搜索<code>generateSign</code>，在里面我们可以看到有一个注册的函数进入分析</p>
-<p><img src="https://obohe.com/i/2021/11/23/123xaqg.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123xaqg.png"></p>
 <p>进入后往下找可以看到有一个<code>MD5</code>加密，这个也就解释了为什么每次我们在获取到<code>validation</code>时其长度永远都是 32 位的。</p>
-<p><img src="https://obohe.com/i/2021/11/23/12pxprp.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/12pxprp.png"></p>
 <p>我们同时看到<code>MD5</code>加密的函数没有去符号表，猜测如果有其他加密那么是不是也会有对对应的符号表，按着这个思路我们继续分析，打开函数列表往下滑了滑就可以明显的看到还有一个<code>RC4</code>加密算法，通过交叉引用可以定位到如下界面，其中的加密过程便是<code>RC4 + MD5</code>，我们通过动调进行分析，测试我们输入的数据在这个加密后得到的数据与抓包得到的数据进行比对，我们可以发现出现对应<code>validation</code>的地方。</p>
-<p><img src="https://obohe.com/i/2021/11/23/123xa6m.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/123xa6m.png"></p>
 <p>进入<code>RC4</code>部分可以明显的看到其生成的过程，先初始化 256 的一个<code>BOX</code>密钥流，再对其进行异或加密，对此我们可以仿照其对应的生成相同的密钥流，或者直接提取出来对应的<code>BOX</code>的值之后对输入数据进行处理。</p>
 <p>那么剩下的就是一个<code>MD5</code>加密了，对于哈希加密我们只能爆破进行求解，但是我们不需要爆破出来所对应的数据，可以通过抓包软件来完成得到数据。因此我们直接利用<code>Python</code>的哈希库实现同样操作即可。</p>
-<p><img src="https://obohe.com/i/2021/11/23/12yqfqs.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/23/12yqfqs.png"></p>
 <h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a><strong>脚本编写</strong></h2><p><code>python</code>集成了一个<code>requests</code>库给我们使用，我们可以利用这个库来完成对服务器的请求（小爬虫）</p>
 <p>在开始前我们同样的要获取相应的<code>Header</code>让服务器认为我们是用户而不是爬虫，来提供对应的服务。（UA伪装？爬虫还没有学多少）</p>
 <p>同时还有一个<code>Url</code>给我们的爬虫进行爬取，一个<code>Data</code>提供爬取数据，之后便是对于服务器端的请求了。</p>
@@ -332,419 +84,136 @@
 <h3 id="请求登录："><a href="#请求登录：" class="headerlink" title="请求登录："></a><strong>请求登录</strong>：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span>():</span><br><span class="hljs-comment">#print(&quot;输入账号 :&quot;)</span><br>uid = <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">#填入账号</span><br><span class="hljs-comment">#print(&quot;输入密码 :&quot;)</span><br>password = <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">#填入密码</span><br><span class="hljs-comment">#批量登录可以将uid和password封装到一个字典？</span><br>a = <span class="hljs-string">&quot;app_id,7appsign,d3b1b961f3d090fd0e4b0026662420afpassword,&quot;</span><br>a = a + password<br>b = [<span class="hljs-number">0</span>] * <span class="hljs-built_in">len</span>(a)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(a)):<br>	b[i] = <span class="hljs-built_in">ord</span>(a[i])<br>b.append(<span class="hljs-number">10</span>)<br>usersName= <span class="hljs-string">&quot;userName,&quot;</span><br>usersName = <span class="hljs-string">&quot;userName,&quot;</span> + uid<br>d = [<span class="hljs-number">0</span>] * <span class="hljs-built_in">len</span>(usersName)<br><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(usersName)):<br>	d[j] = <span class="hljs-built_in">ord</span>(usersName[j])<br>xlen = <span class="hljs-built_in">len</span>(a) + <span class="hljs-built_in">len</span>(usersName) + <span class="hljs-number">1</span><br>sign = b + d<br>url = <span class="hljs-string">&quot;https://mobi.koolearn.com/ci/login&quot;</span><br>headers = &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>:<span class="hljs-string">&quot;application/x-www-form-urlencoded&quot;</span>,<span class="hljs-string">&quot;imei&quot;</span>:<br><span class="hljs-string">&quot;b37e74424d6a28a6&quot;</span>,<span class="hljs-string">&quot;Content-Length&quot;</span>:<span class="hljs-string">&quot;110&quot;</span>,<span class="hljs-string">&quot;pversion&quot;</span>: <span class="hljs-string">&quot;1.1&quot;</span>,<span class="hljs-string">&quot;Host&quot;</span>:<br><span class="hljs-string">&quot;mobi.koolearn.com&quot;</span>,<span class="hljs-string">&quot;Connection&quot;</span>: <span class="hljs-string">&quot;Keep-Alive&quot;</span>,<span class="hljs-string">&quot;Accept-Encoding&quot;</span>:<br><span class="hljs-string">&quot;gzip&quot;</span>,<span class="hljs-string">&quot;appname&quot;</span>: <span class="hljs-string">&quot;koolearn&quot;</span>,<span class="hljs-string">&quot;vendor&quot;</span>: <span class="hljs-string">&quot;koolearn&quot;</span>,<span class="hljs-string">&quot;channel&quot;</span>:<br><span class="hljs-string">&quot;guanfang&quot;</span>,<span class="hljs-string">&quot;version&quot;</span>: <span class="hljs-string">&quot;5.3.1&quot;</span>,<span class="hljs-string">&quot;vcode&quot;</span>: <span class="hljs-string">&quot;531&quot;</span>,<span class="hljs-string">&quot;macaddr&quot;</span>:<br><span class="hljs-string">&quot;02:00:00:00:00:00&quot;</span>,<span class="hljs-string">&quot;model&quot;</span>: <span class="hljs-string">&quot;OPPO,PEHM00&quot;</span>,<span class="hljs-string">&quot;screensize&quot;</span>: <span class="hljs-string">&quot;1080*2290&quot;</span>,<span class="hljs-string">&quot;UserAgent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Linux; Android 11; PEHM00 Build/RKQ1.201217.002; wv)AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 MobileSafari/537.36&quot;</span>,<span class="hljs-string">&quot;model&quot;</span>: <span class="hljs-string">&quot;OPPO,PEHM00&quot;</span>,<span class="hljs-string">&quot;platform&quot;</span>: <span class="hljs-string">&quot;android_phone_11&quot;</span>&#125;<span class="hljs-comment">#请求头</span><br>slen = <span class="hljs-built_in">len</span>(pw)<br>data = <span class="hljs-string">&quot;password=&quot;</span><br>password = <span class="hljs-built_in">list</span>(password)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(slen):<br>	<span class="hljs-keyword">if</span>(password[i]==<span class="hljs-string">&#x27;=&#x27;</span>):<br>		password[i] = <span class="hljs-string">&#x27;%3D&#x27;</span><br>password = <span class="hljs-string">&#x27;&#x27;</span>.join(password)<br>data = data + password + <span class="hljs-string">&#x27;%0A&#x27;</span><br>data = data +<span class="hljs-string">&quot;&amp;userName=&quot;</span> + uid<br>data = data +<span class="hljs-string">&quot;&amp;app_id=7&amp;validation=&quot;</span> + generateSign(sign,xlen)<span class="hljs-comment">#请求信息</span><br>res = requests.post(url=url,data=data,headers=headers, verify=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;登录成功 ：&quot;</span>)<br><span class="hljs-built_in">print</span>(res.text)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27; &#x27;</span>)<br></code></pre></td></tr></table></figure>
 
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>Koolearn逆向分析</div>
-      <div>https://equinox-shame.github.io/2022/03/14/Koolearn逆向分析/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>March 14, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/03/14/Hexo%E9%94%99%E8%AF%AF%EF%BC%9Aspawn%20failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="Hexo错误：spawn failed的解决方法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Hexo错误：spawn failed的解决方法</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/03/14/Funny.exe/" title="Funny.exe分析">
-                        <span class="hidden-mobile">Funny.exe分析</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

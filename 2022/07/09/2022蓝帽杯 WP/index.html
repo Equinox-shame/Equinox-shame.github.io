@@ -1,319 +1,70 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="前言整个比赛下来十分坐牢，就只有取证能稍微动一下下，真 —— 取证大赛，比赛结束了，也就只有取证是有解，其他的题目一个没动…. 以下仅有的也是取证的 wp 题解… 电子取证手机取证_1Q：现对一个苹果手机进行取证，请您对以下问题进行分析解答。627604C2-C586-48C1-AA16-FF33C3022159.PNG图片的分辨率是？ A： 直接在目录下找到这个图片查看对应分辨率即可  只后在对">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2022 蓝帽杯电子取证部分WP">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/07/09/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%20WP/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言整个比赛下来十分坐牢，就只有取证能稍微动一下下，真 —— 取证大赛，比赛结束了，也就只有取证是有解，其他的题目一个没动…. 以下仅有的也是取证的 wp 题解… 电子取证手机取证_1Q：现对一个苹果手机进行取证，请您对以下问题进行分析解答。627604C2-C586-48C1-AA16-FF33C3022159.PNG图片的分辨率是？ A： 直接在目录下找到这个图片查看对应分辨率即可  只后在对">
-<meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/PlWwCeUQ9JH7Vxa.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/pblwyk2n8PzYoui.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/MDFhfgmP1vARtVr.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/XuDOIgs1ylVSBpC.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/GHM943qUXWypTOj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/z7p31SVwOhFdXeI.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/ctFjTPg5pCvyhIK.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/bcW3XGQaoVkOyUl.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/7SrFPAn4zdTmXte.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/Bfx6E5MCKp1USLY.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/HOiCNpK6zUr1R83.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/A6tp1cw5DYgUJjx.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/09/g1NMtXSGajfBncC.png">
-<meta property="article:published_time" content="2022-07-09T11:07:44.162Z">
-<meta property="article:modified_time" content="2022-08-30T14:45:20.349Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/07/09/PlWwCeUQ9JH7Vxa.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>2022 蓝帽杯电子取证部分WP - Autumnal</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2022 蓝帽杯电子取证部分WP - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言整个比赛下来十分坐牢，就只有取证能稍微动一下下，真 —— 取证大赛，比赛结束了，也就只有取证是有解，其他的题目一个没动….
+以下仅有的也是取证的 wp 题解…
+电子取证手机取证_1Q：现对一个苹,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="2022 蓝帽杯电子取证部分WP"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">2022 蓝帽杯电子取证部分WP</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-07-09 19:07" pubdate>
-          July 9, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          2.2k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          18 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">2022 蓝帽杯电子取证部分WP</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">2022 蓝帽杯电子取证部分WP</h1>
+        <div class="stuff">
+            <span>七月 09, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>整个比赛下来十分坐牢，就只有取证能稍微动一下下，真 —— 取证大赛，比赛结束了，也就只有取证是有解，其他的题目一个没动….</p>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>整个比赛下来十分坐牢，就只有取证能稍微动一下下，真 —— 取证大赛，比赛结束了，也就只有取证是有解，其他的题目一个没动….</p>
 <p>以下仅有的也是取证的 wp 题解…</p>
 <h2 id="电子取证"><a href="#电子取证" class="headerlink" title="电子取证"></a>电子取证</h2><h3 id="手机取证-1"><a href="#手机取证-1" class="headerlink" title="手机取证_1"></a>手机取证_1</h3><p>Q：现对一个苹果手机进行取证，请您对以下问题进行分析解答。<code>627604C2-C586-48C1-AA16-FF33C3022159.PNG</code>图片的分辨率是？</p>
 <p>A：</p>
 <p>直接在目录下找到这个图片查看对应分辨率即可</p>
-<p><img src="https://s2.loli.net/2022/07/09/PlWwCeUQ9JH7Vxa.png" srcset="/img/loading.gif" lazyload alt="12.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/PlWwCeUQ9JH7Vxa.png" alt="12.png"></p>
 <p>只后在对应目录下找到图片即可:</p>
-<p><img src="https://s2.loli.net/2022/07/09/pblwyk2n8PzYoui.png" srcset="/img/loading.gif" lazyload alt="13.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/pblwyk2n8PzYoui.png" alt="13.png"></p>
 <h3 id="手机取证-2"><a href="#手机取证-2" class="headerlink" title="手机取证_2"></a>手机取证_2</h3><p>Q：姜总的快递单号是多少？</p>
 <p>A：</p>
 <p>打开手机取证附件中自带的阅读器</p>
 <p>在社交通讯——国际处进行查找对应信息</p>
-<p><img src="https://s2.loli.net/2022/07/09/MDFhfgmP1vARtVr.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/MDFhfgmP1vARtVr.png" alt="1.png"></p>
 <h3 id="计算机取证-1"><a href="#计算机取证-1" class="headerlink" title="计算机取证_1"></a>计算机取证_1</h3><p>Q：现对一个windows计算机进行取证，请您对以下问题进行分析解答。从内存镜像中获得taqi7的开机密码是多少？</p>
 <p>A：</p>
 <p>使用<code>volatility</code>执行以下语句进行查看内存信息：</p>
@@ -337,448 +88,165 @@
 <p>执行以下语句，获取进程列表，找到制作镜像的程序对应<code>PID</code>即可</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">volatility</span> -f <span class="hljs-number">1</span>.dmp --profile=Win<span class="hljs-number">7</span>SP<span class="hljs-number">1</span>x<span class="hljs-number">64</span> pslist<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://s2.loli.net/2022/07/09/XuDOIgs1ylVSBpC.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/XuDOIgs1ylVSBpC.png" alt="2.png"></p>
 <h3 id="程序分析-1"><a href="#程序分析-1" class="headerlink" title="程序分析_1"></a>程序分析_1</h3><p>Q：现已获取某个APP程序，请您对以下问题进行分析解答。本程序包名是？</p>
-<p>A：<br>直接加载到<code>GDA</code>中，查看对应的包名即可：<br><img src="https://s2.loli.net/2022/07/09/GHM943qUXWypTOj.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
+<p>A：<br>直接加载到<code>GDA</code>中，查看对应的包名即可：<br><img src="https://s2.loli.net/2022/07/09/GHM943qUXWypTOj.png" alt="3.png"></p>
 <h3 id="程序分析-2"><a href="#程序分析-2" class="headerlink" title="程序分析_2"></a>程序分析_2</h3><p>Q：本程序的入口是？</p>
 <p>A：</p>
 <p>点击<code>APK入口</code>，程序便会帮我们自动跳转到入口点，输入对应包路径即可</p>
-<p><img src="https://s2.loli.net/2022/07/09/z7p31SVwOhFdXeI.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/z7p31SVwOhFdXeI.png" alt="4.png"></p>
 <h3 id="程序分析-3"><a href="#程序分析-3" class="headerlink" title="程序分析_3"></a>程序分析_3</h3><p>Q：本程序的服务器地址的密文是？</p>
 <p>A：</p>
 <p>找到对应包路径下的主函数，直接就可以看到</p>
-<p><img src="https://s2.loli.net/2022/07/09/ctFjTPg5pCvyhIK.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/ctFjTPg5pCvyhIK.png" alt="5.png"></p>
 <h3 id="网站取证-1"><a href="#网站取证-1" class="headerlink" title="网站取证_1"></a>网站取证_1</h3><p>Q：据了解，某网上商城系一团伙日常资金往来用，从2022年4月1日起使用虚拟币GG币进行交易，现已获得该网站的源代码以及部分数据库备份文件，请您对以下问题进行分析解答。请从网站源码中找出木马文件，并提交木马连接的密码</p>
 <p>A：<br>拿到对应网站源码后直接拿火绒进行扫描，便可以发现后门脚本：</p>
-<p><img src="https://s2.loli.net/2022/07/09/bcW3XGQaoVkOyUl.png" srcset="/img/loading.gif" lazyload alt="6.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/bcW3XGQaoVkOyUl.png" alt="6.png"></p>
 <p>打开该<code>php</code>文件，便可以发现对应的密码</p>
-<p><img src="https://s2.loli.net/2022/07/09/7SrFPAn4zdTmXte.png" srcset="/img/loading.gif" lazyload alt="7.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/7SrFPAn4zdTmXte.png" alt="7.png"></p>
 <h3 id="网站取证-2"><a href="#网站取证-2" class="headerlink" title="网站取证_2"></a>网站取证_2</h3><p>Q：请提交数据库连接的明文密码</p>
 <p>A：</p>
 <p>在网站源码目录下找到<code>database.php</code></p>
-<p><img src="https://s2.loli.net/2022/07/09/Bfx6E5MCKp1USLY.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/Bfx6E5MCKp1USLY.png" alt="8.png"></p>
 <p>可以发现其导入了<code>encrypt.php</code>，同时调用了其中的<code>my_encrypt()</code>函数，我们找到<code>encrypt.php</code>，发现其是一个解密函数，我们直接跑一下函数就行</p>
-<p><img src="https://s2.loli.net/2022/07/09/HOiCNpK6zUr1R83.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/HOiCNpK6zUr1R83.png" alt="9.png"></p>
 <p>到在线网站上跑一下：</p>
-<p><img src="https://s2.loli.net/2022/07/09/A6tp1cw5DYgUJjx.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/A6tp1cw5DYgUJjx.png" alt="10.png"></p>
 <h3 id="网站取证-3"><a href="#网站取证-3" class="headerlink" title="网站取证_3"></a>网站取证_3</h3><p>Q：请提交数据库金额加密混淆使用的盐值</p>
 <p>A：</p>
 <p>找到源码目录<code>application\admin\controller</code>下的<code>Channelorder.php</code>，即可直接得到对应盐值：</p>
-<p><img src="https://s2.loli.net/2022/07/09/g1NMtXSGajfBncC.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
+<p><img src="https://s2.loli.net/2022/07/09/g1NMtXSGajfBncC.png" alt="11.png"></p>
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/CTF-WriteUp/" class="category-chain-item">CTF WriteUp</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>2022 蓝帽杯电子取证部分WP</div>
-      <div>https://equinox-shame.github.io/2022/07/09/2022蓝帽杯 WP/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>July 9, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/07/13/%E8%93%9D%E5%B8%BD%E6%9D%AF%20LOADER%20%E9%80%86%E5%90%91/" title="2022蓝帽杯 Loader 题解">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2022蓝帽杯 Loader 题解</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/07/07/IDAPython%20%E5%AD%A6%E4%B9%A0/" title="IDAPython 学习">
-                        <span class="hidden-mobile">IDAPython 学习</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

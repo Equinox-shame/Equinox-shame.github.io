@@ -1,308 +1,60 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="前言VM逆向对于Re老手肯定是不陌生的，但是对于我一个Re废物来说，之前一直有听说过VM的逆向题目，但是因为时间原因一直没有去实践过一个题目，基本上是遇到就溜，感觉到十分棘手，因此在此次学习中将其进行记录，也希望对后来学习的同学有所帮助 基本介绍VMP：也就是虚拟机保护技术，它是将基于x86汇编系统的可执行代码转换为字节码指令系统的代码，以达到保护原有指令不被轻易逆向和篡改的目的。这种指令执行系统">
-<meta property="og:type" content="article">
-<meta property="og:title" content="VM：虚拟机保护技术">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/07/04/VM%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言VM逆向对于Re老手肯定是不陌生的，但是对于我一个Re废物来说，之前一直有听说过VM的逆向题目，但是因为时间原因一直没有去实践过一个题目，基本上是遇到就溜，感觉到十分棘手，因此在此次学习中将其进行记录，也希望对后来学习的同学有所帮助 基本介绍VMP：也就是虚拟机保护技术，它是将基于x86汇编系统的可执行代码转换为字节码指令系统的代码，以达到保护原有指令不被轻易逆向和篡改的目的。这种指令执行系统">
-<meta property="og:locale">
-<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/3G5bqSUAHE6sJ1g.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/HxuQ6T7gUcvoKpB.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/7SKOAH2Qdw9FUre.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/5KlTGE9YIWJU2eg.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/ej1BqlE8uv2VYay.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/LDzw7B5OKpR8gnl.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/47Y5FyZOvJWKsaC.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/V7pWNLfA4QsvxBj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/04/xIrjG4v2pWAm1wQ.png">
-<meta property="article:published_time" content="2022-07-04T15:37:07.005Z">
-<meta property="article:modified_time" content="2022-07-04T15:36:40.549Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>VM：虚拟机保护技术 - Autumnal</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VM：虚拟机保护技术 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言VM逆向对于Re老手肯定是不陌生的，但是对于我一个Re废物来说，之前一直有听说过VM的逆向题目，但是因为时间原因一直没有去实践过一个题目，基本上是遇到就溜，感觉到十分棘手，因此在此次学习中将其进,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="VM：虚拟机保护技术"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">VM：虚拟机保护技术</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-07-04 23:37" pubdate>
-          July 4, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          14k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          114 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">VM：虚拟机保护技术</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">VM：虚拟机保护技术</h1>
+        <div class="stuff">
+            <span>七月 04, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>VM</code>逆向对于<code>Re</code>老手肯定是不陌生的，但是对于我一个<code>Re</code>废物来说，之前一直有听说过<code>VM</code>的逆向题目，但是因为时间原因一直没有去实践过一个题目，基本上是遇到就溜，感觉到十分棘手，因此在此次学习中将其进行记录，也希望对后来学习的同学有所帮助</p>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>VM</code>逆向对于<code>Re</code>老手肯定是不陌生的，但是对于我一个<code>Re</code>废物来说，之前一直有听说过<code>VM</code>的逆向题目，但是因为时间原因一直没有去实践过一个题目，基本上是遇到就溜，感觉到十分棘手，因此在此次学习中将其进行记录，也希望对后来学习的同学有所帮助</p>
 <h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p><code>VMP</code>：也就是虚拟机保护技术，它是将基于x86汇编系统的可执行代码转换为字节码指令系统的代码，以达到保护原有指令不被轻易逆向和篡改的目的。这种指令执行系统和Intel的x86指令系统不在同一个层次中。</p>
 <p>字节码(<code>Bytecode</code>)：是由指令执行系统定义的一套指令和数据组成的一串数据流，由于每个系统设计的字节码都是供自己使用的，因此他们之间的字节码并不通用。</p>
 <p>虚拟机执行时的情况：</p>
-<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png"><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png"><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190118103002-f5bb62b4-1ac8-1.png" alt="img"></a></p>
 <p><code>VStartVM</code>将真实环境压入栈后会生成一个<code>VMDispather</code>标签，当<code>Handler</code>执行完毕后会跳回这里，形成一个循环，所以<code>VStratVM</code>，也叫做<code>dispather</code></p>
 <h2 id="做题思路"><a href="#做题思路" class="headerlink" title="做题思路"></a>做题思路</h2><p>分析<code>VM</code>基本上是一个体力活，需要将程序的<code>opcode</code>提取出来进行翻译为高级的语言，之后再采用逆向的方式对其进行求解</p>
 <p>分析VM题的一般套路：</p>
@@ -341,9 +93,9 @@
 <p>下面以一个<code>VM</code>逆向来进一步说明</p>
 <h2 id="GWCTF-2019-babyvm"><a href="#GWCTF-2019-babyvm" class="headerlink" title="[GWCTF 2019] babyvm"></a>[GWCTF 2019] babyvm</h2><p>我们首先将程序查壳，发现是无壳<code>64</code>位程序，直接拖入到<code>64</code>位<code>IDA</code>中去</p>
 <p>找到对应的主函数，可以发现函数十分少(下面图片中函数名都是后期修复的，前期需要自己进行识别修复)</p>
-<p><img src="https://s2.loli.net/2022/07/04/3G5bqSUAHE6sJ1g.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/3G5bqSUAHE6sJ1g.png" alt="1.png"></p>
 <p>我们主要分析的便是<code>VM_init</code>，进入该函数部分</p>
-<p><img src="https://s2.loli.net/2022/07/04/HxuQ6T7gUcvoKpB.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/HxuQ6T7gUcvoKpB.png" alt="2.png"></p>
 <p>可以看到这个程序对应的初始化过程和上文所写的<a href="##%E5%85%B3%E8%81%94opcode%E5%92%8C%E5%AF%B9%E5%BA%94handler%E5%87%BD%E6%95%B0">关联opcode和对应handler函数过程</a>十分相似，可以快速的帮我们进行识别出来<code>eip</code></p>
 <blockquote>
 <p>图片上标注错了，64位的程序对应寄存器该是<code>rip</code>，但是不影响分析，后文仍然采用<code>eip</code>代替<code>rip</code>，方便进行描述</p>
@@ -352,17 +104,17 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">opcode = [<span class="hljs-number">0xF5</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x20</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x21</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x22</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x03</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x23</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x04</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x24</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x05</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x25</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x06</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x27</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x28</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x29</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0A</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2A</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0B</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2B</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2C</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2D</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0E</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2E</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0F</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x10</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x30</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x11</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x31</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x12</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x32</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x13</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x33</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF4</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF5</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x03</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x03</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x04</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x03</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x04</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x05</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x04</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x05</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x06</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x05</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x06</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE3</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE5</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF6</span>, <span class="hljs-number">0xF7</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x06</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE3</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE5</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF6</span>, <span class="hljs-number">0xF7</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE3</span>, <span class="hljs-number">0x0A</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE5</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF6</span>, <span class="hljs-number">0xF7</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x13</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF8</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE7</span>, <span class="hljs-number">0x13</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0E</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x12</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF8</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x0E</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE7</span>, <span class="hljs-number">0x12</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE1</span>, <span class="hljs-number">0x0F</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x11</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF8</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE4</span>, <span class="hljs-number">0x0F</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF1</span>, <span class="hljs-number">0xE7</span>, <span class="hljs-number">0x11</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xF4</span>]<br></code></pre></td></tr></table></figure>
 
 <p>提出<code>opcode</code>之后分析下方的函数，可以很容易进行识别，其中<code>mov</code>中还有一部分指令，作用是将输入的不同数据移动到对应的虚拟寄存器中，可以参考上文的<a href="##%E5%85%B7%E4%BD%93%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0">具体执行函数实现</a></p>
-<p><img src="https://s2.loli.net/2022/07/04/7SKOAH2Qdw9FUre.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/7SKOAH2Qdw9FUre.png" alt="3.png"></p>
 <p>分析出来每个函数对应的作用我们就可以开始进行逆向了</p>
-<p><img src="https://s2.loli.net/2022/07/04/5KlTGE9YIWJU2eg.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
-<p><img src="https://s2.loli.net/2022/07/04/ej1BqlE8uv2VYay.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
-<p><img src="https://s2.loli.net/2022/07/04/LDzw7B5OKpR8gnl.png" srcset="/img/loading.gif" lazyload alt="6.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/5KlTGE9YIWJU2eg.png" alt="4.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/ej1BqlE8uv2VYay.png" alt="5.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/LDzw7B5OKpR8gnl.png" alt="6.png"></p>
 <p>需要注意的是在这个程序中对应的<code>opcode</code>中存在有两个输入，因此程序中可能会有两个判断过程，当我们输入完后后续还有一个过程。但是我们输入第一个发生错误后程序就直接结束了，因此我们判断第一个输入的<code>check</code>是假的，需要我们找到对应的函数，但是直接找函数却是无法找到，因此我们切换到汇编</p>
-<p><img src="https://s2.loli.net/2022/07/04/47Y5FyZOvJWKsaC.png" srcset="/img/loading.gif" lazyload alt="7.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/47Y5FyZOvJWKsaC.png" alt="7.png"></p>
 <p>切换到汇编后我们可以明显看到第一个判断的数据上方还有一个数据段长度和假的加密后的数据长度相同，因此我们合理猜测这个数据是我们真正加密后的数据，通过交叉引用可以发现真正的加密部分</p>
-<p><img src="https://s2.loli.net/2022/07/04/V7pWNLfA4QsvxBj.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/V7pWNLfA4QsvxBj.png" alt="9.png"></p>
 <p>真正加密部分：</p>
-<p><img src="https://s2.loli.net/2022/07/04/xIrjG4v2pWAm1wQ.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
+<p><img src="https://s2.loli.net/2022/07/04/xIrjG4v2pWAm1wQ.png" alt="8.png"></p>
 <p>对此我们的程序的大致分析就结束了，可以总结出来如下的一个函数段表，为我们后续的翻译<code>opcode</code>做准备：</p>
 <table>
 <thead>
@@ -436,419 +188,136 @@
 <p>得到 flag：<code>flag&#123;Y0u_hav3_r3v3rs3_1t!&#125;</code></p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>至此一个简单的<code>VM</code>就结束了，对于后续的复杂<code>VM</code>题目也是类似的过程，将程序的<code>opcode</code>提取，翻译，解密。更多的还是花费时间进行调试与解密，希望这篇文章能对后者学习的同学有帮助吧</p>
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>VM：虚拟机保护技术</div>
-      <div>https://equinox-shame.github.io/2022/07/04/VM：虚拟机保护技术/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>July 4, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/07/07/IDAPython%20%E5%AD%A6%E4%B9%A0/" title="IDAPython 学习">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">IDAPython 学习</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/07/03/ACTF%20dropper%20%E5%A4%8D%E7%8E%B0/" title="ACTF dropper 复现">
-                        <span class="hidden-mobile">ACTF dropper 复现</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

@@ -1,743 +1,213 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数 直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些地方">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2022蓝帽杯 Loader 题解">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/07/13/%E8%93%9D%E5%B8%BD%E6%9D%AF%20LOADER%20%E9%80%86%E5%90%91/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数 直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些地方">
-<meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/SldJ18VxacbLNzG.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/M7G8aldpguYyrn3.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/wJzSc8k5rjKTLeY.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/ot5DjCQK8MXeZNb.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/S1V5Ju8tpW3scKG.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/tVvSniLcGfZTRCq.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/GMHFK8LIjd5xNwW.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/5F9S31KA2rMHowq.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/fxi5yX9uWHPvcYs.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/13/2JrDQoVc5y47uRB.png">
-<meta property="article:published_time" content="2022-07-13T04:23:00.307Z">
-<meta property="article:modified_time" content="2022-07-13T04:20:35.794Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>2022蓝帽杯 Loader 题解 - Autumnal</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2022蓝帽杯 Loader 题解 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助
+子程序程序主函数
+直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="2022蓝帽杯 Loader 题解"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">2022蓝帽杯 Loader 题解</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-07-13 12:23" pubdate>
-          July 13, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          1.2k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          10 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">2022蓝帽杯 Loader 题解</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">2022蓝帽杯 Loader 题解</h1>
+        <div class="stuff">
+            <span>七月 13, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助</p>
-<h2 id="子程序程序主函数"><a href="#子程序程序主函数" class="headerlink" title="子程序程序主函数"></a>子程序程序主函数</h2><p><img src="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助</p>
+<h2 id="子程序程序主函数"><a href="#子程序程序主函数" class="headerlink" title="子程序程序主函数"></a>子程序程序主函数</h2><p><img src="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png" alt="1.png"></p>
 <p>直接拖到<code>IDA</code>中，程序会分析出来对应的主函数，在主函数我们可以观察到一个<code>VirtuaalProtect</code>函数，通过程序名称我们也可以知道程序是一个加载一个新的<code>PE</code>来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按<code>P</code>进行构建函数，通过不断的测试哪些地方会调用输出的方式我们找到对应子程序的<code>main</code></p>
-<p><img src="https://s2.loli.net/2022/07/13/SldJ18VxacbLNzG.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/SldJ18VxacbLNzG.png" alt="2.png"></p>
 <p>找到之后就是开始我们漫长的调试之路了…</p>
 <h2 id="过程分析"><a href="#过程分析" class="headerlink" title="过程分析"></a>过程分析</h2><p>进入到子程序的主函数后，我们调试可以得出一些信息，比如哪些是输出，和输入，同时我们会注意到检测<code>flag</code>的格式的部分：</p>
-<p><img src="https://s2.loli.net/2022/07/13/M7G8aldpguYyrn3.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/M7G8aldpguYyrn3.png" alt="3.png"></p>
 <p>可以判断出来程序的主要部分是<code>flag&#123;XXX&#125;</code>总共的长度是<code>42</code>位</p>
-<p><img src="https://s2.loli.net/2022/07/13/wJzSc8k5rjKTLeY.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/wJzSc8k5rjKTLeY.png" alt="4.png"></p>
 <p>之后的调试需要我们多次切换到对应的内存中去观察，尝试去取对应的<code>十进制</code>数据多次观察后我们可以发现程序将我们的输入转换为了无符号的<code>long long</code>类型的一个数据，毕竟我们输入的也是字符串，如果程序需要进行对应的加密也需要将我们的输入转换为数字，方便后面的运算</p>
-<p><img src="https://s2.loli.net/2022/07/13/ot5DjCQK8MXeZNb.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/ot5DjCQK8MXeZNb.png" alt="5.png"></p>
 <p>之后程序会将你的输入进行判断，判断是否在大小区间内，如果不在范围内就会跳转到错误处，结束程序</p>
 <p>在我们标出对应的数据后，整体逆向就轻松了许多，我们大致可以猜测<code>_mm_lodau_si128</code>是将后面的偏移地址处的数据进行加载，那么可以猜测在这个前后应该会有加密部分</p>
-<p><img src="https://s2.loli.net/2022/07/13/S1V5Ju8tpW3scKG.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/S1V5Ju8tpW3scKG.png" alt="10.png"></p>
 <p>我们不断调试可以发现这个加密函数的一种特点，即前两个是运算的数据，最后一个为保存数据的偏移地址，通过这个特点，结合调试，我们可以找到另外的几个加密函数，如下：</p>
-<p><img src="https://s2.loli.net/2022/07/13/tVvSniLcGfZTRCq.png" srcset="/img/loading.gif" lazyload alt="6.png"></p>
-<p><img src="https://s2.loli.net/2022/07/13/GMHFK8LIjd5xNwW.png" srcset="/img/loading.gif" lazyload alt="7.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/tVvSniLcGfZTRCq.png" alt="6.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/GMHFK8LIjd5xNwW.png" alt="7.png"></p>
 <p>上面两个函数通过调试与观察对应的内存空间我们可以发现其过程就是一个乘法，但是因为两个数相同，即为求平方</p>
 <p>同时一个数据比较坑的是下面的一个<code>减法</code>运算，和进行比较最后的<code>a3</code>处的偏移地址的值是否等于<code>9</code></p>
-<p><img src="https://s2.loli.net/2022/07/13/5F9S31KA2rMHowq.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
-<p>在减法运算中，两个数据被转换为了<code>unsigned int</code>类型而加的<code>0x100000000i64</code>已经发生了溢出，对应的后32位字节我们得到的是 0 ，因此在加法运算中我们将其忽略即可。<img src="https://s2.loli.net/2022/07/13/fxi5yX9uWHPvcYs.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/5F9S31KA2rMHowq.png" alt="8.png"></p>
+<p>在减法运算中，两个数据被转换为了<code>unsigned int</code>类型而加的<code>0x100000000i64</code>已经发生了溢出，对应的后32位字节我们得到的是 0 ，因此在加法运算中我们将其忽略即可。<img src="https://s2.loli.net/2022/07/13/fxi5yX9uWHPvcYs.png" alt="9.png"></p>
 <p>大致流程在多次调试后可以理出来一个计算公式：<br>$$<br>input1^2-11*(input2^2)=9<br>$$<br>其中输入的要求长度为<code>42</code>，我们减去<code>flag&#123;&#125;</code>的长度可以发现是<code>18*2  (36)</code>同时我们的输入也是拆成了两个长<code>18</code>的数据进行计算，因此<code>input1</code>为我们输入<code>36</code>位数字的前<code>18</code>个，<code>input2</code>为输入的后<code>18</code>位数字</p>
 <p>对此我们可以采用：<a target="_blank" rel="noopener" href="https://www.wolframalpha.com/">https://www.wolframalpha.com/</a> 进行求解</p>
-<p><img src="https://s2.loli.net/2022/07/13/2JrDQoVc5y47uRB.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
+<p><img src="https://s2.loli.net/2022/07/13/2JrDQoVc5y47uRB.png" alt="11.png"></p>
 <p>发现计算出来的<code>y</code>少了一位，我们将其补上一个前缀<code>0</code>即可得到<code>flag</code>：</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flag</span>&#123;<span class="hljs-number">118936021352508390035860559716724409</span>&#125;<br></code></pre></td></tr></table></figure>
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>2022蓝帽杯 Loader 题解</div>
-      <div>https://equinox-shame.github.io/2022/07/13/蓝帽杯 LOADER 逆向/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>July 13, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/07/13/Python%E9%80%86%E5%90%91/" title="Python逆向">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Python逆向</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/07/09/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%20WP/" title="2022 蓝帽杯电子取证部分WP">
-                        <span class="hidden-mobile">2022 蓝帽杯电子取证部分WP</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

@@ -1,323 +1,60 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="基本概念一般概念汇编语言能够直接访问计算机硬件 地址总线是单向的，其他的是双向的。  其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&gt; 空间为2的N次方。 数据总线的宽度决定了CPU和未接数据传送的速度。 控制总线决定了CPU对外部器件的控制能力。  汇编器：将程序转换为机器语言连接器：将汇编器生成的单个文件进行组合为一个可执行程序调试器：使程序员单步执行程序，并检查寄">
-<meta property="og:type" content="article">
-<meta property="og:title" content="汇编语言学习">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/06/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="基本概念一般概念汇编语言能够直接访问计算机硬件 地址总线是单向的，其他的是双向的。  其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&gt; 空间为2的N次方。 数据总线的宽度决定了CPU和未接数据传送的速度。 控制总线决定了CPU对外部器件的控制能力。  汇编器：将程序转换为机器语言连接器：将汇编器生成的单个文件进行组合为一个可执行程序调试器：使程序员单步执行程序，并检查寄">
-<meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png">
-<meta property="og:image" content="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png">
-<meta property="og:image" content="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png">
-<meta property="article:published_time" content="2022-06-16T06:59:37.185Z">
-<meta property="article:modified_time" content="2022-07-06T10:37:10.574Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>汇编语言学习 - Autumnal</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>汇编语言学习 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="基本概念一般概念汇编语言能够直接访问计算机硬件
+地址总线是单向的，其他的是双向的。
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&amp;gt; 空间为2的N次方。
+数据总线的宽度,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="汇编语言学习"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">汇编语言学习</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-16 14:59" pubdate>
-          June 16, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          14k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          121 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">汇编语言学习</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">汇编语言学习</h1>
+        <div class="stuff">
+            <span>六月 16, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="一般概念"><a href="#一般概念" class="headerlink" title="一般概念"></a>一般概念</h3><p>汇编语言能够直接访问计算机硬件</p>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="一般概念"><a href="#一般概念" class="headerlink" title="一般概念"></a>一般概念</h3><p>汇编语言能够直接访问计算机硬件</p>
 <p>地址总线是单向的，其他的是双向的。</p>
 <blockquote>
 <p>其中地址总线的数量决定了可寻址的存储单元大小，<code>N</code>根地址总线，对应寻址&gt; 空间为<code>2的N次方</code>。</p>
@@ -376,7 +113,7 @@
 <li>图像随机存储器(VRAM)：保存视频数据，其为双端口，可以一个端口刷新显示数据，另一个端口将数据写到显示器</li>
 <li>互补金属氧化物半导体(CMOS)RAM：在系统主板上，保存系统设置信息，由电池供电，因此断电后其中的内容仍能够保留</li>
 </ol>
-<h3 id="输入输出系统"><a href="#输入输出系统" class="headerlink" title="输入输出系统"></a>输入输出系统</h3><img src="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<h3 id="输入输出系统"><a href="#输入输出系统" class="headerlink" title="输入输出系统"></a>输入输出系统</h3><img src="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png" style="zoom: 67%;" />
 
 <p>与虚拟机概念相似，输入输出是通过不同层次的访问来实现的。库函数在最高层，操作系统是次高层。BIOS(基本输入输出系统)是一组函数，能直接与硬件设备通信。程序也可以直接访问输入输出设备。</p>
 <h2 id="汇编语言基础"><a href="#汇编语言基础" class="headerlink" title="汇编语言基础"></a>汇编语言基础</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><blockquote>
@@ -438,9 +175,9 @@
 <p>指令在程序汇编编译时变得可执行，汇编器将其翻译为机器语言字节，并且在运行时由<code>CPU</code>加载和执行</p>
 </blockquote>
 <h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><p>定义格式： [ name ] directive initializer [ ,initializer ] (例： A BYTE 100 )</p>
-<img src="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<img src="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png" style="zoom: 67%;" />
 
-<img src="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png" srcset="/img/loading.gif" lazyload alt="3.png" style="zoom: 67%;" />
+<img src="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png" alt="3.png" style="zoom: 67%;" />
 
 <h3 id="32位汇编程序模板"><a href="#32位汇编程序模板" class="headerlink" title="32位汇编程序模板"></a>32位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">; 32位汇编程序模板<br>.386 ; 表示一个32位程序<br>.model flat,stdcall ; 确定程序的内存模式(flat)和子程序调用规范<br>.stack 4096 ;栈空间大小<br>ExitProcess PROTO, dwExitCode:DWORD ; 设置PROTO关键字的返回值<br>.data<br>	; 数据段<br>.code<br>main PROC<br>	; 程序指令<br>	<br>	INVOKE ExitProcess,0<br>main ENDP<br>END main<br></code></pre></td></tr></table></figure>
 
@@ -452,7 +189,7 @@
 <li>立即数 —— 使用数字文本表达式</li>
 <li>内存操作数 —— 引用内存位置</li>
 </ol>
-<img src="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png" style="zoom:67%;" />
 
 <p><code>MOV</code>指令将源操作数复制到目的操作数，<code>MOVZX</code>在传送过程中执行<code>零扩展</code>，<code>MOVSX</code>执行符号位扩展(一般来说十六进制第一位大于等于 8 的便是负数，扩展符号位 1 ，便会得到 FFF…)</p>
 <p><code>LAHF</code>将<code>EFLAGS</code>寄存器的低字节复制到<code>AH</code>，被复制的标志位包括：符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位，而<code>SAHF</code>将<code>AH</code>的内容复制到<code>EFLAGS</code>寄存器低字节</p>
@@ -537,9 +274,9 @@
 
 <p><code>CALL</code>指令执行时将下一条指令的地址压入栈中，再把被调用过程的地址复制到指令指针寄存器中(EIP)</p>
 <p><code>RET</code>指令执行时先将<code>ESP</code>的值弹道<code>EIP</code>中，然后<code>ESP</code>向高地址移动</p>
-<img src="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png" srcset="/img/loading.gif" lazyload style="zoom:90%;" />
+<img src="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png" style="zoom:90%;" />
 
-<img src="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<img src="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png" style="zoom: 67%;" />
 
 
 
@@ -553,9 +290,9 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">include Irvine32.inc<br></code></pre></td></tr></table></figure>
 
 <p>通过链接库可以直接调用内部现有的功能函数，<code>Irvine32.inc</code>中包含如下过程：</p>
-<img src="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png" style="zoom:80%;" />
 
-<img src="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png" srcset="/img/loading.gif" lazyload style="zoom:70%;" />
+<img src="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png" style="zoom:70%;" />
 
 <h2 id="条件处理"><a href="#条件处理" class="headerlink" title="条件处理"></a>条件处理</h2><h3 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h3><p>允许作决策的编程语言使程序员可以改变控制流，使用的技术成为<code>条件分支</code></p>
 <p>通过布尔运算可以很方便的更改一个数字的单个位，布尔指令影响对应的<code>零标志位</code>、<code>进位标志位</code>、<code>符号标志位</code>、<code>溢出标志位</code>和<code>奇偶标志位</code></p>
@@ -598,14 +335,14 @@
 
 <p>溢出标志位置 1 ，就把两个正数相加使其产生负的和数；若要清除溢出标志位，则将操作数和 0 进行<code>OR</code>操作</p>
 <h3 id="条件跳转"><a href="#条件跳转" class="headerlink" title="条件跳转"></a>条件跳转</h3><p>第一步先使用<code>CMP</code>、<code>AND</code>或<code>SUB</code>操作改变<code>CPU</code>的状态标志位，随后使用<code>条件跳转指令</code>来对<code>标志位</code>进行测试，而产生新的分支</p>
-<p><img src="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png" srcset="/img/loading.gif" lazyload></p>
-<img src="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<p><img src="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png"></p>
+<img src="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png" style="zoom:80%;" />
 
-<img src="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png" style="zoom:80%;" />
 
-<img src="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png" style="zoom:80%;" />
 
-<img src="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png" srcset="/img/loading.gif" lazyload alt="13.png" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png" alt="13.png" style="zoom:80%;" />
 
 <h3 id="条件循环指令"><a href="#条件循环指令" class="headerlink" title="条件循环指令"></a>条件循环指令</h3><p><code>LOOPZ</code>(为零跳转）指令的工作和<code>LOOP</code>指令相同，只是有一个附加条件:为零控制转向目的标号，零标志位必须置 1。<code>LOOPE</code>(相等跳转)指令相当于<code>LOOPZ</code>两者有相同的操作码，执行以下任务:</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ecx</span> = ecx - <span class="hljs-number">1</span><br><span class="hljs-attribute">if</span> ecx &gt; <span class="hljs-number">0</span> and zf = <span class="hljs-number">1</span> <br>	<span class="hljs-attribute">jump</span> to destination<br></code></pre></td></tr></table></figure>
@@ -656,46 +393,46 @@
 
 <h2 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h2><h3 id="移位和循环移位指令"><a href="#移位和循环移位指令" class="headerlink" title="移位和循环移位指令"></a>移位和循环移位指令</h3><p>溢出：当一个有符号数进行循环移位时发生了符号位的取反( 0 -&gt; 1 或 1 -&gt; 0 )时，溢出标志位置 1</p>
 <p>逻辑移位：在移位过程中空出来的高位用 0 进行填充</p>
-<p><img src="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png"></p>
 <p>算术移位：在移位过程中空出来的高位用符号位进行填充</p>
-<p><img src="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png"></p>
 <hr>
 <p><code>SHL</code>指令将目的操作数逻辑左移移位，最低位用 0 进行填充，其中最高位会移入进位标志位上，每向左移位一次相当于乘以 2</p>
-<p><img src="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png"></p>
 <p><code>SHR</code>指令将目的操作数逻辑右移移位，最高位用 0 进行填充，其中最后一位被移除的会置于进位标志位上，每向右移位一次相当于除以 2</p>
-<p><img src="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png"></p>
 <hr>
 <p><code>SAL</code>(算术左移)指令与<code>SHL</code>相同，每次移动时将最低为用 0 进行填充，其中最高位会移入进位标志位上</p>
-<p><img src="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png"></p>
 <p><code>SAR</code>进行算术右移，<code>SAL</code>与<code>SAR</code>两者的操作数类型与<code>SHL</code>和<code>SHR</code>完全相同</p>
-<p><img src="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png"></p>
 <hr>
 <p><code>ROL</code>以循环方式来进行移位，该指令将数的一段移动到另一端，并不会丢弃位，当循环计数次数大于 1 时，进位标志位保存的是最后循环位移出<code>MSB</code>的位</p>
-<p><img src="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png"></p>
 <blockquote>
 <p>可以利用该方式将一个数字的高 4 位与低 4 位进行交换</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov al,26h<br>rol al,4	; al = 62h<br></code></pre></td></tr></table></figure>
 </blockquote>
 <p><code>ROR</code>(循环右移)指令把所有位都向右移，最低位复制到进位标志位和最高位。该指令格式与SHL指令相同</p>
-<p><img src="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png"></p>
 <p>与之相似的是当循环计数值大于1时，进位标志位保存的是最后循环移出LSB的位</p>
 <hr>
 <p><code>RCL</code>(带进位循环左移)指令把每一位都向左移，进位标志位复制到LSB，而MSB复制到进位标志位</p>
-<p><img src="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png"></p>
 <blockquote>
 <p>此处的<code>带进位</code>指的是进位标志位也参与到移位中</p>
 </blockquote>
 <p><code>RCR</code>(带进位循环右移)指令把每一位都向右移，进位标志位复制到<code>MSB</code>,而<code>LSB</code>复制到进位标志位</p>
-<p><img src="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png"></p>
 <hr>
 <p><code>SHLD</code>(双精度左移)指令将目的操作数向左移动指定位数。移动形成的空位由源操作数的高位填充。源操作数不变，但是符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位会受影响，格式为：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">SHLD dest,source,count<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png"></p>
 <p><code>SHRD</code>(双精度右移)指令将目的操作数向右移动指定位数。移动形成的空位由源操作数的低位格式为：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">SHLD dest,source,count<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png"></p>
 <blockquote>
 <p>一般为了在屏幕上进行图像的重定向而将位元组左右移动的时候，可以用<code>SHLD</code>和<code>SHRD</code>来处理位映射图像。或者在数据加密时可以用到两种移位方式。</p>
 </blockquote>
@@ -780,14 +517,14 @@
 <h3 id="扩展加减法"><a href="#扩展加减法" class="headerlink" title="扩展加减法"></a>扩展加减法</h3><p><code>ADC</code>(带进位加法)指令将源操作数和进位标志位的值都与目的操作数相加</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov dl,0<br>mov al,0FFh<br>add al,0FFh		; AL = FEh<br>adc dl,0		; DL/AL = 01FEh<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png"></p>
 <blockquote>
 <p><code>ADC</code>指令相当于在普通的<code>ADD</code>指令的基础上加上了一个进位标志位(<code>CF</code>)，在运行加法运算时是使用高位进行运算</p>
 </blockquote>
 <p><code>SBB</code>(带借位减法)指令从目的操作数中减去源操作数和进位标志位的值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov edx,7	; 高 32 位<br>mov eax,1	; 低 32 位<br>sub eax,2	; 减 2<br>sbb edx,0	; 高 32 位减法<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png"></p>
 <blockquote>
 <p><code>SBB</code>指令也是相当于<code>SUB</code>指令的基础上减去了一个进位标志位(<code>CF</code>)，运行减法运算时是使用高位进行运算</p>
 </blockquote>
@@ -895,9 +632,9 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">proto		-&gt;		invoke		-&gt;		proc	-&gt;		endp<br><br>MySub PROTO		; 过程原型<br>...<br>INVOKE MySub	; 过程调用<br>...<br>MySub PROC		; 过程实现<br>...<br>...<br>MySub ENDP	<br></code></pre></td></tr></table></figure>
 
 <h2 id="字符串和数组"><a href="#字符串和数组" class="headerlink" title="字符串和数组"></a>字符串和数组</h2><p><code>X86</code>指令集有五组指令用于处理字节、字和双字数组，其被称为<code>字符串原语</code>，其能够高效执行，因为它们会自动重复并增加数组索引</p>
-<p><img src="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png" srcset="/img/loading.gif" lazyload alt="28.png"></p>
+<p><img src="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png" alt="28.png"></p>
 <p>就其自身而言，字符串基本指令只能处理一个或一对内存数值。如果加上重复前缀，指令就可以使用<code>ECX</code>寄存器作为计数器重复执行。重复前缀使得单条指令能够处理整个数组</p>
-<p><img src="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png" srcset="/img/loading.gif" lazyload alt="29.png"></p>
+<p><img src="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png" alt="29.png"></p>
 <blockquote>
 <p>使用方式如下：</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">REP<span class="hljs-regexp">/PEPZ/</span>...  MOVSB<span class="hljs-regexp">/CMPSB/</span>...<br></code></pre></td></tr></table></figure>
@@ -923,419 +660,136 @@
 <p>两种方式都类似于高级语言中已经寻找到了一个数组的首地址，通过一个单字节的指针来进行寻找每一位的数据，每次指针的增加量便是对应的偏移量，如<code>int</code>类型，占用了 4 字节，那么每次偏移往下找数据时增加的量便为 4</p>
 </blockquote>
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/Assembly/" class="category-chain-item">Assembly</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>汇编语言学习</div>
-      <div>https://equinox-shame.github.io/2022/06/16/汇编语言学习/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>June 16, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/06/24/call%20$+5%20pop%20eax/" title="call $+5 pop eax">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">call $+5 pop eax</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/06/09/%E4%B8%AD%E5%9B%BD%E8%BF%91%E4%BB%A3%E5%8F%B2/" title="中国近代史大纲">
-                        <span class="hidden-mobile">中国近代史大纲</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

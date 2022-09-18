@@ -1,364 +1,110 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="Crack  by  混入21的蒟蒻 暴力破解运行安装包，安装对应的软件，拖入PE进行查壳分析，发现有一个 UPX 壳，直接利用 UPX.exe脱壳  脱去壳后拉入IDA分析 寻找对应的Register可以发现如下字符串 ：  寻找对应的The Code you&#39;ve entered invalid!之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：   之后">
-<meta property="og:type" content="article">
-<meta property="og:title" content="RARPasswordRecovery 逆向分析">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/RARPasswordRecovery%20%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="Crack  by  混入21的蒟蒻 暴力破解运行安装包，安装对应的软件，拖入PE进行查壳分析，发现有一个 UPX 壳，直接利用 UPX.exe脱壳  脱去壳后拉入IDA分析 寻找对应的Register可以发现如下字符串 ：  寻找对应的The Code you&#39;ve entered invalid!之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：   之后">
-<meta property="og:locale">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/78b9fa1a17f66358.png">
-<meta property="og:image" content="https://static01.imgkr.com/temp/8a9bc7575c154ed4b7d36096d063131d.png">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/c035d0e6f8572a68.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/df848f56ed92542f.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/7f09bb11d3a1e51e.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/4udi5.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/3a63b21f8f5bbb79.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/c3500131c19c76fe.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/187c71a1437aa093.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/3e23d6f8e59918a9.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/775ef29a79e0b9d2.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/a2575782c23cdc67.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/e8cfc242d1760495.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/hc1uh0.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/hgrz7t.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/i6x5y5.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/isfzou.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/k5xfdv.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/k5xids.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.687Z">
-<meta property="article:modified_time" content="2022-02-28T14:34:36.117Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>RARPasswordRecovery 逆向分析 - Autumnal</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RARPasswordRecovery 逆向分析 - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="Crack  by  混入21的蒟蒻
+暴力破解运行安装包，安装对应的软件，拖入PE进行查壳分析，发现有一个 UPX 壳，直接利用 UPX.exe脱壳
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+脱去壳后拉入IDA分析
+寻找对应的Regist,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="RARPasswordRecovery 逆向分析"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">RARPasswordRecovery 逆向分析</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          March 14, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          3.7k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          31 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">RARPasswordRecovery 逆向分析</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">RARPasswordRecovery 逆向分析</h1>
+        <div class="stuff">
+            <span>三月 14, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h2 id="Crack-by-混入21的蒟蒻"><a href="#Crack-by-混入21的蒟蒻" class="headerlink" title="Crack  by  混入21的蒟蒻"></a>Crack  by  混入21的蒟蒻</h2><hr>
+
+        </div>
+        <div class="content markdown">
+            <h2 id="Crack-by-混入21的蒟蒻"><a href="#Crack-by-混入21的蒟蒻" class="headerlink" title="Crack  by  混入21的蒟蒻"></a>Crack  by  混入21的蒟蒻</h2><hr>
 <h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>运行安装包，安装对应的软件，拖入<code>PE</code>进行查壳分析，发现有一个 <code>UPX</code> 壳，直接利用 <code>UPX.exe</code>脱壳</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png"></p>
 <p>脱去壳后拉入<code>IDA</code>分析</p>
 <p>寻找对应的<code>Register</code>可以发现如下字符串 ：</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/78b9fa1a17f66358.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/78b9fa1a17f66358.png"></p>
 <p>寻找对应的<code>The Code you&#39;ve entered invalid!</code>之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：</p>
-<p><img src="https://static01.imgkr.com/temp/8a9bc7575c154ed4b7d36096d063131d.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/c035d0e6f8572a68.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://static01.imgkr.com/temp/8a9bc7575c154ed4b7d36096d063131d.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/11/c035d0e6f8572a68.png"></p>
 <p>之后跳转到图形界面进行分析 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/df848f56ed92542f.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/df848f56ed92542f.png"></p>
 <p>结合动态调试可以发现这 3 个函数会对程序获取到的密钥进行判断，如果为<code>True</code>则直接跳转到下面的<code>The Code you&#39;ve entered invalid!</code>此时我们的注册环节就失败了，如果需要跳转到注册成功的界面那么我们需要在每一次的判断中都是<code>False</code>这样我们才能跳转到提示注册成功。</p>
 <p>那么暴力破解这个就变得十分简单了，我们只需要更改对应的<code>jz/jnz</code>这两个跳转使其互换，那么就可以达到我们的目的了。</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/7f09bb11d3a1e51e.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/7f09bb11d3a1e51e.png"></p>
 <p>之后我们将补丁打上就完成了对应的注册暴力破解。</p>
 <hr>
-<h2 id="注册机"><a href="#注册机" class="headerlink" title="注册机"></a>注册机</h2><h3 id="注册条件判断"><a href="#注册条件判断" class="headerlink" title="注册条件判断"></a>注册条件判断</h3><p><img src="https://obohe.com/i/2021/11/21/4udi5.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="注册机"><a href="#注册机" class="headerlink" title="注册机"></a>注册机</h2><h3 id="注册条件判断"><a href="#注册条件判断" class="headerlink" title="注册条件判断"></a>注册条件判断</h3><p><img src="https://obohe.com/i/2021/11/21/4udi5.png"></p>
 <p>在之前暴力破解时我们找到了对应的提示框显示的位置，可以明显的看到有一个<code>if</code>对 4 个表达式进行判断，如果要完成注册机的编写我们则需要让 4 个等式都成立即可，而这个也会是我们编写注册机的关键之处。</p>
 <hr>
 <h4 id="第一个条件"><a href="#第一个条件" class="headerlink" title="第一个条件"></a>第一个条件</h4><p>我们简单的动态调试一下发现只要第一个判断条件是对输入的数据长度进行判断，如果长度为 0 那么函数就会直接跳转到下面的<code>The Code you&#39;ve entered invalid!</code>处，也就是意味着在第一个判断处我们仅需要保证输入的长度是大于<code>0</code>的就可以实现跳转到第二个条件中。</p>
 <hr>
 <h4 id="第二个条件"><a href="#第二个条件" class="headerlink" title="第二个条件"></a>第二个条件</h4><p>通过上图的汇编可以明显地发现有一个<code>test</code>函数，我们需要做的是让<code>test</code>函数的值为 1，也就是<code>eax</code>的值不为空，那么关键就是<code>call</code>里面的函数<code>_wcsstr</code>。我们点击进入该函数，进行分析。</p>
-<img src="https://i.bmp.ovh/imgs/2021/11/3a63b21f8f5bbb79.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
+<img src="https://i.bmp.ovh/imgs/2021/11/3a63b21f8f5bbb79.png" style="zoom: 50%;" />
 
 <p>通过图形化的界面我们可以看到程序的大致流程，我们通过输入进行测试，观察具体执行过程。</p>
 <p>我们随意输入一串数字<code>123456789</code>进行测试，在流程中我们会在寄存器经常看到<code>DA</code> ：</p>
-<p>​                                                                               <img src="https://i.bmp.ovh/imgs/2021/11/c3500131c19c76fe.png" srcset="/img/loading.gif" lazyload> </p>
+<p>​                                                                               <img src="https://i.bmp.ovh/imgs/2021/11/c3500131c19c76fe.png"> </p>
 <p>经过一轮下来的动调发现，程序会一直在如下区间内一直循环 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/187c71a1437aa093.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/187c71a1437aa093.png"></p>
 <p>如果你常常看寄存器里的值你会发现在寄存器里你输入的值会一个个被<code>pop</code>掉（一直往下寻址），此时我们也通过浏览器查询<code>_wcsstr</code>函数作用企图获得一些灵感，在百度百科中介绍该函数是一个寻找的字符的一个函数 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/3e23d6f8e59918a9.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/3e23d6f8e59918a9.png"></p>
 <p>这或许就解释了在<code>EDI</code>寄存器中为什么我们的输入会一值向下寻址，可能就是在寻找寄存器中出现的<code>DA</code> ？我们更改一下我们的测试密钥更改成<code>DADADADADA</code>，再次对其进行测试。同样的我们在寄存器里会发现当读入我们的一个数据后出现了<code>AOOSOFT-RAR-RECOVERY</code>，感觉是不是有一点熟悉？</p>
 <p>是不是少了一个<code>D</code>，不然就是程序的名字，我们继续按<code>F8</code>测试会发现在寄存器<code>ECX</code>中<code>AOSSOFT-RAR-RECOVERY</code>会变成<code>OSSOFT-RAR-RECOVERY</code>但是继续调试过一个循环会发现又变成成了<code>AOSSOFT-RAR-RECOVERY</code>，但是读入<code>A</code>时又成了<code>OSSOFT-RAR-RECOVERY</code>，我们比那会很疑惑这个密钥是不是与程序的名字<code>DAOSSOFT-RAR-RECOVERY</code>有关系，我们再次改变密钥为<code>DAdsaddasd4152</code>，动调还是会发现<code>ECX</code>中<code>AOSSOFT-RAR-RECOVERY</code>会变成<code>OSSOFT-RAR-RECOVERY</code>但是继续调试读入的数据是<code>d</code>时<code>OSSOFT-RAR-RECOVERY</code>就变回了<code>DA</code>,因此我们确定了输入与密钥的部分关系——密钥开头<code>DAOSSOFT-RAR-RECOVERY</code>。</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/775ef29a79e0b9d2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/775ef29a79e0b9d2.png"></p>
 <p>至此我们就已经通过了两个条件了。</p>
 <hr>
 <h4 id="第三个条件"><a href="#第三个条件" class="headerlink" title="第三个条件"></a>第三个条件</h4><p>通过第二个条件时我们可以在寄存器里发现我们的输入会被存储于<code>EAX</code>寄存器中  ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/a2575782c23cdc67.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/a2575782c23cdc67.png"></p>
 <p>同样的我们回到汇编层去分析程序 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/e8cfc242d1760495.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://i.bmp.ovh/imgs/2021/11/e8cfc242d1760495.png"></p>
 <p>可以较为明显的看到，函数在第三个条件判断中运行了一次减法和一次右移的操作，我们要想通过，那么就需要保证在第二次测试的输入<code>DAOSSOFT-RAR-RECOVERY</code>保证后面有值进行运算减法和一次右移过后的值不为 0 就可以通过了，例如在<code>DAOSSOFT-RAR-RECOVERY</code>后添加一部分数字或者一部分字母，便可以通过第三个条件。</p>
 <hr>
-<h4 id="第四个条件"><a href="#第四个条件" class="headerlink" title="第四个条件"></a>第四个条件</h4><p><img src="https://obohe.com/i/2021/11/21/hc1uh0.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="第四个条件"><a href="#第四个条件" class="headerlink" title="第四个条件"></a>第四个条件</h4><p><img src="https://obohe.com/i/2021/11/21/hc1uh0.png"></p>
 <p>进入第四个条件时，通过汇编可以看到<code>ECX</code>的值等于<code>EBX</code>，同时将<code>ECX</code>入栈，下面有一个<code>Call</code>指令，调用了一个函数，而下面就是<code>test al al</code>，如果我们将鼠标放到<code>al</code>上，你会发现<code>al</code>的值为 0 ，那么意味着如果要进入到<code>if</code>语句内部那么<code>al</code>的只会在<code>call</code>的函数中发生改变，此时我们分析的重点便落到了<code>call sub_417CE0 </code>中。</p>
 <p>进入该函数，我们转换成<code>C的伪代码</code>形式，进行判断该函数的作用。</p>
-<img src="https://obohe.com/i/2021/11/21/hgrz7t.png" srcset="/img/loading.gif" lazyload  />
+<img src="https://obohe.com/i/2021/11/21/hgrz7t.png"  />
 
 <p>进入后发现函数里面会有一大堆东西，其中大部分是去掉了函数名称，但是我们仍然可以在其中找到一些东西，<code>wcshr</code>和<code>__InterlockedDecrement</code>两个函数名，经过百度我们可以了解到其相关信息。</p>
 <blockquote>
 <p><strong>wcshr</strong></p>
-<p><img src="https://obohe.com/i/2021/11/21/i6x5y5.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/21/i6x5y5.png"></p>
 <p><strong>__InterlockedDecrement</strong></p>
 <p>百度后发现其类似于一种线程锁的东西？防止删除自己，因此我们便不用花费大量时间纠结于下面&gt;的一堆<code>if</code>判断语句中。</p>
 </blockquote>
@@ -369,7 +115,7 @@
 <p>在这个判断中我们需要做的就是让<code>v1</code>的值不为<code>-1</code>和<code>0</code>即可，之后的大多数函数都是不用进行过多的分析。</p>
 <hr>
 <h3 id="注册程序编写"><a href="#注册程序编写" class="headerlink" title="注册程序编写"></a>注册程序编写</h3><p>经过上面的分析过后我们便可以成功的进行注册，程序会弹出来恭喜注册成功的提示 ：</p>
-<p>​                                                                 <img src="https://obohe.com/i/2021/11/21/isfzou.png" srcset="/img/loading.gif" lazyload></p>
+<p>​                                                                 <img src="https://obohe.com/i/2021/11/21/isfzou.png"></p>
 <p><strong>那么我们注册机应该怎么写呢？</strong></p>
 <p>我们再次简单的整理一下上述密钥的判断过程，可以得知密钥是以<code>DAOSSOFT-RAR-RECOVERY</code>为开头的，之后的输入都要满足之前的条件，要存在有<code>-</code>，使我们的最后一个条件成立——即<code>v1</code>不为<code>-1</code>和<code>0</code>即可。</p>
 <p>分析过后我们便可以开始完成我们的编写，脚本如下。</p>
@@ -381,425 +127,142 @@
 <p>答案是肯定的。我们分析出来了程序的注册流程，我们便可以对其注册部分进行魔改，也可以对其输入输出的文本框进行修改。</p>
 <h3 id="改变密钥"><a href="#改变密钥" class="headerlink" title="改变密钥"></a>改变密钥</h3><p>我们根据上面的密钥分析我们可以得到对应的注册密钥是以<code>DAOSSOFT-RAR-RECOVERY</code>为开头的，那我们也可以更改对应的值，使其成为我们独有的加密。</p>
 <p>我们找到<code>DAOSSOFT-RAR-RECOVERY</code>对应所在的位置，进行更改 ：</p>
-<p><img src="https://obohe.com/i/2021/11/21/k5xfdv.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/21/k5xfdv.png"></p>
 <p>之后进行测试 ：</p>
-<p><img src="https://obohe.com/i/2021/11/21/k5xids.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://obohe.com/i/2021/11/21/k5xids.png"></p>
 <p>发现同样可以注册成功，完成我们的密钥魔改。</p>
 <h3 id="标题修改"><a href="#标题修改" class="headerlink" title="标题修改"></a>标题修改</h3><p>我们同样的定位对应的数据位置，对其进行更改便可以达到与修改密钥一样的方式完成对应的修改过程，此处就不贴上对应的图了。</p>
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>RARPasswordRecovery 逆向分析</div>
-      <div>https://equinox-shame.github.io/2022/03/14/RARPasswordRecovery 逆向分析/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>March 14, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/03/14/PWN%E7%9A%84%E5%9F%BA%E6%9C%ACROP%E9%93%BE%E6%9E%84%E9%80%A0/" title="PWN的基本ROP链构造">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">PWN的基本ROP链构造</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/03/14/Re%E6%A8%A1%E5%9D%97/" title="Re模块">
-                        <span class="hidden-mobile">Re模块</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>

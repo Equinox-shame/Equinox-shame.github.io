@@ -1,306 +1,60 @@
 
-
 <!DOCTYPE html>
-<html lang="zh" data-default-color-scheme=auto>
-
-
-
+<html lang="zh" class="loading">
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="梓曰">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="Bomb Labphase_1第一关整体上就是比较字符串，判断输入的字符串于目的字符串不一样的时候炸弹就发生爆炸。  输入比较的字符串即可通过第一关： 1Border relations with Canada have never been better.  phase_2第二关的伪代码看起来十分的难看，所以我们直接看汇编。 12345678910111213141516171819202122">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP - Bomb Lab">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/04/03/Bomb%20Lab/index.html">
-<meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="Bomb Labphase_1第一关整体上就是比较字符串，判断输入的字符串于目的字符串不一样的时候炸弹就发生爆炸。  输入比较的字符串即可通过第一关： 1Border relations with Canada have never been better.  phase_2第二关的伪代码看起来十分的难看，所以我们直接看汇编。 12345678910111213141516171819202122">
-<meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/04/01/RUQlt7WoYAdcub1.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/02/yl8pm5FITsdcLVa.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/mIbuVKrgG8JxYEl.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/B56OhTHM7mDo8gS.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/SBViRqdIFpsQM4x.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/i5wAenhazEGTHSj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/WvKgZBAjRT5bf4h.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/8I2od5fy1gwW3z6.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/9d8wQLMt4hNiveX.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/qWt9o6uyhXcwlCQ.png">
-<meta property="og:image" content="https://s2.loli.net/2022/04/03/KqzQN2pmTVidJwn.png">
-<meta property="article:published_time" content="2022-04-03T13:30:12.370Z">
-<meta property="article:modified_time" content="2022-04-03T13:29:46.113Z">
-<meta property="article:author" content="梓曰">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/04/01/RUQlt7WoYAdcub1.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>CSAPP - Bomb Lab - Autumnal</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CSAPP - Bomb Lab - Autumnal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="Bomb Labphase_1第一关整体上就是比较字符串，判断输入的字符串于目的字符串不一样的时候炸弹就发生爆炸。
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+输入比较的字符串即可通过第一关：
+1Border relations with ,"> 
+    <meta name="author" content="梓曰"> 
+    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
     
-  
+    
+<link rel="stylesheet" href="/css/diaspora.css">
 
-
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Autumnal Equinox</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                Hejmpaĝo
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                Arkivoj
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                Kategorio
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                Ligoj
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="CSAPP - Bomb Lab"></span>
-          
+<body class="loading">
+    <span id="config-title" style="display:none">Autumnal</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">CSAPP - Bomb Lab</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-04-03 21:30" pubdate>
-          April 3, 2022 pm
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          16k vortoj
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          130 minutoj
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> rigardoj
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+    <div class="scrollbar"></div>
 </div>
 
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">CSAPP - Bomb Lab</h1>
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">CSAPP - Bomb Lab</h1>
+        <div class="stuff">
+            <span>四月 03, 2022</span>
             
-            
-              <div class="markdown-body">
-                
-                <h1 id="Bomb-Lab"><a href="#Bomb-Lab" class="headerlink" title="Bomb Lab"></a>Bomb Lab</h1><h2 id="phase-1"><a href="#phase-1" class="headerlink" title="phase_1"></a>phase_1</h2><p>第一关整体上就是比较字符串，判断输入的字符串于目的字符串不一样的时候炸弹就发生爆炸。</p>
-<p><img src="https://s2.loli.net/2022/04/01/RUQlt7WoYAdcub1.png" srcset="/img/loading.gif" lazyload></p>
+
+        </div>
+        <div class="content markdown">
+            <h1 id="Bomb-Lab"><a href="#Bomb-Lab" class="headerlink" title="Bomb Lab"></a>Bomb Lab</h1><h2 id="phase-1"><a href="#phase-1" class="headerlink" title="phase_1"></a>phase_1</h2><p>第一关整体上就是比较字符串，判断输入的字符串于目的字符串不一样的时候炸弹就发生爆炸。</p>
+<p><img src="https://s2.loli.net/2022/04/01/RUQlt7WoYAdcub1.png"></p>
 <p>输入比较的字符串即可通过第一关：</p>
 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">Border </span>relations with Canada have never <span class="hljs-keyword">been </span><span class="hljs-keyword">better.</span><br></code></pre></td></tr></table></figure>
 
@@ -314,7 +68,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function">__int64 __fastcall <span class="hljs-title">phase_3</span><span class="hljs-params">(__int64 a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  __int64 result; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">int</span> v2; <span class="hljs-comment">// [rsp+8h] [rbp-10h] BYREF</span><br>  <span class="hljs-keyword">int</span> v3; <span class="hljs-comment">// [rsp+Ch] [rbp-Ch] BYREF</span><br><br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-keyword">int</span>)__isoc99_sscanf(a1, <span class="hljs-string">&quot;%d %d&quot;</span>, &amp;v2, &amp;v3) &lt;= <span class="hljs-number">1</span> ) <span class="hljs-comment">// 输入两个数字</span><br>    explode_bomb();<br>  <span class="hljs-keyword">switch</span> ( v2 )	<span class="hljs-comment">//第一个数字用于决定result的值</span><br>  &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>      result = <span class="hljs-number">0xCF</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>      result = <span class="hljs-number">0x137</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>      result = <span class="hljs-number">0x2C3</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>      result = <span class="hljs-number">0x100</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>      result = <span class="hljs-number">0x185</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:<br>      result = <span class="hljs-number">0xCE</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">6</span>:<br>      result = <span class="hljs-number">0x2AA</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">7</span>:<br>      result = <span class="hljs-number">0x147</span>LL;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>:<br>      explode_bomb();<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( (_DWORD)result != v3 )<span class="hljs-comment">//将输入的第二个数字与 result 进行比较，相等则通过。</span><br>    explode_bomb();<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="phase-4"><a href="#phase-4" class="headerlink" title="phase_4"></a>phase_4</h2><p>程序的逻辑也比较简单，输入两个数字，将第一个数字送到对应的递归中，获得的返回值必须为<code>0</code> ，同时第二个数字也要为<code>0</code>，两个值均为<code>0</code>的情况下成功</p>
-<img src="https://s2.loli.net/2022/04/02/yl8pm5FITsdcLVa.png" srcset="/img/loading.gif" lazyload style="zoom:100%;" /> 
+<img src="https://s2.loli.net/2022/04/02/yl8pm5FITsdcLVa.png" style="zoom:100%;" /> 
 
 <p>同时递归为：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function">__int64 __fastcall <span class="hljs-title">func4</span><span class="hljs-params">(__int64 a1, __int64 a2, __int64 a3)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v3; <span class="hljs-comment">// ecx</span><br>  __int64 result; <span class="hljs-comment">// rax</span><br><br>  v3 = ((<span class="hljs-keyword">int</span>)a3 - (<span class="hljs-keyword">int</span>)a2) / <span class="hljs-number">2</span> + a2;            <span class="hljs-comment">// 7</span><br>  <span class="hljs-keyword">if</span> ( v3 &gt; (<span class="hljs-keyword">int</span>)a1 )<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)func4(a1, a2, (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)(v3 - <span class="hljs-number">1</span>));<br>  result = <span class="hljs-number">0LL</span>;                                 <span class="hljs-comment">// v3 == a1 </span><br>  <span class="hljs-keyword">if</span> ( v3 &lt; (<span class="hljs-keyword">int</span>)a1 )<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)func4(a1, (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)(v3 + <span class="hljs-number">1</span>), a3) + <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -347,21 +101,21 @@
 <h2 id="phase-6"><a href="#phase-6" class="headerlink" title="phase_6"></a>phase_6</h2><p>在<code>6</code>中的难度明显比前<code>5</code>个要大一些，程序段变得复杂了很多，但是仍然可以通过不断的调试进行判断出来程序的行为。</p>
 <blockquote>
 <p>程序的函数明显多了很多：</p>
-<img src="https://s2.loli.net/2022/04/03/mIbuVKrgG8JxYEl.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+<img src="https://s2.loli.net/2022/04/03/mIbuVKrgG8JxYEl.png" style="zoom:50%;" />
 </blockquote>
 <p>对于这个较大的“过程”，我们将其一步步进行分析，在上面图的左边部分是程序最开始执行的一部分，在多次循环后进入到右半部分。</p>
 <p>这个函数整体的汇编如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><code class="hljs assembly">public phase_6<br>.text:00000000004010F4     phase_6 proc near             ; CODE XREF: main+126↑p<br>.text:00000000004010F4<br>.text:00000000004010F4     input= dword ptr -78h<br>.text:00000000004010F4     var_60= byte ptr -60h<br>.text:00000000004010F4     var_58= qword ptr -58h<br>.text:00000000004010F4     var_50= byte ptr -50h<br>.text:00000000004010F4     var_28= byte ptr -28h<br>.text:00000000004010F4<br>.text:00000000004010F4     ; __unwind &#123;<br>.text:00000000004010F4 000 push    r14<br>.text:00000000004010F6 008 push    r13<br>.text:00000000004010F8 010 push    r12<br>.text:00000000004010FA 018 push    rbp<br>.text:00000000004010FB 020 push    rbx<br>.text:00000000004010FC 028 sub     rsp, 50h              ; Integer Subtraction<br>.text:0000000000401100 078 mov     r13, rsp<br>.text:0000000000401103 078 mov     rsi, rsp<br>.text:0000000000401106 078 call    read_six_numbers      ; Call Procedure<br>.text:0000000000401106<br>.text:000000000040110B 078 mov     r14, rsp<br>.text:000000000040110E 078 mov     r12d, 0<br>.text:000000000040110E<br>.text:0000000000401114<br>.text:0000000000401114     loc_401114:                   ; CODE XREF: phase_6+5D↓j<br>.text:0000000000401114 078 mov     rbp, r13              ; 返回处偏移加了4<br>.text:0000000000401117 078 mov     eax, [r13+0]<br>.text:000000000040111B 078 sub     eax, 1                ; 输入的第一个数字减1<br>.text:000000000040111E 078 cmp     eax, 5                ; 小于5<br>.text:0000000000401121 078 jbe     short loc_401128      ; Jump if Below or Equal (CF=1 | ZF=1)<br>.text:0000000000401121<br>.text:0000000000401123 078 call    explode_bomb          ; Call Procedure<br>.text:0000000000401123<br>.text:0000000000401128     ; ---------------------------------------------------------------------------<br>.text:0000000000401128<br>.text:0000000000401128     loc_401128:                   ; CODE XREF: phase_6+2D↑j<br>.text:0000000000401128 078 add     r12d, 1               ; Add<br>.text:000000000040112C 078 cmp     r12d, 6               ; 控制循环，共6次<br>.text:0000000000401130 078 jz      short loc_401153      ; Jump if Zero (ZF=1)<br>.text:0000000000401130<br>.text:0000000000401132 078 mov     ebx, r12d<br>.text:0000000000401132<br>.text:0000000000401135<br>.text:0000000000401135     loc_401135:                   ; CODE XREF: phase_6+57↓j<br>.text:0000000000401135 078 movsxd  rax, ebx              ; Move with Sign-Extend Doubleword<br>.text:0000000000401138 078 mov     eax, [rsp+rax*4]<br>.text:000000000040113B 078 cmp     [rbp+0], eax          ; 依次比较，判断每个输入都不同<br>.text:000000000040113E 078 jnz     short loc_401145      ; 不相等就跳转<br>.text:000000000040113E<br>.text:0000000000401140 078 call    explode_bomb          ; Call Procedure<br>.text:0000000000401140<br>.text:0000000000401145     ; ---------------------------------------------------------------------------<br>.text:0000000000401145<br>.text:0000000000401145     loc_401145:                   ; CODE XREF: phase_6+4A↑j<br>.text:0000000000401145 078 add     ebx, 1                ; 控制循环，共6次<br>.text:0000000000401148 078 cmp     ebx, 5                ; Compare Two Operands<br>.text:000000000040114B 078 jle     short loc_401135      ; Jump if Less or Equal (ZF=1 | SF!=OF)<br>.text:000000000040114B<br>.text:000000000040114D 078 add     r13, 4                ; 向下偏移4个字节，取后面输入数字<br>.text:0000000000401151 078 jmp     short loc_401114      ; 返回处偏移加了4<br>.text:0000000000401151<br>.text:0000000000401153     ; ---------------------------------------------------------------------------<br>.text:0000000000401153<br>.text:0000000000401153     loc_401153:                   ; CODE XREF: phase_6+3C↑j<br>.text:0000000000401153 078 lea     rsi, [rsp+24]         ; Load Effective Address<br>.text:0000000000401158 078 mov     rax, r14<br>.text:000000000040115B 078 mov     ecx, 7<br>.text:000000000040115B<br>.text:0000000000401160<br>.text:0000000000401160     loc_401160:                   ; CODE XREF: phase_6+79↓j<br>.text:0000000000401160 078 mov     edx, ecx              ; 7<br>.text:0000000000401160                                   ; 把ecx的值给edx<br>.text:0000000000401162 078 sub     edx, [rax]            ; Integer Subtraction<br>.text:0000000000401164 078 mov     [rax], edx            ; 7 - 每一位输入，将其结果替换为输入的数字中<br>.text:0000000000401166 078 add     rax, 4                ; 输入数字向下取一位<br>.text:000000000040116A 078 cmp     rax, rsi              ; 判断是否处理完输入的6个数字<br>.text:000000000040116D 078 jnz     short loc_401160      ; 7<br>.text:000000000040116D                                   ; 把ecx的值给edx<br>.text:000000000040116D<br>.text:000000000040116F 078 mov     esi, 0<br>.text:0000000000401174 078 jmp     short loc_401197      ; Jump<br>.text:0000000000401174<br>.text:0000000000401176     ; ---------------------------------------------------------------------------<br>.text:0000000000401176<br>.text:0000000000401176     loc_401176:                   ; CODE XREF: phase_6+8B↓j<br>.text:0000000000401176                                   ; phase_6+B5↓j<br>.text:0000000000401176 078 mov     rdx, [rdx+8]          ; node1向下偏移8字节<br>.text:000000000040117A 078 add     eax, 1                ; Add<br>.text:000000000040117D 078 cmp     eax, ecx              ; 找到对应数字所对应的node<br>.text:000000000040117F 078 jnz     short loc_401176      ; node1向下偏移8字节<br>.text:000000000040117F<br>.text:0000000000401181 078 jmp     short loc_401188      ; 存储对应node数据<br>.text:0000000000401181                                   ; 将node进行保存到输入中，<br>.text:0000000000401181                                   ; 每次偏移两个单位，当好去除掉了空格<br>.text:0000000000401181<br>.text:0000000000401183     ; ---------------------------------------------------------------------------<br>.text:0000000000401183<br>.text:0000000000401183     loc_401183:                   ; CODE XREF: phase_6+A9↓j<br>.text:0000000000401183 078 mov     edx, offset node1<br>.text:0000000000401183<br>.text:0000000000401188<br>.text:0000000000401188     loc_401188:                   ; CODE XREF: phase_6+8D↑j<br>.text:0000000000401188 078 mov     [rsp+rsi*2+32], rdx   ; 存储对应node数据<br>.text:0000000000401188                                   ; 将node进行保存到输入中，<br>.text:0000000000401188                                   ; 每次偏移两个单位，当好去除掉了空格<br>.text:000000000040118D 078 add     rsi, 4                ; Add<br>.text:0000000000401191 078 cmp     rsi, 18h              ; 循环6次<br>.text:0000000000401195 078 jz      short loc_4011AB      ; Jump if Zero (ZF=1)<br>.text:0000000000401195<br>.text:0000000000401197<br>.text:0000000000401197     loc_401197:                   ; CODE XREF: phase_6+80↑j<br>.text:0000000000401197 078 mov     ecx, [rsp+rsi]<br>.text:000000000040119A 078 cmp     ecx, 1                ; 取减完后的每一项与1进行比较<br>.text:000000000040119D 078 jle     short loc_401183      ; 不等于往左，等于往右<br>.text:000000000040119D<br>.text:000000000040119F 078 mov     eax, 1<br>.text:00000000004011A4 078 mov     edx, offset node1     ; 将node1地址给edx<br>.text:00000000004011A9 078 jmp     short loc_401176      ; node1向下偏移8字节<br>.text:00000000004011A9<br>.text:00000000004011AB     ; ---------------------------------------------------------------------------<br>.text:00000000004011AB<br>.text:00000000004011AB     loc_4011AB:                   ; CODE XREF: phase_6+A1↑j<br>.text:00000000004011AB 078 mov     rbx, [rsp+32]<br>.text:00000000004011B0 078 lea     rax, [rsp+40]         ; Load Effective Address<br>.text:00000000004011B5 078 lea     rsi, [rsp+80]         ; 将rsi置0<br>.text:00000000004011BA 078 mov     rcx, rbx<br>.text:00000000004011BA<br>.text:00000000004011BD<br>.text:00000000004011BD     loc_4011BD:                   ; CODE XREF: phase_6+DC↓j<br>.text:00000000004011BD 078 mov     rdx, [rax]<br>.text:00000000004011C0 078 mov     [rcx+8], rdx          ; rcx对应node起始地址<br>.text:00000000004011C4 078 add     rax, 8                ; Add<br>.text:00000000004011C8 078 cmp     rax, rsi              ; 判断是否循环完毕<br>.text:00000000004011CB 078 jz      short loc_4011D2      ; Jump if Zero (ZF=1)<br>.text:00000000004011CB<br>.text:00000000004011CD 078 mov     rcx, rdx<br>.text:00000000004011D0 078 jmp     short loc_4011BD      ; Jump<br>.text:00000000004011D0<br>.text:00000000004011D2     ; ---------------------------------------------------------------------------<br>.text:00000000004011D2<br>.text:00000000004011D2     loc_4011D2:                   ; CODE XREF: phase_6+D7↑j<br>.text:00000000004011D2 078 mov     qword ptr [rdx+8], 0<br>.text:00000000004011DA 078 mov     ebp, 5<br>.text:00000000004011DA<br>.text:00000000004011DF<br>.text:00000000004011DF     loc_4011DF:                   ; CODE XREF: phase_6+101↓j<br>.text:00000000004011DF 078 mov     rax, [rbx+8]          ; 将node中的数据段给rax<br>.text:00000000004011E3 078 mov     eax, [rax]<br>.text:00000000004011E5 078 cmp     [rbx], eax            ; 比较后一项和前一项的大小<br>.text:00000000004011E7 078 jge     short loc_4011EE      ; 后一项的数据小于前一项时跳转<br>.text:00000000004011E7<br>.text:00000000004011E9 078 call    explode_bomb          ; Call Procedure<br>.text:00000000004011E9<br>.text:00000000004011EE     ; ---------------------------------------------------------------------------<br>.text:00000000004011EE<br>.text:00000000004011EE     loc_4011EE:                   ; CODE XREF: phase_6+F3↑j<br>.text:00000000004011EE 078 mov     rbx, [rbx+8]<br>.text:00000000004011F2 078 sub     ebp, 1                ; Integer Subtraction<br>.text:00000000004011F5 078 jnz     short loc_4011DF      ; 将node中的数据段给rax<br>.text:00000000004011F5<br>.text:00000000004011F7 078 add     rsp, 50h              ; Add<br>.text:00000000004011FB 028 pop     rbx<br>.text:00000000004011FC 020 pop     rbp<br>.text:00000000004011FD 018 pop     r12<br>.text:00000000004011FF 010 pop     r13<br>.text:0000000000401201 008 pop     r14<br>.text:0000000000401203 000 retn                          ; Return Near from Procedure<br>.text:0000000000401203     ; &#125; // starts at 4010F4<br></code></pre></td></tr></table></figure>
 
 <p>可以看到有多个函数，我们切换到图形模式：</p>
-<p><img src="https://s2.loli.net/2022/04/03/B56OhTHM7mDo8gS.png" srcset="/img/loading.gif" lazyload><br><img src="https://s2.loli.net/2022/04/03/SBViRqdIFpsQM4x.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/04/03/B56OhTHM7mDo8gS.png"><br><img src="https://s2.loli.net/2022/04/03/SBViRqdIFpsQM4x.png"></p>
 <p>在左半部分，多次调试壳以判断出对应函数的第一个部分是确保输入不同，采用了两个循环进行遍历。</p>
 <p>再看看右半部分：</p>
-<p><img src="https://s2.loli.net/2022/04/03/i5wAenhazEGTHSj.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
+<p><img src="https://s2.loli.net/2022/04/03/i5wAenhazEGTHSj.png" alt="9.png"></p>
 <p>在函数<code>loc_40153</code>、<code>loc_401160</code>中将我们输入的每一位数字用<code>7</code>减去后保存在原来的位置上，完成后跳转到下一个部分。</p>
-<p><img src="https://s2.loli.net/2022/04/03/WvKgZBAjRT5bf4h.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
+<p><img src="https://s2.loli.net/2022/04/03/WvKgZBAjRT5bf4h.png" alt="10.png"></p>
 <p>在这段程序中我们可以注意到有一个<code>node</code>的偏移，可是打开<code>node</code>查看对应的数据会发现十分的奇怪，但是稍微修复一下可以得到：</p>
-<img src="https://s2.loli.net/2022/04/03/8I2od5fy1gwW3z6.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/04/03/8I2od5fy1gwW3z6.png" style="zoom:80%;" />
 
 <p>发现什么了吗？每一个<code>node</code>中都存放着一共偏移量，用来指向另一个<code>node</code>，意味着这个<code>node</code>构成的是一个链表结构，而第一个数据也便是其链表中的数据部分。</p>
 <p>我们在调试中可以发现程序将用<code>7</code>减去我们的输入后的数据保存在原来位置上，之后通过<code>loc_401176</code>对整个链表进行遍历，直到我们的输入和寄存器<code>eax</code>中数据大小一致时将链表中的数据进行保存。</p>
@@ -370,7 +124,7 @@
 <p> node1 -&gt; 1     |     node2 -&gt; 2     |    …</p>
 </blockquote>
 <p>保存之后程序会对我们保存的寄存器值每次取两个，共<code>5</code>次，将寄存器中数据的前一个节点和后一个节点的值进行比较。当后面的数据小于前面的数据时，继续下一次循环，如果出现小于等于时，则引爆炸弹。</p>
-<p><img src="https://s2.loli.net/2022/04/03/9d8wQLMt4hNiveX.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/04/03/9d8wQLMt4hNiveX.png"></p>
 <blockquote>
 <p>更正上图一个错误点，于<code>loc_4011FF</code>处，应该是后一项的数据小于前一项时跳转。</p>
 </blockquote>
@@ -400,424 +154,141 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function">__int64 __fastcall <span class="hljs-title">fun7</span><span class="hljs-params">(__int64 a1, __int64 a2)</span></span><br><span class="hljs-function"></span>&#123;<br>  __int64 result; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">if</span> ( !a1 )<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0xFFFFFFFF</span>LL;<br>  <span class="hljs-keyword">if</span> ( *(_DWORD *)a1 &gt; (<span class="hljs-keyword">int</span>)a2 )<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)fun7(*(_QWORD *)(a1 + <span class="hljs-number">8</span>), a2);<br>  result = <span class="hljs-number">0LL</span>;<br>  <span class="hljs-keyword">if</span> ( *(_DWORD *)a1 != (_DWORD)a2 )<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)fun7(*(_QWORD *)(a1 + <span class="hljs-number">16</span>), a2) + <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>看起来似乎又是一个递归调用，我们回到传入的数据<code>a1</code>中，经过修复后可以看到：</p>
-<p><img src="https://s2.loli.net/2022/04/03/qWt9o6uyhXcwlCQ.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/04/03/qWt9o6uyhXcwlCQ.png"></p>
 <p>所以对应的<code>fun7</code>是一个二叉树，我们画出对应的树状图：</p>
-<p><img src="https://s2.loli.net/2022/04/03/KqzQN2pmTVidJwn.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/04/03/KqzQN2pmTVidJwn.png"></p>
 <p>若访问到空节点，则返回值会出现<code>0xffffffff</code>，所以我们只能在树上（软件原因树的最右分枝未补全）的节点选择。通过代码我们知道，若从节点<code>n1</code>出发初始值为<code>0x24</code>，若改节点为右儿子则<code>a=2*a+1</code>、为左儿子则<code>a=a*2</code>。所以<code>0x16</code>、<code>0x14</code>节点都可以在到达根节点时返回<code>a=2</code>，输入任意一值即可通关。</p>
 
-                
-              </div>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
         
-  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
-  
-  
 
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci='01ed89abee289d37f2f8'
+        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
+        data-r='equinox-shame.github.io'
+        data-o='Equinox-shame'
+        data-a='Equinox-shame'
+        data-d='false'
+    >查看评论</div>
 
 
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>CSAPP - Bomb Lab</div>
-      <div>https://equinox-shame.github.io/2022/04/03/Bomb Lab/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>Aŭtoro</div>
-          <div>梓曰</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>Postigita</div>
-          <div>April 3, 2022</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>Lizenta</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/04/07/Win32%20%E7%BC%96%E7%A8%8B/" title="Win 32 编程">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Win 32 编程</span>
-                        <span class="visible-mobile">Antaŭa afiŝo</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/03/29/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E9%80%86%E5%90%91/" title="一些简单逆向">
-                        <span class="hidden-mobile">一些简单逆向</span>
-                        <span class="visible-mobile">Sekva afiŝo</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  <article id="comments" lazyload>
-    
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-  </article>
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Enhavtabelo</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Serĉi</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">ŝlosivorto</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="leancloud-site-pv-container" style="display: none">
-        Vidoj: 
-        <span id="leancloud-site-pv"></span>
         
-      </span>
+    </div>
     
-    
-      <span id="leancloud-site-uv-container" style="display: none">
-        Visitoj: 
-        <span id="leancloud-site-uv"></span>
-        
-      </span>
-    
-    
-
-  
 </div>
 
-  
-  
-  
+
+    </div>
 </div>
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script defer src="/js/leancloud.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">Blogo funkcias plej bone kun JavaScript ebligita</div>
-  </noscript>
 </body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
 </html>
