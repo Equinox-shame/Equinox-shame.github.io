@@ -1,0 +1,700 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="DebugMe打开程序可以看到程序就只是弹出了一段对话： 12I heard you like bugs so I put bugs in your debugger so you can have bugs while you debug!!!Seriously though try and find the flag, you will find it in your debugger!!!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SMC 逆向分析">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/04/12/DebugMe/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="DebugMe打开程序可以看到程序就只是弹出了一段对话： 12I heard you like bugs so I put bugs in your debugger so you can have bugs while you debug!!!Seriously though try and find the flag, you will find it in your debugger!!!">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-12T03:40:10.336Z">
+<meta property="article:modified_time" content="2022-04-12T03:46:26.325Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SMC 逆向分析 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SMC 逆向分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-12 11:40" pubdate>
+          April 12, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          93 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SMC 逆向分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="DebugMe"><a href="#DebugMe" class="headerlink" title="DebugMe"></a>DebugMe</h1><p>打开程序可以看到程序就只是弹出了一段对话：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim">I heard you like bugs <span class="hljs-keyword">so</span> I <span class="hljs-keyword">put</span> bugs in your debugger <span class="hljs-keyword">so</span> you can have bugs <span class="hljs-keyword">while</span> you debug!!!<br>Seriously though <span class="hljs-keyword">try</span> <span class="hljs-built_in">and</span> <span class="hljs-keyword">find</span> the flag, you will <span class="hljs-keyword">find</span> it in your debugger!!!<br></code></pre></td></tr></table></figure>
+
+<p>大致判断出是一个自解密，在调试过程中可以直接得到</p>
+<p>字符串里看到有对应的字符串，但是没有交叉引用，同时也有对指针的加密解密过程，因此推断可能是一个<code>SMC</code>，对应的区段已经被加密过，在调试过程中进行还原。</p>
+<p>拖入<code>010</code>查看节区数发现有14个节区，感觉有点不对劲，进行了一下简单调试发现似乎有反调试，直接程序无法开跑。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">mainCRTStartup_0</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v0; <span class="hljs-comment">// eax</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v1; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">int</span> v2; <span class="hljs-comment">// ebx</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v3; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">int</span> (__cdecl *v4)(<span class="hljs-keyword">int</span>, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **); <span class="hljs-comment">// eax</span><br><br>  LOBYTE(v0) = NtCurrentPeb()-&gt;BeingDebugged;   <span class="hljs-comment">// 反调试？</span><br>  <span class="hljs-keyword">if</span> ( !(_BYTE)v0 )<br>  &#123;<br>    LOBYTE(v0) = NtCurrentPeb()-&gt;NtGlobalFlag;<br>    <span class="hljs-keyword">if</span> ( !(_BYTE)v0 )<br>    &#123;<br>      v1 = __rdtsc();<br>      v2 = v1;<br>      v3 = __rdtsc();<br>      v0 = v3 - v2;<br>      <span class="hljs-keyword">if</span> ( v0 &lt;= <span class="hljs-number">1000</span> )<br>      &#123;<br>        v4 = main;<br>        <span class="hljs-keyword">do</span><br>        &#123;<br>          *(_BYTE *)v4 ^= <span class="hljs-number">0x5C</span>u;<span class="hljs-comment">//因该是加密部分，同时也是解密</span><br>          v4 = (<span class="hljs-keyword">int</span> (__cdecl *)(<span class="hljs-keyword">int</span>, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **))((<span class="hljs-keyword">char</span> *)v4 + <span class="hljs-number">1</span>);<br>        &#125;<br>        <span class="hljs-keyword">while</span> ( (<span class="hljs-keyword">int</span>)v4 &lt;= (<span class="hljs-keyword">int</span>)sub_401791 );<br>        mingw_app_type = <span class="hljs-number">0</span>;<br>        __security_init_cookie();<br>        LOBYTE(v0) = __tmainCRTStartup();<br>      &#125;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> v0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在上面看到大致加密因该是采用了异或的方式进行的处理，讲字节码进行异或<code>0x5C (92)</code></p>
+<p>接下来就是找到对应加密的节区，节区长度，对其进行解密，可能要写<code>idc</code>脚本？(不会写😢)于是只能找到后到<code>010</code>进行手动修复。</p>
+<blockquote>
+<p>后面发现可以自己解密，如果想要保持解密后的状态就要自己写解密脚本或者<code>010</code>手动修复了</p>
+</blockquote>
+<p>通过不断的打断点判断哪里之前会遇到反调试，最终程序停在了这个函数处<code>mainCRTStartup_0</code>，也就是上面代码块的内容，其会对<code>v0</code>进行判断，看其是否为假，如果为真则证明触发反调试，其值被设置为了<code>1</code>，也就是常见的反调试判断<code>eax</code>是否为<code>0</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs assembly">; 10:   if ( !(_BYTE)v0 )<br>.text:0040890D mov     dl, al<br>.text:0040890F cmp     al, 0                 ; al为1触发反调试<br>.text:00408911 jnz     short loc_408992      ; 退出解密<br>.text:00408911<br>.text:00408913 jmp     $+5<br>.text:00408913<br>.text:00408918 ; ---------------------------------------------------------------------------<br>.text:00408918 ; 12:     LOBYTE(v0) = NtCurrentPeb()-&gt;NtGlobalFlag;<br>.text:00408918<br>.text:00408918 loc_408918:                   ; CODE XREF: _mainCRTStartup_0+F↑j<br>.text:00408918 xor     eax, eax<br>.text:0040891A xor     edx, edx<br>.text:0040891C mov     eax, large fs:30h<br>.text:00408922 mov     al, [eax+68h]<br>.text:00408925 ; 13:     if ( !(_BYTE)v0 )<br>.text:00408925 mov     dl, al<br>.text:00408927 cmp     al, 0<br>.text:00408929 jnz     short loc_408992      ; 退出解密<br></code></pre></td></tr></table></figure>
+
+<p>我们通过<code>set ip</code>进行绕过这个判断状态，进入到<code>if</code>函数内部，内部中仍然有一个<code>if ( !(_BYTE)v0 )</code>判断是否处于调试状态，仍然通过<code>set ip</code>进行绕过，进行解密完毕后就进入了如下函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">int</span> __tmainCRTStartup()<br>&#123;<br>  <span class="hljs-keyword">void</span> *v0; <span class="hljs-comment">// esp</span><br>  <span class="hljs-keyword">void</span> *v1; <span class="hljs-comment">// esp</span><br>  <span class="hljs-keyword">int</span> v2; <span class="hljs-comment">// eax</span><br>  _BYTE v4[<span class="hljs-number">84</span>]; <span class="hljs-comment">// [esp+10h] [ebp-78h] BYREF</span><br>  <span class="hljs-keyword">int</span> v5; <span class="hljs-comment">// [esp+64h] [ebp-24h]</span><br>  LONG *v6; <span class="hljs-comment">// [esp+68h] [ebp-20h]</span><br>  LONG Exchange; <span class="hljs-comment">// [esp+6Ch] [ebp-1Ch]</span><br>  LONG v8; <span class="hljs-comment">// [esp+70h] [ebp-18h]</span><br>  <span class="hljs-keyword">int</span> v9; <span class="hljs-comment">// [esp+74h] [ebp-14h]</span><br>  BOOL v10; <span class="hljs-comment">// [esp+78h] [ebp-10h]</span><br>  <span class="hljs-keyword">void</span> *i; <span class="hljs-comment">// [esp+7Ch] [ebp-Ch]</span><br><br>  v10 = <span class="hljs-number">0</span>;<br>  <span class="hljs-built_in">memset</span>(&amp;v4[<span class="hljs-number">16</span>], <span class="hljs-number">0</span>, <span class="hljs-number">0x44</span>u);<br>  v0 = alloca(<span class="hljs-number">48</span>);<br>  v1 = alloca(<span class="hljs-number">48</span>);<br>  i = v4;<br>  <span class="hljs-built_in">memset</span>(v4, <span class="hljs-number">204</span>, <span class="hljs-number">0x20</span>u);<br>  <span class="hljs-keyword">if</span> ( mingw_app_type )<br>    GetStartupInfoA((LPSTARTUPINFOA)&amp;v4[<span class="hljs-number">16</span>]);   <span class="hljs-comment">// 获取启动信息，来判断是否被调试</span><br>  v8 = <span class="hljs-number">0</span>;<br>  Exchange = *(_DWORD *)(NtCurrentTeb() + <span class="hljs-number">4</span>);<br>  v9 = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>  &#123;<br>    v8 = InterlockedCompareExchange(&amp;__native_startup_lock, Exchange, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span> ( !v8 )<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">if</span> ( v8 == Exchange )<br>    &#123;<br>      v9 = <span class="hljs-number">1</span>;<br>      <span class="hljs-keyword">break</span>;<br>    &#125;<br>    Sleep(<span class="hljs-number">0x3E8</span>u);<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( __native_startup_state == <span class="hljs-number">1</span> )<br>  &#123;<br>    _amsg_exit(<span class="hljs-number">31</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( __native_startup_state )<br>  &#123;<br>    has_cctor = <span class="hljs-number">1</span>;<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    __native_startup_state = <span class="hljs-number">1</span>;<br>    _initterm(&amp;__crt_xc_end__, &amp;__xi_z);<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( __native_startup_state == <span class="hljs-number">1</span> )<br>  &#123;<br>    _initterm(&amp;__crt_xc_start__, &amp;__xc_z);<br>    __native_startup_state = <span class="hljs-number">2</span>;<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( !v9 )<br>  &#123;<br>    v6 = &amp;__native_startup_lock;<br>    v5 = <span class="hljs-number">0</span>;<br>    v5 = _InterlockedExchange(&amp;__native_startup_lock, <span class="hljs-number">0</span>);<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( __dyn_tls_init_callback )<br>    __dyn_tls_init_callback(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>);<br>  _pei386_runtime_relocator();                  <span class="hljs-comment">// 解密</span><br>  __mingw_oldexcpt_handler = (<span class="hljs-keyword">int</span>)SetUnhandledExceptionFilter(_gnu_exception_handler);<br>  __mingw_prepare_except_for_msvcr80_and_higher();<br>  fpreset();<br>  <span class="hljs-keyword">if</span> ( mingw_app_type )<br>  &#123;<br>    <span class="hljs-keyword">for</span> ( i = __acmdln; *(<span class="hljs-keyword">char</span> *)i &gt; <span class="hljs-number">32</span> || *(_BYTE *)i &amp;&amp; v10; i = (<span class="hljs-keyword">char</span> *)i + <span class="hljs-number">1</span> )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( *(_BYTE *)i == <span class="hljs-number">34</span> )<br>        v10 = !v10;<br>    &#125;<br>    <span class="hljs-keyword">while</span> ( *(_BYTE *)i &amp;&amp; *(<span class="hljs-keyword">char</span> *)i &lt;= <span class="hljs-number">32</span> )<br>      i = (<span class="hljs-keyword">char</span> *)i + <span class="hljs-number">1</span>;<br>    __mingw_winmain_hInstance = <span class="hljs-number">0x400000</span>;<br>    __mingw_winmain_lpCmdLine = (<span class="hljs-keyword">int</span>)i;<br>    <span class="hljs-keyword">if</span> ( (v4[<span class="hljs-number">60</span>] &amp; <span class="hljs-number">1</span>) != <span class="hljs-number">0</span> )<br>      v2 = *(<span class="hljs-keyword">unsigned</span> __int16 *)&amp;v4[<span class="hljs-number">64</span>];<br>    <span class="hljs-keyword">else</span><br>      v2 = <span class="hljs-number">10</span>;<br>    __mingw_winmain_nShowCmd = v2;              <span class="hljs-comment">// 调用控制台</span><br>  &#125;<br>  duplicate_ppstrings(_bss_start__, &amp;argv);<br>  __main();<br>  ___initenv = envp;<br>  mainret = main(_bss_start__, (<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **)argv, (<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **)envp);<span class="hljs-comment">// 启动主程序</span><br>  <span class="hljs-keyword">if</span> ( !managedapp )<br>    <span class="hljs-built_in">exit</span>(mainret);<br>  <span class="hljs-keyword">if</span> ( !has_cctor )<br>    _cexit();<br>  <span class="hljs-keyword">return</span> mainret;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>此时进入主函数<code>main</code>可以看到大部分数据已经被修复好了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br></pre></td><td class="code"><pre><code class="hljs assembly">_main:                        ; CODE XREF: ___tmainCRTStartup+2C3↑p<br>.text:00401620                               ; DATA XREF: _mainCRTStartup_0+6A↓o<br>.text:00401620 push    ebp<br>.text:00401621 mov     ebp, esp<br>.text:00401623 xor     eax, eax<br>.text:00401625 xor     edx, edx<br>.text:00401627 mov     eax, large fs:30h<br>.text:0040162D mov     al, [eax+2]<br>.text:00401630 mov     dl, al<br>.text:00401632 cmp     al, 0<br>.text:00401634 jnz     short _d<br>.text:00401634<br>.text:00401636 jmp     $+5<br>.text:00401636<br>.text:0040163B ; ---------------------------------------------------------------------------<br>.text:0040163B<br>.text:0040163B _G:                           ; CODE XREF: .text:00401636↑j<br>.text:0040163B xor     eax, eax<br>.text:0040163D xor     edx, edx<br>.text:0040163F mov     eax, large fs:30h<br>.text:00401645 mov     al, [eax+68h]<br>.text:00401648 mov     dl, al<br>.text:0040164A cmp     al, 0<br>.text:0040164C jnz     short _d<br>.text:0040164C<br>.text:0040164E rdtsc<br>.text:00401650 mov     ebx, eax<br>.text:00401652 push    ecx<br>.text:00401653 pop     ecx<br>.text:00401654 add     edi, edi<br>.text:00401656 sub     edi, edi<br>.text:00401658 push    esi<br>.text:00401659 pop     esi<br>.text:0040165A add     ecx, ecx<br>.text:0040165C sub     ecx, ecx<br>.text:0040165E push    esi<br>.text:0040165F pop     esi<br>.text:00401660 add     edi, edi<br>.text:00401662 sub     edi, edi<br>.text:00401664 push    ecx<br>.text:00401665 pop     ecx<br>.text:00401666 add     ecx, ecx<br>.text:00401668 sub     ecx, ecx<br>.text:0040166A add     edi, edi<br>.text:0040166C sub     edi, edi<br>.text:0040166E push    esi<br>.text:0040166F pop     esi<br>.text:00401670 rdtsc<br>.text:00401672 sub     eax, ebx<br>.text:00401674 cmp     eax, 3E8h<br>.text:00401679 jg      short _d<br>.text:00401679<br>.text:0040167B jmp     _n<br>.text:0040167B<br>.text:00401680 ; ---------------------------------------------------------------------------<br>.text:00401680<br>.text:00401680 _d:                           ; CODE XREF: .text:00401634↑j<br>.text:00401680                               ; .text:0040164C↑j<br>.text:00401680                               ; .text:00401679↑j<br>.text:00401680 push    offset __data_start__ ; &quot;Looks like your doing something naughty&quot;...<br>.text:00401685 call    _printf<br>.text:00401685<br>.text:0040168A add     esp, 4<br>.text:00401690 mov     esp, ebp<br>.text:00401692 pop     ebp<br>.text:00401693 retn<br>.text:00401693<br>.text:00401694 ; ---------------------------------------------------------------------------<br>.text:00401694<br>.text:00401694 _n:                           ; CODE XREF: .text:0040167B↑j<br>.text:00401694 push    offset m1             ; &quot;I heard you like bugs so I put bugs in &quot;...<br>.text:00401699 call    _printf<br>.text:00401699<br>.text:0040169E add     esp, 4<br>.text:004016A4 push    offset m2             ; &quot;Seriously though try and find the flag,&quot;...<br>.text:004016A9 call    _printf<br>.text:004016A9<br>.text:004016AE add     esp, 4<br>.text:004016B4 xor     eax, eax<br>.text:004016B6 mov     eax, 6A253E2Dh<br>.text:004016BB push    eax<br>.text:004016BC jmp     $+5<br>.text:004016BC<br>.text:004016C1 ; ---------------------------------------------------------------------------<br>.text:004016C1<br>.text:004016C1 _lol:                         ; CODE XREF: .text:004016BC↑j<br>.text:004016C1 sub     eax, 560C29FCh<br>.text:004016C6 push    eax<br>.text:004016C7 jmp     $+5<br>.text:004016C7<br>.text:004016CC ; ---------------------------------------------------------------------------<br>.text:004016CC<br>.text:004016CC _yaya:                        ; CODE XREF: .text:004016C7↑j<br>.text:004016CC and     eax, 41414141h<br>.text:004016D1 and     eax, 3E3E3E3Eh<br>.text:004016D6 mov     eax, 6A253E2Dh<br>.text:004016DB sub     eax, 49FD1BF4h<br>.text:004016E0 push    eax<br>.text:004016E1 jmp     $+5<br>.text:004016E1<br>.text:004016E6 ; ---------------------------------------------------------------------------<br>.text:004016E6<br>.text:004016E6 _lala:                        ; CODE XREF: .text:004016E1↑j<br>.text:004016E6 xor     eax, eax<br>.text:004016E8 mov     eax, 6A253E2Dh<br>.text:004016ED sub     eax, 2B1124FFh<br>.text:004016F2 push    eax<br>.text:004016F3 jmp     $+5<br>.text:004016F3<br>.text:004016F8 ; ---------------------------------------------------------------------------<br>.text:004016F8<br>.text:004016F8 _dsfghtgf:                    ; CODE XREF: .text:004016F3↑j<br>.text:004016F8 and     eax, 41414141h<br>.text:004016FD and     eax, 3E3E3E3Eh<br>.text:00401702 mov     eax, 6A253E2Dh<br>.text:00401707 sub     eax, 5E190004h<br>.text:0040170C push    eax<br>.text:0040170D jmp     $+5<br>.text:0040170D<br>.text:00401712 ; ---------------------------------------------------------------------------<br>.text:00401712<br>.text:00401712 _ertrwe:                      ; CODE XREF: .text:0040170D↑j<br>.text:00401712 and     eax, 41414141h<br>.text:00401717 and     eax, 3E3E3E3Eh<br>.text:0040171C mov     eax, 6A253E2Dh<br>.text:00401721 add     eax, 0DE9D64Dh<br>.text:00401726 push    eax<br>.text:00401727 jmp     $+5<br>.text:00401727<br>.text:0040172C ; ---------------------------------------------------------------------------<br>.text:0040172C<br>.text:0040172C _kjnjk:                       ; CODE XREF: .text:00401727↑j<br>.text:0040172C xor     eax, eax<br>.text:0040172E mov     eax, 6A253E2Dh<br>.text:00401733 sub     eax, 2B003419h<br>.text:00401738 push    eax<br>.text:00401739 jmp     $+5<br>.text:00401739<br>.text:0040173E ; ---------------------------------------------------------------------------<br>.text:0040173E<br>.text:0040173E _qsacb:                       ; CODE XREF: .text:00401739↑j<br>.text:0040173E and     eax, 41414141h<br>.text:00401743 and     eax, 3E3E3E3Eh<br>.text:00401748 mov     eax, 6A253E2Dh<br>.text:0040174D sub     eax, 3E001C06h<br>.text:00401752 push    eax<br>.text:00401753 jmp     $+5<br>.text:00401753<br>.text:00401758 ; ---------------------------------------------------------------------------<br>.text:00401758<br>.text:00401758 _tftrtftc:                    ; CODE XREF: .text:00401753↑j<br>.text:00401758 and     eax, 41414141h<br>.text:0040175D and     eax, 3E3E3E3Eh<br>.text:00401762 mov     eax, 6A253E2Dh<br>.text:00401767 sub     eax, 42AA050Eh<br>.text:0040176C push    eax<br>.text:0040176D jmp     $+5<br>.text:0040176D<br>.text:00401772 ; ---------------------------------------------------------------------------<br>.text:00401772<br>.text:00401772 _sup:                         ; CODE XREF: .text:0040176D↑j<br>.text:00401772 push    esp<br>.text:00401773 pop     esi<br>.text:00401774 xor     edx, edx<br>.text:00401776 mov     edi, esi<br>.text:00401778 mov     edx, edi<br>.text:0040177A cld<br>.text:0040177B mov     ecx, 24h ; &#x27;$&#x27;<br>.text:00401780 mov     ebx, 4Bh ; &#x27;K&#x27;<br>.text:00401785 xor     eax, eax<br>.text:00401787 push    eax<br>.text:00401787<br>.text:00401788<br>.text:00401788 _l:                           ; CODE XREF: .text:0040178C↓j<br>.text:00401788 lodsb<br>.text:00401789 xor     eax, ebx<br>.text:0040178B stosb<br>.text:0040178C loop    _l<br>.text:0040178C<br>.text:0040178E mov     esp, ebp<br>.text:00401790 pop     ebp<br>.text:00401790<br>.text:00401791<br></code></pre></td></tr></table></figure>
+
+<p>试图生成一下函数，按一下<code>P</code>进行生成</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">unsigned</span> __int64 v3; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">int</span> v4; <span class="hljs-comment">// ebx</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v5; <span class="hljs-comment">// rax</span><br>  <span class="hljs-keyword">char</span> *v7; <span class="hljs-comment">// esi</span><br>  _BYTE *v8; <span class="hljs-comment">// edi</span><br>  <span class="hljs-keyword">int</span> v9; <span class="hljs-comment">// ecx</span><br>  <span class="hljs-keyword">char</span> v10; <span class="hljs-comment">// al</span><br>  _DWORD v11[<span class="hljs-number">9</span>]; <span class="hljs-comment">// [esp-24h] [ebp-24h] BYREF</span><br><br>  <span class="hljs-keyword">if</span> ( NtCurrentPeb()-&gt;BeingDebugged )<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Looks like your doing something naughty. Stop it!!!\n&quot;</span>);<br>  <span class="hljs-keyword">if</span> ( LOBYTE(NtCurrentPeb()-&gt;NtGlobalFlag) )<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Looks like your doing something naughty. Stop it!!!\n&quot;</span>);<br>  v3 = __rdtsc();<br>  v4 = v3;<br>  v5 = __rdtsc();<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-keyword">int</span>)v5 - v4 &gt; <span class="hljs-number">1000</span> )<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Looks like your doing something naughty. Stop it!!!\n&quot;</span>);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;I heard you like bugs so I put bugs in your debugger so you can have bugs while you debug!!!\n&quot;</span>);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Seriously though try and find the flag, you will find it in your debugger!!!\n&quot;</span>);<br>  v11[<span class="hljs-number">8</span>] = <span class="hljs-number">1780825645</span>;<br>  v11[<span class="hljs-number">7</span>] = <span class="hljs-number">337187889</span>;<br>  v11[<span class="hljs-number">6</span>] = <span class="hljs-number">539501113</span>;<br>  v11[<span class="hljs-number">5</span>] = <span class="hljs-number">1058281774</span>;<br>  v11[<span class="hljs-number">4</span>] = <span class="hljs-number">202128937</span>;<br>  v11[<span class="hljs-number">3</span>] = <span class="hljs-number">2014254202</span>;<br>  v11[<span class="hljs-number">2</span>] = <span class="hljs-number">1059392020</span>;<br>  v11[<span class="hljs-number">1</span>] = <span class="hljs-number">740631079</span>;<br>  v11[<span class="hljs-number">0</span>] = <span class="hljs-number">662386975</span>;<br>  v7 = (<span class="hljs-keyword">char</span> *)v11;<br>  v8 = v11;<br>  v9 = <span class="hljs-number">36</span>;<br>  <span class="hljs-keyword">do</span><br>  &#123;<br>    v10 = *v7++;<br>    *v8++ = v10 ^ <span class="hljs-number">0x4B</span>;<br>    --v9;<br>  &#125;<br>  <span class="hljs-keyword">while</span> ( v9 );<br>  <span class="hljs-keyword">return</span> sub_401791(<span class="hljs-number">0</span>, v11);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以很清楚的看到程序执行的过程了，对其进行分析即可！</p>
+<blockquote>
+<p>主要的加密过程还是异或，其实可以直接自己计算的，但是异或具有对称性，我们直接借助调试器进行解密即可</p>
+</blockquote>
+<p>需要注意的是程序在里面还是有反调试，会弹出对应的语句注意绕过即可</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">Looks like your doing something naughty. Stop it!!!<br></code></pre></td></tr></table></figure>
+
+<p>最终可以得到<code>FLAG</code></p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">Tr0lling_Ant1_D3buGGeR_trickz_R_fun!<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SMC 逆向分析</div>
+      <div>https://equinox-shame.github.io/2022/04/12/DebugMe/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 12, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/15/Linux%E6%B7%B7%E5%88%86%E7%AC%94%E8%AE%B0/" title="Linux 学习的一些总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux 学习的一些总结</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/07/Win32%20%E7%BC%96%E7%A8%8B/" title="Win 32 编程">
+                        <span class="hidden-mobile">Win 32 编程</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

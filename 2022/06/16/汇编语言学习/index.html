@@ -1,0 +1,1300 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基本概念一般概念汇编语言能够直接访问计算机硬件 地址总线是单向的，其他的是双向的。  其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&gt; 空间为2的N次方。 数据总线的宽度决定了CPU和未接数据传送的速度。 控制总线决定了CPU对外部器件的控制能力。  汇编器：将程序转换为机器语言连接器：将汇编器生成的单个文件进行组合为一个可执行程序调试器：使程序员单步执行程序，并检查寄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言学习">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/06/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="基本概念一般概念汇编语言能够直接访问计算机硬件 地址总线是单向的，其他的是双向的。  其中地址总线的数量决定了可寻址的存储单元大小，N根地址总线，对应寻址&gt; 空间为2的N次方。 数据总线的宽度决定了CPU和未接数据传送的速度。 控制总线决定了CPU对外部器件的控制能力。  汇编器：将程序转换为机器语言连接器：将汇编器生成的单个文件进行组合为一个可执行程序调试器：使程序员单步执行程序，并检查寄">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png">
+<meta property="og:image" content="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png">
+<meta property="og:image" content="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png">
+<meta property="article:published_time" content="2022-06-16T06:59:37.185Z">
+<meta property="article:modified_time" content="2022-07-06T10:37:10.574Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>汇编语言学习 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="汇编语言学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-16 14:59" pubdate>
+          June 16, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          121 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">汇编语言学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="一般概念"><a href="#一般概念" class="headerlink" title="一般概念"></a>一般概念</h3><p>汇编语言能够直接访问计算机硬件</p>
+<p>地址总线是单向的，其他的是双向的。</p>
+<blockquote>
+<p>其中地址总线的数量决定了可寻址的存储单元大小，<code>N</code>根地址总线，对应寻址&gt; 空间为<code>2的N次方</code>。</p>
+<p>数据总线的宽度决定了<code>CPU</code>和未接数据传送的速度。</p>
+<p>控制总线决定了<code>CPU</code>对外部器件的控制能力。</p>
+</blockquote>
+<p>汇编器：将程序转换为机器语言<br>连接器：将汇编器生成的单个文件进行组合为一个可执行程序<br>调试器：使程序员单步执行程序，并检查寄存器和内存状态</p>
+<h3 id="与高级语言区别"><a href="#与高级语言区别" class="headerlink" title="与高级语言区别"></a>与高级语言区别</h3><p>高级语言一条语句会被扩展为多条机器语言，而汇编语指令一条语句对应一条机器语言指令<br>同时高级语言易于移植，编译好的程序几乎能在任何计算机系统中运行，汇编语言不可移植，因为它是为特定处理器系列而设计的。</p>
+<h3 id="汇编语言的优势"><a href="#汇编语言的优势" class="headerlink" title="汇编语言的优势"></a>汇编语言的优势</h3><ol>
+<li>占用内存少，是编写嵌入式程序的理想工具</li>
+<li>允许程序员精确指定程序可执行代码</li>
+<li>可以对计算机硬件进行直接访问，对1要求高速度的代码进行手工优化</li>
+<li>有助于理解计算机硬件、操作系统和应用程序之间的交互</li>
+<li>一些高级语言对其数据进行了抽象，使其对在执行一些底层任务时不如汇编语言方便，如：位控制</li>
+<li>便于编写硬件设备驱动程序</li>
+</ol>
+<h3 id="内存的读写与地址空间"><a href="#内存的读写与地址空间" class="headerlink" title="内存的读写与地址空间"></a>内存的读写与地址空间</h3><p><code>CPU</code>对地址的读写需要进行三类信息的交互：</p>
+<ol>
+<li>存储单元的的地址(地址信息)</li>
+<li>器件的选择，读或写命令(控制信息)</li>
+<li>读或写的数据(数据信息)</li>
+</ol>
+<p>过程：地址线先发送要读取的地址信息，到内存之中，内存找到对应的地址后<code>CPU</code>发送控制信息，进行读或写，随后通过数据线进行读或者写。</p>
+<h3 id="数据表示"><a href="#数据表示" class="headerlink" title="数据表示"></a>数据表示</h3><p><code>十六进制</code>与<code>二进制</code>的加法运算与10进制相似，都是从低位依次相加到高位，大于进制数便进位。需要注意的是可能在加法运算中会发生溢出(最高有效位不足)。</p>
+<p><code>二进制</code>减法可以采用<code>十进制</code>的减法进行运算，同时也可以采用一个较为简单的办法，将<code>被减数</code>的符号位取反，然后两个数相加，忽略掉最高位的进位。</p>
+<h4 id="补码-可逆"><a href="#补码-可逆" class="headerlink" title="补码(可逆)"></a>补码(可逆)</h4><p><code>二进制数的补码</code>计算：取反后加一</p>
+<blockquote>
+<p>00000001 -&gt; 11111110 -&gt; 11111111</p>
+</blockquote>
+<p><code>十六进制数的补码</code>计算：按位取反(用15减去该位上的数字)后加一</p>
+<blockquote>
+<p>6A3D -&gt; 95C2 + 1 -&gt; 95C3</p>
+</blockquote>
+<h4 id="有符号数进制转换"><a href="#有符号数进制转换" class="headerlink" title="有符号数进制转换"></a>有符号数进制转换</h4><p>转为二进制：</p>
+<p>将其绝对值转换为二进制数据，如果原来的数据为负，则对该二进制数据求补码</p>
+<p>转为十六进制：</p>
+<p>将其绝对值转换为十六进制数据，如果原来的数据为负，则对该十六进制数据求补码</p>
+<blockquote>
+<p>通过观察16进制数据的最高位可以判断对应的数据的正负性，如果最高位大于等于8，则该数为负数，最高位小于等于7，则该数为正数</p>
+</blockquote>
+<h2 id="x86架构"><a href="#x86架构" class="headerlink" title="x86架构"></a>x86架构</h2><h3 id="一般概念-1"><a href="#一般概念-1" class="headerlink" title="一般概念"></a>一般概念</h3><p><code>CPU</code>包含寄存器、高频时钟、控制单元、算术逻辑单元</p>
+<p><code>CPU</code>通过控制、地址、数据三种总线与计算机其他部分相联系</p>
+<p>计算机从内存读取数据比从内部寄存器读取数据慢，前者大致消耗<code>4个时钟周期</code>，后者只需要<code>1个时钟周期</code></p>
+<p>指令执行周期：<code>取指 -&gt; 译码 -&gt; 执行</code></p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><blockquote>
+<p>EAX是默认使用的乘除指令。它常常被称为扩展累加器寄存器<br>ECX为CPU默认使用的循环计数器<br>ESP用于寻址堆栈(一种系统内存结构)数据。它极少用于一般算术运算和数据传输，通常被称为扩展堆栈指针寄存器<br>ESI和EDI用于高速存储器传输指令，有时也被称为扩展源变址寄存器和扩展目的变址寄存器<br>EBP在高级语言中用来引用堆栈中的函数参数和局部变量。除了高级编程，它不用于一般算术运算和数据传输。它常常被称为扩展帧指针寄存器。<br>实地址模式中，16位段寄存器表示的是预先分配的内存区域的基址，这个内存区域称为段。保护模式中，段寄存器中存放的是段描述符表指针。一些段中存放程序指令(代码)，其他段存放变量(数据)，还有一个堆栈段存放的是局部函数变量和函数参数。<br>EIP为指令指针寄存器，包含下一条将要执行指令的地址。某些机器指令能控制EIP，使得程序分支转向到一个新位置<br>FFLAGS寄存器包含了独立的二进制位。用干控制CPU的操作，或是反映一些CPU操作的结果。有些指令可以测试和控制这些单独的处理器标志位<br>状态标志位状态标志位反映了CPU执行的算术和逻辑操作的结果。其中包括:溢出位、符号位、零标志位、辅助进位标志位、奇偶校验位和进位标志位。<br>进位标志位(CF)，与目标位置相比，无符号算术运算结果太大时，设置该标志位。<br>溢出标志位(OF)，与目标位置相比，有符号算术运算结果太大或太小时，设置该标志位<br>符号标志位(SF)，算术或逻辑操作产生负结果时，设置该标志位。<br>零标志位(ZF)，算术或逻辑操作产生的结果为零时，设置该标志位。<br>辅助进位标志位(AF)，算术操作在8位操作数中产生了位3向位4的进位时，设置该标志位。<br>奇偶校验标志位(PF)，结果的最低有效字节包含偶数个1时，设置该标志位，否则清除该标志位。一般情况下，如果数据有可能被修改或损坏时，该标志位用于进行错误检测。<br>方向标志位(DF)，控制了串操作指令(MOVS，CMPSSCASLODS与STOS)设置DF标志位将使得串操作指令地址自动递减(从高地址向低地址处理串)。清除DF标志位将使得串操作指令自动递增(从低地址向高地址处理串)。<br>中断允许标志位(IF)，控制处理器对干可屏蔽中断的处理，设置该标志位位可使处理器响应可屏蔽中断；清除则禁止响应可屏蔽中断。<br>跟踪标志位(TF)，设置可启用单步运行模式来调试程序，清除则禁用单步运行模式。</p>
+</blockquote>
+<h3 id="计算机组件"><a href="#计算机组件" class="headerlink" title="计算机组件"></a>计算机组件</h3><p>主板是微型计算机的心脏，它是一个平面电路板，其上集成了CPU、支持处理器、主存、输入输出接口、电源接口和扩展槽。</p>
+<p>BIOS：基本输入输出系统，用于保存系统软件</p>
+<p>基于<code>Intel</code>的系统使用的是几种基础类型内存：</p>
+<ol>
+<li>只读存储器(ROM)：永久烧录在芯片上，并且不能擦除</li>
+<li>可擦除可编程只读存储器(EPROM)：能用紫外线缓慢擦除，并且重新编程</li>
+<li>动态随机访问存储器(DRAM):通常的内存，在程序运行时保存程序和数据的部件。需要每毫秒进行刷新，以避免丢失数据</li>
+<li>静态RAM(SRAM)：主要用于价格高、速度快的<code>cache</code>存储器，不需要刷新</li>
+<li>图像随机存储器(VRAM)：保存视频数据，其为双端口，可以一个端口刷新显示数据，另一个端口将数据写到显示器</li>
+<li>互补金属氧化物半导体(CMOS)RAM：在系统主板上，保存系统设置信息，由电池供电，因此断电后其中的内容仍能够保留</li>
+</ol>
+<h3 id="输入输出系统"><a href="#输入输出系统" class="headerlink" title="输入输出系统"></a>输入输出系统</h3><img src="https://s2.loli.net/2022/06/18/Zqc2es3E7P8C5KM.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+
+<p>与虚拟机概念相似，输入输出是通过不同层次的访问来实现的。库函数在最高层，操作系统是次高层。BIOS(基本输入输出系统)是一组函数，能直接与硬件设备通信。程序也可以直接访问输入输出设备。</p>
+<h2 id="汇编语言基础"><a href="#汇编语言基础" class="headerlink" title="汇编语言基础"></a>汇编语言基础</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wa_junye/article/details/105617238">https://blog.csdn.net/wa_junye/article/details/105617238</a></p>
+</blockquote>
+<h3 id="一般概念-2"><a href="#一般概念-2" class="headerlink" title="一般概念"></a>一般概念</h3><p>数据标号和符号标号的区别</p>
+<blockquote>
+<p>数据标号表示变量的位置它提供了一种简便的方式操作变量，而符号标号表示程序代码的位置，使用冒号结束，通常用于循环与跳转</p>
+</blockquote>
+<p>大小端序</p>
+<blockquote>
+<p>大端序将最高有效字节放在第一个内存地址中，小端序中最低有效字节放在第一个内存地址中</p>
+<p>如存放数据 12345678h 大端序为 12h、34h、56h、78h 小端序为 78h、56h、34h、12h</p>
+</blockquote>
+<p>源文件和列表文件的区别</p>
+<blockquote>
+<p>源文件是ASCII编码的程序源代码， 列表文件包括源文件的副本，行号每条指令的数字地址，每条指令的机器代码字节(十六进制)以及符号表<br>符号表中包含了程序中所使用的所有标识符名称，段和相关信息<br>指令的数字地址是相对程序占用的起点而言的，从<code>0000 0000</code>开始</p>
+</blockquote>
+<p>注释块的编写</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">comment %<br>	注释内容 [ % 可以用其他字符代替 ]<br>%<br></code></pre></td></tr></table></figure>
+
+<p>DUP 操作符</p>
+<blockquote>
+<p>DUP可以为多个数据项分配存储空间，可以用于初始化或非初始化数据</p>
+<p>如： Array DWORD 200 DUP(?) ; 分配两百个双字空间，同时不将其初始化</p>
+</blockquote>
+<h3 id="基本语言元素"><a href="#基本语言元素" class="headerlink" title="基本语言元素"></a>基本语言元素</h3><p>整形常量表达式是算术表达式，包括了整数常量、符号常量和算术运算符。<code>优先级</code>是指当表达式有两个或者更多运算时，隐藏的优先执行顺序</p>
+<p>被<code>.code</code>和<code>.data</code>等伪指令所包括起来的叫<code>段</code></p>
+<blockquote>
+<p>有<code>代码段</code>和<code>数据段</code>还有一种叫<code>堆栈</code></p>
+</blockquote>
+<p>整数常量形式： [{ + | - }] digits [ radix ]</p>
+<blockquote>
+<p>其中radix为对应基数，有如下基数：</p>
+<p>h -&gt; 16进制    r -&gt; 编码实数    q/o -&gt; 8进制    t -&gt; 10进制(备用) </p>
+<p>d -&gt; 10进制    y -&gt; 2进制(备用)    b -&gt; 2进制</p>
+</blockquote>
+<p>实数常量格式： [ sign ] integer. [ integer ] [ exponent ]</p>
+<blockquote>
+<p>符号和指数的格式如下：</p>
+<p>sign    { +/- }</p>
+<p>exponent     E[{ +/- }]integer</p>
+<p>其中<code>E</code>表示十的多少次方： 1E5 = 1 * 10^5         1E-5 = 1*10^-5</p>
+</blockquote>
+<p>保留字、标识符伪指令都是不区分大小写的</p>
+<blockquote>
+<p>保留字包括：指令助记符(如：MOV)、寄存器名称、伪指令(如：.data)、属性(如：BYTE、WORD)、运算符、预定义符号(如：@data)</p>
+<p>标识符的一些规则：</p>
+<ul>
+<li>可以包含 1 - 247 个字符</li>
+<li>不区分大小写</li>
+<li>第一个字符必须以字母、下划线、@、？、$。后续字符可以是数字</li>
+<li>标识符不能和汇编器的保留字相同</li>
+</ul>
+<p>伪指令：嵌入源代码中的命令，由汇编器识别和执行，其不在运行时执行，但是可以定义变量、宏和子程序(函数);为内存段分配名称，执行许多其他汇编器相关的日常任务</p>
+</blockquote>
+<p>指令的基本格式： [ label: ] mnemonic [ operands ] [ ;comment ]</p>
+<blockquote>
+<p>指令在程序汇编编译时变得可执行，汇编器将其翻译为机器语言字节，并且在运行时由<code>CPU</code>加载和执行</p>
+</blockquote>
+<h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><p>定义格式： [ name ] directive initializer [ ,initializer ] (例： A BYTE 100 )</p>
+<img src="https://s2.loli.net/2022/06/19/T5A9gMSzvFW72O6.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+
+<img src="https://s2.loli.net/2022/06/19/DuCgF3fQchw21BS.png" srcset="/img/loading.gif" lazyload alt="3.png" style="zoom: 67%;" />
+
+<h3 id="32位汇编程序模板"><a href="#32位汇编程序模板" class="headerlink" title="32位汇编程序模板"></a>32位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">; 32位汇编程序模板<br>.386 ; 表示一个32位程序<br>.model flat,stdcall ; 确定程序的内存模式(flat)和子程序调用规范<br>.stack 4096 ;栈空间大小<br>ExitProcess PROTO, dwExitCode:DWORD ; 设置PROTO关键字的返回值<br>.data<br>	; 数据段<br>.code<br>main PROC<br>	; 程序指令<br>	<br>	INVOKE ExitProcess,0<br>main ENDP<br>END main<br></code></pre></td></tr></table></figure>
+
+<h3 id="64位汇编程序模板"><a href="#64位汇编程序模板" class="headerlink" title="64位汇编程序模板"></a>64位汇编程序模板</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs assembly">; 64位汇编程序模板<br>ExitProcess PROTO<br>.data<br>	; 数据段<br>.code<br>main PROC<br>	; 程序指令<br>	<br>	push ecx,0<br>	call ExitProcess<br>main ENDP<br>END<br></code></pre></td></tr></table></figure>
+
+<h2 id="数据传送、寻址和算术运算"><a href="#数据传送、寻址和算术运算" class="headerlink" title="数据传送、寻址和算术运算"></a>数据传送、寻址和算术运算</h2><h3 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h3><p>操作数有 3 种基本类型：</p>
+<ol>
+<li>寄存器操作数 —— 使用<code>CPU</code>内已命名的寄存器</li>
+<li>立即数 —— 使用数字文本表达式</li>
+<li>内存操作数 —— 引用内存位置</li>
+</ol>
+<img src="https://s2.loli.net/2022/06/22/zKEin4w85BWtNyu.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+
+<p><code>MOV</code>指令将源操作数复制到目的操作数，<code>MOVZX</code>在传送过程中执行<code>零扩展</code>，<code>MOVSX</code>执行符号位扩展(一般来说十六进制第一位大于等于 8 的便是负数，扩展符号位 1 ，便会得到 FFF…)</p>
+<p><code>LAHF</code>将<code>EFLAGS</code>寄存器的低字节复制到<code>AH</code>，被复制的标志位包括：符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位，而<code>SAHF</code>将<code>AH</code>的内容复制到<code>EFLAGS</code>寄存器低字节</p>
+<p><code>XCHG</code>用于交换两个操作数内容，需要注意两个操作数的字节大小需要相同</p>
+<p>通过<code>数组名 + 偏移量</code>可以取到对应数组在栈中的某个数据，但如果是<code>数组名 + 元素个数 * 类型长度</code>那么可以得到对应的偏移，如果需要去取对应偏移的值，那么需要加上一个中括号(如 <code>[array+2]</code> )</p>
+<h3 id="加法和减法"><a href="#加法和减法" class="headerlink" title="加法和减法"></a>加法和减法</h3><p><code>INC</code>和<code>DEC</code>指令分别对应寄存器或内存操作数加一和减一，需要注意的是这两个指令不会改变进位标志位</p>
+<p><code>ADD</code>指令将<code>长度相同</code>的源操作数和目的操作数进行相加，<code>SUB</code>指令从目的操作数减去源操作数</p>
+<p><code>NEG</code>(非)指令通过把操作数转换为其二进制补码，将操作数的符号取反，可以将整数转为负数</p>
+<h3 id="标志位"><a href="#标志位" class="headerlink" title="标志位"></a>标志位</h3><ul>
+<li><p>进位标志意味着无符号整数溢出 (CF/CY)</p>
+<blockquote>
+<p>如果和数超过了目的操作数的存储大小，就可以认为 CF = 1</p>
+<p>从较小的无符号整数中减去较大的无符号整数时，减法操作就会将进位标志位置 1</p>
+</blockquote>
+</li>
+<li><p>溢出标志意味着有符号整数溢出 (OF/OV)</p>
+<blockquote>
+<p>有符号数算术操作结果与目的操作数相比，如果发生上溢或者下溢，则溢出标志位置 1 </p>
+<p>OF = CF XOR 运算结果最后的二进制最高位</p>
+</blockquote>
+</li>
+<li><p>零标志位意味着操作结果为 0 (ZF/ZR)</p>
+</li>
+<li><p>符号标志位意味着操作产生的结果为负数 (SF/PL)</p>
+<blockquote>
+<p>有符号数算术操作结果为负数，则符号标志位置 1</p>
+</blockquote>
+</li>
+<li><p>奇偶进位标志值在一条算术或者布尔运算执行后，立即判断目的操作数最低有效字节(二进制下的后 8 位)中 1 的个数是否为偶数 (PF/PE)</p>
+<blockquote>
+<p>目的操作数最低有效字节(二进制下的后 8 位)中 1 的个数为偶数时置 1</p>
+</blockquote>
+</li>
+<li><p>辅助进位标志位置 1 ，意味着目的操作数最低有效字节中位 3 有进位 (AF/AC)</p>
+<blockquote>
+<p>主要用于二进制编码的十进制数(BCD)运算</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="与数据相关的运算符和伪指令"><a href="#与数据相关的运算符和伪指令" class="headerlink" title="与数据相关的运算符和伪指令"></a>与数据相关的运算符和伪指令</h3><p><code>OFFSET</code>运算符返回的是一个变量与其所在段起始地址之间的距离</p>
+<p><code>PTR</code>运算符可以重写操作数默认的大小类型</p>
+<p><code>TYPE</code>运算符返回第是一个操作数或数组中每个元素的大小(按字节计算)</p>
+<p><code>LENGTHOF</code>运算符返回的是数组中元素的个数</p>
+<p><code>SIZEOF</code>运算符返回的是数组初始化时使用的字节数</p>
+<p><code>LABEL</code>伪指令可以插入一个标号，并定义它的大小属性，但是不为这个标号分配存储空间</p>
+<blockquote>
+<p>个人理解: <code>LABEL</code>创建了一个对应类型的一个框，不占据任何空间，当有数据被定义时便会放在框内，直到框装满，对应的变量的值便是框内数据</p>
+</blockquote>
+<h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><p><code>JMP</code>无条件跳转到一条指令处，<code>LOOP</code>使用<code>ECX</code>作为计数器，当<code>ECX</code>等于 0 时结束循环，再循环过程中每次<code>ECX</code>会减 1，如果将<code>ECX</code>初始值设置为 0，在第一次循环后减一会造成溢出，产生<code>FFFFFFFF</code>，而形成巨大的循环</p>
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h3 id="堆栈操作"><a href="#堆栈操作" class="headerlink" title="堆栈操作"></a>堆栈操作</h3><p>在<code>堆栈</code>中，新值将被添加到栈顶，删除值也在栈顶移除，被称为<code>LIFO</code>(先进后出)结构，原因是：最后进入堆栈的值也是第一个出堆栈的值</p>
+<p><code>运行时堆栈</code>是内存数组，<code>CPU</code>通过<code>ESP</code>对其进行直接管理，该寄存器也被称为堆栈指针寄存器，<code>ESP</code>存放的是堆栈中某个位置的 32 位偏移量。<code>ESP</code>基本不会直接被程序员控制，反之，它是用<code>CALL</code>、<code>RET</code>、<code>PUSH</code>和<code>POP</code>等指令间接修改</p>
+<p><code>ESP</code>总是指向最后压入堆栈的数据，运行时堆栈在内存中是向下生长的，即从高地址向低地址扩展。数值在弹出堆栈后，栈顶指针增加(按堆栈元素大小)，指向堆栈中下一个最高位置</p>
+<p>运行时堆栈的一些用途：</p>
+<ul>
+<li>当寄存器用于多个目的时，堆栈可以作为寄存器的一个方便的临时保存区。在寄存器被修改后,还可以恢复其初始值</li>
+<li>执行CALL指令时，CPU在堆栈中保存当前过程的返回地址</li>
+<li>调用过程时,输入数值也被称为参数，通过将其压入堆栈实现参数传递。堆栈也为过程局部变量提供了临时存储区域</li>
+</ul>
+<p><code>PUSH</code>指令首先减少<code>ESP</code>的值，再将源操作数复制到堆栈。</p>
+<p><code>POP</code>指令先把<code>ESP</code>指向的堆栈元素内容复制到一个 16 位或 32 位的目的操作数中，再增加<code>ESP</code>的值</p>
+<p><code>PUSHFD</code>将 32 位<code>EFLAGS</code>寄存器内容压入堆栈。<code>POPFD</code>吧栈顶内容弹出到<code>EFLAGS</code>寄存器</p>
+<blockquote>
+<p>不能用<code>MOV</code>指令将标识寄存器内容复制给一个变量，因此，<code>PUSHFD</code>是保护标志位的最佳途径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">pushfd	; 保存标志寄存器<br>;<br>; 任意语句序列<br>;<br>popfd	; 恢复标志寄存器<br></code></pre></td></tr></table></figure>
+
+<p>采用上述方式使用入栈和出栈指令时，必须要确保程序的指向路径不会跳过<code>POPFD</code>指令</p>
+</blockquote>
+<p><code>PUSHAD</code>指令按照<code>EAX</code>、<code>ECX</code>、<code>EDX</code>、<code>EBX</code>、<code>ESP</code>(执行<code>PUSHAD</code>之前的值)、<code>EBP</code>、<code>ESI</code>和<code>EDI</code>的顺序，将所有 32 位通用寄存器压入堆栈。<code>POPAD</code> 指令按照相反顺序将同样的寄存器弹出堆栈。与之相似，<code>PUSHA</code>指令按序(<code>AX</code>、<code>CX</code>、<code>DX</code>、<code>BX</code>、<code>SP</code>、<code>BP</code>、<code>SI</code>和<code>DI</code>)将16位通用寄存器压入堆栈。<code>POPA</code>指令按照相反顺序将同样的寄存器弹出堆栈。</p>
+<p>需要注意的是，过程用一个或者多个寄存器返回结构时不应使用<code>PUSHA</code>和<code>PUSHAD</code>，这两个指令都保存了对应的保存的寄存器值，若中间有过程用寄存器传递可能会丢失数据</p>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">read PROC<br>	PUSHAD<br>	.<br>	.<br>	mov eax,return_value<br>	.<br>	.<br>	POPAD<br>	ret		; EAX的值被覆盖了<br>read ENDP<br></code></pre></td></tr></table></figure>
+
+<p>上述调用<code>POPAD</code>将会覆盖<code>EAX</code>的返回值，导致返回数据丢失</p>
+</blockquote>
+<h3 id="定义并使用过程"><a href="#定义并使用过程" class="headerlink" title="定义并使用过程"></a>定义并使用过程</h3><p>汇编语言中经常使用通用寄存器来传递参数</p>
+<p>过程可以非正式地定义为:由返回语句结束的已命名的语句块。过程用<code>PROC</code>和<code>ENDP</code>伪指令来定义，并且必须为其分配一个名字(有效标识符)</p>
+<p><code>PORC</code>和<code>ENDP</code>伪指令来定义一个过程，当在程序启动过程之外创建一个过程时，就用<code>RET</code>指令来结束它。RET强制CPU返回到该过程被调用的位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">main PROC<br>	.<br>	.<br>	ret<br>main ENDP<br></code></pre></td></tr></table></figure>
+
+<p>默认情况下，标号只在其被定义的过程中可见。解决这个限制可以定义全局标号，即在名字后面加双冒号(::)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">Destination ::<br></code></pre></td></tr></table></figure>
+
+<p><code>CALL</code>指令执行时将下一条指令的地址压入栈中，再把被调用过程的地址复制到指令指针寄存器中(EIP)</p>
+<p><code>RET</code>指令执行时先将<code>ESP</code>的值弹道<code>EIP</code>中，然后<code>ESP</code>向高地址移动</p>
+<img src="https://s2.loli.net/2022/06/23/PuQaif6qB3Ymczp.png" srcset="/img/loading.gif" lazyload style="zoom:90%;" />
+
+<img src="https://s2.loli.net/2022/06/23/T7tPLYsWqBzNHnD.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+
+
+
+<p>与<code>PROC</code>伪指令一起使用的<code>USES</code>运算符，列出了过程修改的全部寄存器。汇编器产生代码，在程序开始时将寄存器的内容压人堆栈，并在过程返回前弹出恢复寄存器。</p>
+<p><code>USES</code>运算符与<code>PROC</code>伪指令一起使用，让程序员列出在该过程中修改的所有寄存器名。<code>USES</code>告诉汇编器做两件事情:</p>
+<p>第一，在过程开始时生成<code>PUSH</code>指令，将寄存器保存到堆栈;</p>
+<p>第二，在过程结束时生成<code>POP</code>指令，从堆栈恢复寄存器的值。</p>
+<p><code>USES</code>运算符紧跟在<code>PROC</code>之后，其后是位于同一行上的寄存器列表，表项之间用空格符或制表符(不是逗号)分隔。</p>
+<h3 id="外部连接库"><a href="#外部连接库" class="headerlink" title="外部连接库"></a>外部连接库</h3><p>链接库(<code>.inc</code>)是一种文件，包含了已经汇编为机器代码的过程(子程序)。链接库开始时是一个或者多个源文件，这些文件再被汇编为目标文件</p>
+<p>链接库通过<code>include</code>进行导入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">include Irvine32.inc<br></code></pre></td></tr></table></figure>
+
+<p>通过链接库可以直接调用内部现有的功能函数，<code>Irvine32.inc</code>中包含如下过程：</p>
+<img src="https://s2.loli.net/2022/06/23/hUugkmKVf3EvNaM.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/23/e3ahMou9cEglfUS.png" srcset="/img/loading.gif" lazyload style="zoom:70%;" />
+
+<h2 id="条件处理"><a href="#条件处理" class="headerlink" title="条件处理"></a>条件处理</h2><h3 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h3><p>允许作决策的编程语言使程序员可以改变控制流，使用的技术成为<code>条件分支</code></p>
+<p>通过布尔运算可以很方便的更改一个数字的单个位，布尔指令影响对应的<code>零标志位</code>、<code>进位标志位</code>、<code>符号标志位</code>、<code>溢出标志位</code>和<code>奇偶标志位</code></p>
+<p><code>AND</code>指令将两个数进行<code>与运算</code>，要求对应的两个数的大小相等，操作数可以是8、16、32、64位。</p>
+<blockquote>
+<p>1 and 1 = 1</p>
+<p>0 and 1 = 0</p>
+<p>0 and 0 = 0</p>
+<p>两个数同时为 1 的时候运算结果才为 1 ，反之则为 0</p>
+</blockquote>
+<p><code>OR</code>指令将两个数进行<code>或运算</code>，同样要求两个数的大小相等，操作数可以是8、16、32、64位</p>
+<blockquote>
+<p>1 or 1 = 1</p>
+<p>0 or 1 = 1</p>
+<p>0 or 0 = 0</p>
+<p>两个数中有一个数字为 1 那么运算的结果便为 1</p>
+</blockquote>
+<p><code>XOR</code>指令将两个数进行<code>异或运算</code>，操作数组合和大小与<code>AND</code>和<code>OR</code>指令相同</p>
+<blockquote>
+<p>0 xor 0 = 0</p>
+<p>1 xor 1 = 0</p>
+<p>0 xor 1 = 1</p>
+<p>两个数字不同时进行<code>xor</code>运算的结果为 1 ，两个数字相同时<code>xor</code>结果为 0 ，同时<code>xor</code>具备有可逆性有如下性质：</p>
+<p>A XOR B = C        C XOR B = A        C XOR A = B</p>
+</blockquote>
+<p><code>NOT</code>指令将操作数的所有位进行翻转(0 -&gt; 1 , 1 -&gt; 0)，其结果为反码，需要注意的时<code>NOT</code>指令不会影响标志位</p>
+<p> <code>TEST</code>指令将两个操作数对应位之间进行<code>AND</code>操作，根据其运算结果设置对应的<code>符号标志位</code>、<code>零标志位</code>和<code>奇偶标志位</code>，<code>TEST</code>指令不改变对应的目标操作数，可以用于发现操作数中单个位是否置位(某个位上是否为 1)</p>
+<blockquote>
+<p><code>TEST</code>指令总是清除<code>溢出</code>和<code>进位标志位</code>，其修改<code>符号标志位</code>、<code>零标志位</code>和<code>奇偶标志位</code>的方式与<code>AND</code>指令相同</p>
+</blockquote>
+<p><code>CMP</code>用于比较两个操作数，内部隐含一个减法操作，并且不会修改任何操作数，常常用于创建条件分支</p>
+<h3 id="一些置位方式"><a href="#一些置位方式" class="headerlink" title="一些置位方式"></a>一些置位方式</h3><p>零标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">test al,0	; 零标志位置 1<br>and al,0	; 零标志位置 1<br>or al,1		; 零标志位清零<br></code></pre></td></tr></table></figure>
+
+<p>符号标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">or al,80h	; 符号标志位置 1 		80h -&gt; 1000 0000<br>and al,7Fh	; 符号标志位清零	   7F -&gt; 0111 1111<br></code></pre></td></tr></table></figure>
+
+<p>进位标志位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">stc		; 进位标志位置 1<br>clc		; 进位标志位清零<br></code></pre></td></tr></table></figure>
+
+<p>溢出标志位置 1 ，就把两个正数相加使其产生负的和数；若要清除溢出标志位，则将操作数和 0 进行<code>OR</code>操作</p>
+<h3 id="条件跳转"><a href="#条件跳转" class="headerlink" title="条件跳转"></a>条件跳转</h3><p>第一步先使用<code>CMP</code>、<code>AND</code>或<code>SUB</code>操作改变<code>CPU</code>的状态标志位，随后使用<code>条件跳转指令</code>来对<code>标志位</code>进行测试，而产生新的分支</p>
+<p><img src="https://s2.loli.net/2022/06/25/4zFIxHBo76dUrMi.png" srcset="/img/loading.gif" lazyload></p>
+<img src="https://s2.loli.net/2022/06/25/vqCVzOUTf3bYhNw.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/25/5v38l9ROwYTGzp2.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/25/hp6Fj2MmXZIuNCe.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/25/2MDTH4lOCWRqoJL.png" srcset="/img/loading.gif" lazyload alt="13.png" style="zoom:80%;" />
+
+<h3 id="条件循环指令"><a href="#条件循环指令" class="headerlink" title="条件循环指令"></a>条件循环指令</h3><p><code>LOOPZ</code>(为零跳转）指令的工作和<code>LOOP</code>指令相同，只是有一个附加条件:为零控制转向目的标号，零标志位必须置 1。<code>LOOPE</code>(相等跳转)指令相当于<code>LOOPZ</code>两者有相同的操作码，执行以下任务:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ecx</span> = ecx - <span class="hljs-number">1</span><br><span class="hljs-attribute">if</span> ecx &gt; <span class="hljs-number">0</span> and zf = <span class="hljs-number">1</span> <br>	<span class="hljs-attribute">jump</span> to destination<br></code></pre></td></tr></table></figure>
+
+<p>两者均不改变对应的状态标志位，如果处于 64 位下便采用<code>rcx</code>作为对应循环计数器</p>
+<p><code>LOOPNZ</code>(非零跳转）指令与<code>LOOPZ</code>(为零跳转)相对应。当<code>ECX</code>中无符号数值大于零(减 1 操作之后)且零标志位等于零时,继续循环。<code>LOOPNE</code>(不等跳转)指令相当于<code>LOOPNZ</code>，它们有相同的操作码，执行以下任务:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ecx</span> = ecx - <span class="hljs-number">1</span><br><span class="hljs-attribute">if</span> ecx &gt; <span class="hljs-number">0</span> and zf =<span class="hljs-number">0</span><br>	<span class="hljs-attribute">jump</span> to destination<br></code></pre></td></tr></table></figure>
+
+<p>条件循环指令与普通的循环指令相似，不同的是需要额外判断对应<code>CPU</code>中的状态标志位，当两者(ECX != 0 和 条件标志位满足)同时成立时，便发生跳转</p>
+<h3 id="条件分支与循环伪指令"><a href="#条件分支与循环伪指令" class="headerlink" title="条件分支与循环伪指令"></a>条件分支与循环伪指令</h3><p>条件分支(IF语句)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.IF condition1<br>	statements<br>.ELSEIF	condition2<br>	statements<br>.ENDIF<br></code></pre></td></tr></table></figure>
+
+<p>在<code>condition</code>中可以采用与高级语言同样的关系和逻辑运算符，同时也存在一些特殊运算符：</p>
+<table>
+<thead>
+<tr>
+<th align="center">运算符</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OVERFLOW?</td>
+<td align="center">若溢出标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">CARRY?</td>
+<td align="center">若进位标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">PARITY?</td>
+<td align="center">若奇偶标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">SIGN?</td>
+<td align="center">若符号标志置 1 ，则返回“真”</td>
+</tr>
+<tr>
+<td align="center">ZERO?</td>
+<td align="center">若零标志置 1 ，则返回“真”</td>
+</tr>
+</tbody></table>
+<p>循环语句</p>
+<p>do-while</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.REPEAT<br>	statements<br>.UNITL condition<br></code></pre></td></tr></table></figure>
+
+<p>while</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.WHILE<br>	statements<br>.ENDW<br></code></pre></td></tr></table></figure>
+
+<h2 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h2><h3 id="移位和循环移位指令"><a href="#移位和循环移位指令" class="headerlink" title="移位和循环移位指令"></a>移位和循环移位指令</h3><p>溢出：当一个有符号数进行循环移位时发生了符号位的取反( 0 -&gt; 1 或 1 -&gt; 0 )时，溢出标志位置 1</p>
+<p>逻辑移位：在移位过程中空出来的高位用 0 进行填充</p>
+<p><img src="https://s2.loli.net/2022/06/27/qKyGjDH9p4XAnTo.png" srcset="/img/loading.gif" lazyload></p>
+<p>算术移位：在移位过程中空出来的高位用符号位进行填充</p>
+<p><img src="https://s2.loli.net/2022/06/27/KfhTkOioQnSDB39.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<p><code>SHL</code>指令将目的操作数逻辑左移移位，最低位用 0 进行填充，其中最高位会移入进位标志位上，每向左移位一次相当于乘以 2</p>
+<p><img src="https://s2.loli.net/2022/06/27/L2BzFh7stfIjbGq.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>SHR</code>指令将目的操作数逻辑右移移位，最高位用 0 进行填充，其中最后一位被移除的会置于进位标志位上，每向右移位一次相当于除以 2</p>
+<p><img src="https://s2.loli.net/2022/06/27/fEqbkyWGhw49RYd.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<p><code>SAL</code>(算术左移)指令与<code>SHL</code>相同，每次移动时将最低为用 0 进行填充，其中最高位会移入进位标志位上</p>
+<p><img src="https://s2.loli.net/2022/06/27/MdxzQH28yYOqgL1.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>SAR</code>进行算术右移，<code>SAL</code>与<code>SAR</code>两者的操作数类型与<code>SHL</code>和<code>SHR</code>完全相同</p>
+<p><img src="https://s2.loli.net/2022/06/27/eEbtSmirCOFkyM4.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<p><code>ROL</code>以循环方式来进行移位，该指令将数的一段移动到另一端，并不会丢弃位，当循环计数次数大于 1 时，进位标志位保存的是最后循环位移出<code>MSB</code>的位</p>
+<p><img src="https://s2.loli.net/2022/06/27/f4xNEm39hTodgL5.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>可以利用该方式将一个数字的高 4 位与低 4 位进行交换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov al,26h<br>rol al,4	; al = 62h<br></code></pre></td></tr></table></figure>
+</blockquote>
+<p><code>ROR</code>(循环右移)指令把所有位都向右移，最低位复制到进位标志位和最高位。该指令格式与SHL指令相同</p>
+<p><img src="https://s2.loli.net/2022/06/27/6prmwqa4d8oP5WA.png" srcset="/img/loading.gif" lazyload></p>
+<p>与之相似的是当循环计数值大于1时，进位标志位保存的是最后循环移出LSB的位</p>
+<hr>
+<p><code>RCL</code>(带进位循环左移)指令把每一位都向左移，进位标志位复制到LSB，而MSB复制到进位标志位</p>
+<p><img src="https://s2.loli.net/2022/06/27/7khEqoUcb4ClYX8.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>此处的<code>带进位</code>指的是进位标志位也参与到移位中</p>
+</blockquote>
+<p><code>RCR</code>(带进位循环右移)指令把每一位都向右移，进位标志位复制到<code>MSB</code>,而<code>LSB</code>复制到进位标志位</p>
+<p><img src="https://s2.loli.net/2022/06/27/scNyV4eOp6qgtFY.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<p><code>SHLD</code>(双精度左移)指令将目的操作数向左移动指定位数。移动形成的空位由源操作数的高位填充。源操作数不变，但是符号标志位、零标志位、辅助进位标志位、奇偶标志位和进位标志位会受影响，格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">SHLD dest,source,count<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/Sbq4fVQpcFXG87N.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>SHRD</code>(双精度右移)指令将目的操作数向右移动指定位数。移动形成的空位由源操作数的低位格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">SHLD dest,source,count<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/IKm13vOUaX7Dg6o.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>一般为了在屏幕上进行图像的重定向而将位元组左右移动的时候，可以用<code>SHLD</code>和<code>SHRD</code>来处理位映射图像。或者在数据加密时可以用到两种移位方式。</p>
+</blockquote>
+<h3 id="乘法与除法指令"><a href="#乘法与除法指令" class="headerlink" title="乘法与除法指令"></a>乘法与除法指令</h3><p>32 位模式下，<code>MUL</code>(无符号数乘法)指令有三种类型:第一种执行 8 位操作数与<code>AL</code>寄存器的乘法;第二种执行 16 位操作数与<code>AX</code>寄存器的乘法;第三种执行 32 位操作数与<code>EAX</code>寄存器的乘法。乘数和被乘数的大小必须保持一致，乘积的大小则是它们的一倍。这三种类型都可以使用寄存器和内存操作数,但不能使用立即数</p>
+<p>往往来说两个数相乘可能会产生比其长度大一倍的数字，对此引入了两个寄存器(或者一个)分别保存结果的高位和地位</p>
+<table>
+<thead>
+<tr>
+<th align="center">被乘数</th>
+<th align="center">乘数</th>
+<th align="center">乘积</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AL</td>
+<td align="center">reg/mem8</td>
+<td align="center">AX (AH为高 4 位，AL为低 4 位)</td>
+</tr>
+<tr>
+<td align="center">AX</td>
+<td align="center">reg/mem16</td>
+<td align="center">DX:AX (DX为高 8 位，AX为低 8 位)</td>
+</tr>
+<tr>
+<td align="center">EAX</td>
+<td align="center">reg/mem32</td>
+<td align="center">EDX:EAX (EDX为高 16 位，EAX为低 16 位)</td>
+</tr>
+</tbody></table>
+<p><code>IMUL</code>(有符号数乘法)指令执行有符号整数乘法。与<code>MUL</code>指令不同，<code>IMUL</code>会保留乘积的符号，实现的方法是，将乘积低半部分的最高位符号扩展到高半部分</p>
+<p><code>x86</code>指令集支持三种格式的<code>IMUL</code>指令:单操作数、双操作数和三操作数</p>
+<blockquote>
+<p>一般来说，在单操作数的情况下默认与<code>AL</code>(<code>AX</code>、<code>EAX</code>)相乘</p>
+<p>三操作数时将成绩保存在第一个操作数中，第二个与第三个操作数进行乘法运算</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">imul <span class="hljs-keyword">A</span>,B,C     ==     <span class="hljs-keyword">A</span> = B * C<br></code></pre></td></tr></table></figure>
+
+<p>和<code>MUL</code>指令一样，其乘积的存储大小使得溢出不会发生。同时，如果乘积的高半部分不是其低半部分的符号扩展，则进位标志位(CF)和溢出标志位(OF)置 1</p>
+<p>利用这个特点可以决定是否忽略乘积的高半部分。即不是符号位扩展(OF = 1 )：不可以忽略乘积的高半部分</p>
+</blockquote>
+<p>32 位模式下，<code>DIV</code>(无符号除法)指令执行 8 位、16 位和 32 位无符号数除法。</p>
+<table>
+<thead>
+<tr>
+<th align="center">被除数</th>
+<th align="center">除数</th>
+<th align="center">商</th>
+<th align="center">余数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AX</td>
+<td align="center">reg/mem8</td>
+<td align="center">AL</td>
+<td align="center">AH</td>
+</tr>
+<tr>
+<td align="center">DX:AX</td>
+<td align="center">reg/mem16</td>
+<td align="center">AX</td>
+<td align="center">DX</td>
+</tr>
+<tr>
+<td align="center">EDX:EAX</td>
+<td align="center">reg/mem32</td>
+<td align="center">EAX</td>
+<td align="center">EDX</td>
+</tr>
+</tbody></table>
+<p><code>IDIV</code>(有符号除法)指令执行有符号整数除法，其操作数与<code>DIV</code>指令相同。执行 8 位除法之前，被除数(<code>AX</code>)必须完成符号扩展。余数的符号总是与被除数相同。</p>
+<blockquote>
+<p>符号扩展指令：</p>
+<p><code>CBW</code>(字节转字)指令将<code>AL</code>的符号位扩展到<code>AH</code>，保留了数据的符号</p>
+<p><code>CWD</code>(字转双字)指令将<code>AX</code>的符号位扩展到<code>DX</code></p>
+<p><code>CDQ</code>(双字转四字)指令将<code>EAX</code>的符号位扩展到<code>EDX</code></p>
+</blockquote>
+<p>需要注意的是执行<code>DIV</code>和<code>IDIV</code>后所有的算术运算状态标志位的值都不确定</p>
+<p>异常：如果除法运算结果的商目的操作数存储不下时会引发溢出异常，同时如果除以 0 时会引发除零异常机制</p>
+<p>对于溢出异常可以使用 32 位除数和 64 位被除数来减少出现除法溢出条件的可能性</p>
+<blockquote>
+<p>被除数 / 除数 = 商 … 余数</p>
+</blockquote>
+<h3 id="扩展加减法"><a href="#扩展加减法" class="headerlink" title="扩展加减法"></a>扩展加减法</h3><p><code>ADC</code>(带进位加法)指令将源操作数和进位标志位的值都与目的操作数相加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov dl,0<br>mov al,0FFh<br>add al,0FFh		; AL = FEh<br>adc dl,0		; DL/AL = 01FEh<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/zZF2iI15BGnv36W.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><code>ADC</code>指令相当于在普通的<code>ADD</code>指令的基础上加上了一个进位标志位(<code>CF</code>)，在运行加法运算时是使用高位进行运算</p>
+</blockquote>
+<p><code>SBB</code>(带借位减法)指令从目的操作数中减去源操作数和进位标志位的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov edx,7	; 高 32 位<br>mov eax,1	; 低 32 位<br>sub eax,2	; 减 2<br>sbb edx,0	; 高 32 位减法<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2022/06/27/kUwXnKDlGSQB7yc.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><code>SBB</code>指令也是相当于<code>SUB</code>指令的基础上减去了一个进位标志位(<code>CF</code>)，运行减法运算时是使用高位进行运算</p>
+</blockquote>
+<h2 id="高级过程"><a href="#高级过程" class="headerlink" title="高级过程"></a>高级过程</h2><p>调用程序向子程序传递的数值被称为<code>实际参数</code>。而被调用的子程序要接收的数值被称为<code>形式参数</code>。</p>
+<h3 id="堆栈帧"><a href="#堆栈帧" class="headerlink" title="堆栈帧"></a>堆栈帧</h3><p><code>堆栈帧</code>是一块堆栈保留区域，用于存放被传递的实际参数、子程序的返回值、局部变量以及被保存的寄存器。</p>
+<p>堆栈帧的创建步骤如下:</p>
+<ol>
+<li>被传递的实际参数。如果有,则压入堆栈</li>
+<li>当子程序被调用时,使该子程序的返回值压入堆栈</li>
+<li>子程序开始执行时,<code>EBP</code>被压入堆栈</li>
+<li>设置<code>EBP</code>等于<code>ESP</code>。从这时开始，EBP就变成了该子程序所有参数的引用基址</li>
+<li>如果有局部变量，修改<code>ESP</code>以便在堆栈中为这些变量预留空间</li>
+<li>如果需要保存寄存器,就将它们压入堆栈</li>
+</ol>
+<p>在过程调用之前，任何存放参数的寄存器需要首先入栈，然后向其分配过程参数，再返回后再恢复起始值，同时当一个参数通过数值传递时，该值的副本会被压入堆栈，对于一个函数而言，其参数入栈的顺序是从右向左进行的。</p>
+<p>一般而言，当一个过程的参数是一个数组时，我们常常将其所对应的地址进行压入堆栈中，节省操作的时间</p>
+<p>访问堆栈中的数据我们可以使用<code>基址 —— 偏移量寻址</code>，用<code>[EBP+X]</code>获取到对应压入栈中的数据，需要注意的是在子程序返回的时候需要将参数从栈中进行删除，否则可能会造成内存泄漏，堆栈就会被破坏。</p>
+<blockquote>
+<p>调用规范：</p>
+<p><strong>C 调用规范</strong></p>
+<p>程序调用子程序时，在CALL指令的后面紧跟一条语句使堆栈指针(<code>ESP</code>)加上一个数，该数的值即为子程序参数所占堆栈空间的总和。一般而言一个参数占用的空间是<code>4 字节</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">add esp,X	; X 为 4 的倍数<br></code></pre></td></tr></table></figure>
+
+<p><strong>STDCALL调用规范</strong></p>
+<p><code>STDCALL</code>规范给<code>RET</code>指令添加了一个整数参数，这使得程序在返回到调用过程时，ESP会加上该数值。同时这个添加的整数必须与被调用过程参数占用的堆栈空间字节数相等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ret X		; X 为 4 的倍数<br></code></pre></td></tr></table></figure>
+
+<p>上面代码等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">add esp,X<br>ret<br></code></pre></td></tr></table></figure>
+
+<p>要说明的是，<code>STDCALL</code>与<code>C</code>相似，参数是按逆序入栈的。通过在<code>RET</code>指令中添加参数，<code>STDCALL</code>不仅减少了子程序调用产生的代码量(减少了一条指令)，还保证了调用程序永远不会忘记清除堆栈。另一方面，<code>C</code>调用规范则允许子程序声明不同数量的参数，主调程序可以决定传递多少个参数。</p>
+<p><code>C语言</code>的<code>printf</code>函数就是一个例子，它的参数数量取决于初始字符串参数中的格式说明符的个数。</p>
+<hr>
+<p><code>STDCALL</code>与<code>C语言</code>调用规范差异：</p>
+<table>
+<thead>
+<tr>
+<th align="center">c</th>
+<th align="center">stdcall</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">在被调用函数 (<code>Callee</code>) 返回后，由调用方 (<code>Caller</code>) 调整堆栈。 1.调用方的函数调用 2.被调用函数的执行 3.被调用函数的结果返回 4.调用方清除调整堆栈</td>
+<td align="center">在被调用函数 (<code>Callee</code>) 返回前，由被调用函数 (<code>Callee</code>) 调整堆栈。图示： 1.调用方的函数调用 2.被调用函数的执行 3.被调用函数清除调整堆栈 4.被调用函数的结果返回</td>
+</tr>
+<tr>
+<td align="center">因为每个调用的地方都需要生成一段调整堆栈的代码，所以最后生成的文件较大。</td>
+<td align="center">因为调整堆栈的代码只存在在一个地方（被调用函数的代码内），所以最后生成的文件较小。</td>
+</tr>
+<tr>
+<td align="center">函数的参数个数可变(就像 <em><code>printf</code></em> 函数一样)，因为只有调用者才知道它传给被调用函数几个参数，才能在调用结束时适当地调整堆栈。</td>
+<td align="center">函数的参数个数不能是可变的。</td>
+</tr>
+</tbody></table>
+</blockquote>
+<p>通常子程序在修改寄存器之前就要将它们的值压入栈中进行保存(<code>PUSH</code>)，在子程序返回后恢复原寄存器的值(<code>POP</code>)</p>
+<p>在子过程中，局部变量一般创建于运行时堆栈，通常位于基址指针(<code>EBP</code>)下，我们对其需要将<code>ESP</code>向下开辟对应字节的空间，从子程序退出前也需要将局部变量从堆栈中进行删除</p>
+<p><code>LEA</code>指令返回简介操作数的地址，比如创建了一个局部变量时，不能采用<code>mov esi,OFFSET [EBP-X]</code>的方式将对应的局部变量空间地址赋予给<code>ESI</code>，因为<code>OFFSET</code>只适用于编译时已知的地址。<code>LEA</code>的作用也便是将新开辟的地址空间进行复制操作。</p>
+<p><code>ENTER</code>指令为被调用过程自动创建堆栈帧。它为局部变量保留堆栈空间，把<code>EBP</code>入栈。具体来说,它执行三个操作:</p>
+<ol>
+<li>把EBP入栈(<code>push ebp</code>)</li>
+<li>把EBP设置为堆栈帧的基址(<code>mov ebp,esp</code>)</li>
+<li>为局部变量保留空间(<code>sub esp, numbytes</code>)</li>
+</ol>
+<p>对应结构为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ENTER numbytes, nestinglevel<br></code></pre></td></tr></table></figure>
+
+<p>这两个操作数都是立即数。<code>Numbytes</code>总是向上舍入为 4 的倍数，以便<code>ESP</code>对齐双字边界。<code>Nestinglevel</code>确定了从主调过程堆栈帧复制到当前帧的堆栈帧指针的个数。</p>
+<blockquote>
+<p>有如下等价关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">enter X,0<br></code></pre></td></tr></table></figure>
+
+<p>等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push ebp<br>mov ebp,esp<br>sub esp,X<br></code></pre></td></tr></table></figure>
+</blockquote>
+<p>一般使用<code>ENTER</code>指令时都需要使用<code>LEAVE</code>进行配合使用，<code>LEAVE</code>指令结束一个过程的堆栈帧，反转了<code>ENTER</code>的指令操作，恢复了<code>ESP</code>和<code>EBP</code>的值</p>
+<blockquote>
+<p>有如下等价关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">leave<br></code></pre></td></tr></table></figure>
+
+<p>等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov esp,ebp<br>pop ebp<br></code></pre></td></tr></table></figure>
+
+<p><code>POP EBP</code>是先把<code>ESP</code>指向的堆栈元素内容复制到<code>EBP</code>中，再增加<code>ESP</code>的值，此时的<code>ESP</code>对应的地址便是返回地址</p>
+</blockquote>
+<p><code>LOCAL</code>伪指令在过程内部声明一个或多个局部变量，它必须紧跟在<code>PROC</code>伪指令的后面。与全局变量相比,局部变量有独特优势:</p>
+<ol>
+<li>对局部变量名和内容的访问可以被限制在包含它的过程之内。局部变量对程序调试也有帮助,因为只有少数几条程序语句才能修改它们。</li>
+<li>局部变量的生命周期受限于包含它的过程的执行范围。局部变量能有效利用内存，因为同样的存储空间还可以被其他变量使用。</li>
+<li>同一个变量名可以被多个过程使用,而不会发生命名冲突。</li>
+<li>递归过程可以用局部变量在堆栈中保存数值。如果使用的是全局变量，那么每次过程调用自身时,这些数值就会被覆盖。</li>
+</ol>
+<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p><code>递归子程序</code>是指直接或简介的调用自身的子程序</p>
+<p>一个简单的递归也会占用大量的堆栈空间，在每次过程调用发生时最占用 4 字节的堆栈空间，因为要把返回地址保存到堆栈(对应<code>CALL</code>语句的下一条语句地址)</p>
+<p>假设完成同样的任务，递归子程序所使用的内存空间通常大于非递归子程序</p>
+<h3 id="INVOKE-和-PROC-指令"><a href="#INVOKE-和-PROC-指令" class="headerlink" title="INVOKE 和 PROC 指令"></a>INVOKE 和 PROC 指令</h3><p><code>INVOKE</code>伪指令(仅限32位模式)能代替<code>CALL</code>指令，它的功能更加强大，可以传递多个参数。用<code>INVOKE</code>伪指令定义过程时，<code>ADDR</code>运算符可以传递指针。</p>
+<blockquote>
+<p><code>ADDR</code>指令用于传递指针，同时只能和<code>INVOKE</code>同时使用，传递给<code>ADDR</code>的参数必须是汇编时常数不能使用<code>[ebp+X]</code>的形式</p>
+</blockquote>
+<p><code>PROC</code>伪指令在声明过程名的同时可以带上已命名参数列表。<code>PROTO</code>伪指令为现有过程创建原型,原型声明过程的名称和参数列表。</p>
+<blockquote>
+<p><code>PROC</code>相当于声明形参，只后会被<code>MASM</code>翻译为对应的汇编语句来开辟对应的栈空间</p>
+</blockquote>
+<p>伪指令的调用先后为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">proto		-&gt;		invoke		-&gt;		proc	-&gt;		endp<br><br>MySub PROTO		; 过程原型<br>...<br>INVOKE MySub	; 过程调用<br>...<br>MySub PROC		; 过程实现<br>...<br>...<br>MySub ENDP	<br></code></pre></td></tr></table></figure>
+
+<h2 id="字符串和数组"><a href="#字符串和数组" class="headerlink" title="字符串和数组"></a>字符串和数组</h2><p><code>X86</code>指令集有五组指令用于处理字节、字和双字数组，其被称为<code>字符串原语</code>，其能够高效执行，因为它们会自动重复并增加数组索引</p>
+<p><img src="https://s2.loli.net/2022/07/06/AQJPYMV7tfNvq6C.png" srcset="/img/loading.gif" lazyload alt="28.png"></p>
+<p>就其自身而言，字符串基本指令只能处理一个或一对内存数值。如果加上重复前缀，指令就可以使用<code>ECX</code>寄存器作为计数器重复执行。重复前缀使得单条指令能够处理整个数组</p>
+<p><img src="https://s2.loli.net/2022/07/06/Tr9EZ746oWwmtyC.png" srcset="/img/loading.gif" lazyload alt="29.png"></p>
+<blockquote>
+<p>使用方式如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">REP<span class="hljs-regexp">/PEPZ/</span>...  MOVSB<span class="hljs-regexp">/CMPSB/</span>...<br></code></pre></td></tr></table></figure>
+
+<p>格式为：<code>重复前缀 + 字符串基本指令</code></p>
+</blockquote>
+<p>需要注意的是，再重复指令时，我们需要将方向标志位进行置 1 或者置 0 ，通过不同的置位来告诉对应的<code>ESI</code>和<code>EDI</code>是增加还是减少</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">CLD			; 方向标志位清零(正向)<br>STD			; 方向标志位置 1 (反向)<br></code></pre></td></tr></table></figure>
+
+<p>当方向标志位清零的时候，程序中对应寄存器代表的的地址是是正向增长，当方向标志位置 1 的时候，对应的地址是逐渐减少。</p>
+<h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><p>高级语言在内存中有两种方式存放数组的行和列：<code>行主序</code>和<code>列主序</code></p>
+<p><code>行主序</code>最常用，第一行的数据存放在内存块开始的位置，第一行存放结束后后面紧跟的是第二行的第一个元素，<code>列主序</code>则是第一列的数据存放在内存块开始的位置，在第一列数据结束后后面紧跟的数据是第二列的第一个元素</p>
+<p>对于二维数组的访问我们常常将其抽象为一个一维数组，通过<code>基址 + 变址操作数</code>或<code>基址 + 变址 + 偏移量操作数</code></p>
+<blockquote>
+<p>基址 + 变址操作数</p>
+<p>[ base + index ]</p>
+<p>通过将两个寄存器相加来产生一个偏移地址</p>
+<p>基址 + 变址 + 偏移量操作数</p>
+<p>[ base + index + displacement ]</p>
+<p>displacement[ base + index ]</p>
+<p>采用的是一个偏移量、一个基址寄存器和一个可选的比例因子来生成有效地址</p>
+<hr>
+<p>两种方式都类似于高级语言中已经寻找到了一个数组的首地址，通过一个单字节的指针来进行寻找每一位的数据，每次指针的增加量便是对应的偏移量，如<code>int</code>类型，占用了 4 字节，那么每次偏移往下找数据时增加的量便为 4</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Assembly/" class="category-chain-item">Assembly</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>汇编语言学习</div>
+      <div>https://equinox-shame.github.io/2022/06/16/汇编语言学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 16, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/24/call%20$+5%20pop%20eax/" title="call $+5 pop eax">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">call $+5 pop eax</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/09/%E4%B8%AD%E5%9B%BD%E8%BF%91%E4%BB%A3%E5%8F%B2/" title="中国近代史大纲">
+                        <span class="hidden-mobile">中国近代史大纲</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

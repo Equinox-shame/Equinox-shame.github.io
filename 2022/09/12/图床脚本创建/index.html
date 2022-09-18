@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言不知道什么时候开始平时经常使用的sm.ms图床网站突然就被墙了，怎么登都上不去…然后恰巧本人魔法上网莫名的也崩了，30G的流量一点都用不出去，两者似乎达成了莫名的Combo，让我想要上传图片写个人博客变得困难起来了。起初在泥电某群内遇到一个QQ图床，但是发现不能上传Hexo，最后幸运的是在好朋友的帮助下找到了sm.ms的一个备用链接smms.app,同时也注意到了上传图片的限制，一次性传的图片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图床自动上传脚本创建">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/09/12/%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC%E5%88%9B%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言不知道什么时候开始平时经常使用的sm.ms图床网站突然就被墙了，怎么登都上不去…然后恰巧本人魔法上网莫名的也崩了，30G的流量一点都用不出去，两者似乎达成了莫名的Combo，让我想要上传图片写个人博客变得困难起来了。起初在泥电某群内遇到一个QQ图床，但是发现不能上传Hexo，最后幸运的是在好朋友的帮助下找到了sm.ms的一个备用链接smms.app,同时也注意到了上传图片的限制，一次性传的图片">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-12T13:46:50.645Z">
+<meta property="article:modified_time" content="2022-09-12T13:46:34.707Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>图床自动上传脚本创建 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="图床自动上传脚本创建"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-12 21:46" pubdate>
+          September 12, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图床自动上传脚本创建</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道什么时候开始平时经常使用的<code>sm.ms</code>图床网站突然就被墙了，怎么登都上不去…然后恰巧本人魔法上网莫名的也崩了，<code>30G</code>的流量一点都用不出去，两者似乎达成了莫名的<code>Combo</code>，让我想要上传图片写个人博客变得困难起来了。起初在泥电某群内遇到一个<code>QQ图床</code>，但是发现不能上传<code>Hexo</code>，最后幸运的是在好朋友的帮助下找到了<code>sm.ms</code>的一个备用链接<code>smms.app</code>,同时也注意到了上传图片的限制，一次性传的图片有限制，恰巧该图床网站提供了一个<code>API</code>接口使用，因此便诞生了此文</p>
+<h2 id="QQ-图床创建"><a href="#QQ-图床创建" class="headerlink" title="QQ 图床创建"></a>QQ 图床创建</h2><h3 id="失败原因猜测"><a href="#失败原因猜测" class="headerlink" title="失败原因猜测"></a>失败原因猜测</h3><p><code>QQ图床</code>似乎是<code>QQ</code>内发送的图会被保存到服务器上，然后通过<code>QQ</code>类软件可以进行访问，但是上传到<code>Hexo</code>时会因为<code>Referer</code>的来源不是本地或者是<code>QQ</code>类产品而导致无法浏览</p>
+<h3 id="构建方式"><a href="#构建方式" class="headerlink" title="构建方式"></a>构建方式</h3><p><code>QQ图床</code>主要构造十分简单，只需要在<code>QQ</code>上发送一张图片，那么就会生成对应的<code>Url</code>满足下面规则：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//g</span>chat.qpic.cn<span class="hljs-regexp">/gchatpic_new/</span><span class="hljs-number">0</span><span class="hljs-regexp">/530077417-0-&lt;你的md5&gt;/</span><span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<p>此处的<code>MD5</code>为我们发送的图片的<code>MD5</code>值，需要注意的是<code>MD5</code>中的字母需要全部大写，构造完毕后我们即可进行访问</p>
+<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><p>此处采用<code>Python</code>来完成我们的<code>Url</code>生成，该脚本会扫描当前目录下的图片(<code>.png</code>、<code>.jpg</code>)，然后按照上面规则进行产生<code>Url</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> hashlib<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> re<br><br><br>path = sys.argv[<span class="hljs-number">0</span>]<br>path = os.path.dirname(path)<br><span class="hljs-comment"># print(path)</span><br>files = os.listdir(path)<br><br><span class="hljs-comment"># print(files)</span><br>flag = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> files:<br>    png = re.search(<span class="hljs-string">&quot;.png&quot;</span>,i)<br>    jpg = re.search(<span class="hljs-string">&quot;.jpg&quot;</span>,i)<br>    <span class="hljs-keyword">if</span> png != <span class="hljs-literal">None</span> <span class="hljs-keyword">or</span> jpg != <span class="hljs-literal">None</span>:<br>        flag = <span class="hljs-number">1</span><br>        file_name = path + <span class="hljs-string">&#x27;\\&#x27;</span> +i<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;文件名称: &quot;</span>,file_name)<br><br>        data = <span class="hljs-built_in">open</span>(file_name,<span class="hljs-string">&quot;rb&quot;</span>).read()<br>        after_md5 = hashlib.md5(data).hexdigest()<br>        after_md5 = after_md5.encode()<br><br>        change_md5 = <span class="hljs-string">&quot;&quot;</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(after_md5)):<br>            <span class="hljs-keyword">if</span> after_md5[i] &gt;= <span class="hljs-built_in">ord</span>(<span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">and</span> after_md5[i] &lt;= <span class="hljs-built_in">ord</span>(<span class="hljs-string">&quot;z&quot;</span>):<br>                change_md5 += <span class="hljs-built_in">chr</span>(after_md5[i] - <span class="hljs-number">32</span>)<br>            <span class="hljs-keyword">else</span>:<br>                change_md5 += <span class="hljs-built_in">chr</span>(after_md5[i])<br><br>        url = <span class="hljs-string">f&quot;http://gchat.qpic.cn/gchatpic_new/0/530077417-0-<span class="hljs-subst">&#123;change_md5&#125;</span>/0&quot;</span><br><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;对应外链: &quot;</span>,url,<span class="hljs-string">&quot;\n&quot;</span>)<br><br><span class="hljs-keyword">if</span> flag == <span class="hljs-number">0</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;当前目录没有图片 ~&quot;</span>)<br><br>os.system(<span class="hljs-string">&quot;pause&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="SM-MS-图床创建"><a href="#SM-MS-图床创建" class="headerlink" title="SM.MS 图床创建"></a>SM.MS 图床创建</h2><p>与<code>QQ图床</code>不同<code>SM.MS</code>已经给我们提供了对应的<code>API</code>，我们可以直接使用<code>Python</code>的<code>requests</code>库进行发送请求即可</p>
+<blockquote>
+<p>API文档链接 : <a target="_blank" rel="noopener" href="https://doc.sm.ms/">https://doc.sm.ms/</a></p>
+</blockquote>
+<h3 id="构建脚本-1"><a href="#构建脚本-1" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> unicodedata <span class="hljs-keyword">import</span> name<br><span class="hljs-keyword">import</span> requests<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Get_API_Token</span>(<span class="hljs-params">UserName,PassWord</span>):</span><br>    data = &#123;<br>        <span class="hljs-string">&quot;username&quot;</span>: UserName,<br>        <span class="hljs-string">&quot;password&quot;</span>: PassWord,<br>    &#125;<br>    url = <span class="hljs-string">&quot;https://smms.app/api/v2/token&quot;</span><br>    res = requests.post(data=data,url=url)<br>    res = res.json()<br>    state = res[<span class="hljs-string">&#x27;success&#x27;</span>]<br>    <span class="hljs-keyword">if</span> state == <span class="hljs-literal">True</span>:<br>        token = res[<span class="hljs-string">&#x27;data&#x27;</span>][<span class="hljs-string">&#x27;token&#x27;</span>]<br>        <span class="hljs-keyword">return</span> token<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;账号或密码有误 ~&quot;</span>)<br>        os.system(<span class="hljs-string">&quot;pause&quot;</span>)<br>        exit(<span class="hljs-number">0</span>)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Upload_Pic</span>(<span class="hljs-params">UserName,PassWord</span>):</span><br>    path = sys.argv[<span class="hljs-number">0</span>]<br>    path = os.path.dirname(path)<br>    files = os.listdir(path)<br>    flag = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> files:<br>        png = re.search(<span class="hljs-string">&quot;.png&quot;</span>,i)<br>        jpg = re.search(<span class="hljs-string">&quot;.jpg&quot;</span>,i)<br>        jpeg = re.search(<span class="hljs-string">&quot;.jpeg&quot;</span>,i)<br>        <span class="hljs-keyword">if</span> png != <span class="hljs-literal">None</span> <span class="hljs-keyword">or</span> jpg != <span class="hljs-literal">None</span> <span class="hljs-keyword">or</span> jpeg != <span class="hljs-literal">None</span>:<br>            flag = <span class="hljs-number">1</span><br>            file_name = path + <span class="hljs-string">&#x27;\\&#x27;</span> +i<br>            <br><br>            token = Get_API_Token(UserName,PassWord)<br>            headers = &#123;<br>                <span class="hljs-string">&#x27;Authorization&#x27;</span>: token,<br>            &#125;<br>            files = &#123;<br>                <span class="hljs-string">&#x27;smfile&#x27;</span>:<span class="hljs-built_in">open</span>(file_name,<span class="hljs-string">&quot;rb&quot;</span>)<br>            &#125;<br>            url = <span class="hljs-string">&quot;https://smms.app/api/v2/upload&quot;</span><br>            res = requests.post(url=url,files=files,headers=headers).json()<br>            state = res[<span class="hljs-string">&#x27;success&#x27;</span>]<br>            <span class="hljs-keyword">if</span> state == <span class="hljs-literal">True</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图片名称: &quot;</span>,res[<span class="hljs-string">&#x27;data&#x27;</span>][<span class="hljs-string">&#x27;filename&#x27;</span>])<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图片路径: &quot;</span>,file_name)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;外链链接: &quot;</span>,res[<span class="hljs-string">&#x27;data&#x27;</span>][<span class="hljs-string">&#x27;url&#x27;</span>])<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;删除链接: &quot;</span>,res[<span class="hljs-string">&#x27;data&#x27;</span>][<span class="hljs-string">&#x27;delete&#x27;</span>])<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)<br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图片名称: &quot;</span>,i)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图片路径: &quot;</span>,file_name)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图片上传失败啦 ~&quot;</span>)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)<br>                <span class="hljs-keyword">continue</span><br><br>    <span class="hljs-keyword">if</span> flag == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;当前目录下没有图片 ~&quot;</span>)           <br>        os.system(<span class="hljs-string">&quot;pause&quot;</span>)<br>        exit(<span class="hljs-number">0</span>)<br><br>    <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    UserName =<span class="hljs-string">&quot;&quot;</span> <span class="hljs-comment"># 输入账号的地方</span><br>    PassWord =<span class="hljs-string">&quot;&quot;</span> <span class="hljs-comment"># 输入密码的地方</span><br>    Upload_Pic(UserName,PassWord)<br><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Others/" class="category-chain-item">Others</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>图床自动上传脚本创建</div>
+      <div>https://equinox-shame.github.io/2022/09/12/图床脚本创建/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 12, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" title="C++ 核心编程">
+                        <span class="hidden-mobile">C++ 核心编程</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
