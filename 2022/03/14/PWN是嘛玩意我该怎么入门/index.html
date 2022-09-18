@@ -1,64 +1,353 @@
 
-<!DOCTYPE html>
-<html lang="zh" class="loading">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PWN是嘛玩意我该怎么入门(南航入门指北) - Autumnal</title>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="google" content="notranslate" />
-    <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="尽量简洁的简介pwn写作 屁 达不溜 恩，读作 胖 是指对一个程序输入特定的字符，使得程序执行了一些意料之外的操作，最终拿到系统的shell的过程
-“拿到shell? shell是什么? 为什么要拿,"> 
-    <meta name="author" content="梓曰"> 
-    <link rel="alternative" href="atom.xml" title="Autumnal" type="application/atom+xml"> 
-    <link rel="icon" href="/img/favicon.png"> 
-    
-    
-<link rel="stylesheet" href="/css/diaspora.css">
 
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="尽量简洁的简介pwn写作 屁 达不溜 恩，读作 胖 是指对一个程序输入特定的字符，使得程序执行了一些意料之外的操作，最终拿到系统的shell的过程 “拿到shell? shell是什么? 为什么要拿? 怎么拿?” 这个同学问的非常好 具体参考提问的智慧(bushi 关于shell shell可以就理解为是一个机子的控制权限，或者操作权限 比如在windows上输入Win + R再输入cmd后回车">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PWN是嘛玩意我该怎么入门(南航入门指北)">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/PWN%E6%98%AF%E5%98%9B%E7%8E%A9%E6%84%8F%E6%88%91%E8%AF%A5%E6%80%8E%E4%B9%88%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="尽量简洁的简介pwn写作 屁 达不溜 恩，读作 胖 是指对一个程序输入特定的字符，使得程序执行了一些意料之外的操作，最终拿到系统的shell的过程 “拿到shell? shell是什么? 为什么要拿? 怎么拿?” 这个同学问的非常好 具体参考提问的智慧(bushi 关于shell shell可以就理解为是一个机子的控制权限，或者操作权限 比如在windows上输入Win + R再输入cmd后回车">
+<meta property="og:locale">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tABJU.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA0iT.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAyQJ.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tADWF.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tArz4.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA6y9.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA2e1.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAcLR.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tARdx.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAWo6.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAhFK.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA4JO.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA5WD.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAoSe.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tATQH.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAOTP.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAqeI.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tALwt.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAHOA.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tA7yd.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAjFf.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAvY8.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tAxfS.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEplQ.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tESSg.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tE9yj.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tECOs.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEimn.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEEkV.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEFwq.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEkT0.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/09/21/4tEVYT.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/af157825031bcb93.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/928077802e3391f6.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/f29e7bb5ee5eda91.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/3371f0dc29fd79c4.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/a49b1e09dcc5f952.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/47cef4a12b9300b7.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/26c3471d9df41e4f.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/dfe779c25978568e.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/857afcf23d4b345c.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/09/a835d816c8aebb46.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d6e32ab3f51d913f8eb8.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d71f2ab3f51d913ff660.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7932ab3f51d9140cb43.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7b02ab3f51d9141006a.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7bf2ab3f51d91411e21.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7ce2ab3f51d91413a39.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7e02ab3f51d9141597b.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7ee2ab3f51d914170fb.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d7fc2ab3f51d914187ed.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6149d8082ab3f51d91419ba4.png">
+<meta property="article:published_time" content="2022-03-14T05:16:18.687Z">
+<meta property="article:modified_time" content="2022-07-19T07:50:20.901Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/09/21/4tABJU.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>PWN是嘛玩意我该怎么入门(南航入门指北) - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
-<body class="loading">
-    <span id="config-title" style="display:none">Autumnal</span>
-    <div id="loader"></div>
-    <div id="single">
-    <div id="top" style="display: block;">
-    <div class="bar" style="width: 0;"></div>
-    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://equinox-shame.github.io"></a>
-    <div title="播放/暂停" class="iconfont icon-play"></div>
-    <h3 class="subtitle">PWN是嘛玩意我该怎么入门(南航入门指北)</h3>
-    <div class="social">
-        <div>
-            <div class="share">
-                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
-            </div>
-            <div id="qr"></div>
-        </div>
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Inicio
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archivo
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categorías
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Enlaces
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <div class="scrollbar"></div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PWN是嘛玩意我该怎么入门(南航入门指北)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-14 13:16" pubdate>
+          March 14, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.5k palabras
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 minutos
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> vistas
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-    <div class="section">
-        <div class="article">
-    <div class='main'>
-        <h1 class="title">PWN是嘛玩意我该怎么入门(南航入门指北)</h1>
-        <div class="stuff">
-            <span>三月 14, 2022</span>
-            
+</div>
 
-        </div>
-        <div class="content markdown">
-            <h2 id="尽量简洁的简介"><a href="#尽量简洁的简介" class="headerlink" title="尽量简洁的简介"></a>尽量简洁的简介</h2><p>pwn写作 屁 达不溜 恩，读作 胖 是指对一个程序输入特定的字符，使得程序执行了一些意料之外的操作，最终拿到系统的shell的过程</p>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">PWN是嘛玩意我该怎么入门(南航入门指北)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="尽量简洁的简介"><a href="#尽量简洁的简介" class="headerlink" title="尽量简洁的简介"></a>尽量简洁的简介</h2><p>pwn写作 屁 达不溜 恩，读作 胖 是指对一个程序输入特定的字符，使得程序执行了一些意料之外的操作，最终拿到系统的shell的过程</p>
 <p>“拿到shell? shell是什么? 为什么要拿? 怎么拿?”</p>
 <p>这个同学问的非常好 具体参考提问的智慧(bushi <strong>关于shell</strong> shell可以就理解为是一个机子的控制权限，或者操作权限</p>
 <p>比如在windows上输入Win + R再输入cmd后回车 会打开一个黑框子——控制台窗口</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tABJU.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tABJU.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>这个黑框就可以称为你Windows的shell</p>
 <p>linux同理Ctrl + Alt +T</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA0iT.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA0iT.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>在这个黑框里，你可以输入指令来进行文件夹或文件的访问、重命名、删除，ip访问，软件安装，关机，rm -rf /*等等许多你能想到的能用键鼠实现的操作</p>
 <p>实际上用鼠标双击打开一个文件就是将”访问文件夹-访问文件-打开文件”这一系列指令集成进了double click这样一个快捷键里</p>
 <p>有时候这个黑框框能提供比键鼠权限更高的操作</p>
@@ -190,55 +479,55 @@
 <p>连接到那个地址后，服务器会用一个一模一样的程序来响应，这时你屏幕上显示的东西也就会和自己运行那个程序的时候一模一样</p>
 <p>如果你的利用脚本可以通过这个程序拿到本地的shell，那么基本上在连接到目标地址后进行同样的操作就也能拿到对方机子的shell，这个时候输入Linxu命令就会被目标主机执行</p>
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p><strong>Linux</strong></p>
-<p>Linux有许多花里胡哨的版本，这里咱们就用ubuntu 16.04就行 切记16.04!!! 首先下载安装<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a979f489b47b">VMware</a> 然后上<a target="_blank" rel="noopener" href="https://releases.ubuntu.com/16.04/">镜像网站</a>下载ubuntu 16.04镜像 速度太慢的话还有<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8d5ad27b96b9">其他源</a>可以下 这里我就翻中科大的牌儿了 <img src="https://z3.ax1x.com/2021/09/21/4tAyQJ.png" alt="img"> 下载好后打开VMware，创建新的虚拟机 <img src="https://z3.ax1x.com/2021/09/21/4tADWF.png" alt="img"> 选择自定义</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tArz4.png" alt="img"></p>
+<p>Linux有许多花里胡哨的版本，这里咱们就用ubuntu 16.04就行 切记16.04!!! 首先下载安装<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a979f489b47b">VMware</a> 然后上<a target="_blank" rel="noopener" href="https://releases.ubuntu.com/16.04/">镜像网站</a>下载ubuntu 16.04镜像 速度太慢的话还有<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8d5ad27b96b9">其他源</a>可以下 这里我就翻中科大的牌儿了 <img src="https://z3.ax1x.com/2021/09/21/4tAyQJ.png" srcset="/img/loading.gif" lazyload alt="img"> 下载好后打开VMware，创建新的虚拟机 <img src="https://z3.ax1x.com/2021/09/21/4tADWF.png" srcset="/img/loading.gif" lazyload alt="img"> 选择自定义</p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tArz4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>直接下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA6y9.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA6y9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择骚后安装操作系统，下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA2e1.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA2e1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择Linux,下面找到ubuntu64，下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAcLR.png" alt="img"> </p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAcLR.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>然后给虚拟机取个名字，这里用句大实话代替，下面位置必须是已经存在的文件夹(建议别放C盘)，下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tARdx.png" alt="img"> </p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tARdx.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>直接下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAWo6.png" alt="img"> </p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAWo6.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>内存看自己配置，16G电脑就给8G，8G电脑就给4G，下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAhFK.png" alt="img"> </p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAhFK.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>直接下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA4JO.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA4JO.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA5WD.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA5WD.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAoSe.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAoSe.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tATQH.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tATQH.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择储存为单个文件，下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAOTP.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAOTP.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>下一步</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAqeI.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAqeI.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择自定义硬件 使用ISO镜像文件，把下载的ubuntu镜像位置填进去</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tALwt.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tALwt.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>关闭，完成 这样就有了一个虚拟机</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAHOA.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAHOA.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>点击开启此虚拟机，等出现下面这个画面，选择中文，安装ubuntu</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tA7yd.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tA7yd.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>直接继续</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAjFf.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAjFf.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择现在安装</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAvY8.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAvY8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>选择继续</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tAxfS.png" alt="img"> </p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tAxfS.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>继续</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tEplQ.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tEplQ.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>汉语，继续</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tESSg.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tESSg.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>账户密码，继续</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tE9yj.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tE9yj.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>等它搞完，选择重启 这样一个活生生的Linux就装好了 不要升级！ 不要升级！ 不要升级！ 然后咱们把源换一下，不然下载东西很慢 先进入设置-系统设置，找到软件和更新</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tECOs.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tECOs.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>打开，找到下载自选项</p>
-<p> <img src="https://z3.ax1x.com/2021/09/21/4tEimn.png" alt="img"> </p>
-<p>选择中国，或者在中国选项下面选一个看着顺眼的源 <img src="https://z3.ax1x.com/2021/09/21/4tEEkV.png" alt="img"> </p>
+<p> <img src="https://z3.ax1x.com/2021/09/21/4tEimn.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p>选择中国，或者在中国选项下面选一个看着顺眼的源 <img src="https://z3.ax1x.com/2021/09/21/4tEEkV.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>然后授权-关闭-重新载入 接着要装一些库让你64位的Linux可以运行32位的程序 Ctrl + Alt + T打开控制台</p>
 <p>1</p>
 <p>sudo apt-get install gcc-multilib</p>
@@ -248,26 +537,26 @@
 <p>sudo apt-get install libc6:i386</p>
 <p>Copied!</p>
 <p><strong>Windows</strong></p>
-<p>Windows说实话其实没有太多需要配置的，nc签到题要是嫌麻烦不想开Linux写可以在Windows上装一个netcat，这样可以直接用控制台来nc 也基本仅限于做nc签到题了，所以意义不太大 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/kukudetent/p/11696500.html">安装教程</a> 使用方法，以<a target="_blank" rel="noopener" href="https://ctf.show/challenges">CTF秀</a>为例 PWN第一题PWN签到题，直接先launch了这个instance <img src="https://z3.ax1x.com/2021/09/21/4tEFwq.png" alt="img"></p>
+<p>Windows说实话其实没有太多需要配置的，nc签到题要是嫌麻烦不想开Linux写可以在Windows上装一个netcat，这样可以直接用控制台来nc 也基本仅限于做nc签到题了，所以意义不太大 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/kukudetent/p/11696500.html">安装教程</a> 使用方法，以<a target="_blank" rel="noopener" href="https://ctf.show/challenges">CTF秀</a>为例 PWN第一题PWN签到题，直接先launch了这个instance <img src="https://z3.ax1x.com/2021/09/21/4tEFwq.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p> 看到一行nc 111.231.70.44 28071 这个就是我们要连接的目标地址 安装好netcat后直接复制进控制台</p>
 <p>(不要直接复制↑上面那个指令，要自己去ctfshow靶场上申请一个题目环境)</p>
-<p><img src="https://z3.ax1x.com/2021/09/21/4tEkT0.png" alt="img"> </p>
-<p>flag就出来了 <img src="https://z3.ax1x.com/2021/09/21/4tEVYT.png" alt="img"></p>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><h3 id="Wndows部分"><a href="#Wndows部分" class="headerlink" title="Wndows部分"></a>Wndows部分</h3><p>IDA 群文件里可以直接下载 <img src="https://s3.bmp.ovh/imgs/2021/09/af157825031bcb93.png" alt="img"></p>
-<p> emmm还有三天到期？那你们猜猜这个文档是什么时候写的 IDA是一个功能很强大的反编译软件，使用方法如下 假设我们已经下好了一个二进制文件 <img src="https://s3.bmp.ovh/imgs/2021/09/928077802e3391f6.png" alt="img"></p>
+<p><img src="https://z3.ax1x.com/2021/09/21/4tEkT0.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p>flag就出来了 <img src="https://z3.ax1x.com/2021/09/21/4tEVYT.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><h3 id="Wndows部分"><a href="#Wndows部分" class="headerlink" title="Wndows部分"></a>Wndows部分</h3><p>IDA 群文件里可以直接下载 <img src="https://s3.bmp.ovh/imgs/2021/09/af157825031bcb93.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> emmm还有三天到期？那你们猜猜这个文档是什么时候写的 IDA是一个功能很强大的反编译软件，使用方法如下 假设我们已经下好了一个二进制文件 <img src="https://s3.bmp.ovh/imgs/2021/09/928077802e3391f6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p> 双击直接打开，这时会询问打开方式，用我们熟悉的影音先锋打开它，直接拖到最后选择在这台电脑上查找其他应用</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/09/f29e7bb5ee5eda91.png" alt="img"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/09/f29e7bb5ee5eda91.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>找到你IDA的安装目录，会看到有两个可执行文件，带64的是反编译64位文件的，不带64是反编译32位文件的 至于怎么看这个文件是32位的还是64位的，可以拖进Linux里用file命令查看 但是两个exe都试一下看看哪个没报错其实也挺方便 而且题目做多了以后你们就可以自己总结出在IDA打开文件时有哪些小细节能帮助你判断这是32位的还是64位的</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/09/3371f0dc29fd79c4.png" alt="img"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/09/3371f0dc29fd79c4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>打开文件时一路确定就行，然后一般都直接进main函数去分析它的主要功能</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/09/a49b1e09dcc5f952.png" alt="img"></p>
-<p>双击进入，可以看到main函数的整体流程和汇编代码，按空格可以切换到线性代码，按下F5能反汇编出伪代码 <img src="https://s3.bmp.ovh/imgs/2021/09/47cef4a12b9300b7.png" alt="img"> </p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/09/a49b1e09dcc5f952.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>双击进入，可以看到main函数的整体流程和汇编代码，按空格可以切换到线性代码，按下F5能反汇编出伪代码 <img src="https://s3.bmp.ovh/imgs/2021/09/47cef4a12b9300b7.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>多数变量和函数名都是IDA默认命名，可以右键重命名便于自己理解程序 函数可以双击跟进去分析其功能，然后按ESC返回跟进前的函数</p>
-<p> <img src="https://s3.bmp.ovh/imgs/2021/09/26c3471d9df41e4f.png" alt="img"> </p>
+<p> <img src="https://s3.bmp.ovh/imgs/2021/09/26c3471d9df41e4f.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>双击变量可以查看他们在栈上的排列，就不贴图了</p>
 <h3 id="Linux部分"><a href="#Linux部分" class="headerlink" title="Linux部分"></a>Linux部分</h3><p><em><strong>以下工具的安装过程会涉及到安装或更新其他库(包括首先要按 “环境” 那一部分正确配置好你的宝贝Linux)，比如所有工具都需要提前安装并更新好pip，但是安装更新操作只需要执行一次，所以我只在安装pwntools的时候给出了该操作。如果跳过前几个工具的安装，先按我给的操作安装ROPgadget，那么基本上安装不了(但是可以自己根据报错来解决)。所以务必要按照本文给的顺序依次安装，指令不能少也不能错</strong></em></p>
 <p><strong>Python</strong></p>
-<p>Python是干啥的应该不用我介绍吧 ubuntu默认安装了python 2.7,Ctrl + Alt + T调出控制台，输入python，测试一下python是不是能正常使用 <img src="https://s3.bmp.ovh/imgs/2021/09/dfe779c25978568e.png" alt="img"></p>
+<p>Python是干啥的应该不用我介绍吧 ubuntu默认安装了python 2.7,Ctrl + Alt + T调出控制台，输入python，测试一下python是不是能正常使用 <img src="https://s3.bmp.ovh/imgs/2021/09/dfe779c25978568e.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>pwntools</strong></p>
 <p>安装： 在控制台输入</p>
 <p>1</p>
@@ -306,7 +595,7 @@
 <p>gdb</p>
 <p>Copied!</p>
 <p>如果显示了gdb-peda$说明安装成功</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/09/857afcf23d4b345c.png" alt="img"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/09/857afcf23d4b345c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>checksec</strong></p>
 <p>用于检查二进制文件保护开启情况的工具</p>
 <p>安装</p>
@@ -321,7 +610,7 @@
 <p>1</p>
 <p>checksec</p>
 <p>Copied!</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/09/a835d816c8aebb46.png" alt="img"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/09/a835d816c8aebb46.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>43</p>
 <p><strong>ROPgadget</strong></p>
 <p>用于在二进制文件中寻找用于构建攻击代码的现成代码块(俗称gadgets)的工具</p>
@@ -341,7 +630,7 @@
 <p>4</p>
 <p>sudo python setup.py install</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d6e32ab3f51d913f8eb8.png" alt="img"></p>
+<p><img src="https://pic.imgdb.cn/item/6149d6e32ab3f51d913f8eb8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p> 报错是因为我没加参数，如果报的错不一样，那么八成是安装失败了 checksec也是</p>
 <p><strong>ropper</strong></p>
 <p>与ROPgadget功能一致，但有时候更强大</p>
@@ -354,7 +643,7 @@
 <p>4</p>
 <p>pip install ropper</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d71f2ab3f51d913ff660.png" alt="img"></p>
+<p><img src="https://pic.imgdb.cn/item/6149d71f2ab3f51d913ff660.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>45</p>
 <p>话说我为了写这个入门手册，自己又配好了一个环境，要不要干脆就打包发出来呢 还是算了，我去年装虚拟机经历的痛苦，你们一丝都不能少 这可都是为你们好，多熟悉熟悉linux操作的姿势，可养发了</p>
 <h2 id="一道例题"><a href="#一道例题" class="headerlink" title="一道例题"></a>一道例题</h2><p>没有什么高深的技术(高深的我也不会呀)，主要是体验pwn解题的过程</p>
@@ -362,7 +651,7 @@
 <p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1ELu0ELg-FhAj7yZ349POIw">二进制文件</a> 提取码：afnw</p>
 <p>直接拖入IDA64打开</p>
 <p>找到main，F5反编译 看到通过scanf可以往cmmand这个变量里输入8个字符</p>
-<p> <img src="https://pic.imgdb.cn/item/6149d7932ab3f51d9140cb43.png" alt="img"> </p>
+<p> <img src="https://pic.imgdb.cn/item/6149d7932ab3f51d9140cb43.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>在程序的最后会调用system执行cmmand</p>
 <p>上面讲过，如果能执行system(“/bin/sh”)就能拿到shell</p>
 <p>所以我们要想办法让command储存的就是”/bin/sh”这个字符串</p>
@@ -370,7 +659,7 @@
 <p>然后和36,48,115,104这些进行比较</p>
 <p>这些数字在ASCII码表里各对应着一个字符</p>
 <p>实际上就是在和这些字符比较</p>
-<p>点击36，按R可以将整数转换为字符 <img src="https://pic.imgdb.cn/item/6149d7b02ab3f51d9141006a.png" alt="img"> </p>
+<p>点击36，按R可以将整数转换为字符 <img src="https://pic.imgdb.cn/item/6149d7b02ab3f51d9141006a.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>意思是说</p>
 <p>如果发现cmmand里面有’$’并且下一个是’0’</p>
 <p>或者发现’s’并且下一个是’h’</p>
@@ -399,8 +688,8 @@
 <p>而这个空字符是作为字符串结束的标志，所以程序会认为commad这个字符串到第一个’h’后就结束了</p>
 <p>commad也会变成’sh’</p>
 <p>这样，最后就执行了system(‘sh’)，也就拿到shell了 可以看到在haoshufu这个程序里出现了控制台标志$，并且可以对输入的指令进行响  应那咱们连上远端，实战一下</p>
-<p><img src="https://pic.imgdb.cn/item/6149d7bf2ab3f51d91411e21.png" alt="img"> </p>
-<p> <img src="https://pic.imgdb.cn/item/6149d7ce2ab3f51d91413a39.png" alt="img"> </p>
+<p><img src="https://pic.imgdb.cn/item/6149d7bf2ab3f51d91411e21.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p> <img src="https://pic.imgdb.cn/item/6149d7ce2ab3f51d91413a39.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>(远端失效了，在本地做做练练手就行)</p>
 <p>1</p>
 <p>Win + R</p>
@@ -411,22 +700,22 @@
 <p>1</p>
 <p>nc 106.15.120.40 8009</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d7e02ab3f51d9141597b.png" alt="img"></p>
+<p><img src="https://pic.imgdb.cn/item/6149d7e02ab3f51d9141597b.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>50</p>
 <p>1</p>
 <p>shsh</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d7ee2ab3f51d914170fb.png" alt="img"></p>
+<p><img src="https://pic.imgdb.cn/item/6149d7ee2ab3f51d914170fb.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>51</p>
 <p>1</p>
 <p>ls   查看目录</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d7fc2ab3f51d914187ed.png" alt="img"></p>
+<p><img src="https://pic.imgdb.cn/item/6149d7fc2ab3f51d914187ed.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>52</p>
 <p>1</p>
 <p>cat flag   打印flag文件内容</p>
 <p>Copied!</p>
-<p><img src="https://pic.imgdb.cn/item/6149d8082ab3f51d91419ba4.png" alt="img"> </p>
+<p><img src="https://pic.imgdb.cn/item/6149d8082ab3f51d91419ba4.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>flag就是flag{biubiubiubiubiubiubiubiu}</p>
 <p>*<strong>* 其他解法</strong></p>
 <p>有大师傅给了不一样的思路</p>
@@ -455,136 +744,419 @@
 <p>原理就不解释了，可以自己查有关这些指令和符号的介绍</p>
 <p>最上面两个不易成功，可以自己研究研究是为什么</p>
 
-            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
-                <source type="audio/mpeg" src="">
-            </audio>
+                
+              </div>
             
-                <ul id="audio-list" style="display:none">
-                    
-                        
-                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
-                        
-                    
-                        
-                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
-                        
-                    
-                </ul>
-            
-        </div>
-        
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-    <div id='gitalk-container' class="comment link"
-		data-enable='false'
-        data-ae='false'
-        data-ci='01ed89abee289d37f2f8'
-        data-cs='51741e819059e2ea7ab6c6f3d0fa0ac631d1d975'
-        data-r='equinox-shame.github.io'
-        data-o='Equinox-shame'
-        data-a='Equinox-shame'
-        data-d='false'
-    >查看评论</div>
-
-
-        
-    </div>
+<span class="category-chains">
+  
+  
     
-</div>
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
 
+      </span>
+    
+  
+</span>
 
     </div>
+  
+  
 </div>
 
 
+              
+  
 
-</body>
-
-
-<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
-<script src="/js/plugin.js"></script>
-<script src="/js/typed.js"></script>
-<script src="/js/diaspora.js"></script>
-
-
-<link rel="stylesheet" href="/photoswipe/photoswipe.css">
-<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
-
-
-<script src="/photoswipe/photoswipe.min.js"></script>
-<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
-
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PWN是嘛玩意我该怎么入门(南航入门指北)</div>
+      <div>https://equinox-shame.github.io/2022/03/14/PWN是嘛玩意我该怎么入门/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Autor</div>
+          <div>梓曰</div>
         </div>
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-            <div class="pswp__top-bar">
-                <!--  Controls are self-explanatory. Order can be changed. -->
-                <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Publicado el</div>
+          <div>March 14, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licencia bajo</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Atribución">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/14/misc/" title="misc入门指北(来自于MoeCTF)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">misc入门指北(来自于MoeCTF)</span>
+                        <span class="visible-mobile">Anterior</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/14/Python%20%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/" title="Python 沙箱逃逸">
+                        <span class="hidden-mobile">Python 沙箱逃逸</span>
+                        <span class="visible-mobile">Siguiente</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
                 </div>
+              
             </div>
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
         </div>
+      </div>
     </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Tabla de Contenidos</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
-        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
-        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
-        messageStyle: "none"
-    });
-</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Buscar</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Palabra clave</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Vistas: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitantes: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
         }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
     });
+  });
 </script>
 
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
 </script>
 
 
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
 
 
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">El blog funciona mejor con JavaScript habilitado</div>
+  </noscript>
+</body>
 </html>
