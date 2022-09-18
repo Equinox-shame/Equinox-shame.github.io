@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="en" data-default-color-scheme=auto>
+<html lang="zh" data-default-color-scheme=auto>
 
 
 
@@ -13,7 +13,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
     <meta name="description" content="拿到程序，拖入IDA进行反编译，我们可以获取到一些基本的信息  我们可以得到flag的长度为24，同时点击对应的encrypt可以发现跳到的是一个地址，我们可以断定是一个SMC程序，程序将我们的输入保存了两份，第一份用来判断是否是假的flag，第二部分用于真正的加密，同时判断是否与flag加密后相同 我们可以利用一个SMC解密脚本进行手动解密来进行静态分析，而不是动态调试来进行解密 1234567">
@@ -22,14 +22,14 @@
 <meta property="og:url" content="https://equinox-shame.github.io/2022/08/15/2020%20%E7%BD%91%E9%BC%8E%E6%9D%AF(%E9%9D%92%E9%BE%99%E7%BB%84)%20jocker/index.html">
 <meta property="og:site_name" content="Autumnal">
 <meta property="og:description" content="拿到程序，拖入IDA进行反编译，我们可以获取到一些基本的信息  我们可以得到flag的长度为24，同时点击对应的encrypt可以发现跳到的是一个地址，我们可以断定是一个SMC程序，程序将我们的输入保存了两份，第一份用来判断是否是假的flag，第二部分用于真正的加密，同时判断是否与flag加密后相同 我们可以利用一个SMC解密脚本进行手动解密来进行静态分析，而不是动态调试来进行解密 1234567">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="og:image" content="https://s2.loli.net/2022/08/15/iSut91mNQpGCOb6.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/15/KmwvSnIWghH9etZ.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/15/nSdAEF23QWhw9ci.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/15/L1B2sPpm7wzCdJ4.png">
 <meta property="article:published_time" content="2022-08-15T09:27:44.070Z">
 <meta property="article:modified_time" content="2022-08-15T09:27:21.555Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2022/08/15/iSut91mNQpGCOb6.png">
   
@@ -118,7 +118,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Autumnal Equinox</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -138,7 +138,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
-                Home
+                ホーム
               </a>
             </li>
           
@@ -150,7 +150,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
-                Archives
+                アーカイブ
               </a>
             </li>
           
@@ -162,7 +162,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
-                Categories
+                カテゴリ
               </a>
             </li>
           
@@ -172,21 +172,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                Tags
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                About
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                リンク
               </a>
             </li>
           
@@ -242,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k words
+          1.6k 単語
         
       </span>
     
@@ -253,7 +241,7 @@
         
         
         
-          14 mins
+          14 分
         
       </span>
     
@@ -263,7 +251,7 @@
       
         <span id="busuanzi_container_page_pv" style="display: none">
           <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> views
+          <span id="busuanzi_value_page_pv"></span> 閲覧
         </span>
         
       
@@ -367,20 +355,20 @@
     <div class="license-meta">
       
         <div class="license-meta-item">
-          <div>Author</div>
-          <div>John Doe</div>
+          <div>著者</div>
+          <div>梓曰</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
-          <div>Posted on</div>
+          <div>作成日</div>
           <div>August 15, 2022</div>
         </div>
       
       
       
         <div class="license-meta-item">
-          <div>Licensed under</div>
+          <div>著作権</div>
           <div>
             
               
@@ -409,7 +397,7 @@
                       <a href="/2022/08/29/SQL%20%E6%B3%A8%E5%85%A5/" title="SQL 注入">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">SQL 注入</span>
-                        <span class="visible-mobile">Previous</span>
+                        <span class="visible-mobile">前の記事</span>
                       </a>
                     
                   </article>
@@ -418,7 +406,7 @@
                     
                       <a href="/2022/08/13/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%9B%BA%E4%BB%B6%E9%80%86%E5%90%91%20%E2%80%94%E2%80%94%20cnss%E6%8B%9B%E6%96%B0%20IDA%20bao%20zha%20le/" title="第一次固件逆向 —— cnss招新 IDA bao zha le">
                         <span class="hidden-mobile">第一次固件逆向 —— cnss招新 IDA bao zha le</span>
-                        <span class="visible-mobile">Next</span>
+                        <span class="visible-mobile">次の記事</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
@@ -428,6 +416,34 @@
             </div>
 
             
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
           </article>
         </div>
       </div>
@@ -437,7 +453,7 @@
       
   <aside class="sidebar" style="margin-left: -1rem">
     <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;見出し</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
@@ -492,7 +508,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -500,7 +516,7 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
@@ -517,9 +533,34 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
     </div>
   
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        閲覧合計数: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        合計閲覧者数: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
   
   
   
@@ -683,7 +724,7 @@
   
 
   <noscript>
-    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+    <div class="noscript-warning">ブログは JavaScript を有効にすると最適に機能します</div>
   </noscript>
 </body>
 </html>
