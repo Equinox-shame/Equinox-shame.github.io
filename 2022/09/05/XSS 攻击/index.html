@@ -24,7 +24,7 @@
 <meta property="og:description" content="分类XSS攻击大致可以分为三类 存储型XSS：存储型XSS，持久化，代码是存储在服务器中的，如在个人信息或发表文章等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。这种XSS比较危险，容易造成蠕虫，盗窃Cookie反射型XSS：非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-09-05T14:02:28.325Z">
-<meta property="article:modified_time" content="2022-09-05T14:01:24.181Z">
+<meta property="article:modified_time" content="2022-09-18T16:29:47.310Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -133,7 +133,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
-                Inicio
+                Home
               </a>
             </li>
           
@@ -145,7 +145,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
-                Archivo
+                Archives
               </a>
             </li>
           
@@ -157,7 +157,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
-                Categorías
+                Categories
               </a>
             </li>
           
@@ -169,7 +169,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/links/">
                 <i class="iconfont icon-link-fill"></i>
-                Enlaces
+                Links
               </a>
             </li>
           
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.8k palabras
+          6.9k words
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          57 minutos
+          58 mins
         
       </span>
     
@@ -246,7 +246,7 @@
       
         <span id="busuanzi_container_page_pv" style="display: none">
           <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> vistas
+          <span id="busuanzi_value_page_pv"></span> views
         </span>
         
       
@@ -337,7 +337,7 @@
 
 <p><code>htmlspecialchars</code>函数只针对<code>&lt;&gt;</code>大于小于号进行<code>html</code>实体化，我们还可以利用其他方法进行<code>xss</code>注入，这里我们可以利用<code>onfocus</code>事件绕过</p>
 <blockquote>
-<p><code>onfocus</code> 事件在对象获得焦点时发生，常用于<input>、<select>、<a> 标签</p>
+<p><code>onfocus</code> 事件在对象获得焦点时发生，常用于<code>&lt;input&gt;</code>、<code>&lt;select&gt;</code>、<code>&lt;a&gt;</code> 标签</p>
 </blockquote>
 <p>我们可以使用鼠标属性，添加一个鼠标点击</p>
 <figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-string">&#x27;onclick=&#x27;</span><span class="hljs-function"><span class="hljs-title">alert</span>(<span class="hljs-number">1</span>)</span><br><span class="hljs-string">&quot;onclick=&quot;</span><span class="hljs-function"><span class="hljs-title">alert</span>(<span class="hljs-number">1</span>)</span><br></code></pre></td></tr></table></figure>
@@ -422,26 +422,26 @@
     <div class="license-meta">
       
         <div class="license-meta-item">
-          <div>Autor</div>
+          <div>Author</div>
           <div>梓曰</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
-          <div>Publicado el</div>
+          <div>Posted on</div>
           <div>September 5, 2022</div>
         </div>
       
       
       
         <div class="license-meta-item">
-          <div>Licencia bajo</div>
+          <div>Licensed under</div>
           <div>
             
               
               
                 <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - Atribución">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
                     <i class="iconfont icon-by"></i>
                   </span>
                 </a>
@@ -464,7 +464,7 @@
                       <a href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" title="C++ 核心编程">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">C++ 核心编程</span>
-                        <span class="visible-mobile">Anterior</span>
+                        <span class="visible-mobile">Previous</span>
                       </a>
                     
                   </article>
@@ -473,7 +473,7 @@
                     
                       <a href="/2022/08/29/SQL%20%E6%B3%A8%E5%85%A5/" title="SQL 注入">
                         <span class="hidden-mobile">SQL 注入</span>
-                        <span class="visible-mobile">Siguiente</span>
+                        <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
@@ -520,7 +520,7 @@
       
   <aside class="sidebar" style="margin-left: -1rem">
     <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Tabla de Contenidos</p>
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
@@ -575,7 +575,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Buscar</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -583,7 +583,7 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">Palabra clave</label>
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
@@ -611,14 +611,14 @@
   
     
       <span id="leancloud-site-pv-container" style="display: none">
-        Vistas: 
+        Views: 
         <span id="leancloud-site-pv"></span>
         
       </span>
     
     
       <span id="leancloud-site-uv-container" style="display: none">
-        Visitantes: 
+        Visitors: 
         <span id="leancloud-site-uv"></span>
         
       </span>
@@ -791,7 +791,7 @@
   
 
   <noscript>
-    <div class="noscript-warning">El blog funciona mejor con JavaScript habilitado</div>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
   </noscript>
 </body>
 </html>
