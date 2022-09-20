@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2022/08/03/gmpy2%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/" target="_self">
+          gmpy2常见函数使用
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/03/gmpy2%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/" target="_self">
+        <div>
+          初始化大整数1234import gmpy2gmpy2.mpz(909090)result:mpz(909090)  求大整数a,b的最大公因数1234import gmpy2gmpy2.gcd(6,18)result:mpz(6)  求大整数x模m的逆元y12345import gmpy2#4*6 ≡ 1 mod 23gmpy2.invert(4,23)result:mpz(6)  检验大整数是
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-03 11:49" pubdate>
+              2022-08-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Crypto/" class="category-chain-item">Crypto</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2022/07/29/DASCTF%202022.07%20E4sy_Mix%20%E5%A4%8D%E7%8E%B0/" target="_self">
           DASCTF 2022.07 E4sy_Mix 复现
         </a>
@@ -710,60 +764,6 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/07/01/%E5%A4%A7%E6%95%B0%E9%99%A4%E6%B3%95/" target="_self">
-          大数除法
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/01/%E5%A4%A7%E6%95%B0%E9%99%A4%E6%B3%95/" target="_self">
-        <div>
-          简单举例以7546除23为例。 先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300； 然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320； 然后186减去23，可以减8次，此时商就是328. 原因说明对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数反复
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-07-01 23:45" pubdate>
-              2022-07-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/School-Learning/" class="category-chain-item">School Learning</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
@@ -793,7 +793,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Buscar</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -801,7 +801,7 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+          <label data-error="x" data-success="v" for="local-search-input">Palabra clave</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
@@ -829,14 +829,14 @@
   
     
       <span id="leancloud-site-pv-container" style="display: none">
-        Alle Aufrufe: 
+        Vistas: 
         <span id="leancloud-site-pv"></span>
         
       </span>
     
     
       <span id="leancloud-site-uv-container" style="display: none">
-        Alle Besucher: 
+        Visitantes: 
         <span id="leancloud-site-uv"></span>
         
       </span>
@@ -914,7 +914,7 @@
   
 
   <noscript>
-    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+    <div class="noscript-warning">El blog funciona mejor con JavaScript habilitado</div>
   </noscript>
 </body>
 </html>
