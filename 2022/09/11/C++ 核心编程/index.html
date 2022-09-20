@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/09/15/gR2jitCBb5OvPZL.png">
 <meta property="article:published_time" content="2022-09-11T09:37:33.822Z">
-<meta property="article:modified_time" content="2022-09-18T14:00:13.651Z">
+<meta property="article:modified_time" content="2022-09-20T14:12:47.412Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2022/09/15/gR2jitCBb5OvPZL.png">
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          17k 字
+          18k 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          144 分钟
+          152 分钟
         
       </span>
     
@@ -720,6 +720,65 @@
 <p>如果子类中没有堆区数据，可以不写为虚析构或纯虚析构</p>
 <p>用于纯虚析构函数的类也属于抽象类</p>
 </blockquote>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p><code>C++</code>中的文件操作需要包含头文件<code>#include &lt;fstream&gt;</code></p>
+<p>操作文件的三大类：</p>
+<ol>
+<li><code>ofstream</code>：写操作</li>
+<li><code>ifstream</code>：读操作</li>
+<li><code>fstream</code>：读写操作</li>
+</ol>
+<p>创建流对象：<code>ofstream ofs</code></p>
+<p>打开文件：<code>ofs.open(&quot;&lt;file path&gt;&quot;,&lt;mode&gt;)</code></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">打开方式</th>
+<th align="center">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ios::in</td>
+<td align="center">读文件</td>
+</tr>
+<tr>
+<td align="center">ios::out</td>
+<td align="center">写文件</td>
+</tr>
+<tr>
+<td align="center">ios::ate</td>
+<td align="center">初始位置：文件尾</td>
+</tr>
+<tr>
+<td align="center">ios::app</td>
+<td align="center">追加方式写文件</td>
+</tr>
+<tr>
+<td align="center">ios::trunc</td>
+<td align="center">如果文件存在先删除，再创建</td>
+</tr>
+<tr>
+<td align="center">ios::binary</td>
+<td align="center">二进制方式</td>
+</tr>
+</tbody></table>
+<p>注意：文件打开方式可以配合使用，使用<code>|</code>操作符</p>
+</blockquote>
+<p>写数据：<code>ofs &lt;&lt; &quot;XXX&quot;;</code></p>
+<p>关闭文件：<code>ofs.close()</code></p>
+<p><strong>读文件</strong></p>
+<p>使用<code>&gt;&gt;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ifstream ifs;<br>ifs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;xxx&quot;</span>,ios::in);<br><span class="hljs-keyword">char</span> buff[<span class="hljs-number">1024</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">while</span>(ifs &gt;&gt; buff)&#123;<br>	cout &lt;&lt; buff &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用<code>getline()</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ifstream ifs;<br>ifs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;xxx&quot;</span>,ios::in);<br><span class="hljs-keyword">char</span> buff[<span class="hljs-number">1024</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">while</span>(ifs.<span class="hljs-built_in">getline</span>(buf,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(buff)))&#123;<br>	cout &lt;&lt; buff &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ifstream ifs;<br>ifs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;xxx&quot;</span>,ios::in);<br><span class="hljs-keyword">char</span> buff[<span class="hljs-number">1024</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">while</span>(<span class="hljs-built_in">getline</span>(ifs,buff))&#123;<br>	cout &lt;&lt; buff &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用<code>get()</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ifstream ifs;<br>ifs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;xxx&quot;</span>,ios::in);<br><span class="hljs-keyword">char</span> buff[<span class="hljs-number">1024</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">while</span>((c = ifs.<span class="hljs-built_in">get</span>()) != EOF )&#123;<br>	cout &lt;&lt; c &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
