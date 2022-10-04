@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一些废话折腾了几天的OS，终于搭建完成了一个win10的分析环境，本来兴冲冲的开始分析时，运行程序发现没有点反应  想想也是，恶意程序运行后能有什么明显反应一样的 XD  搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了Windows的一个报错机制，但是没有回显，而且Wireshark也没有分析到任何流量信息，此时我开始觉得我环境是不是真的运行不起来 … 在找到一个 17 年的博">
+    <meta name="description" content="一些废话折腾了几天的OS，终于搭建完成了一个win10的分析环境，本来兴冲冲的开始分析时，运行程序发现没有点反应  想想也是，恶意程序运行后能有什么明显反应一样的 XD  搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了Windows的一个报错机制，但是没有回显，Wireshark等分析软件也没有捕获到任何有效信息，此时我开始觉得我环境是不是真的运行不起来 … 在找到一个 17">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第一次恶意代码分析 —— 恶意代码分析实战 Lab 3-1">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/10/04/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98%20Lab%203-1/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="一些废话折腾了几天的OS，终于搭建完成了一个win10的分析环境，本来兴冲冲的开始分析时，运行程序发现没有点反应  想想也是，恶意程序运行后能有什么明显反应一样的 XD  搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了Windows的一个报错机制，但是没有回显，而且Wireshark也没有分析到任何流量信息，此时我开始觉得我环境是不是真的运行不起来 … 在找到一个 17 年的博">
+<meta property="og:description" content="一些废话折腾了几天的OS，终于搭建完成了一个win10的分析环境，本来兴冲冲的开始分析时，运行程序发现没有点反应  想想也是，恶意程序运行后能有什么明显反应一样的 XD  搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了Windows的一个报错机制，但是没有回显，Wireshark等分析软件也没有捕获到任何有效信息，此时我开始觉得我环境是不是真的运行不起来 … 在找到一个 17">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/10/03/d5ApqKNToSeIb7Q.png">
 <meta property="og:image" content="https://s2.loli.net/2022/10/03/ZNlaXHouSkei9wT.png">
@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://s2.loli.net/2022/10/04/MmStPWrl1pE8CfT.png">
 <meta property="og:image" content="https://s2.loli.net/2022/10/04/wQksMct4WeD89HK.png">
 <meta property="article:published_time" content="2022-10-04T06:44:04.273Z">
-<meta property="article:modified_time" content="2022-10-04T06:43:42.496Z">
+<meta property="article:modified_time" content="2022-10-04T06:57:54.098Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2022/10/03/d5ApqKNToSeIb7Q.png">
@@ -294,9 +294,9 @@
 <blockquote>
 <p>想想也是，恶意程序运行后能有什么明显反应一样的 XD</p>
 </blockquote>
-<p>搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了<code>Windows</code>的一个报错机制，但是没有回显，而且<code>Wireshark</code>也没有分析到任何流量信息，此时我开始觉得我环境是不是真的运行不起来 …</p>
-<p>在找到一个 17 年的博客发现，好像还真跑不起来，作者在<code>win10</code>下运行点动静都没，我也尝试在微步云的<code>win10</code>、<code>win7</code>的沙箱运行，发现也都运行不起来。</p>
-<p>此时开始根据那位作者来搭建一个 04 年的<code>32位XP</code>古董<code>OS</code>，只能说太折磨了…各种软件适配，小到输入法，各个软件找到能用的版本太难了…又花了将近一天时间才搭建完成…</p>
+<p>搞了半天以为我环境出现了问题，结果在查看进程分析的时候发现其引发了<code>Windows</code>的一个报错机制，但是没有回显，<code>Wireshark</code>等分析软件也没有捕获到任何有效信息，此时我开始觉得我环境是不是真的运行不起来 …</p>
+<p>在找到一个 17 年的博客发现，好像还真跑不起来，作者在<code>win10</code>等各个环境下运行点动静都没，我也尝试在微步云的<code>win10</code>、<code>win7</code>的沙箱运行，发现也都运行不起来。</p>
+<p>由于那位作者成功于<code>32位XP</code>上成功运行，因此我也准备来搭建一个 04 年的<code>32位XP</code>古董<code>OS</code>，只能说太折磨了…各种软件适配，小到输入法，各个软件找到能用的版本太难了…又花了将近一天时间才搭建完成…</p>
 <h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>拿到一个恶意程序后，第一步便是将其上传到一个沙箱进行测试，我们此处使用<code>VirusTotal</code></p>
 <p>可以很明显的看到有<code>67</code>个杀软报毒，说明该样本已经能够被大部分杀软识别进行消灭了</p>
 <img src="https://s2.loli.net/2022/10/03/d5ApqKNToSeIb7Q.png" srcset="/img/loading.gif" lazyload alt="1.png" style="zoom:67%;" />
