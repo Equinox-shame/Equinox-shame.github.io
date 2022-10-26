@@ -1,0 +1,847 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言MEMZ属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是MEMZ会修改MBR主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。 准备工作我们采用之前搭建好的Win10分析环境下运行MEMZ，并准备相关的分析工具如IDA等。 和分析其他样本一样我们先将其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MEMZ 样本分析">
+<meta property="og:url" content="https://equinox-shame.github.io/2022/10/26/MEMZ%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言MEMZ属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是MEMZ会修改MBR主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。 准备工作我们采用之前搭建好的Win10分析环境下运行MEMZ，并准备相关的分析工具如IDA等。 和分析其他样本一样我们先将其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/p7bkJHt56NTeaEG.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/a3gF5WeEdCMqJli.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/UDXIfPdV9lxHWmj.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/OXdxSMyLbj2mWrE.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/AtFfacCQZzBn3UJ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/mYOw68JPLdpQvhl.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/HBs8EjWJu9SG36U.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/83mDBLrxSEcW1iR.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/PsZOv4Jzl7nxf2u.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/23/kAJlpGQqwdXuhBD.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/8USsW9dvgQOFI4B.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/fsDC9PaQBVezoSb.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/DYIsyME5THvaVom.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/yJaYtD4hWGZCdIE.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/BfxzZMP1hdg6LoN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/L78pJUu2swMbBqh.png">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-3c70db094c82da7e3afa9536f26aff8b_r.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/faNGXKMpW1sDI2w.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/2jFWPkbm4YRHi5e.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/oIfiV9a2UKnS7yv.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/nzYvo1dENRUFIcj.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/AcqkD1gvxGpFn9N.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/pwUHTcXi9DgnFeh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/oOZvUDuekJNcsRr.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/6cheOMISTKHzYrm.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/9t4XLg8V3JES2Br.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/Jy1FfHpQjBGD5d3.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/eKdySQqR18p52jX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/25/eRndMcOkhiDL8QE.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/sc3Vu1lDGJHaWRQ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/Hw2QR3koIvqYjBy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/YnJPHqBeSgduR48.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/bkJ1ip67lsdZwrP.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/E5qabn6rDGN3h1S.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/eA3KnZsGJpVRDrj.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/ipIDUxQG5eLT2BA.png">
+<meta property="og:image" content="https://s2.loli.net/2022/10/26/gIwNAeoscy6u7Hn.png">
+<meta property="article:published_time" content="2022-10-26T15:58:34.549Z">
+<meta property="article:modified_time" content="2022-10-26T15:58:22.872Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>MEMZ 样本分析 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MEMZ 样本分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-26 23:58" pubdate>
+          2022年10月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MEMZ 样本分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>MEMZ</code>属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是<code>MEMZ</code>会修改<code>MBR</code>主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>我们采用之前搭建好的<code>Win10</code>分析环境下运行<code>MEMZ</code>，并准备相关的分析工具如<code>IDA</code>等。</p>
+<p>和分析其他样本一样我们先将其上传在线云沙箱观察一下程序的对应信息，如导入导出表等等。获取一些初步的信息。</p>
+<p>此处我们采用<code>微步云沙箱</code>，进行上传分析</p>
+<img src="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png" srcset="/img/loading.gif" lazyload alt="1.png" style="zoom: 75%;" />
+
+<p>可以看到彩虹猫的一些行为特征，修改<code>MBR</code>，安装钩子获取信息等等，我们观察其对应的导入导出表</p>
+<img src="https://s2.loli.net/2022/10/23/p7bkJHt56NTeaEG.png" srcset="/img/loading.gif" lazyload alt="2.png" style="zoom: 75%;" />
+
+<p>我们观察可以看到程序有创建文件、创建线程、创建对话框、设置鼠标等等相关的一些<code>API</code>函数，我们可以推测出其的一些相关功能特点</p>
+<p><img src="https://s2.loli.net/2022/10/23/a3gF5WeEdCMqJli.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
+<p>同时在程序中有许许多多的<code>URL</code>，全部是谷歌的相关搜索，合理推测程序会联网打开这些网页</p>
+<img src="https://s2.loli.net/2022/10/23/UDXIfPdV9lxHWmj.png" srcset="/img/loading.gif" lazyload alt="3.png" style="zoom:80%;" />
+
+<p>沙箱的动态分析下我们可以观测到彩虹猫会自己创建六个线程，然后创建一个<code>txt</code>文件，前面所提到的许多导出函数在这个图中也有相关的体现</p>
+<img src="https://s2.loli.net/2022/10/23/OXdxSMyLbj2mWrE.png" srcset="/img/loading.gif" lazyload alt="4.png" style="zoom:80%;" />
+
+<h2 id="尝试运行"><a href="#尝试运行" class="headerlink" title="尝试运行"></a>尝试运行</h2><p>我们通过云沙箱的一定分析后，尝试跑一下对应的恶意程序观察其相关的破坏性</p>
+<p>当我们尝试运行时会收到作者的提示，告诉你这个是一个恶意程序，确保我们不是一不小心点开的，需要我们两次进行确认</p>
+<p><img src="https://s2.loli.net/2022/10/23/AtFfacCQZzBn3UJ.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
+<p>我们确认后程序会生成一个<code>txt</code>，告诉我们电脑被彩虹猫破坏了</p>
+<p><img src="https://s2.loli.net/2022/10/23/mYOw68JPLdpQvhl.png" srcset="/img/loading.gif" lazyload alt="6.png"></p>
+<p>之后会出现：</p>
+<ul>
+<li>电脑打开一些进程，如<code>画图</code>、<code>记事本</code>、<code>控制面板</code>等</li>
+<li>文字出现反转，显示不正常</li>
+<li>电脑桌面不断设置反色，然后回复正常</li>
+<li>鼠标指针处出现各种报错图标，以及鼠标产生不正常的抖动</li>
+<li>电脑弹出反正的警告以及报错声</li>
+<li>电脑重启后出现彩虹猫</li>
+<li>…</li>
+</ul>
+<p>如：</p>
+<img src="https://s2.loli.net/2022/10/23/HBs8EjWJu9SG36U.png" srcset="/img/loading.gif" lazyload alt="7.png" style="zoom: 50%;" />
+
+<p>当我们重启时候会产生一个蓝屏错误信息，随后启动便只剩下了一个彩虹猫，以及那奇妙的音乐…</p>
+<img src="https://s2.loli.net/2022/10/23/83mDBLrxSEcW1iR.png" srcset="/img/loading.gif" lazyload alt="8.png" style="zoom:50%;" />
+
+<img src="https://s2.loli.net/2022/10/23/PsZOv4Jzl7nxf2u.png" srcset="/img/loading.gif" lazyload alt="9.png" style="zoom: 67%;" />
+
+<h2 id="逆向分析"><a href="#逆向分析" class="headerlink" title="逆向分析"></a>逆向分析</h2><p>之后就是我们的最重要的部分，尝试逆向分析程序</p>
+<p><img src="https://s2.loli.net/2022/10/23/kAJlpGQqwdXuhBD.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
+<p>放入<code>PE</code>进行查壳，发现是无壳<code>32位</code>位程序，拖入<code>IDA</code>中进行反编译</p>
+<blockquote>
+<p>需要注意一下，有些<code>PE</code>检测时会运行对应的程序，因为<code>MEMZ</code>存在有保护性确认，因此本地实体机分析时并不会产生太大的问题，但对于某些恶意样本可能会对主机产生不可逆的破坏</p>
+</blockquote>
+<p>拖入<code>IDA</code>反编译后可以发现程序十分的简单，仅有<code>26</code>个函数，同时结构也十分清晰，方便我们的分析。</p>
+<h3 id="启动过程"><a href="#启动过程" class="headerlink" title="启动过程"></a>启动过程</h3><p><img src="https://s2.loli.net/2022/10/25/8USsW9dvgQOFI4B.png" srcset="/img/loading.gif" lazyload alt="12.png"></p>
+<p><img src="https://s2.loli.net/2022/10/25/fsDC9PaQBVezoSb.png" srcset="/img/loading.gif" lazyload alt="13.png"></p>
+<p>通过观察我们可以看出<code>MEMZ</code>在询问我们是否启动后(两次警告过后)，便会创建六个<code>MEMZ</code>进程，带有<code>watchdog</code>的五个进程以及一个带有<code>main</code>的进程</p>
+<p>此时我们就可以发现创建的进程会进入里面的<code>if</code>块，此时我们开始对<code>if</code>块内的一些东西进行分析</p>
+<p><img src="https://s2.loli.net/2022/10/25/DYIsyME5THvaVom.png" srcset="/img/loading.gif" lazyload alt="14.png"></p>
+<p><code>MEMZ</code>在启动创建多个进程后，又会启动相应的线程来不断遍历内存中的相关进程数目</p>
+<p><img src="https://s2.loli.net/2022/10/25/yJaYtD4hWGZCdIE.png" srcset="/img/loading.gif" lazyload alt="15.png"></p>
+<p>当我们手动关闭或者是关机时候，那么对应的进程数目便会减少，进而调用崩溃函数，引发崩溃</p>
+<p><img src="https://s2.loli.net/2022/10/25/BfxzZMP1hdg6LoN.png" srcset="/img/loading.gif" lazyload alt="21.png"></p>
+<p>同时我们可以注意到<code>MEMZ</code>调用了<code>ntdll</code>中的一些无文档的提权函数，通过<code>dll</code>中的函数进行提权以及引发蓝屏异常，并强制用户重启</p>
+<h3 id="修改MBR"><a href="#修改MBR" class="headerlink" title="修改MBR"></a>修改MBR</h3><p><code>MEMZ</code>将覆写的数据进行提出，然后重新写入，导致了我们的磁盘启动后<code>BIOS</code>无法将权限给<code>MBR</code>进而无法启动<code>OS</code></p>
+<p><img src="https://s2.loli.net/2022/10/25/L78pJUu2swMbBqh.png" srcset="/img/loading.gif" lazyload alt="17.png"></p>
+<p>即覆写逻辑为：</p>
+<p><img src="https://pic4.zhimg.com/v2-3c70db094c82da7e3afa9536f26aff8b_r.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>我们稍后尝试提取出修改的数据</p>
+<h3 id="随机调用"><a href="#随机调用" class="headerlink" title="随机调用"></a>随机调用</h3><p><img src="https://s2.loli.net/2022/10/25/faNGXKMpW1sDI2w.png" srcset="/img/loading.gif" lazyload alt="18.png"></p>
+<p><code>MEMZ</code>创建线程来进行随机打开文件，于<code>off_405130</code>处我们可以看到执行的函数每两个<code>dword</code>一组，每次执行完后，采用地址<code>+2</code>，获取下一个函数的地址</p>
+<p><img src="https://s2.loli.net/2022/10/25/2jFWPkbm4YRHi5e.png" srcset="/img/loading.gif" lazyload alt="22.png"></p>
+<h4 id="随机打开进程"><a href="#随机打开进程" class="headerlink" title="随机打开进程"></a>随机打开进程</h4><h4 id="打开网页"><a href="#打开网页" class="headerlink" title="打开网页"></a>打开网页</h4><p><img src="https://s2.loli.net/2022/10/25/oIfiV9a2UKnS7yv.png" srcset="/img/loading.gif" lazyload alt="19.png"></p>
+<img src="https://s2.loli.net/2022/10/25/nzYvo1dENRUFIcj.png" srcset="/img/loading.gif" lazyload alt="20.png" style="zoom: 80%;" />
+
+<p>通过随机数来进行随机的打开进程，并返回一个随机数</p>
+<h3 id="鼠标抖动"><a href="#鼠标抖动" class="headerlink" title="鼠标抖动"></a>鼠标抖动</h3><p><img src="https://s2.loli.net/2022/10/25/AcqkD1gvxGpFn9N.png" srcset="/img/loading.gif" lazyload alt="23.png"></p>
+<p>通过随机数来改变当前鼠标所在位置，达到鼠标指针抖动效果</p>
+<h3 id="随机输入"><a href="#随机输入" class="headerlink" title="随机输入"></a>随机输入</h3><p><img src="https://s2.loli.net/2022/10/25/pwUHTcXi9DgnFeh.png" srcset="/img/loading.gif" lazyload alt="24.png"></p>
+<p><code>MEMZ</code>通过<code>Hook</code>输入信息并通过随机数产生输入进行发送</p>
+<h3 id="播放声音"><a href="#播放声音" class="headerlink" title="播放声音"></a>播放声音</h3><p><img src="https://s2.loli.net/2022/10/25/oOZvUDuekJNcsRr.png" srcset="/img/loading.gif" lazyload alt="25.png"></p>
+<h3 id="改变桌面"><a href="#改变桌面" class="headerlink" title="改变桌面"></a>改变桌面</h3><p><img src="https://s2.loli.net/2022/10/25/6cheOMISTKHzYrm.png" srcset="/img/loading.gif" lazyload alt="26.png"></p>
+<h3 id="随机位置弹提示框"><a href="#随机位置弹提示框" class="headerlink" title="随机位置弹提示框"></a>随机位置弹提示框</h3><p><img src="https://s2.loli.net/2022/10/25/9t4XLg8V3JES2Br.png" srcset="/img/loading.gif" lazyload alt="27.png"></p>
+<p><img src="https://s2.loli.net/2022/10/25/Jy1FfHpQjBGD5d3.png" srcset="/img/loading.gif" lazyload alt="28.png"></p>
+<p><img src="https://s2.loli.net/2022/10/25/eKdySQqR18p52jX.png" srcset="/img/loading.gif" lazyload alt="29.png"></p>
+<h3 id="文字反转"><a href="#文字反转" class="headerlink" title="文字反转"></a>文字反转</h3><p><img src="https://s2.loli.net/2022/10/25/eRndMcOkhiDL8QE.png" srcset="/img/loading.gif" lazyload alt="30.png"></p>
+<h3 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h3><p>双击打开病毒文件时，首先弹出警告框，点取消直接退出，点确定则创建五个参数<code>/watchdog</code>和一个参数<code>/main</code>的进程。</p>
+<p><code>/watchdog</code>进程检测是否有病毒进程被关闭或者将要关机，有的话弹出20个提示框，然后蓝屏/关机。</p>
+<p><code>/main</code>进程首先修改磁盘<code>MBR</code>，然后用记事本弹出信息，最后循环执行打开程序/播放声音/反色屏幕/放图片/不断缩放屏幕/随意复制屏幕内容等操作并堵塞。</p>
+<h2 id="MBR修改内容提取"><a href="#MBR修改内容提取" class="headerlink" title="MBR修改内容提取"></a>MBR修改内容提取</h2><p>我们前面提到了<code>MEMZ</code>会修改<code>MBR</code>内容，那么修改了什么呢？我们尝试提取一下。</p>
+<p>我们可以通过<code>IDA</code>调试拿到数据，我们前文所分析过了，<code>MEMZ</code>会创建带参数的启动，其中带<code>/main</code>参数的可以修改<code>MBR</code>，因此我们在对应位置上打上一个断点，提取就是了</p>
+<blockquote>
+<p>注意此处调试需要带参数</p>
+</blockquote>
+<p>那么问题来了，我们提取到后该怎么分析呢？</p>
+<p>我们可以使用虚拟机<code>Bochs</code>来进行调试</p>
+<blockquote>
+<p><code>Bochs</code>是一个开源的虚拟机，同时<code>Bochs</code>完全是靠软件来模拟整个<code>PC</code>环境，因此它非常的适合开发操作系统</p>
+</blockquote>
+<p>我们提取到了对应的<code>MBR</code>，我们利用<code>Bochs</code>中的创建磁盘可以新建一个启动硬盘</p>
+<p><img src="https://s2.loli.net/2022/10/26/sc3Vu1lDGJHaWRQ.png" srcset="/img/loading.gif" lazyload alt="31.png"></p>
+<p>我们找到<code>Bochs</code>的安装文件夹，以管理员权限进行打开<code>bximage</code></p>
+<p><img src="https://s2.loli.net/2022/10/26/Hw2QR3koIvqYjBy.png" srcset="/img/loading.gif" lazyload alt="32.png"></p>
+<p>按照上图进行设置，磁盘大小以及名字可以自己定义，需要注意的是不要带有任何的中文</p>
+<p><img src="https://s2.loli.net/2022/10/26/YnJPHqBeSgduR48.png" srcset="/img/loading.gif" lazyload alt="33.png"></p>
+<p>之后找到<code>bochsrc-sample</code>进行修改</p>
+<p><img src="https://s2.loli.net/2022/10/26/bkJ1ip67lsdZwrP.png" srcset="/img/loading.gif" lazyload alt="34.png"></p>
+<p><img src="https://s2.loli.net/2022/10/26/E5qabn6rDGN3h1S.png" srcset="/img/loading.gif" lazyload alt="35.png"></p>
+<blockquote>
+<p>此处的<code>abc</code>为一个文件夹，文件夹不要带任何的中文！！！</p>
+</blockquote>
+<p>按照上述过程设置完毕后，将<code>txt</code>文件后缀改为<code>bxrc</code>，之后启动，然后选择<code>continue</code>，加载一次镜像成功后便可以将<code>bxrc</code>文件直接拖入<code>IDA</code>进行调试分析</p>
+<p><img src="https://s2.loli.net/2022/10/26/eA3KnZsGJpVRDrj.png" srcset="/img/loading.gif" lazyload alt="36.png"></p>
+<p>我们反汇编后可以看到其主要是 16 位的汇编和底层机器进行打交道，我们比较难以观察，于是采用动调观察修改后的启动过程</p>
+<p><img src="https://s2.loli.net/2022/10/26/ipIDUxQG5eLT2BA.png" srcset="/img/loading.gif" lazyload alt="37.png"></p>
+<p>我们大致可以得到如下过程图：</p>
+<p><img src="https://s2.loli.net/2022/10/26/gIwNAeoscy6u7Hn.png" srcset="/img/loading.gif" lazyload alt="38.png"></p>
+<p>至此样本分析大致就结束了</p>
+<blockquote>
+<p>不知道为什么在<code>bochs</code>上跑出来的彩虹猫音乐变成了全损😥</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>MEMZ</code>的感染特征比较的明显，可以对比<code>MBR</code>数据是否为其修改过后的数据，来判断是否中毒</p>
+<p>同时<code>MEMZ</code>仅存在<code>MBR</code>部分为恶意部分，其他小玩意均为无害，可以拿来图一乐，以及感叹作者能利用 16 位汇编展现动画</p>
+<p>有时间的话想自己写一个相似的小玩意，但苦于学业压力，天天被迫赶作业🙄🙄</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MEMZ 样本分析</div>
+      <div>https://equinox-shame.github.io/2022/10/26/MEMZ 样本分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/04/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%E2%80%94%20%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98%20Lab%203-1/" title="第一次恶意代码分析 —— 恶意代码分析实战 Lab 3-1">
+                        <span class="hidden-mobile">第一次恶意代码分析 —— 恶意代码分析实战 Lab 3-1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
