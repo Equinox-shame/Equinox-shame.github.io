@@ -230,15 +230,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/14/Funny.exe/" target="_self">
-          Funny.exe分析
+        <a href="/2022/03/14/Hexo%E9%94%99%E8%AF%AF%EF%BC%9Aspawn%20failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" target="_self">
+          Hexo错误：spawn failed的解决方法
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/14/Funny.exe/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/14/Hexo%E9%94%99%E8%AF%AF%EF%BC%9Aspawn%20failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" target="_self">
         <div>
-          样本分析初步过程（拿到程序，就被Windows Defender给杀了）我们运行一下程序会发现其在一直输出Hello word，我们先过一遍 ExeinfoPe.exe发现这个是一个32位的程序  将其再拖入我们的【好朋友】 IDA里面进行反汇编的分析 打开一看，就仅有 2 个函数  Fun() 分析点开 fun 函数，我们可以看到内部的构造也是十分的简单  也就仅仅一个循环，一个数组，在循环的过
+          重启电脑有的时候可能是因为网络波动产生的错误，请首先尝试。 服务器相关如果你的Hexo是部署在服务器时，请注意以下方法 首先检查服务器是否能被ssh跑通，SERVER填写自己的云主机ip，以git用户为例： 12SHELLssh -v git@SERVER  服务器部署请一定要检查公钥pub文件是否输入正确 切换至指定用户，以git用户为例： 1234SHELLsu gitmkdir ~/.ssh
         </div>
       </a>
 
@@ -262,7 +262,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
+  <a href="/categories/Others/" class="category-chain-item">Others</a>
   
   
 
@@ -392,60 +392,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/14/HGame/" target="_self">
-          HGame 逆向复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/14/HGame/" target="_self">
-        <div>
-          HGameReverseeazyasm根据题目可以知道，题目由汇编编写而来，直接拖入ida ：  可以看到关键部分（如上图） 程序将[si]先左移4位后再右移4位，把两个得到的结果相加，最后于0x17进行异或之后与一个字符比较，如此循环28次。 在汇编里不难发现对比的字符串：  因此我们可以编写对应的解题脚本了（c++）： 123456789101112131415161718#include&l
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-03-14 13:16" pubdate>
-              2022-03-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/2022/03/14/Data%20Lab/" target="_self">
           CSAPP - Data Lab
         </a>
@@ -479,6 +425,60 @@
       <span class="category-chain">
         
   <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/03/14/HGame/" target="_self">
+          HGame 逆向复现
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/14/HGame/" target="_self">
+        <div>
+          HGameReverseeazyasm根据题目可以知道，题目由汇编编写而来，直接拖入ida ：  可以看到关键部分（如上图） 程序将[si]先左移4位后再右移4位，把两个得到的结果相加，最后于0x17进行异或之后与一个字符比较，如此循环28次。 在汇编里不难发现对比的字符串：  因此我们可以编写对应的解题脚本了（c++）： 123456789101112131415161718#include&l
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-03-14 13:16" pubdate>
+              2022-03-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
   
   
 
