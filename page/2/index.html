@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2022/08/15/2020%20%E7%BD%91%E9%BC%8E%E6%9D%AF(%E9%9D%92%E9%BE%99%E7%BB%84)%20jocker/" target="_self">
+          2020 网鼎杯(青龙组) jocker
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/15/2020%20%E7%BD%91%E9%BC%8E%E6%9D%AF(%E9%9D%92%E9%BE%99%E7%BB%84)%20jocker/" target="_self">
+        <div>
+          拿到程序，拖入IDA进行反编译，我们可以获取到一些基本的信息  我们可以得到flag的长度为24，同时点击对应的encrypt可以发现跳到的是一个地址，我们可以断定是一个SMC程序，程序将我们的输入保存了两份，第一份用来判断是否是假的flag，第二部分用于真正的加密，同时判断是否与flag加密后相同 我们可以利用一个SMC解密脚本进行手动解密来进行静态分析，而不是动态调试来进行解密 1234567
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-15 17:27" pubdate>
+              2022-08-15
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2022/08/13/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%9B%BA%E4%BB%B6%E9%80%86%E5%90%91%20%E2%80%94%E2%80%94%20cnss%E6%8B%9B%E6%96%B0%20IDA%20bao%20zha%20le/" target="_self">
           第一次固件逆向 —— cnss招新 IDA bao zha le
         </a>
@@ -679,60 +733,6 @@
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
             <time datetime="2022-07-13 23:42" pubdate>
-              2022-07-13
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/07/13/%E8%93%9D%E5%B8%BD%E6%9D%AF%20LOADER%20%E9%80%86%E5%90%91/" target="_self">
-          2022蓝帽杯 Loader 题解
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/13/%E8%93%9D%E5%B8%BD%E6%9D%AF%20LOADER%20%E9%80%86%E5%90%91/" target="_self">
-        <div>
-          前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数 直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些地方
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-07-13 12:23" pubdate>
               2022-07-13
             </time>
           </div>
