@@ -1,0 +1,1024 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ANSI转义码">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/01/05/ANSI%E8%BD%AC%E4%B9%89%E7%A0%81/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/RZd8TSV9lvFJ5m3.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/Cbr6XUvVx9hIwY7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/mfwh1SQ4HTtb8kA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/kYT89Hx6EnRaVQJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/z5I4JQr8RPcBhnu.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/dROajFy3XmhKLUt.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/yEhP3Ulj5ZrzpWo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/XajNnA8mopDeB2y.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/acHMCVNkPvElL3p.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/04/a5VWwdTbErNmJnG.png">
+<meta property="article:published_time" content="2023-01-05T11:42:34.653Z">
+<meta property="article:modified_time" content="2023-01-05T11:42:11.870Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/01/04/RZd8TSV9lvFJ5m3.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ANSI转义码 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ANSI转义码"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-05 19:42" pubdate>
+          2023年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.2k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ANSI转义码</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近期末考试考了一部分，间隙逛群的时候发现群友打的<code>CatCTF</code>的<code>Misc</code>中的<code>CatFlag</code>有点意思，通过一个简单的<code>cat flag</code>操作就可以拿到<code>flag</code>，但是在<code>vim</code>、<code>010Editor</code>下拿<code>flag</code>比较的困难，同时如果直接使用<code>strings flag</code>也是拿不到<code>flag</code>，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/ANSI_escape_code">https://en.wikipedia.org/wiki/ANSI_escape_code</a></p>
+</blockquote>
+<p>简单的去了解了一下，发现了一些比较好玩的东西，同时也顺便了解到一些题目中<code>shell</code>窗口是如何实现输出彩色字以及彩色背景等有关内容(XD)，本文记录一下关于这个题涉及到的<code>ANSI转义码</code>中的一些小玩意</p>
+<h2 id="富文本"><a href="#富文本" class="headerlink" title="富文本"></a>富文本</h2><h3 id="字体颜色"><a href="#字体颜色" class="headerlink" title="字体颜色"></a>字体颜色</h3><p>有没有觉得直接输出一个白色字符串有些多少单调且无聊？想不想输出彩色的字符？</p>
+<p>最基本的<code>ANSI转义码</code>是涉及呈现文本的代码，可以让我们修改文字的颜色、背景或者是添加一些修饰等，我们以<code>Python3</code>的环境为例子：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Hello&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>我们在控制台输入这个指令，可以看到字体是白色的：</p>
+<p><img src="https://s2.loli.net/2023/01/04/RZd8TSV9lvFJ5m3.png" srcset="/img/loading.gif" lazyload alt="image-20230104232231945"></p>
+<p>但是我们加入一个<code>ANSI转义码</code>：<code>\u001b[31m</code></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[31mHello&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>此时的输出是：</p>
+<p><img src="https://s2.loli.net/2023/01/04/Cbr6XUvVx9hIwY7.png" srcset="/img/loading.gif" lazyload alt="image-20230104232349539"></p>
+<p>可以看到我们的输出结果变成了红色，且下面一行也是红色，而这便是<code>ANSI颜色</code>的一种工作方式，当我们设置了某种颜色后，其便会一直存在，直到我们换了一种颜色或者打出重置代码</p>
+<p>我们输入重置代码来进行恢复：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/mfwh1SQ4HTtb8kA.png" srcset="/img/loading.gif" lazyload alt="image-20230104232612082"></p>
+<p>可以看到已经变回了原来的白色了。根据<code>ANSI颜色</code>的工作特性，我们一般都是讲要输入的字符串包裹在颜色代码以及重置代码之间,以此来控制我们所需要的彩色部分</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[31mHello\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/kYT89Hx6EnRaVQJ.png" srcset="/img/loading.gif" lazyload alt="image-20230104232815303"></p>
+<p>我们简单的了解了颜色的工作原理后我们列出一些颜色供给大家进行选择：</p>
+<h4 id="8-色彩"><a href="#8-色彩" class="headerlink" title="8 色彩"></a>8 色彩</h4><p>基本上所有的控制台都支持以下的颜色：</p>
+<ul>
+<li>黑色：<code>\u001b[30m</code></li>
+<li>红色：<code>\u001b[31m</code></li>
+<li>绿色：<code>\u001b[32m</code></li>
+<li>黄色：<code>\u001b[33m</code></li>
+<li>蓝色：<code>\u001b[34m</code></li>
+<li>洋红色：<code>\u001b[35m</code></li>
+<li>青色：<code>\u001b[36m</code></li>
+<li>白色：<code>\u001b[37m</code></li>
+</ul>
+<p>我们将其都进行输出：</p>
+<p><img src="https://s2.loli.net/2023/01/04/z5I4JQr8RPcBhnu.png" srcset="/img/loading.gif" lazyload alt="image-20230104233241429"></p>
+<h4 id="16-色彩"><a href="#16-色彩" class="headerlink" title="16 色彩"></a>16 色彩</h4><p>对于大多数终端，除了上述 8 种基本的颜色集外，还支持更明亮的颜色：</p>
+<ul>
+<li>亮黑色：<code>\u001b[30;1m</code></li>
+<li>亮红色：<code>\u001b[31;1m</code></li>
+<li>亮绿色：<code>\u001b[32;1m</code></li>
+<li>亮黄色：<code>\u001b[33;1m</code></li>
+<li>亮蓝色：<code>\u001b[34;1m</code></li>
+<li>明亮的洋红色：<code>\u001b[35;1m</code></li>
+<li>亮青色：<code>\u001b[36;1m</code></li>
+<li>亮白：<code>\u001b[37;1m</code></li>
+</ul>
+<p>其与 8 个基本的色彩的区别在于其代码中间增加了一个：<code>;1</code></p>
+<p><img src="https://s2.loli.net/2023/01/04/dROajFy3XmhKLUt.png" srcset="/img/loading.gif" lazyload alt="image-20230104233700947"></p>
+<h4 id="256-色彩"><a href="#256-色彩" class="headerlink" title="256 色彩"></a>256 色彩</h4><p>一些终端支持256色扩展颜色集，其颜色代码形势如下：<code>\u001b[38;5;$&#123;ID&#125;m</code></p>
+<p>我们换到<code>VSC</code>的<code>shell</code>进行演示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>        code = <span class="hljs-built_in">str</span>(i * <span class="hljs-number">16</span> + j)<br>        sys.stdout.write(<span class="hljs-string">u&quot;\u001b[38;5;&quot;</span> + code + <span class="hljs-string">&quot;m &quot;</span> + code.ljust(<span class="hljs-number">4</span>))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/yEhP3Ulj5ZrzpWo.png" srcset="/img/loading.gif" lazyload alt="image-20230104234048257"></p>
+<p>我们此处使用<code>sys.stdout.write</code>而不是<code>print</code>，这样我们可以在一行上打印多个</p>
+<h3 id="背景颜色"><a href="#背景颜色" class="headerlink" title="背景颜色"></a>背景颜色</h3><p><code>ANSI转义码</code>还支持你设置对应的文本背景颜色，和设置字体颜色一样，其重置的方式代码仍然是<code>\u001b[0m]</code></p>
+<ul>
+<li>背景黑色：<code>\u001b[40m</code></li>
+<li>背景红色：<code>\u001b[41m</code></li>
+<li>背景绿色：<code>\u001b[42m</code></li>
+<li>背景黄色：<code>\u001b[43m</code></li>
+<li>背景蓝色：<code>\u001b[44m</code></li>
+<li>背景洋红色：<code>\u001b[45m</code></li>
+<li>背景青色：<code>\u001b[46m</code></li>
+<li>背景白色：<code>\u001b[47m</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>, <span class="hljs-number">48</span>):<br>    sys.stdout.write(<span class="hljs-string">&quot;\u001b[&quot;</span> + <span class="hljs-built_in">str</span>(i) + <span class="hljs-string">&quot;m&quot;</span>+<span class="hljs-string">&quot;  &quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/XajNnA8mopDeB2y.png" srcset="/img/loading.gif" lazyload alt="image-20230104235121754"></p>
+<p>亮色版本：</p>
+<ul>
+<li>背景亮黑色：<code>\u001b[40;1m</code></li>
+<li>背景亮红色：<code>\u001b[41;1m</code></li>
+<li>背景亮绿色：<code>\u001b[42;1m</code></li>
+<li>背景亮黄色：<code>\u001b[43;1m</code></li>
+<li>背景亮蓝色：<code>\u001b[44;1m</code></li>
+<li>背景明亮洋红色：<code>\u001b[45;1m</code></li>
+<li>背景亮青色：<code>\u001b[46;1m</code></li>
+<li>背景亮白色：<code>\u001b[47;1m</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>, <span class="hljs-number">48</span>):<br>    sys.stdout.write(<span class="hljs-string">u&quot;\u001b[&quot;</span> + <span class="hljs-built_in">str</span>(i) + <span class="hljs-string">&quot;m&quot;</span>+<span class="hljs-string">&quot;  &quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>对于 256 颜色也是一样的：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>        code = <span class="hljs-built_in">str</span>(i * <span class="hljs-number">16</span> + j)<br>        sys.stdout.write(<span class="hljs-string">&quot;\u001b[48;5;&quot;</span> + code + <span class="hljs-string">&quot;m &quot;</span> + code.ljust(<span class="hljs-number">4</span>))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/acHMCVNkPvElL3p.png" srcset="/img/loading.gif" lazyload alt="image-20230104235619983"></p>
+<h3 id="修饰"><a href="#修饰" class="headerlink" title="修饰"></a>修饰</h3><p>除了字体颜色以及背景可以提供修改，我们还可以加入粗体，下划线，反转等修饰</p>
+<ul>
+<li>粗体：<code>\u001b[1m</code></li>
+<li>下划线：<code>\u001b[4m</code> (好像VSC控制台会吃掉这个下划线，但是控制台不会)</li>
+<li>反转：<code>\u001b[7m</code></li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[1m BOLD \u001b[0m\u001b[4m Underline \u001b[0m\u001b[7m Reversed \u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/01/04/a5VWwdTbErNmJnG.png" srcset="/img/loading.gif" lazyload alt="image-20230104235902453"></p>
+<p>这几个也可以一起搭配前面所提到的修改字符颜色以及背景一起使用，此处就不再赘述</p>
+<h2 id="光标控制"><a href="#光标控制" class="headerlink" title="光标控制"></a>光标控制</h2><p>顾名思义，我们可以使用<code>ANSI转义码</code>来控制光标的位置，以此来达到模仿输入的操作</p>
+<p>其中基本的为：<code>上下左右</code>控制</p>
+<ul>
+<li>向上：<code>\u001b[&#123;n&#125;A</code></li>
+<li>向下：<code>\u001b[&#123;n&#125;B</code></li>
+<li>向右：<code>\u001b[&#123;n&#125;C</code></li>
+<li>向左：<code>\u001b[&#123;n&#125;D</code></li>
+</ul>
+<p>其中<code>&#123;n&#125;</code>在使用过程中我们需要将其替换为对应的数字，代表我们想要移动的长度</p>
+<blockquote>
+<p>需要注意的是，当我们的光标向左移动了 n 个后再进行输出时，会将后面的内容进行覆盖</p>
+</blockquote>
+<p>在输出时，会先解析对应的ANSI转义码，将光标进行移动，之后在进行输出，借助这个特性我们可以写一个进度显示器，而不需要使用类似<code>tqdm</code>的库</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> time, sys<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">loading</span>():</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Loading...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        sys.stdout.write(<span class="hljs-string">u&quot;\u001b[3D&quot;</span> + <span class="hljs-built_in">str</span>(i + <span class="hljs-number">1</span>) + <span class="hljs-string">&quot;%&quot;</span>) <span class="hljs-comment"># 3 可以是大于它的数字，我们仅仅只是需要将其移动到最前面将输出覆盖即可</span><br>        sys.stdout.flush()<br>    <span class="hljs-built_in">print</span>()<br>    <br>loading()<br></code></pre></td></tr></table></figure>
+
+<p>或者是类似加载条的形式：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> time, sys<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">loading</span>():</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Loading...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        width = (i + <span class="hljs-number">1</span>) / <span class="hljs-number">4</span><br>        bar = <span class="hljs-string">&quot;[&quot;</span> + <span class="hljs-string">&quot;#&quot;</span> * width + <span class="hljs-string">&quot; &quot;</span> * (<span class="hljs-number">25</span> - width) + <span class="hljs-string">&quot;]&quot;</span><br>        sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span> +  bar)<br>        sys.stdout.flush()<br>    <span class="hljs-built_in">print</span>()<br>    <br>loading()<br></code></pre></td></tr></table></figure>
+
+<p>以上的进度条都没有任何的监控进度的完成，但是我们可以加入对应的监控项目，然后降至转化为真正的进度监控，或者结合上面提到的字体颜色以及背景的更改来设计更为花哨的进度条</p>
+<p>对于下一行的操作<code>ANSI转义码</code>也提供了一些方法：</p>
+<ul>
+<li>下一行：将光标向下移动到行首<code>\u001b[&#123;n&#125;E</code></li>
+<li>上一行：将光标向下移动到行首<code>\u001b[&#123;n&#125;F</code></li>
+</ul>
+<p>同时其也允许我们保存对应位置数据：</p>
+<ul>
+<li>保存位置：保存当前光标位置<code>\u001b[&#123;s&#125;</code></li>
+<li>保存位置：将光标恢复到上次保存的位置<code>\u001b[&#123;u&#125;</code></li>
+</ul>
+<h2 id="编写命令行"><a href="#编写命令行" class="headerlink" title="编写命令行"></a>编写命令行</h2><p><code>ANSI转义</code>码的主要目的就是实现命令行，我们可以根据用户的输入来产生对应的输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys, tty<br> <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">command_line</span>():</span><br>    tty.setraw(sys.stdin) <span class="hljs-comment"># 将我们的命令行设置成raw模式，避免shell帮我们解析方向键、回退键(Backspace)以及用户输入进行缓冲</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>: <br>        <span class="hljs-built_in">input</span> = <span class="hljs-string">&quot;&quot;</span><br>        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>: <span class="hljs-comment"># 循环来控制每一个字符</span><br>            char = <span class="hljs-built_in">ord</span>(sys.stdin.read(<span class="hljs-number">1</span>)) <span class="hljs-comment"># 每次只读入一个字符</span><br>            <br>            <span class="hljs-keyword">if</span> char == <span class="hljs-number">3</span>: <span class="hljs-comment"># CTRL-C</span><br>                <span class="hljs-keyword">return</span><br>            <span class="hljs-keyword">elif</span> <span class="hljs-number">32</span> &lt;= char &lt;= <span class="hljs-number">126</span>: <span class="hljs-comment"># 普通字符</span><br>                <span class="hljs-built_in">input</span> = <span class="hljs-built_in">input</span> + <span class="hljs-built_in">chr</span>(char)<br>            <span class="hljs-keyword">elif</span> char <span class="hljs-keyword">in</span> &#123;<span class="hljs-number">10</span>, <span class="hljs-number">13</span>&#125;: <span class="hljs-comment"># 如果是回车时</span><br>                sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span>)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\necho something ... &quot;</span>, <span class="hljs-built_in">input</span>)<br>                <span class="hljs-built_in">input</span> = <span class="hljs-string">&quot;&quot;</span><br>                <br>            sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span>)  <span class="hljs-comment"># 光标移动到最左侧</span><br>            sys.stdout.write(<span class="hljs-built_in">input</span>) <span class="hljs-comment"># 重新输出 input</span><br>            sys.stdout.flush()<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的是上述代码中导入了<code>tty</code>库，我们使用这个库的时候需要有<code>termios</code>库，此库仅适用于<code>Unix</code>，因此上述代码在<code>Windows端</code>无法执行</p>
+</blockquote>
+<p>因为我们采用了<code>raw</code>模式，不移动光标照顾护额打印会出现光标不会移动到行首的问题，我们我们再次输出一个<code>\u001b[1000D</code>确保其回到开头</p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>但是我们想要实现删除时，我们采用覆写的方式在某种意义上也算是完成了我们的需要，但是假如我们需要删掉一个字符呢？我们覆写模式还是需要将字符串后面的内容再次进行输出，稍微有点麻烦，对此<code>ANSI转义码</code>也提供了删除这一操作</p>
+<ul>
+<li><p>清除屏幕：清除屏幕</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="xml">\u001b[</span><span class="hljs-template-variable">&#123;n&#125;</span><span class="xml">J</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>n=0</code>从光标中清除，直到屏幕结束，</li>
+<li><code>n=1</code>从光标清除到屏幕开头</li>
+<li><code>n=2</code>清除整个屏幕</li>
+</ul>
+</li>
+<li><p>清除行：清除当前行</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="xml">\u001b[</span><span class="hljs-template-variable">&#123;n&#125;</span><span class="xml">K</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>n=0</code>从光标清除到行尾</li>
+<li><code>n=1</code>从光标清除到行首</li>
+<li><code>n=2</code>清除整行</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们简答的了解了一下<code>ANSI转义码</code>的使用，对于更多的指令大家可以参考下面的表格</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>signature</th>
+<th>description</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>Cursor Up</td>
+<td>(n=1)</td>
+<td>Move cursor up by n 【将光标向上移动n行】</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Cursor Down</td>
+<td>(n=1)</td>
+<td>Move cursor down by n 【将光标向下移动n行】</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Cursor Forward</td>
+<td>(n=1)</td>
+<td>Move cursor forward by n 【将光标向前移动n个字符】</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Cursor Back</td>
+<td>(n=1)</td>
+<td>Move cursor back by n 【将光标向后移动n个字符】</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Cursor Next Line</td>
+<td>(n=1)</td>
+<td>Move cursor to the beginning of the line n lines down【将光标向下移到到n行的行首】</td>
+</tr>
+<tr>
+<td>F</td>
+<td>Cursor Previous Line</td>
+<td>(n=1)</td>
+<td>Move cursor to the beginning of the line n lines up【将光标向上移到到n行的行首】</td>
+</tr>
+<tr>
+<td>G</td>
+<td>Cursor Horizontal Absolute</td>
+<td>(n=1)</td>
+<td>Move cursor to the the column nwithin the current row 【将光标移动到当前行中的第n列】</td>
+</tr>
+<tr>
+<td>H</td>
+<td>Cursor Position</td>
+<td>(n=1, m=1)</td>
+<td>Move cursor to row n, column m, counting from the top left corner</td>
+</tr>
+<tr>
+<td>J</td>
+<td>Erase in Display</td>
+<td>(n=0)</td>
+<td>Clear part of the screen. 0, 1, 2, and 3 have various specific functions</td>
+</tr>
+<tr>
+<td>K</td>
+<td>Erase in Line</td>
+<td>(n=0)</td>
+<td>Clear part of the line. 0, 1, and 2 have various specific functions</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Scroll Up</td>
+<td>(n=1)</td>
+<td>Scroll window up by n lines 【将窗口向上滚动到n行】</td>
+</tr>
+<tr>
+<td>T</td>
+<td>Scroll Down</td>
+<td>(n=1)</td>
+<td>Scroll window down by n lines 【将窗口向下滚动到n行】</td>
+</tr>
+<tr>
+<td>s</td>
+<td>Save Cursor Position</td>
+<td>()</td>
+<td>Save current cursor position for use with u</td>
+</tr>
+<tr>
+<td>u</td>
+<td>Restore Cursor Position</td>
+<td>()</td>
+<td>Set cursor back to position last saved by s</td>
+</tr>
+<tr>
+<td>f</td>
+<td>…</td>
+<td>…</td>
+<td>(same as G)</td>
+</tr>
+<tr>
+<td>m</td>
+<td>SGR</td>
+<td>(*)</td>
+<td>Set graphics mode. More below【见下一个表格】</td>
+</tr>
+</tbody></table>
+<p>关于SGR的作用我们在下面一个表格进行简单说明：</p>
+<table>
+<thead>
+<tr>
+<th>value</th>
+<th>name / description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>Reset: turn off all attributes 【重置：关闭所有属性】</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Bold (or bright, it’s up to the terminal and the user config to some extent) 【粗体】</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Italic 【斜体】</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Underline 【下划线】</td>
+</tr>
+<tr>
+<td>30–37</td>
+<td>Set text colour from the basic colour palette of 0–7 【从0-7的基本颜色板中设置文本颜色,即前景色】</td>
+</tr>
+<tr>
+<td>38;5;n</td>
+<td>Set text colour to index n in a 256-colour palette(e.g. \x1b[38;5;34m)【前景色】</td>
+</tr>
+<tr>
+<td>38;2;r;g;b</td>
+<td>Set text colour to an RGB value (e.g. \x1b[38;2;255;255;0m)【前景色】</td>
+</tr>
+<tr>
+<td>40–47</td>
+<td>Set background colour 【从0-7的基本颜色板中设置背景色】</td>
+</tr>
+<tr>
+<td>48;5;n</td>
+<td>Set background colour to index n in a 256-colour palette 【背景色】</td>
+</tr>
+<tr>
+<td>48;2;r;g;b</td>
+<td>Set background colour to an RGB value 【背景色】</td>
+</tr>
+<tr>
+<td>90–97</td>
+<td>Set text colour from the bright colour palette of 0–7</td>
+</tr>
+<tr>
+<td>100–107</td>
+<td>Set background colour from the bright colour palette of 0–7</td>
+</tr>
+</tbody></table>
+<p>其中有些没有列出来，感兴趣可以自己去看看<code>Wiki</code></p>
+<p>我们可以通过<code>ANSI转义码</code>来实现<code>Shell</code>端的游戏、命令行、Vim等功能，更多的小玩意可以靠大家的想象去实现与完成</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Misc/" class="category-chain-item">Misc</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ANSI转义码</div>
+      <div>https://equinox-shame.github.io/2023/01/05/ANSI转义码/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/14/GitLab%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0(CVE-2021-22205)/" title="GitLab 远程命令执行漏洞复现(CVE-2021-22205)">
+                        <span class="hidden-mobile">GitLab 远程命令执行漏洞复现(CVE-2021-22205)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
