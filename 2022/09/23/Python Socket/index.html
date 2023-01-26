@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="是什么简单而言socket是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。 Python的Socket通信逻辑大致如下图：   怎么用Python肯定是需要我们导入包的 1import socket   似乎这个是自带的？反正pip install socket没能安装，但是可以直接导入  导入包之后我们需要使用socket.socket()">
+    <meta name="description" content="是什么 简单而言socket是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。 Python的Socket通信逻辑大致如下图：  怎么用 Python肯定是需要我们导入包的 1import socket  似乎这个是自带的？反正pip install socket没能安装，但是可以直接导入  导入包之后我们需要使用socket.socket()">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python Socket">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/09/23/Python%20Socket/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="是什么简单而言socket是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。 Python的Socket通信逻辑大致如下图：   怎么用Python肯定是需要我们导入包的 1import socket   似乎这个是自带的？反正pip install socket没能安装，但是可以直接导入  导入包之后我们需要使用socket.socket()">
+<meta property="og:description" content="是什么 简单而言socket是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。 Python的Socket通信逻辑大致如下图：  怎么用 Python肯定是需要我们导入包的 1import socket  似乎这个是自带的？反正pip install socket没能安装，但是可以直接导入  导入包之后我们需要使用socket.socket()">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/09/24/CQyf6NUDHXtIKAT.png">
 <meta property="article:published_time" content="2022-09-23T15:56:29.305Z">
@@ -280,19 +280,18 @@
             
               <div class="markdown-body">
                 
-                <h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><p>简单而言<code>socket</code>是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。</p>
+                <h2 id="是什么">是什么</h2>
+<p>简单而言<code>socket</code>是一种网络编程需要我们编写服务端与客户端，我们可以简单的理解为客户端与服务器之间交互的方式实现手段之一。</p>
 <p><code>Python</code>的<code>Socket</code>通信逻辑大致如下图：</p>
 <img src="https://s2.loli.net/2022/09/24/CQyf6NUDHXtIKAT.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
-
-<h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h2><p><code>Python</code>肯定是需要我们导入包的</p>
+<h2 id="怎么用">怎么用</h2>
+<p><code>Python</code>肯定是需要我们导入包的</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> socket<br></code></pre></td></tr></table></figure>
-
 <blockquote>
 <p>似乎这个是自带的？反正<code>pip install socket</code>没能安装，但是可以直接导入</p>
 </blockquote>
 <p>导入包之后我们需要使用<code>socket.socket()</code>方法来创建一个套接字</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">sk = socket.socket([family[, <span class="hljs-built_in">type</span>[, proto]]])<br></code></pre></td></tr></table></figure>
-
 <p><strong>参数说明：</strong></p>
 <ul>
 <li><code>family</code>: 套接字家族，可以使<code>AF_UNIX</code>或者<code>AF_INET</code>。</li>
@@ -308,7 +307,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>socket.AF_UNIX</td>
 <td>只能够用于单一的Unix系统进程间通信</td>
 </tr>
@@ -344,7 +344,8 @@
 <td>创建UDP Socket：</td>
 <td>s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>创建后对应的对象后可以使用如下方法：</p>
 <table>
 <thead>
@@ -353,7 +354,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>服务器端方法</strong></td>
 <td></td>
 </tr>
@@ -445,29 +447,33 @@
 <td>s.makefile()</td>
 <td>创建一个与该套接字相关连的文件</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <blockquote>
 <p>常用方法已经加粗</p>
 </blockquote>
 <p><strong>注意事项：</strong></p>
 <ul>
-<li><p><code>Python3</code>以后，socket传递的都是<strong>bytes类型</strong>的数据，字符串需要先转换一下，<code>string.encode()</code>即可；另一端接收到的bytes数据想转换成字符串，只要<code>bytes.decode()</code>一下就可以。</p>
+<li>
+<p><code>Python3</code>以后，socket传递的都是<strong>bytes类型</strong>的数据，字符串需要先转换一下，<code>string.encode()</code>即可；另一端接收到的bytes数据想转换成字符串，只要<code>bytes.decode()</code>一下就可以。</p>
 </li>
-<li><p>在正常通信时，<code>connect()</code>、<code>accept()</code>和<code>recv()</code>方法都是阻塞的。所谓的阻塞，指的是程序会暂停在那，一直等到有数据过来。</p>
+<li>
+<p>在正常通信时，<code>connect()</code>、<code>accept()</code>和<code>recv()</code>方法都是阻塞的。所谓的阻塞，指的是程序会暂停在那，一直等到有数据过来。</p>
 </li>
 </ul>
-<h2 id="简单创建-——-TCP模式"><a href="#简单创建-——-TCP模式" class="headerlink" title="简单创建 —— TCP模式"></a>简单创建 —— TCP模式</h2><h3 id="用户端"><a href="#用户端" class="headerlink" title="用户端"></a>用户端</h3><p>对于用户端，我们就只用创建一个套接字，进行链接服务器，通过<code>sendall()</code>进行发送到服务端即可</p>
+<h2 id="简单创建-——-TCP模式">简单创建 —— TCP模式</h2>
+<h3 id="用户端">用户端</h3>
+<p>对于用户端，我们就只用创建一个套接字，进行链接服务器，通过<code>sendall()</code>进行发送到服务端即可</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> socket<br><br>s = socket.socket() <span class="hljs-comment"># 使用默认参数</span><br>s.connect(<span class="hljs-string">&quot;127.0.0.1&quot;</span>,<span class="hljs-number">8080</span>) <span class="hljs-comment"># 发送到本地 8080 端口</span><br>message = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;[+] you: &quot;</span>) <span class="hljs-comment"># 输入发送的信息</span><br>s.sendall(message.encode()) <span class="hljs-comment"># 发送信息</span><br>reply = s.recv(<span class="hljs-number">1024</span>).decode() <span class="hljs-comment"># 1024的缓冲区，进行获取返回数据</span><br><span class="hljs-built_in">print</span>(reply)<br>s.close() <span class="hljs-comment"># 关闭链接</span><br></code></pre></td></tr></table></figure>
-
 <p>这个方式十分的简单，编写也没有什么难度，但是只能执行一次，随后便关闭了链接，与此同时对于多个客户端时上述脚本并不能很好的提供服务。因为<code>Python</code>发送的<code>Socket</code>默认是单进程单线程，只能同时出口一个链接请求。</p>
 <p>如果需要实现一直保持链接状态我们可以加入一个<code>while(1)</code>进行循环，当用户输入指定内容后退出链接。</p>
 <p>对于我们想要对多个客户端进行提供服务需要我们加入一个多线程，我们可以使用<code>Python</code>内置的<code>threading</code>模块，配合<code>socket</code>模块使用</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> socket<br><span class="hljs-keyword">import</span> threading        <span class="hljs-comment"># 导入线程模块</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">link_handler</span>(<span class="hljs-params">link, client</span>):</span>     <br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    该函数为线程需要执行的函数，负责具体的服务器和客户端之间的通信工作</span><br><span class="hljs-string">    :param link: 当前线程处理的连接</span><br><span class="hljs-string">    :param client: 客户端ip和端口信息，一个二元元组</span><br><span class="hljs-string">    :return: None</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;服务器开始接收来自[%s:%s]的请求....&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>]))<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:     <span class="hljs-comment"># 利用一个死循环，保持和客户端的通信状态</span><br>        client_data = link.recv(<span class="hljs-number">1024</span>).decode()<br>        <span class="hljs-keyword">if</span> client_data == <span class="hljs-string">&quot;exit&quot;</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;结束与[%s:%s]的通信...&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>]))<br>            <span class="hljs-keyword">break</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;来自[%s:%s]的客户端向你发来信息：%s&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>], client_data))<br>        link.sendall(<span class="hljs-string">&#x27;服务器已经收到你的信息&#x27;</span>.encode())<br>    link.close()<br><br><br>ip_port = (<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">9999</span>)<br>sk = socket.socket()            <span class="hljs-comment"># 创建套接字</span><br>sk.bind(ip_port)                <span class="hljs-comment"># 绑定服务地址</span><br>sk.listen(<span class="hljs-number">5</span>)                    <span class="hljs-comment"># 监听连接请求</span><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;启动socket服务，等待客户端连接...&#x27;</span>)<br><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -*- coding:utf-8 -*-</span><br><br><span class="hljs-keyword">import</span> socket<br><span class="hljs-keyword">import</span> threading        <span class="hljs-comment"># 导入线程模块</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">link_handler</span>(<span class="hljs-params">link, client</span>):</span>     <br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    该函数为线程需要执行的函数，负责具体的服务器和客户端之间的通信工作</span><br><span class="hljs-string">    :param link: 当前线程处理的连接</span><br><span class="hljs-string">    :param client: 客户端ip和端口信息，一个二元元组</span><br><span class="hljs-string">    :return: None</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;服务器开始接收来自[%s:%s]的请求....&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>]))<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:     <span class="hljs-comment"># 利用一个死循环，保持和客户端的通信状态</span><br>        client_data = link.recv(<span class="hljs-number">1024</span>).decode()<br>        <span class="hljs-keyword">if</span> client_data == <span class="hljs-string">&quot;exit&quot;</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;结束与[%s:%s]的通信...&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>]))<br>            <span class="hljs-keyword">break</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;来自[%s:%s]的客户端向你发来信息：%s&quot;</span> % (client[<span class="hljs-number">0</span>], client[<span class="hljs-number">1</span>], client_data))<br>        link.sendall(<span class="hljs-string">&#x27;服务器已经收到你的信息&#x27;</span>.encode())<br>    link.close()<br><br><br>ip_port = (<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">8080</span>)<br>sk = socket.socket()            <span class="hljs-comment"># 创建套接字</span><br>sk.bind(ip_port)                <span class="hljs-comment"># 绑定服务地址</span><br>sk.listen(<span class="hljs-number">5</span>)                    <span class="hljs-comment"># 监听连接请求</span><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;启动socket服务，等待客户端连接...&#x27;</span>)<br><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:     <span class="hljs-comment"># 一个死循环，不断的接受客户端发来的连接请求</span><br>    conn, address = sk.accept()  <span class="hljs-comment"># 等待连接，此处自动阻塞</span><br>    <span class="hljs-comment"># 每当有新的连接过来，自动创建一个新的线程，</span><br>    <span class="hljs-comment"># 并将连接对象和访问者的ip信息作为参数传递给线程的执行函数</span><br>    t = threading.Thread(target=link_handler, args=(conn, address))<br>    t.start() <span class="hljs-comment"># 一个死循环，不断的接受客户端发来的连接请求</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><p>服务器端的编写也是比较简单的，我们只需要创建一个循环，使其一直监听对应的端口，看看是否有程序进行链接，并作出相应处理即可</p>
+<h3 id="服务器端">服务器端</h3>
+<p>服务器端的编写也是比较简单的，我们只需要创建一个循环，使其一直监听对应的端口，看看是否有程序进行链接，并作出相应处理即可</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> socket<br><br>ip_port = (<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">9999</span>)<br><br>sk = socket.socket()            <span class="hljs-comment"># 创建套接字</span><br>sk.bind(ip_port)                <span class="hljs-comment"># 绑定服务地址</span><br>sk.listen(<span class="hljs-number">5</span>)                    <span class="hljs-comment"># 监听连接请求</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;启动socket服务，等待客户端连接...&#x27;</span>)<br>conn, address = sk.accept()     <span class="hljs-comment"># 等待连接，此处自动阻塞</span><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:     <span class="hljs-comment"># 一个死循环，直到客户端发送‘exit’的信号，才关闭连接</span><br>    client_data = conn.recv(<span class="hljs-number">1024</span>).decode()      <span class="hljs-comment"># 接收信息</span><br>    <span class="hljs-keyword">if</span> client_data == <span class="hljs-string">&quot;exit&quot;</span>:       <span class="hljs-comment"># 判断是否退出连接</span><br>        exit(<span class="hljs-string">&quot;通信结束&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;来自%s的客户端向你发来信息：%s&quot;</span> % (address, client_data))<br>    conn.sendall(<span class="hljs-string">&#x27;服务器已经收到你的信息&#x27;</span>.encode())    <span class="hljs-comment"># 回馈信息给客户端</span><br>conn.close()    <span class="hljs-comment"># 关闭连接</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="简单创建-——-UDP模式"><a href="#简单创建-——-UDP模式" class="headerlink" title="简单创建 —— UDP模式"></a>简单创建 —— UDP模式</h2><p>相对TCP编程，UDP编程就简单多了，当然可靠性和安全性也差很多。由于UDP没有握手和挥手的过程，因此accept()和connect()方法都不需要。下面是一个简单的例子：</p>
+<h2 id="简单创建-——-UDP模式">简单创建 —— UDP模式</h2>
+<p>相对TCP编程，UDP编程就简单多了，当然可靠性和安全性也差很多。由于UDP没有握手和挥手的过程，因此accept()和connect()方法都不需要。下面是一个简单的例子：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 服务端</span><br><span class="hljs-keyword">import</span> socket<br>ip_port = (<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">8080</span>)<br>sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, <span class="hljs-number">0</span>) <span class="hljs-comment"># 需要在此处进行设置为UDP模式</span><br>sk.bind(ip_port)<br><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    data = sk.recv(<span class="hljs-number">1024</span>).strip().decode()<br>    <span class="hljs-built_in">print</span>(data)<br>    <span class="hljs-keyword">if</span> data == <span class="hljs-string">&quot;exit&quot;</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;客户端主动断开连接！&quot;</span>)<br>        <span class="hljs-keyword">break</span><br><br>sk.close()<br><br><span class="hljs-comment"># --------------------------------- #</span><br><span class="hljs-comment"># 客户端</span><br><span class="hljs-keyword">import</span> socket<br>ip_port = (<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">8080</span>)<br><br>sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, <span class="hljs-number">0</span>) <span class="hljs-comment"># 需要在此处进行设置为UDP模式</span><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    inp = <span class="hljs-built_in">input</span>(<span class="hljs-string">&#x27;发送的消息：&#x27;</span>).strip()<br>    sk.sendto(inp.encode(), ip_port)<br>    <span class="hljs-keyword">if</span> inp == <span class="hljs-string">&#x27;exit&#x27;</span>:<br>        <span class="hljs-keyword">break</span><br><br>sk.close()<br></code></pre></td></tr></table></figure>
                 
               </div>
@@ -644,6 +650,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -862,6 +874,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

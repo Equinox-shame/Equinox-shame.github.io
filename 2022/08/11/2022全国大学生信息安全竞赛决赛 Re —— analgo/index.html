@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言本来想练习一下Go的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就42位flag，最坏的情况下也就是98的42次方(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个hgame的题目有点相似，hgame的那个题目叫hardasm，看官方的wp看的头大…但是校外的一个师傅给出了subprocess进行爆破的一种方法">
+    <meta name="description" content="前言 本来想练习一下Go的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就42位flag，最坏的情况下也就是98的42次方(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个hgame的题目有点相似，hgame的那个题目叫hardasm，看官方的wp看的头大…但是校外的一个师傅给出了subprocess进行爆破的一种方">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2022全国大学生信息安全竞赛决赛 Re —— analgo">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/08/11/2022%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%20Re%20%E2%80%94%E2%80%94%20analgo/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言本来想练习一下Go的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就42位flag，最坏的情况下也就是98的42次方(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个hgame的题目有点相似，hgame的那个题目叫hardasm，看官方的wp看的头大…但是校外的一个师傅给出了subprocess进行爆破的一种方法">
+<meta property="og:description" content="前言 本来想练习一下Go的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就42位flag，最坏的情况下也就是98的42次方(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个hgame的题目有点相似，hgame的那个题目叫hardasm，看官方的wp看的头大…但是校外的一个师傅给出了subprocess进行爆破的一种方">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/08/11/FmxzaROvT52IJSk.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/11/sKTtodl6Y7LUHgV.png">
@@ -289,18 +289,24 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来想练习一下<code>Go</code>的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就<code>42</code>位<code>flag</code>，最坏的情况下也就是<code>98的42次方</code>(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个<code>hgame</code>的题目有点相似，<code>hgame</code>的那个题目叫<code>hardasm</code>，看官方的<code>wp</code>看的头大…但是校外的一个师傅给出了<code>subprocess</code>进行爆破的一种方法，相当于用<code>python</code>模拟我们输入并获取结果…网上没找到太多的关于这个的资料，于是只好对着校外师傅的脚本简单改改</p>
-<h2 id="简单分析"><a href="#简单分析" class="headerlink" title="简单分析"></a>简单分析</h2><p>刚拿到题目，光是看名字似乎就知道是分析<code>Go</code>了，建议使用<code>IDA 7.6</code>及以上的<code>IDA</code>进行反编译，<code>GO</code>的主函数与我们常接触到的<code>C/C++</code>不太一样，有一些奇妙的特性，像是主函数是<code>main_mian</code>，传入字符串时是一个结构体，结构体里面是一个指针和一个<code>int</code>类型的字符串长度，也因为这些奇妙的特性导致<code>GO</code>逆向向来不太好进行</p>
-<h2 id="输入字符串"><a href="#输入字符串" class="headerlink" title="输入字符串"></a>输入字符串</h2><p><img src="https://s2.loli.net/2022/08/11/FmxzaROvT52IJSk.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
+                <h2 id="前言">前言</h2>
+<p>本来想练习一下<code>Go</code>的有关题目的，不知不觉就找到了这个…被硬生生暴打，坐牢几天后想到为什么不可以直接使用爆破反正也就<code>42</code>位<code>flag</code>，最坏的情况下也就是<code>98的42次方</code>(不会真的有人打开输入关闭去这样爆破吧…)，简单的找了点参考，发现和今年还是去年的一个<code>hgame</code>的题目有点相似，<code>hgame</code>的那个题目叫<code>hardasm</code>，看官方的<code>wp</code>看的头大…但是校外的一个师傅给出了<code>subprocess</code>进行爆破的一种方法，相当于用<code>python</code>模拟我们输入并获取结果…网上没找到太多的关于这个的资料，于是只好对着校外师傅的脚本简单改改</p>
+<h2 id="简单分析">简单分析</h2>
+<p>刚拿到题目，光是看名字似乎就知道是分析<code>Go</code>了，建议使用<code>IDA 7.6</code>及以上的<code>IDA</code>进行反编译，<code>GO</code>的主函数与我们常接触到的<code>C/C++</code>不太一样，有一些奇妙的特性，像是主函数是<code>main_mian</code>，传入字符串时是一个结构体，结构体里面是一个指针和一个<code>int</code>类型的字符串长度，也因为这些奇妙的特性导致<code>GO</code>逆向向来不太好进行</p>
+<h2 id="输入字符串">输入字符串</h2>
+<p><img src="https://s2.loli.net/2022/08/11/FmxzaROvT52IJSk.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
 <p>找到<code>main_main</code>,就可以推断出来我们需要输入的长度</p>
-<h2 id="加密部分"><a href="#加密部分" class="headerlink" title="加密部分"></a>加密部分</h2><p><img src="https://s2.loli.net/2022/08/11/sKTtodl6Y7LUHgV.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
+<h2 id="加密部分">加密部分</h2>
+<p><img src="https://s2.loli.net/2022/08/11/sKTtodl6Y7LUHgV.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
 <p>可以看到程序使用一个<code>qmemcpy</code>将对应的<code>opcode</code>赋值给了<code>v27</code>，同时下面启动<code>main_anal</code>函数，不难猜测出其就是我们的主要加密部分，进入该函数可以看到多个<code>if</code>块，一会<code>if</code>这个<code>if</code>那个同时还有<code>v10</code>这些控制<code>if</code>块是否执行，整个虚拟机运行部分十分混杂，特别难看(也有可能是我太菜了)</p>
 <p><img src="https://s2.loli.net/2022/08/11/3dgOzvHDItWFypN.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
 <p>对此我们结合之前所提到的<code>subprocess</code>想是否我们可以直接对每一位进行爆破？因为程序下面有对应的比较语句，我们是否能像<code>hgame</code>的程序一样将对应的程序部分<code>patch</code>，将我们加密后的数据输出，然后与正确的进行比较，当输出正确一个时会对应上一个加密后的数据，通过这个方式进行有目的性的爆破处理</p>
-<h2 id="爆破测试"><a href="#爆破测试" class="headerlink" title="爆破测试"></a>爆破测试</h2><p>我们可以多次进行尝试输入，因为<code>flag</code>头可以确定是<code>flag&#123;&#125;</code>，长度要求为<code>42</code>，多次的调试进行测试下来我们可以发现一个规律，程序将我们的输入进行两两加密</p>
+<h2 id="爆破测试">爆破测试</h2>
+<p>我们可以多次进行尝试输入，因为<code>flag</code>头可以确定是<code>flag&#123;&#125;</code>，长度要求为<code>42</code>，多次的调试进行测试下来我们可以发现一个规律，程序将我们的输入进行两两加密</p>
 <p><img src="https://s2.loli.net/2022/08/11/odtL8nK92i7xumz.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
 <p>在发现上述规律后我们便要开始尝试进行<code>patch</code>对应的输出</p>
-<h2 id="修改程序"><a href="#修改程序" class="headerlink" title="修改程序"></a>修改程序</h2><p><img src="https://s2.loli.net/2022/08/11/otMfJbkvBQuPOlE.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
+<h2 id="修改程序">修改程序</h2>
+<p><img src="https://s2.loli.net/2022/08/11/otMfJbkvBQuPOlE.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
 <p>我们观察到输出是用<code>lea</code>将对应的偏移地址进行保存到<code>rdx</code>，我们需要做的便是修改对应的<code>off_XXX</code>处内的值，起初打算是将这个换成一个寄存器，因为我们可以通过调试发现加密后的输入保存在某一个寄存器上，修改了半天<code>Keypatch</code>崩了，带着<code>IDA</code>一起走了…要么就是<code>Keypatch</code>总是自己将我们改的一个地址修改到另一个地址，好奇怪？</p>
 <p>最后我们将目标锁定在了比较的过程中，因为比较中肯定会同时出现<code>flag</code>加密后的数据和我们输入加密后的数据，在这个地方我们也可以尝试将对应的输入加密保存到一个固定的位置</p>
 <p>在之前的<code>if</code>块中，我们可以发现比较的函数是<code>runtime_memequal()</code>我们进入函数进行查找对应的比较部分在哪里，最后可以锁定在一个<code>if</code>块上</p>
@@ -314,12 +320,12 @@
 <p>修改完毕后我们进行简单的测试一下看看能不能完成输入</p>
 <p><img src="https://s2.loli.net/2022/08/11/mDNqnovrMCZj1Xp.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
 <p>可以发现可以将我们的输入加密后进行输出后我们可以开始写对应的爆破脚本了</p>
-<h2 id="编写脚本"><a href="#编写脚本" class="headerlink" title="编写脚本"></a>编写脚本</h2><p>此处借用<code>hgame</code>比赛时外校师傅使用的脚本进行魔改</p>
+<h2 id="编写脚本">编写脚本</h2>
+<p>此处借用<code>hgame</code>比赛时外校师傅使用的脚本进行魔改</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess<br><br>real_flag=<span class="hljs-string">&quot;flag&#123;&quot;</span>   <span class="hljs-comment">#绝对正确的前5个字符</span><br>cur_index=<span class="hljs-built_in">len</span>(real_flag)     <span class="hljs-comment">#当前爆破的位置</span><br>k = <span class="hljs-number">0</span><br>s = <span class="hljs-string">&quot;0123465789abcdef-&quot;</span> <span class="hljs-comment"># 限制的输入范围</span><br>s = <span class="hljs-built_in">list</span>(s)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(s)):<br>    s[i] = <span class="hljs-built_in">ord</span>(s[i])<br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">v19 = 0x9F061721E8B3DD38LL; # 加密后的flag</span><br><span class="hljs-string">v20 = 0x120D94C88B56A209LL;</span><br><span class="hljs-string">v21 = 0x8C0C2D3877E67EF3LL;</span><br><span class="hljs-string">v22 = 0x2507BAF4CF113DELL;</span><br><span class="hljs-string">v23 = 0x1B66F9F5A0238BCALL;</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>ans1 = [<span class="hljs-number">0x38</span>,<span class="hljs-number">0xdd</span>,<span class="hljs-number">0xb3</span>,<span class="hljs-number">0xe8</span>,<span class="hljs-number">0x21</span>,<span class="hljs-number">0x17</span>,<span class="hljs-number">0x06</span>,<span class="hljs-number">0x9f</span>]<br>ans2 = [<span class="hljs-number">0x09</span>,<span class="hljs-number">0xa2</span>,<span class="hljs-number">0x56</span>,<span class="hljs-number">0x8b</span>,<span class="hljs-number">0xc8</span>,<span class="hljs-number">0x94</span>,<span class="hljs-number">0x0d</span>,<span class="hljs-number">0x12</span>]<br>ans3 = [<span class="hljs-number">0xf3</span>,<span class="hljs-number">0x7e</span>,<span class="hljs-number">0xe6</span>,<span class="hljs-number">0x77</span>,<span class="hljs-number">0x38</span>,<span class="hljs-number">0x2d</span>,<span class="hljs-number">0x0c</span>,<span class="hljs-number">0x8c</span>]<br>ans4 = [<span class="hljs-number">0xde</span>,<span class="hljs-number">0x13</span>,<span class="hljs-number">0xf1</span>,<span class="hljs-number">0x4c</span>,<span class="hljs-number">0xaf</span>,<span class="hljs-number">0x7b</span>,<span class="hljs-number">0x50</span>,<span class="hljs-number">0x02</span>]<br>ans5 = [<span class="hljs-number">0xca</span>,<span class="hljs-number">0x8b</span>,<span class="hljs-number">0x23</span>,<span class="hljs-number">0xa0</span>,<span class="hljs-number">0xf5</span>,<span class="hljs-number">0xf9</span>,<span class="hljs-number">0x66</span>,<span class="hljs-number">0x1b</span>]<br><br><span class="hljs-keyword">while</span> cur_index &lt; <span class="hljs-number">42</span>:<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> s:<span class="hljs-comment">#当前爆破的位置上的字符</span><br>        real_flag_arr = [<span class="hljs-number">0</span>] * <span class="hljs-number">42</span><br><br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(real_flag)):<span class="hljs-comment">#正确的先复制一下</span><br>            real_flag_arr[j]=<span class="hljs-built_in">ord</span>(real_flag[j])<br><br>        real_flag_arr[<span class="hljs-built_in">len</span>(real_flag_arr)-<span class="hljs-number">1</span>]=<span class="hljs-built_in">ord</span>(<span class="hljs-string">&quot;&#125;&quot;</span>)<span class="hljs-comment">#最后一个字符&quot;&#125;&quot;固定</span><br><br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(real_flag_arr)-<span class="hljs-number">2</span>,cur_index,-<span class="hljs-number">1</span>):<span class="hljs-comment">#除了当前爆破的位置，其他位置上都设置为32</span><br>            real_flag_arr[j]=<span class="hljs-number">48</span><br><br>        real_flag_arr[cur_index]=i <span class="hljs-comment">#设置当前爆破的位置上的字符</span><br>        real_flag_arr_s=<span class="hljs-string">&quot;&quot;</span>.join(<span class="hljs-built_in">chr</span>(k) <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> real_flag_arr) <span class="hljs-comment">#输入到程序中的字符串</span><br>        p = subprocess.Popen([<span class="hljs-string">&quot;C:\\Users\\Equinox\\Desktop\\analgo.exe&quot;</span>],stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)<br>        p.stdin.write(real_flag_arr_s.encode())<br>        p.stdin.close()<br>        out = p.stdout.read()<br>        out = <span class="hljs-built_in">list</span>(out)<br><br>        <span class="hljs-keyword">if</span> out[k] == ans[k]:<span class="hljs-comment">#判断程序打印出的0xFF的个数是否增加，增加则说明当前爆破的位置上的字符设置的是正确的</span><br>            real_flag += <span class="hljs-built_in">chr</span>(i)<br>            cur_index += <span class="hljs-number">1</span><br>            k += <span class="hljs-number">1</span><br>            <span class="hljs-built_in">print</span>(real_flag)<br>            <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
-
 <p>因为前面提到的<code>Wrong!</code>处的字符串似乎只能存储<code>8</code>个字节，因此我们需要每次爆破出来后将源程序继续进行<code>patch</code>，将对应的<code>rsi+8</code>，同时改变脚本中的<code>ans</code>最后即可爆破出<code>flag</code></p>
-<h2 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flag</span>&#123;<span class="hljs-number">568</span>a<span class="hljs-number">3</span>cdd-<span class="hljs-number">77</span>e<span class="hljs-number">1</span>-<span class="hljs-number">4</span>c<span class="hljs-number">42</span>-<span class="hljs-number">9</span>fee-<span class="hljs-number">127</span>e<span class="hljs-number">27</span>a<span class="hljs-number">5744</span>e&#125;<br></code></pre></td></tr></table></figure>
-
+<h2 id="flag">flag</h2>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flag</span>&#123;<span class="hljs-number">568</span>a<span class="hljs-number">3</span>cdd-<span class="hljs-number">77</span>e<span class="hljs-number">1</span>-<span class="hljs-number">4</span>c<span class="hljs-number">42</span>-<span class="hljs-number">9</span>fee-<span class="hljs-number">127</span>e<span class="hljs-number">27</span>a<span class="hljs-number">5744</span>e&#125;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -496,6 +502,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -714,6 +726,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

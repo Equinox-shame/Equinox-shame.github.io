@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。 准备部分我们先准备好upx.exe文件，同时编写一个简单的程序，利用upx.exe对其进行加壳，此处采用一个简单的Hello world来进行练习，代码如下： 123456#include">
+    <meta name="description" content="前言 最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。 准备部分 我们先准备好upx.exe文件，同时编写一个简单的程序，利用upx.exe对其进行加壳，此处采用一个简单的Hello world来进行练习，代码如下： 123456#inclu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="upx 手动脱壳">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/07/01/UPX%20%E8%84%B1%E5%A3%B3%E7%BB%83%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。 准备部分我们先准备好upx.exe文件，同时编写一个简单的程序，利用upx.exe对其进行加壳，此处采用一个简单的Hello world来进行练习，代码如下： 123456#include">
+<meta property="og:description" content="前言 最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。 准备部分 我们先准备好upx.exe文件，同时编写一个简单的程序，利用upx.exe对其进行加壳，此处采用一个简单的Hello world来进行练习，代码如下： 123456#inclu">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/07/01/a7velXtmfyJhzi2.png">
 <meta property="og:image" content="https://s2.loli.net/2022/07/01/NvycFL2G6ObrKg3.png">
@@ -292,16 +292,18 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近遇到好多<code>UPX</code>类型的题目，大多都是直接使用<code>upx -d</code>进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用<code>upx -d</code>进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。</p>
-<h2 id="准备部分"><a href="#准备部分" class="headerlink" title="准备部分"></a>准备部分</h2><p>我们先准备好<code>upx.exe</code>文件，同时编写一个简单的程序，利用<code>upx.exe</code>对其进行加壳，此处采用一个简单的<code>Hello world</code>来进行练习，代码如下：</p>
+                <h2 id="前言">前言</h2>
+<p>最近遇到好多<code>UPX</code>类型的题目，大多都是直接使用<code>upx -d</code>进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用<code>upx -d</code>进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。</p>
+<h2 id="准备部分">准备部分</h2>
+<p>我们先准备好<code>upx.exe</code>文件，同时编写一个简单的程序，利用<code>upx.exe</code>对其进行加壳，此处采用一个简单的<code>Hello world</code>来进行练习，代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	cout&lt;&lt;<span class="hljs-string">&quot;Hello world&quot;</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125; <br></code></pre></td></tr></table></figure>
-
 <p>我们将其进行编译，之后利用<code>upx</code>进行加壳，命令为<code>upx [filename]</code></p>
-<p><img src="https://s2.loli.net/2022/07/01/a7velXtmfyJhzi2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/07/01/a7velXtmfyJhzi2.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>可以成功看到我们已经加上了一个<code>UPX</code>壳，拖入<code>PE</code>查看也可以同样看到<code>UPX</code>的特征</p>
-<p><img src="https://s2.loli.net/2022/07/01/NvycFL2G6ObrKg3.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/07/01/NvycFL2G6ObrKg3.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>至此准备工作已经完成，接下来便是尝试手动脱壳</p>
-<h2 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h2><p>我们想要进行手动脱<code>upx</code>壳不太建议拿<code>ida</code>进行，可以拿<code>od</code>或者是<code>xdbg</code>进行脱壳，此处我们采用<code>xdbg64</code>脱壳(PE文件提示是64位的程序)，将程序直接拖入</p>
+<h2 id="脱壳">脱壳</h2>
+<p>我们想要进行手动脱<code>upx</code>壳不太建议拿<code>ida</code>进行，可以拿<code>od</code>或者是<code>xdbg</code>进行脱壳，此处我们采用<code>xdbg64</code>脱壳(PE文件提示是64位的程序)，将程序直接拖入</p>
 <p><img src="https://s2.loli.net/2022/07/01/grbhp46HvRSlkGu.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
 <p>可以较为清楚的看到程序就已经进入到调试模式了，接下来我们不断按<code>F8</code>进行跑程序,在这过程中我们需要注意的是当程序有往上跳转的趋势的时候我们需要在下一条语句处点击一下再按<code>F4</code>进行跳过，之后我们会遇到<code>EntryPoint</code></p>
 <p><img src="https://s2.loli.net/2022/07/01/KhuiIzksN4XwTo2.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
@@ -323,7 +325,8 @@
 <p>可以成功看到我们已经将壳进行去除了，但是如果我们将程序运行一下，却会发现如下情况：</p>
 <p><img src="https://s2.loli.net/2022/07/01/L7giuSJD6EnGtsV.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
 <p>此时我们需要修复对应的<code>IAT</code>才能成功的运行程序</p>
-<h2 id="IAT修复"><a href="#IAT修复" class="headerlink" title="IAT修复"></a>IAT修复</h2><p>我们再次调试到<code>OEP</code>，采用和之前<code>dump</code>一样的方式，此时我们选择下面的<code>fix dump</code>对<code>IAT</code>表进行修复</p>
+<h2 id="IAT修复">IAT修复</h2>
+<p>我们再次调试到<code>OEP</code>，采用和之前<code>dump</code>一样的方式，此时我们选择下面的<code>fix dump</code>对<code>IAT</code>表进行修复</p>
 <p><img src="https://s2.loli.net/2022/07/01/oxWFtT2QMrEKX5H.png" srcset="/img/loading.gif" lazyload alt="13.png"></p>
 <p>同时如果修复完成后出现如下错误，注意关闭一下杀毒软件如：360(罪魁祸首)</p>
 <p><img src="https://s2.loli.net/2022/07/01/ZpFBTbDsq1kPuCe.png" srcset="/img/loading.gif" lazyload alt="14.png"></p>
@@ -505,6 +508,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -723,6 +732,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

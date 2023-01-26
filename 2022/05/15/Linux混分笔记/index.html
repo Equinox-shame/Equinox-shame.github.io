@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="目录结构图 预先定义变量$#：表示命令行上的参数个数 $?：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 ) $$：表示当前进程进程号 $!：表示后台命令对应的进程号 $-：表示由当前shell设置的执行标志名著称的字符串 $*：表示命令行给出的实参字符串 $@：与$*类似，但是可以通过for将程序给的实参进行依次输出，$*不能单独输出每个实参，只能整块输出 Shell 常用通配符">
+    <meta name="description" content="目录结构图  预先定义变量 $#：表示命令行上的参数个数 $?：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 ) $$：表示当前进程进程号 $!：表示后台命令对应的进程号 $-：表示由当前shell设置的执行标志名著称的字符串 $*：表示命令行给出的实参字符串 $@：与$*类似，但是可以通过for将程序给的实参进行依次输出，$*不能单独输出每个实参，只能整块输出 Shell 常用通">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 学习的一些总结">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/05/15/Linux%E6%B7%B7%E5%88%86%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="目录结构图 预先定义变量$#：表示命令行上的参数个数 $?：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 ) $$：表示当前进程进程号 $!：表示后台命令对应的进程号 $-：表示由当前shell设置的执行标志名著称的字符串 $*：表示命令行给出的实参字符串 $@：与$*类似，但是可以通过for将程序给的实参进行依次输出，$*不能单独输出每个实参，只能整块输出 Shell 常用通配符">
+<meta property="og:description" content="目录结构图  预先定义变量 $#：表示命令行上的参数个数 $?：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 ) $$：表示当前进程进程号 $!：表示后台命令对应的进程号 $-：表示由当前shell设置的执行标志名著称的字符串 $*：表示命令行给出的实参字符串 $@：与$*类似，但是可以通过for将程序给的实参进行依次输出，$*不能单独输出每个实参，只能整块输出 Shell 常用通">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/05/15/lCkAJLeE163hKDO.png">
 <meta property="og:image" content="https://doc.shiyanlou.com/linux_base/3-10.png">
@@ -281,22 +281,26 @@
             
               <div class="markdown-body">
                 
-                <h2 id="目录结构图"><a href="#目录结构图" class="headerlink" title="目录结构图"></a>目录结构图</h2><p><img src="https://s2.loli.net/2022/05/15/lCkAJLeE163hKDO.png" srcset="/img/loading.gif" lazyload alt="Linux目录图.png"></p>
-<h2 id="预先定义变量"><a href="#预先定义变量" class="headerlink" title="预先定义变量"></a>预先定义变量</h2><p><code>$#</code>：表示命令行上的参数个数</p>
+                <h2 id="目录结构图">目录结构图</h2>
+<p><img src="https://s2.loli.net/2022/05/15/lCkAJLeE163hKDO.png" srcset="/img/loading.gif" lazyload alt="Linux目录图.png"></p>
+<h2 id="预先定义变量">预先定义变量</h2>
+<p><code>$#</code>：表示命令行上的参数个数</p>
 <p><code>$?</code>：表示上一条命令执行后端返回值( 0为执行成功，非0为执行失败 )</p>
 <p><code>$$</code>：表示当前进程进程号</p>
 <p><code>$!</code>：表示后台命令对应的进程号</p>
 <p><code>$-</code>：表示由当前<code>shell</code>设置的执行标志名著称的字符串</p>
 <p><code>$*</code>：表示命令行给出的实参字符串</p>
 <p><code>$@</code>：与<code>$*</code>类似，但是可以通过<code>for</code>将程序给的实参进行依次输出，<code>$*</code>不能单独输出每个实参，只能整块输出</p>
-<h2 id="Shell-常用通配符"><a href="#Shell-常用通配符" class="headerlink" title="Shell 常用通配符"></a>Shell 常用通配符</h2><table>
+<h2 id="Shell-常用通配符">Shell 常用通配符</h2>
+<table>
 <thead>
 <tr>
 <th>字符</th>
 <th>含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>*</code></td>
 <td>匹配 0 或多个字符</td>
 </tr>
@@ -322,15 +326,17 @@
 </tr>
 <tr>
 <td><code>&#123;c1..c2&#125;</code></td>
-<td>匹配 c1-c2 中全部字符 如{1..10}</td>
+<td>匹配 c1-c2 中全部字符 如{1…10}</td>
 </tr>
-</tbody></table>
-<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p><img src="https://doc.shiyanlou.com/linux_base/3-10.png" srcset="/img/loading.gif" lazyload></p>
+</tbody>
+</table>
+<h2 id="一些概念">一些概念</h2>
+<p><img src="https://doc.shiyanlou.com/linux_base/3-10.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>由<code>单引号</code>括起来的字符都作为<code>普通字符</code>出现</p>
 <p>使用<code>rm</code>指令删除文件后不可恢复</p>
 <p><code>mv</code>可以给程序进行改名</p>
 <p><code>Linux</code>系统的开发模型是集市模型</p>
-<p><code>Linux</code>系统中，用户文件描述符 0 表示标准输入设备文件描述符 </p>
+<p><code>Linux</code>系统中，用户文件描述符 0 表示标准输入设备文件描述符</p>
 <p>使用不带参数的<code>cd</code>会跳转到当前用户的主目录</p>
 <p>用户关键信息存放于<code>/etc/shadow</code>中，存放用户账号的文件<code>passwd</code>，外部设备文件存放于<code>/dev</code></p>
 <p>硬盘分区表示：<code>/hda1</code>——第一块硬盘的第一个分区、<code>/hdb2</code>——第二块硬盘的第二个分区</p>
@@ -352,7 +358,7 @@
 <p><code>Linux</code>每个进程都有<code>4GB</code>的虚拟空间，其中内核空间占用<code>3GB ~ 4GB</code></p>
 <p>显示已经挂载的文件系统磁盘<code>inode</code>使用状况<code>df -i</code></p>
 <p>一个<code>bash</code>脚本的第一行是<code>#!/bin/bash</code></p>
-<p><code>Linux</code>基本命令存放在<code>/bin</code>目录    </p>
+<p><code>Linux</code>基本命令存放在<code>/bin</code>目录</p>
 <p>打印机、终端 ———— 字符设备<code>(I/O设备)</code></p>
 <blockquote>
 <p>字符设备（Character device）：这是一个顺序的数据流设备，对这种设备的读写是按字符进行的，而且这些字符是连续地形成一个数据流。他不具备缓冲区，所以对这种设备的读写是实时的，如终端、磁带机等。</p>
@@ -385,9 +391,16 @@
 <p><strong>Linux系统7个运行级别</strong></p>
 <blockquote>
 <p>0：关机,停机模式、1：单用户模式、2：多用户模式、3：完整的多用户文本模式、4：系统未使用，保留一般不用、5：图形化模式、6：重启模式</p>
-<p>0： 系统停机（关机）模式，系统默认运行级别不能设置为0，否则不能正常启动，一开机就自动关机。<br>1：单用户模式，root权限，用于系统维护，禁止远程登陆，就像Windows下的安全模式登录。<br>2：多用户模式，没有NFS网络支持。<br>3：完整的多用户文本模式，有NFS，登陆后进入控制台命令行模式。<br>4：系统未使用，保留一般不用，在一些特殊情况下可以用它来做一些事情。例如在笔记本电脑的电池用尽时，可以切换到这个模式来做一些设置。<br>5：图形化模式，登陆后进入图形GUI模式或GNOME、KDE图形化界面，如X Window系统。<br>6：重启模式，默认运行级别不能设为6，否则不能正常启动，就会一直开机重启开机重启。</p>
+<p>0： 系统停机（关机）模式，系统默认运行级别不能设置为0，否则不能正常启动，一开机就自动关机。<br>
+1：单用户模式，root权限，用于系统维护，禁止远程登陆，就像Windows下的安全模式登录。<br>
+2：多用户模式，没有NFS网络支持。<br>
+3：完整的多用户文本模式，有NFS，登陆后进入控制台命令行模式。<br>
+4：系统未使用，保留一般不用，在一些特殊情况下可以用它来做一些事情。例如在笔记本电脑的电池用尽时，可以切换到这个模式来做一些设置。<br>
+5：图形化模式，登陆后进入图形GUI模式或GNOME、KDE图形化界面，如X Window系统。<br>
+6：重启模式，默认运行级别不能设为6，否则不能正常启动，就会一直开机重启开机重启。</p>
 </blockquote>
-<h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><p><code>shutdown</code>：<code>-h</code>——关机、<code>-r</code>——重启</p>
+<h2 id="一些命令">一些命令</h2>
+<p><code>shutdown</code>：<code>-h</code>——关机、<code>-r</code>——重启</p>
 <p><code>kill all</code>：终止一个用户的所有进程</p>
 <p><code>mkdir</code>：当父目录不存在时先创建父目录可以<code>-p</code></p>
 <p><code>$&#123;name#pattern&#125;</code>和<code>$&#123;name##pattern&#125;</code>：</p>
@@ -402,7 +415,8 @@
 <p><code>Linux</code>下实现热启，应修改<code>/etc/inittab</code>下的<code>ca::ctrlaltdel:/sbin/shutdown -t3 -r now</code></p>
 <p>关闭<code>Linux</code>但不重新启动使用<code>halt</code>命令</p>
 <p><code>top</code>命令可以实时地显示进程状态信息</p>
-<h2 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h2><p><code>read</code>是赋值给变量，变量首字母不能为数字</p>
+<h2 id="shell编程">shell编程</h2>
+<p><code>read</code>是赋值给变量，变量首字母不能为数字</p>
 <p>不换行输出<code>echo -n &quot;XXX&quot;</code></p>
 <p><code>shell</code>有两种环境变量：局部变量和环境变量</p>
 
@@ -581,6 +595,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -799,6 +819,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

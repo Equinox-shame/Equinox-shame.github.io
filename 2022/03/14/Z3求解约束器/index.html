@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="基本数据类型 :在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int                           #整型Bool                       #布尔型Array                      #数组BitVec ( ‘a’，8 )      #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言">
+    <meta name="description" content="基本数据类型 : 在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int 				 		 #整型 Bool 			  	    #布尔型 Array 			 	    #数组 BitVec ( ‘a’，8 ) 	 #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示 设未知数的方法 ： 可以使用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Z3求解约束器">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/Z3%E6%B1%82%E8%A7%A3%E7%BA%A6%E6%9D%9F%E5%99%A8/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="基本数据类型 :在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int                           #整型Bool                       #布尔型Array                      #数组BitVec ( ‘a’，8 )      #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言">
+<meta property="og:description" content="基本数据类型 : 在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int 				 		 #整型 Bool 			  	    #布尔型 Array 			 	    #数组 BitVec ( ‘a’，8 ) 	 #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示 设未知数的方法 ： 可以使用">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png">
 <meta property="og:image" content="https://static01.imgkr.com/temp/e59577657a2344d5988bf434269492ed.png">
@@ -281,9 +281,13 @@
             
               <div class="markdown-body">
                 
-                <h2 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型 :"></a>基本数据类型 :</h2><p>在Python中使用Z3模块，我们的所求结果<strong>一般有以下几种数据类型:</strong></p>
+                <h2 id="基本数据类型">基本数据类型 :</h2>
+<p>在Python中使用Z3模块，我们的所求结果<strong>一般有以下几种数据类型:</strong></p>
 <blockquote>
-<p>Int                           #整型<br>Bool                       #布尔型<br>Array                      #数组<br>BitVec ( ‘a’，8 )      #char型</p>
+<p>Int 				 		 #整型<br>
+Bool 			  	    #布尔型<br>
+Array 			 	    #数组<br>
+BitVec ( ‘a’，8 ) 	 #char型</p>
 </blockquote>
 <p>其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示</p>
 <p><strong>设未知数的方法 ：</strong></p>
@@ -292,35 +296,31 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">y =Real(<span class="hljs-string">&#x27;y&#x27;</span>)  				<span class="hljs-comment">#实数变量(数学中的那个实数)</span><br>z =BitVec(<span class="hljs-string">&#x27;z&#x27;</span>,<span class="hljs-number">8</span>) 			<span class="hljs-comment">#char型</span><br>w =BitVec(<span class="hljs-string">&#x27;w&#x27;</span>,<span class="hljs-number">32</span>) 			<span class="hljs-comment">#int型</span><br>p =Bool(<span class="hljs-string">&#x27;p&#x27;</span>)    			<span class="hljs-comment">#定义布尔型</span><br></code></pre></td></tr></table></figure>
 <p><strong>初始化序列：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><br>flag = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    flag.append(BitVec(<span class="hljs-string">&#x27;%d&#x27;</span> % i, <span class="hljs-number">8</span>))    <span class="hljs-comment">#char型</span><br><span class="hljs-built_in">print</span>(flag)<br> <br><span class="hljs-comment">#结果为:[0, 1, 2, 3, 4]</span><br> <br>flag= [Int(<span class="hljs-string">&#x27;%d&#x27;</span> % i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>)]    <span class="hljs-comment">#初始化为int型</span><br> <br>flag = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    flag.append(BitVec(<span class="hljs-string">&#x27;%d&#x27;</span> % i, <span class="hljs-number">32</span>))    <span class="hljs-comment">#int型</span><br><span class="hljs-built_in">print</span>(flag)<br> <br><span class="hljs-comment">#结果为:[0, 1, 2, 3, 4]</span><br></code></pre></td></tr></table></figure>
-
-
-
-<h2 id="二：基本使用语法"><a href="#二：基本使用语法" class="headerlink" title="二：基本使用语法:"></a>二：基本使用语法:</h2><h3 id="Solver"><a href="#Solver" class="headerlink" title="Solver()"></a><strong>Solver()</strong></h3><p>Solver()命令会创建一个通用求解器，创建后我们可以添加我们的约束条件，进行下一步的求解</p>
-<p><strong>add()</strong> </p>
+<h2 id="二：基本使用语法">二：基本使用语法:</h2>
+<h3 id="Solver"><strong>Solver()</strong></h3>
+<p>Solver()命令会创建一个通用求解器，创建后我们可以添加我们的约束条件，进行下一步的求解</p>
+<p><strong>add()</strong></p>
 <p>add()命令用来添加约束条件，通常在solver()命令之后，添加的约束条件通常是一个逻辑等式</p>
-<h3 id="check"><a href="#check" class="headerlink" title="check()"></a><strong>check()</strong></h3><p>该函数通常用来判断在添加完约束条件后，来检测解的情况，有解的时候会回显sat，无解的时候会回显unsat </p>
-<h3 id="model"><a href="#model" class="headerlink" title="model()"></a><strong>model()</strong></h3><p>在存在解的时候，该函数会将每个限制条件所对应的解集的交集，进而得出正解。</p>
-<h3 id="常用求解步骤："><a href="#常用求解步骤：" class="headerlink" title="常用求解步骤："></a><strong>常用求解步骤：</strong></h3><p> 创建约束求解器</p>
+<h3 id="check"><strong>check()</strong></h3>
+<p>该函数通常用来判断在添加完约束条件后，来检测解的情况，有解的时候会回显sat，无解的时候会回显unsat</p>
+<h3 id="model"><strong>model()</strong></h3>
+<p>在存在解的时候，该函数会将每个限制条件所对应的解集的交集，进而得出正解。</p>
+<h3 id="常用求解步骤："><strong>常用求解步骤：</strong></h3>
+<p>创建约束求解器</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">solver = Solver()<br></code></pre></td></tr></table></figure>
-
 <p>添加约束条件（这一步是z3求解的关键）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">solver.add()<br></code></pre></td></tr></table></figure>
-
 <p>判断解是否存在</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> solver.check() == sat:		<span class="hljs-comment"># sat 表示有解 unsat 表示无解</span><br></code></pre></td></tr></table></figure>
-
 <p>求解</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span> ( solver.model() )		<span class="hljs-comment">#一般是以 &#x27;约束求解器&#x27;.model() 得到结果，配合 print输出</span><br></code></pre></td></tr></table></figure>
-
-
-
-<h2 id="题目示例"><a href="#题目示例" class="headerlink" title="题目示例"></a>题目示例</h2><p>尝试求解 try 部分内容 ：</p>
+<h2 id="题目示例">题目示例</h2>
+<p>尝试求解 try 部分内容 ：</p>
 <p>其中的 key_cmp 对应的分别为  <code>S</code>  <code>y</code>  <code>c</code>  <code>l</code>  <code>o</code>  <code>v</code>  <code>e</code>  <code>r</code></p>
-<p><img src="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">from</span> z3 <span class="hljs-keyword">import</span> *<br><br><br><br>key1 = BitVec(<span class="hljs-string">&#x27;key1&#x27;</span>,<span class="hljs-number">32</span>)		<span class="hljs-comment">#之前改了下面的数据不想改回去偷了个懒没写成数组</span><br>key2 = BitVec(<span class="hljs-string">&#x27;key2&#x27;</span>,<span class="hljs-number">32</span>)<br>key3 = BitVec(<span class="hljs-string">&#x27;key3&#x27;</span>,<span class="hljs-number">32</span>)<br>key4 = BitVec(<span class="hljs-string">&#x27;key4&#x27;</span>,<span class="hljs-number">32</span>)<br>key5 = BitVec(<span class="hljs-string">&#x27;key5&#x27;</span>,<span class="hljs-number">32</span>)<br>key6 = BitVec(<span class="hljs-string">&#x27;key6&#x27;</span>,<span class="hljs-number">32</span>)<br>key7 = BitVec(<span class="hljs-string">&#x27;key7&#x27;</span>,<span class="hljs-number">32</span>)<br>key8 = BitVec(<span class="hljs-string">&#x27;key8&#x27;</span>,<span class="hljs-number">32</span>)<br><br><br><br>key = Solver()					<span class="hljs-comment">#创建约束求解器</span><br><br>key.add((key2 * key3 - key6 * <span class="hljs-number">72</span> - key5 * <span class="hljs-number">3</span> - key4 ^ key2 + (key4 &lt;&lt; <span class="hljs-number">2</span>) + key3 * <span class="hljs-number">6</span> - key8 &amp; key7 - <span class="hljs-number">1000</span>) - <span class="hljs-number">14</span>==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;S&#x27;</span>))<br><br><br>key.add(((key6 * <span class="hljs-number">7</span> + key4 * <span class="hljs-number">3</span> + key3 + key7 - (key3 &gt;&gt; <span class="hljs-number">2</span>) - key2 ^ key1 + key8 + (key5 ^ key2) + (key5 | key8)) - <span class="hljs-number">801</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;y&#x27;</span>))<br><br>key.add(((key7 * <span class="hljs-number">5</span> + key3 * <span class="hljs-number">6</span> - key4 * <span class="hljs-number">7</span> + key5 | key6 + key5 * <span class="hljs-number">10</span> + key1 ^ key2 * <span class="hljs-number">3</span> - key8 + key1 + key2) - <span class="hljs-number">924</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;c&#x27;</span>))<br><br>key.add((key2 * <span class="hljs-number">3</span> + key6 * <span class="hljs-number">9</span> + key1 + key3 * <span class="hljs-number">2</span> + key4 * <span class="hljs-number">5</span> - key5 * (key7 ^ key8) + <span class="hljs-number">321</span> - <span class="hljs-number">16</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;l&#x27;</span>))<br><br>key.add(((key6 * <span class="hljs-number">12</span> - key1 ^ key7 - key4 * <span class="hljs-number">23</span> + key5 * <span class="hljs-number">3</span> + key3 * <span class="hljs-number">8</span> + key2 - key8 * <span class="hljs-number">2</span> + key7 * <span class="hljs-number">4</span> + <span class="hljs-number">1324</span>) + <span class="hljs-number">1</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;o&#x27;</span>))<br><br>key.add((key4 * <span class="hljs-number">54</span> - key2 * <span class="hljs-number">3</span> + key3 * <span class="hljs-number">3</span> + key5 * <span class="hljs-number">11</span> - key6 * <span class="hljs-number">2</span> + key1 + key8 * <span class="hljs-number">3</span> - key7 - <span class="hljs-number">6298</span> + <span class="hljs-number">40</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;v&#x27;</span>))<br><br>key.add((key8 - key7 * key4 + key3 * key3 - key5 * <span class="hljs-number">32</span> + key6 * (key1 &gt;&gt; <span class="hljs-number">2</span>) - key2 * key2 - <span class="hljs-number">6689</span> + <span class="hljs-number">41</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;e&#x27;</span>))<br><br>key.add(((key6 - key4 * <span class="hljs-number">41</span> + key7 * <span class="hljs-number">41</span> + key6 ^ (key5 &amp; key7 | key1) - (key8 * <span class="hljs-number">24</span> | key3) + key2 - <span class="hljs-number">589</span>) - <span class="hljs-number">36</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;r&#x27;</span>))<br><br><span class="hljs-comment">#约束条件</span><br><br><span class="hljs-keyword">if</span> key.check()==sat:			<span class="hljs-comment">#判断解的情况</span><br>    <span class="hljs-built_in">print</span>(key.model())			<span class="hljs-comment">#输出解</span><br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;WA&quot;</span>)<br><br><br></code></pre></td></tr></table></figure>
-
 <p>输出为 ：</p>
-<p><img src="https://static01.imgkr.com/temp/e59577657a2344d5988bf434269492ed.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://static01.imgkr.com/temp/e59577657a2344d5988bf434269492ed.png" srcset="/img/loading.gif" lazyload alt=""></p>
 
                 
               </div>
@@ -497,6 +497,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -715,6 +721,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

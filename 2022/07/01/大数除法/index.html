@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="简单举例以7546除23为例。 先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300； 然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320； 然后186减去23，可以减8次，此时商就是328. 原因说明对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数反复">
+    <meta name="description" content="简单举例 以7546除23为例。 先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300； 然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320； 然后186减去23，可以减8次，此时商就是328. 原因说明 对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大数除法">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/07/01/%E5%A4%A7%E6%95%B0%E9%99%A4%E6%B3%95/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="简单举例以7546除23为例。 先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300； 然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320； 然后186减去23，可以减8次，此时商就是328. 原因说明对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数反复">
+<meta property="og:description" content="简单举例 以7546除23为例。 先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300； 然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320； 然后186减去23，可以减8次，此时商就是328. 原因说明 对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-01T15:45:21.327Z">
 <meta property="article:modified_time" content="2022-07-01T15:45:15.658Z">
@@ -278,16 +278,15 @@
             
               <div class="markdown-body">
                 
-                <h2 id="简单举例"><a href="#简单举例" class="headerlink" title="简单举例"></a>简单举例</h2><p>以7546除23为例。</p>
+                <h2 id="简单举例">简单举例</h2>
+<p>以7546除23为例。</p>
 <p>先减去23的100倍，就是2300，可以减3次，余下646。  此时商就是300；</p>
 <p>然后646减去23的10倍，就是230，可以减2次，余下186。此时商就是320；</p>
 <p>然后186减去23，可以减8次，此时商就是328.</p>
-<h2 id="原因说明"><a href="#原因说明" class="headerlink" title="原因说明"></a>原因说明</h2><p>对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数反复减去一个比它小的数字，这样计算的效率太低了。</p>
+<h2 id="原因说明">原因说明</h2>
+<p>对于大数除法来说其本质上也是大数减法的一种延续，我们除以一个数字可以采用多次减去该数，而能减去的次数便是我们所需要的商，但是一个很大的数反复减去一个比它小的数字，这样计算的效率太低了。</p>
 <p>于是我们采用减去除数的$10^n$来进行计算，通过这样的多次减法运算，将每次减的次数乘以$10^n$便是此次过程中的商，当我们减完之后会得到多个商(每次减的次数乘以$10^n$后的结果)，我们将其加起来便可以得到我们需要的商。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//需要注意哦，之前的输入函数已经将输入的数据反序了</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">High_division</span><span class="hljs-params">(node a,<span class="hljs-keyword">int</span> x,node &amp;c,<span class="hljs-keyword">int</span> &amp;yu)</span><span class="hljs-comment">//a 被除数 x 除数 </span></span><br><span class="hljs-function"></span>&#123;  <span class="hljs-comment">//c=a/x;yu=a%x;</span><br>	<span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> beichu; <span class="hljs-comment">//声明被除数的大小</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=a.l<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;--i)<span class="hljs-comment">//从a的最后一项开始</span><br>	&#123;<br>		beichu=a.s[i]+yu*<span class="hljs-number">10</span>; <span class="hljs-comment">//每一次的被除数 比如输入 50/3 那么第一次求商的第一位也就是1之后余下来2，我们将2乘10再加上被除数下一位的数字，便是新的被除数 </span><br>		c.s[i]=beichu/x; <span class="hljs-comment">//能够减去的次数</span><br>		yu=beichu%x;   	  <span class="hljs-comment">//求每次的余数</span><br>	&#125;<br>	c.l=a.l;<br>	<span class="hljs-keyword">while</span>(c.s[c.l<span class="hljs-number">-1</span>]==<span class="hljs-number">0</span>&amp;&amp;c.l&gt;<span class="hljs-number">1</span>) <span class="hljs-comment">//去除前面的0</span><br>		c.l--;<br>    <span class="hljs-comment">//因为数据都是以字符串的形式进行存储的在计算后前面会多出来一些0(初始化时设置的)，我们的对应结果需要将其去除</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
 <p>拿上面的代码再举一个例子</p>
 <p><code>50/3</code></p>
 <p>我们最先将余数初始为<code>0</code>，之后进入到对应的循环<code>for</code>中，第一次<code>beichu</code>等于<code>5</code>(之前的输入函数已经将输入的数据反序了)，那么能够减去的次数为<code>1</code>，之后余数为<code>2</code>，此时<code>c.s[]</code>的最后一位存储的便是<code>1</code>，我们第二次进入到循环中去，此时的<code>beichu</code>便变为了<code>20</code>(2*10+0),再经过一次除可以得到是<code>6</code>，此时<code>c.s[]</code>的倒数第二位存储的便是<code>6</code>，之后我们将<code>c.s[]</code>的长度，假设为<code>len</code>进行获取，第一位(下标为0)乘以$10^{len}$次方，之后每次将其<code>len</code>减一，后面一项乘以相应的10的次方便可以啦，最后将每次乘出来的结果进行相加便可以了。</p>
@@ -467,6 +466,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -685,6 +690,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

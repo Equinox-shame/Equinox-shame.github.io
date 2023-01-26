@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="下载地址： 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd&#x3D;qwnd提取码：qwnd sysmagicemmm，程序整体比较简单，本质上就是一个自解密，利用调试的SET IP进行绕过里面的if判断即可得到FLAG 1CTF&amp;#123;debugger_1s_so_p0werful_1n_dyn4m1c_4n4lySis!&amp;#125;">
+    <meta name="description" content="下载地址： 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd&#x3D;qwnd 提取码：qwnd sysmagic emmm，程序整体比较简单，本质上就是一个自解密，利用调试的SET IP进行绕过里面的if判断即可得到FLAG 1CTF&amp;#123;debugger_1s_so_p0werful_1n_dyn4m1c_4n4lySis!&amp;#125;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一些简单逆向">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/03/29/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E9%80%86%E5%90%91/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="下载地址： 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd&#x3D;qwnd提取码：qwnd sysmagicemmm，程序整体比较简单，本质上就是一个自解密，利用调试的SET IP进行绕过里面的if判断即可得到FLAG 1CTF&amp;#123;debugger_1s_so_p0werful_1n_dyn4m1c_4n4lySis!&amp;#125;">
+<meta property="og:description" content="下载地址： 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd&#x3D;qwnd 提取码：qwnd sysmagic emmm，程序整体比较简单，本质上就是一个自解密，利用调试的SET IP进行绕过里面的if判断即可得到FLAG 1CTF&amp;#123;debugger_1s_so_p0werful_1n_dyn4m1c_4n4lySis!&amp;#125;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/03/29/yXDVfJaMCHcInYi.jpg">
 <meta property="article:published_time" content="2022-03-29T09:24:35.507Z">
@@ -281,36 +281,37 @@
               <div class="markdown-body">
                 
                 <p>下载地址：</p>
-<p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd=qwnd">https://pan.baidu.com/s/1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd=qwnd</a><br>提取码：qwnd</p>
-<h2 id="sysmagic"><a href="#sysmagic" class="headerlink" title="sysmagic"></a>sysmagic</h2><p>emmm，程序整体比较简单，本质上就是一个自解密，利用调试的<code>SET IP</code>进行绕过里面的<code>if</code>判断即可得到<code>FLAG</code></p>
+<p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd=qwnd">https://pan.baidu.com/s/1VVUkb8vjg4xTDeJ_Ph_W2Q?pwd=qwnd</a><br>
+提取码：qwnd</p>
+<h2 id="sysmagic">sysmagic</h2>
+<p>emmm，程序整体比较简单，本质上就是一个自解密，利用调试的<code>SET IP</code>进行绕过里面的<code>if</code>判断即可得到<code>FLAG</code></p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">CTF</span>&#123;debugger_<span class="hljs-number">1</span>s_so_p<span class="hljs-number">0</span>werful_<span class="hljs-number">1</span>n_dyn<span class="hljs-number">4</span>m<span class="hljs-number">1</span>c_<span class="hljs-number">4</span>n<span class="hljs-number">4</span>lySis!&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-exe"><a href="#2-exe" class="headerlink" title="2.exe"></a>2.exe</h2><p>这个题目也是比较简单，同样的利用动态调试可以得到对应的<code>FLAG</code>，直接用<code>lazyida</code>提取出来即可</p>
+<h2 id="2-exe">2.exe</h2>
+<p>这个题目也是比较简单，同样的利用动态调试可以得到对应的<code>FLAG</code>，直接用<code>lazyida</code>提取出来即可</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">DUTCTF</span>&#123;We<span class="hljs-number">1</span>c<span class="hljs-number">0</span>met<span class="hljs-number">0</span>DUTCTF&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="Ransomware-exe"><a href="#Ransomware-exe" class="headerlink" title="Ransomware.exe"></a>Ransomware.exe</h2><p>打开程序发现是一个模拟<code>WannaCry</code>病毒的界面，简单的查看一下里面的函数可以发现是一个简单的异或加密，将输入的<code>18</code>个字符和<code>0xCC</code>异或，然后于一串字符比较，解题脚本如下：</p>
+<h2 id="Ransomware-exe">Ransomware.exe</h2>
+<p>打开程序发现是一个模拟<code>WannaCry</code>病毒的界面，简单的查看一下里面的函数可以发现是一个简单的异或加密，将输入的<code>18</code>个字符和<code>0xCC</code>异或，然后于一串字符比较，解题脚本如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">ans = [<span class="hljs-number">0xFD</span>, <span class="hljs-number">0x93</span>, <span class="hljs-number">0xA8</span>, <span class="hljs-number">0x83</span>, <span class="hljs-number">0x93</span>, <span class="hljs-number">0xA2</span>, <span class="hljs-number">0xFC</span>, <span class="hljs-number">0xB8</span>, <span class="hljs-number">0x93</span>, <span class="hljs-number">0xBB</span>, <span class="hljs-number">0x8D</span>, <span class="hljs-number">0xA2</span>, <span class="hljs-number">0xA2</span>, <span class="hljs-number">0xAD</span>, <span class="hljs-number">0x93</span>, <span class="hljs-number">0xAF</span>, <span class="hljs-number">0xBE</span>, <span class="hljs-number">0xB5</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(ans)):<br>    ans[i] = ans[i] ^ <span class="hljs-number">0xCC</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(ans[i]), end=<span class="hljs-string">&#x27;&#x27;</span>)<br><span class="hljs-comment"># 1_dO_n0t_wAnna_cry</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="rev1"><a href="#rev1" class="headerlink" title="rev1"></a>rev1</h2><p>程序本质上还是一个自我异或，对<code>s</code>中的每一个元素异或自己的下标，对此可以直接<code>patch</code>下面的<code>ptr[i] = 0;</code>而使程序解密后的数据不会被清除，之后进行调试即可直接得到<code>FLAG</code>。</p>
+<h2 id="rev1">rev1</h2>
+<p>程序本质上还是一个自我异或，对<code>s</code>中的每一个元素异或自己的下标，对此可以直接<code>patch</code>下面的<code>ptr[i] = 0;</code>而使程序解密后的数据不会被清除，之后进行调试即可直接得到<code>FLAG</code>。</p>
 <figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ceylon">CTF&#123;<span class="hljs-keyword">this</span><span class="hljs-number">_</span><span class="hljs-keyword">is</span><span class="hljs-number">_</span>the<span class="hljs-number">_f</span>lag&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="CreakMe1"><a href="#CreakMe1" class="headerlink" title="CreakMe1"></a>CreakMe1</h2><p>拖入IDA分析后感觉加密反编译的有点难看稍微修复一下可以得到：</p>
+<h2 id="CreakMe1">CreakMe1</h2>
+<p>拖入IDA分析后感觉加密反编译的有点难看稍微修复一下可以得到：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">sub_401060</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// edx</span><br>  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> j; <span class="hljs-comment">// edx</span><br>  <span class="hljs-keyword">int</span> v3; <span class="hljs-comment">// edx</span><br>  <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> v5[<span class="hljs-number">12</span>]; <span class="hljs-comment">// [esp+Ch] [ebp-10h] BYREF</span><br>  __int16 v6; <span class="hljs-comment">// [esp+18h] [ebp-4h]</span><br>  <span class="hljs-keyword">char</span> v7; <span class="hljs-comment">// [esp+1Ah] [ebp-2h]</span><br><br>  *(_DWORD *)v5 = dword_40708C;                 <span class="hljs-comment">// 48195768h </span><br>  *(_DWORD *)&amp;v5[<span class="hljs-number">4</span>] = dword_407090;             <span class="hljs-comment">// 78586E50h</span><br>  v6 = word_407098;                             <span class="hljs-comment">// 65Eh</span><br>  v7 = byte_40709A;                             <span class="hljs-comment">// 0</span><br>  *(_DWORD *)&amp;v5[<span class="hljs-number">8</span>] = dword_407094;             <span class="hljs-comment">// 58196A54h</span><br>  <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">strlen</span>(a1) == <span class="hljs-built_in">strlen</span>(v5) )               <span class="hljs-comment">// flag长12</span><br>  &#123;<br>    <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">strlen</span>(a1); ++i )<br>      a1[i] ^= <span class="hljs-number">0x20</span>u;<br>    <span class="hljs-keyword">for</span> ( j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-built_in">strlen</span>(v5); ++j )<br>      v5[j] -= <span class="hljs-number">5</span>;<br>    v3 = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">if</span> ( !<span class="hljs-built_in">strlen</span>(v5) )<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> ( v5[v3 + a1 - v5] == v5[v3] )		<span class="hljs-comment">//a1和v5每一项相等</span><br>    &#123;<br>      <span class="hljs-keyword">if</span> ( ++v3 &gt;= <span class="hljs-built_in">strlen</span>(v5) )<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>通过观察看出来<code>v5</code>存储的是四字节成都的数据，共 3 个，转换为<code>char</code>时长度为 12，也便是输入的<code>flag</code>长。同时输入在和<code>0x20</code>异或后与<code>v5</code>每一项减 5 后相等，可以编写如下脚本：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">v5 = [<span class="hljs-number">0x68</span>, <span class="hljs-number">0x57</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0x48</span>, <span class="hljs-number">0x50</span>, <span class="hljs-number">0x6E</span>, <span class="hljs-number">0x58</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x54</span>, <span class="hljs-number">0x6A</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0x58</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(v5)):<br>    v5[i] = v5[i] - <span class="hljs-number">5</span><br>    v5[i] = v5[i] ^ <span class="hljs-number">0x20</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(v5[i]), end=<span class="hljs-string">&#x27;&#x27;</span>)<br><span class="hljs-comment"># Cr4ckIsSoE4s</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="CreakMe"><a href="#CreakMe" class="headerlink" title="CreakMe"></a>CreakMe</h2><p>又是一个简单的自解密，直接调试，就可以看到解密出来的<code>FLAG</code></p>
+<h2 id="CreakMe">CreakMe</h2>
+<p>又是一个简单的自解密，直接调试，就可以看到解密出来的<code>FLAG</code></p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Dbapp</span>&#123;crackme<span class="hljs-number">100</span>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="CKme"><a href="#CKme" class="headerlink" title="CKme"></a>CKme</h2><p>emmm，这个题目不清楚是不是拿到图片即可，对于图片可以直接使用<code>Pe</code>的插件直接进行提取出来</p>
+<h2 id="CKme">CKme</h2>
+<p>emmm，这个题目不清楚是不是拿到图片即可，对于图片可以直接使用<code>Pe</code>的插件直接进行提取出来</p>
 <p><img src="https://s2.loli.net/2022/03/29/yXDVfJaMCHcInYi.jpg" srcset="/img/loading.gif" lazyload alt="CKme-直接爆破-reshack也可以恢复图片0001-rip.jpg"></p>
-<h2 id="1-IDA-R字符串"><a href="#1-IDA-R字符串" class="headerlink" title="1-IDA-R字符串"></a>1-IDA-R字符串</h2><p>这个应该是一个签到题目，直接拖入<code>IDA</code>反编译就可以得到对应的<code>FLAG</code>了。</p>
+<h2 id="1-IDA-R字符串">1-IDA-R字符串</h2>
+<p>这个应该是一个签到题目，直接拖入<code>IDA</code>反编译就可以得到对应的<code>FLAG</code>了。</p>
 <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="xml">flag</span><span class="hljs-template-variable">&#123;Welcome_To_RE_World!&#125;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="StarsCode-星号密码"><a href="#StarsCode-星号密码" class="headerlink" title="StarsCode-星号密码"></a>StarsCode-星号密码</h2><p>直接使用星号密码查看器即可得到对应密钥：</p>
+<h2 id="StarsCode-星号密码">StarsCode-星号密码</h2>
+<p>直接使用星号密码查看器即可得到对应密钥：</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Key</span>:<span class="hljs-number">916</span>a<span class="hljs-number">00</span>c<span class="hljs-number">5</span>ff<span class="hljs-number">8</span>b<span class="hljs-number">5784</span><br></code></pre></td></tr></table></figure>
-
 
                 
               </div>
@@ -487,6 +488,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -705,6 +712,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

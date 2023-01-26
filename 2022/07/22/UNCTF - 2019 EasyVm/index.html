@@ -299,101 +299,101 @@
 <table>
 <thead>
 <tr>
-<th align="center">操作码</th>
-<th align="center">对应指令集合</th>
+<th style="text-align:center">操作码</th>
+<th style="text-align:center">对应指令集合</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">*(a1+16)</td>
-<td align="center">寄存器r1(占1字节)</td>
+<tbody>
+<tr>
+<td style="text-align:center">*(a1+16)</td>
+<td style="text-align:center">寄存器r1(占1字节)</td>
 </tr>
 <tr>
-<td align="center">*(a1+17)</td>
-<td align="center">寄存器r2(占1字节)</td>
+<td style="text-align:center">*(a1+17)</td>
+<td style="text-align:center">寄存器r2(占1字节)</td>
 </tr>
 <tr>
-<td align="center">*(a1+18)</td>
-<td align="center">寄存器r3(占1字节)</td>
+<td style="text-align:center">*(a1+18)</td>
+<td style="text-align:center">寄存器r3(占1字节)</td>
 </tr>
 <tr>
-<td align="center">*(a1+19)</td>
-<td align="center">寄存器r4(占1字节)</td>
+<td style="text-align:center">*(a1+19)</td>
+<td style="text-align:center">寄存器r4(占1字节)</td>
 </tr>
 <tr>
-<td align="center">*(a1+20)</td>
-<td align="center">寄存器r5(占4字节)</td>
+<td style="text-align:center">*(a1+20)</td>
+<td style="text-align:center">寄存器r5(占4字节)</td>
 </tr>
 <tr>
-<td align="center">0xA0</td>
-<td align="center">r1++</td>
+<td style="text-align:center">0xA0</td>
+<td style="text-align:center">r1++</td>
 </tr>
 <tr>
-<td align="center">0xA1</td>
-<td align="center">r2++</td>
+<td style="text-align:center">0xA1</td>
+<td style="text-align:center">r2++</td>
 </tr>
 <tr>
-<td align="center">0xA2</td>
-<td align="center">r3++</td>
+<td style="text-align:center">0xA2</td>
+<td style="text-align:center">r3++</td>
 </tr>
 <tr>
-<td align="center">0xA3</td>
-<td align="center">r1 -= r3</td>
+<td style="text-align:center">0xA3</td>
+<td style="text-align:center">r1 -= r3</td>
 </tr>
 <tr>
-<td align="center">0xA4</td>
-<td align="center">r1 ^= r2</td>
+<td style="text-align:center">0xA4</td>
+<td style="text-align:center">r1 ^= r2</td>
 </tr>
 <tr>
-<td align="center">0xA5</td>
-<td align="center">r2 ^= r1</td>
+<td style="text-align:center">0xA5</td>
+<td style="text-align:center">r2 ^= r1</td>
 </tr>
 <tr>
-<td align="center">0xA6</td>
-<td align="center">r1 = 0xCD</td>
+<td style="text-align:center">0xA6</td>
+<td style="text-align:center">r1 = 0xCD</td>
 </tr>
 <tr>
-<td align="center">0xA7</td>
-<td align="center">r2 = r1</td>
+<td style="text-align:center">0xA7</td>
+<td style="text-align:center">r2 = r1</td>
 </tr>
 <tr>
-<td align="center">0xA8</td>
-<td align="center">r3 = 0xCD</td>
+<td style="text-align:center">0xA8</td>
+<td style="text-align:center">r3 = 0xCD</td>
 </tr>
 <tr>
-<td align="center">0xA9</td>
-<td align="center">r1 = input[r3]</td>
+<td style="text-align:center">0xA9</td>
+<td style="text-align:center">r1 = input[r3]</td>
 </tr>
 <tr>
-<td align="center">0xAA</td>
-<td align="center">r2 = input[r3]</td>
+<td style="text-align:center">0xAA</td>
+<td style="text-align:center">r2 = input[r3]</td>
 </tr>
 <tr>
-<td align="center">0xAB</td>
-<td align="center">func1()</td>
+<td style="text-align:center">0xAB</td>
+<td style="text-align:center">func1()</td>
 </tr>
 <tr>
-<td align="center">0xAC</td>
-<td align="center">func2()</td>
+<td style="text-align:center">0xAC</td>
+<td style="text-align:center">func2()</td>
 </tr>
 <tr>
-<td align="center">0xAD</td>
-<td align="center">func3()</td>
+<td style="text-align:center">0xAD</td>
+<td style="text-align:center">func3()</td>
 </tr>
 <tr>
-<td align="center">0xAE</td>
-<td align="center">判断r5的值</td>
+<td style="text-align:center">0xAE</td>
+<td style="text-align:center">判断r5的值</td>
 </tr>
 <tr>
-<td align="center">0xAF</td>
-<td align="center">判断r5的值</td>
+<td style="text-align:center">0xAF</td>
+<td style="text-align:center">判断r5的值</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>可以得到程序对每个输入的字符进行的执行流程为：</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0xa9</span>, <span class="hljs-number">0</span>xa<span class="hljs-number">3</span>, <span class="hljs-number">0</span>xa<span class="hljs-number">5</span>, <span class="hljs-number">0</span>xa<span class="hljs-number">6</span>, <span class="hljs-number">0</span>xa<span class="hljs-number">4</span>, <span class="hljs-number">0</span>xab, <span class="hljs-number">0</span>xa<span class="hljs-number">7</span>, <span class="hljs-number">0</span>xae, <span class="hljs-number">0</span>xa<span class="hljs-number">2</span>, <span class="hljs-number">0</span>xad, <span class="hljs-number">0</span>xaf<br></code></pre></td></tr></table></figure>
-
 <p>因此我们可以写出对应的翻译脚本与解密脚本进行解密：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 翻译脚本</span><br><span class="hljs-comment"># opcode = [0xa9, 0xa3, 0xa5, 0xa6, 0xa4, 0xab, 0xa7, 0xae, 0xa2, 0xad, 0xaf]</span><br><br><span class="hljs-comment"># for i in opcode:</span><br><span class="hljs-comment">#     if i == 0xa0:</span><br><span class="hljs-comment">#         print(&quot;r1++&quot;)</span><br><span class="hljs-comment">#     if i == 0xa1:</span><br><span class="hljs-comment">#         print(&quot;r2++&quot;)</span><br><span class="hljs-comment">#     if i == 0xa2:</span><br><span class="hljs-comment">#         print(&quot;r3++&quot;)</span><br><span class="hljs-comment">#     if i == 0xa3:</span><br><span class="hljs-comment">#         print(&quot;r1 -= r3&quot;)</span><br><span class="hljs-comment">#     if i == 0xa4:</span><br><span class="hljs-comment">#         print(&quot;r1 ^= r2&quot;)</span><br><span class="hljs-comment">#     if i == 0xa5:</span><br><span class="hljs-comment">#         print(&quot;r2 ^= r1&quot;)</span><br><span class="hljs-comment">#     if i == 0xa6:</span><br><span class="hljs-comment">#         print(&quot;r1 = 0xcd&quot;)</span><br><span class="hljs-comment">#     if i == 0xa7:</span><br><span class="hljs-comment">#         print(&quot;r2 = r1&quot;)</span><br><span class="hljs-comment">#     if i == 0xa8:</span><br><span class="hljs-comment">#         print(&quot;r3 = 0xcd&quot;)</span><br><span class="hljs-comment">#     if i == 0xa9:</span><br><span class="hljs-comment">#         print(&quot;r1 = input[r3]&quot;)</span><br><span class="hljs-comment">#     if i == 0xaa:</span><br><span class="hljs-comment">#         print(&quot;r2 = input[r3]&quot;)</span><br><span class="hljs-comment">#     if i == 0xab:</span><br><span class="hljs-comment">#         print(&quot;fun1()&quot;)</span><br><span class="hljs-comment">#     if i == 0xac:</span><br><span class="hljs-comment">#         print(&quot;func2()&quot;)</span><br><span class="hljs-comment">#     if i == 0xad:</span><br><span class="hljs-comment">#         print(&quot;func3()&quot;)</span><br><span class="hljs-comment">#     if i == 0xae:</span><br><span class="hljs-comment">#         print(&quot;if(r5==0)&quot;)</span><br><span class="hljs-comment">#     if i == 0xaf:</span><br><span class="hljs-comment">#         print(&quot;if(r5!=1)&quot;)</span><br><br><span class="hljs-comment"># 翻译结果</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">r1 = input[r3] </span><br><span class="hljs-string">r1 -= r3</span><br><span class="hljs-string">r2 ^= r1</span><br><span class="hljs-string">r1 = 0xcd</span><br><span class="hljs-string">r1 ^= r2</span><br><span class="hljs-string">fun1()</span><br><span class="hljs-string">r2 = r1</span><br><span class="hljs-string">if(r5!=0)</span><br><span class="hljs-string">r3++</span><br><span class="hljs-string">func3()</span><br><span class="hljs-string">if(r5!=1)</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><br><span class="hljs-comment"># 解密脚本</span><br>res = [<span class="hljs-number">0xF4</span>, <span class="hljs-number">0x0A</span>, <span class="hljs-number">0xF7</span>, <span class="hljs-number">0x64</span>, <span class="hljs-number">0x99</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x9E</span>, <span class="hljs-number">0x7D</span>, <span class="hljs-number">0xEA</span>, <span class="hljs-number">0x7B</span>, <span class="hljs-number">0x9E</span>, <span class="hljs-number">0x7B</span>, <span class="hljs-number">0x9F</span>, <span class="hljs-number">0x7E</span>, <span class="hljs-number">0xEB</span>, <span class="hljs-number">0x71</span>, <span class="hljs-number">0xE8</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0xE8</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x98</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0xF4</span>, <span class="hljs-number">0x25</span>, <span class="hljs-number">0xF3</span>, <span class="hljs-number">0x21</span>, <span class="hljs-number">0xA4</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0xF4</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0xA6</span>, <span class="hljs-number">0x7C</span>]<br>flag = [<span class="hljs-number">0</span>]*<span class="hljs-number">32</span><br>temp = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-number">32</span>):<br>    flag[i] = (temp ^ res[i] ^ <span class="hljs-number">0xcd</span>) + i<br>    temp = res[i]<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;UNCTF&#123;&quot;</span>,end=<span class="hljs-string">&#x27;&#x27;</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(flag[i]),end=<span class="hljs-string">&#x27;&#x27;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;&#125;&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>因此我们可以得到<code>flag</code>为：<code>UNCTF&#123;942a4115be2359ffd675fa6338ba23b6&#125;</code></p>
 
                 
@@ -571,6 +571,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -789,6 +795,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="有如下指令： 123地址					HEX数据					反汇编00413930			E8 00000000				call  00413935 ; call $+500413935			58						pop eax  在进行汇编语言分析时，经常看到标题中的指令流（E800000000 58，第二条肯定是pop指令，但是目的寄存器不一定是eax），这是干什么的呢？ 看起来貌似很神秘，其实结合前后代码">
+    <meta name="description" content="有如下指令： 123地址					HEX数据					反汇编00413930			E8 00000000				call  00413935 ; call $+500413935			58						pop eax 在进行汇编语言分析时，经常看到标题中的指令流（E800000000 58，第二条肯定是pop指令，但是目的寄存器不一定是eax），这是干什么的呢？ 看起来貌似很神秘，其实结合前后代码的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="call $+5 pop eax">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/06/24/call%20$+5%20pop%20eax/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="有如下指令： 123地址					HEX数据					反汇编00413930			E8 00000000				call  00413935 ; call $+500413935			58						pop eax  在进行汇编语言分析时，经常看到标题中的指令流（E800000000 58，第二条肯定是pop指令，但是目的寄存器不一定是eax），这是干什么的呢？ 看起来貌似很神秘，其实结合前后代码">
+<meta property="og:description" content="有如下指令： 123地址					HEX数据					反汇编00413930			E8 00000000				call  00413935 ; call $+500413935			58						pop eax 在进行汇编语言分析时，经常看到标题中的指令流（E800000000 58，第二条肯定是pop指令，但是目的寄存器不一定是eax），这是干什么的呢？ 看起来貌似很神秘，其实结合前后代码的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-23T16:26:35.602Z">
 <meta property="article:modified_time" content="2022-06-23T16:26:06.019Z">
@@ -280,7 +280,6 @@
                 
                 <p>有如下指令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">地址					HEX数据					反汇编<br>00413930			E8 00000000				call  00413935 ; call $+5<br>00413935			58						pop eax<br></code></pre></td></tr></table></figure>
-
 <p>在进行汇编语言分析时，经常看到标题中的指令流（<code>E800000000 58</code>，第二条肯定是pop指令，但是目的寄存器不一定是<code>eax</code>），这是干什么的呢？</p>
 <p>看起来貌似很神秘，其实结合前后代码的意图可以知道（进行调试），最终<code>eax</code>中存放的数据是<code>0x00413935</code>，而这个<code>0x00413935</code>，恰好就是<code>pop eax</code>指令的地址。因此实际上这条指令流的作用就是获取执行<code>call $+5</code>时，<code>eip</code>的值，也可以简单认为是获取当前指令地址。</p>
 <p>这条指令流的原理也很简单，<code>E8</code>是<code>call</code>指令中的相对跳转指令，它可以带一个<code>dword</code>参数，指明相对跳转的距离（<code>E8 dword offset</code>），计算方式很简单：<code>下一条指令地址+ offset</code> ，便是call指令的目的地。下一条指令地址就是<code>pop eax</code>的地址啦。</p>
@@ -468,6 +467,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -686,6 +691,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

@@ -288,12 +288,10 @@
 <p>我们可以得到<code>flag</code>的长度为<code>24</code>，同时点击对应的<code>encrypt</code>可以发现跳到的是一个地址，我们可以断定是一个<code>SMC</code>程序，程序将我们的输入保存了两份，第一份用来判断是否是假的<code>flag</code>，第二部分用于真正的加密，同时判断是否与<code>flag</code>加密后相同</p>
 <p>我们可以利用一个<code>SMC</code>解密脚本进行手动解密来进行静态分析，而不是动态调试来进行解密</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> idc<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">aPatch</span>(<span class="hljs-params">start,end,key</span>):</span><br>    n=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span>(start+n!=end+<span class="hljs-number">1</span>):<br>        addr=start+n<br>        idc.patch_byte(addr,idc.get_wide_byte(addr)^key)<br>        n+=<span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%d Byte has been changed&quot;</span>%n)<br><br>codeStart=<span class="hljs-number">0x401500</span><br>codeLen=<span class="hljs-number">187</span><br>xorData=<span class="hljs-number">0x41</span><br>aPatch(codeStart,codeStart+codeLen-<span class="hljs-number">1</span>,xorData)<br></code></pre></td></tr></table></figure>
-
 <p>我们观察<code>wrong</code>函数，也就是一个简单的加密</p>
 <p><img src="https://s2.loli.net/2022/08/15/KmwvSnIWghH9etZ.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
 <p>十分简单的我们便可以写出逆过程</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs py">enc = [<span class="hljs-number">0x000066</span>, <span class="hljs-number">0x00006B</span>, <span class="hljs-number">0x000063</span>, <span class="hljs-number">0x000064</span>, <span class="hljs-number">0x00007F</span>, <span class="hljs-number">0x000061</span>, <span class="hljs-number">0x000067</span>, <span class="hljs-number">0x000064</span>, <span class="hljs-number">0x00003B</span>, <span class="hljs-number">0x000056</span>, <span class="hljs-number">0x00006B</span>, <span class="hljs-number">0x000061</span>, <span class="hljs-number">0x00007B</span>, <span class="hljs-number">0x000026</span>, <span class="hljs-number">0x00003B</span>, <span class="hljs-number">0x000050</span>, <span class="hljs-number">0x000063</span>, <span class="hljs-number">0x00005F</span>, <span class="hljs-number">0x00004D</span>, <span class="hljs-number">0x00005A</span>, <span class="hljs-number">0x000071</span>, <span class="hljs-number">0x00000C</span>, <span class="hljs-number">0x000037</span>, <span class="hljs-number">0x000066</span>]<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">de1</span>(<span class="hljs-params">a</span>):</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">24</span>):<br>        <span class="hljs-keyword">if</span> i&amp;<span class="hljs-number">1</span> !=<span class="hljs-number">0</span> :<br>            a[i] += i<br>        <span class="hljs-keyword">else</span>:<br>            a[i]^=i<br><br>de1(enc)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(enc)):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(enc[i]),end=<span class="hljs-string">&#x27;&#x27;</span>)<br><br><span class="hljs-comment"># flag&#123;fak3_alw35_sp_me!!&#125;</span><br></code></pre></td></tr></table></figure>
-
 <p>明显的看出来这个就是一个<code>Fake Flag</code>，我们观察下面的函数</p>
 <p><img src="https://s2.loli.net/2022/08/15/nSdAEF23QWhw9ci.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
 <p>同样的是一个异或，但是执行这个脚本我们会发现少了后面的<code>5</code>位<code>Flag</code>，此时我们有下面的一个函数：</p>
@@ -301,7 +299,6 @@
 <p>可以发现这个函数比较的难看，我们已知<code>flag</code>最后一位必定为<code>&#125;</code>，我们猜测最后一个加密与前面相同，同样是异或，经过简单的尝试后，发现没有问题…</p>
 <p>于是我们便可以得到如下脚本对完整的<code>flag</code>进行解密</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py">enc2 = [<span class="hljs-number">0x0000000E</span>, <span class="hljs-number">0x0000000D</span>, <span class="hljs-number">0x00000009</span>, <span class="hljs-number">0x00000006</span>, <span class="hljs-number">0x00000013</span>, <span class="hljs-number">0x00000005</span>, <span class="hljs-number">0x00000058</span>, <span class="hljs-number">0x00000056</span>, <span class="hljs-number">0x0000003E</span>, <span class="hljs-number">0x00000006</span>, <span class="hljs-number">0x0000000C</span>, <span class="hljs-number">0x0000003C</span>, <span class="hljs-number">0x0000001F</span>, <span class="hljs-number">0x00000057</span>, <span class="hljs-number">0x00000014</span>, <span class="hljs-number">0x0000006B</span>, <span class="hljs-number">0x00000057</span>, <span class="hljs-number">0x00000059</span>, <span class="hljs-number">0x0000000D</span>]<br>xor_data =<span class="hljs-string">&quot;hahahaha_do_you_find_me?&quot;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">19</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(enc2[i]^<span class="hljs-built_in">ord</span>(xor_data[i])),end=<span class="hljs-string">&#x27;&#x27;</span>)<br><br>enc3 =<span class="hljs-string">&quot;%tp&amp;:&quot;</span><br>xor_data2 = <span class="hljs-built_in">ord</span>(enc3[-<span class="hljs-number">1</span>])^<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;&#125;&#x27;</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(enc3)):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">chr</span>(<span class="hljs-built_in">ord</span>(enc3[i])^xor_data2),end=<span class="hljs-string">&#x27;&#x27;</span>)<br>    <br><span class="hljs-comment"># flag&#123;d07abccf8a410cb37a&#125;</span><br></code></pre></td></tr></table></figure>
-
 
                 
               </div>
@@ -478,6 +475,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -696,6 +699,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

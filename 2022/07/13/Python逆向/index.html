@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言随着CTF的兴起，有着越来越多样化的逆向题目(各种不会的语言被出出来折磨人)，我们可以比较常见的是C、C++语言的逆向题目，而Python题目出现也算是较为常见，题目多为pyc或者是exe，今天与大家一起分享一下关于Python逆向的一些东西 前言随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Pyth">
+    <meta name="description" content="前言 随着CTF的兴起，有着越来越多样化的逆向题目(各种不会的语言被出出来折磨人)，我们可以比较常见的是C、C++语言的逆向题目，而Python题目出现也算是较为常见，题目多为pyc或者是exe，今天与大家一起分享一下关于Python逆向的一些东西 前言 随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Py">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python逆向">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/07/13/Python%E9%80%86%E5%90%91/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言随着CTF的兴起，有着越来越多样化的逆向题目(各种不会的语言被出出来折磨人)，我们可以比较常见的是C、C++语言的逆向题目，而Python题目出现也算是较为常见，题目多为pyc或者是exe，今天与大家一起分享一下关于Python逆向的一些东西 前言随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Pyth">
+<meta property="og:description" content="前言 随着CTF的兴起，有着越来越多样化的逆向题目(各种不会的语言被出出来折磨人)，我们可以比较常见的是C、C++语言的逆向题目，而Python题目出现也算是较为常见，题目多为pyc或者是exe，今天与大家一起分享一下关于Python逆向的一些东西 前言 随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Py">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/05/22/7eH3g2CbGKkYlnr.png">
 <meta property="og:image" content="https://s2.loli.net/2022/05/22/DCbWFe1sHVQiRcg.png">
@@ -293,50 +293,55 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着<code>CTF</code>的兴起，有着越来越多样化的逆向题目(<del>各种不会的语言被出出来折磨人</del>)，我们可以比较常见的是<code>C</code>、<code>C++</code>语言的逆向题目，而<code>Python</code>题目出现也算是较为常见，题目多为<code>pyc</code>或者是<code>exe</code>，今天与大家一起分享一下关于<code>Python</code>逆向的一些东西</p>
-<h1 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h1><p>随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Python的语言逆向，文章整体讲解的较为简单，主要涉及到<code>.py</code> /<code>.pyc</code>/<code>.exe（python打包后的程序）</code>三类题型，如有不足还请多多指正。</p>
-<h2 id="py"><a href="#py" class="headerlink" title=".py"></a>.py</h2><p>在这个情况下我们直接拿到了对应的源代码，可以直接通过对源码进行分析，写出对应的逆向算法进行求解</p>
+                <h2 id="前言">前言</h2>
+<p>随着<code>CTF</code>的兴起，有着越来越多样化的逆向题目(<s>各种不会的语言被出出来折磨人</s>)，我们可以比较常见的是<code>C</code>、<code>C++</code>语言的逆向题目，而<code>Python</code>题目出现也算是较为常见，题目多为<code>pyc</code>或者是<code>exe</code>，今天与大家一起分享一下关于<code>Python</code>逆向的一些东西</p>
+<h1>前言</h1>
+<p>随着当下CTF比赛的发展，各种各样的语音逆向逐渐产生，如C、C++、Python等一些常见语言用于出题也是常规题型，而我们此次所初步了解的是Python的语言逆向，文章整体讲解的较为简单，主要涉及到<code>.py</code> /<code>.pyc</code>/<code>.exe（python打包后的程序）</code>三类题型，如有不足还请多多指正。</p>
+<h2 id="py">.py</h2>
+<p>在这个情况下我们直接拿到了对应的源代码，可以直接通过对源码进行分析，写出对应的逆向算法进行求解</p>
 <p>比如我们现在有如下代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check</span>(<span class="hljs-params">a</span>):</span><br>    <span class="hljs-keyword">if</span> a == <span class="hljs-number">123</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Yes!&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;NO!&quot;</span>)<br>        <br>        <br>a = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;请输入对应flag：&quot;</span>)<br>check(<span class="hljs-built_in">int</span>(a))<br></code></pre></td></tr></table></figure>
-
 <p>我们可以直接观察到程序的源代码，需要我们输入一个<code>flag</code>进行保存在<code>a</code>中，之后便会对<code>a</code>和<code>123</code>进行比较，如果相同，那么将会输出<code>Yes!</code>如果输入错误那就会输出<code>NO!</code>，我们可以很直观的观察到程序的逻辑，因此我们只需要对程序的加密过程进行求解，像此题中的比较，进行逆向思维求解即可</p>
-<h2 id="pyc"><a href="#pyc" class="headerlink" title=".pyc"></a>.pyc</h2><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><blockquote>
+<h2 id="pyc">.pyc</h2>
+<h3 id="参考资料">参考资料</h3>
+<blockquote>
 <p>PYC文件是什么</p>
 <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a2e3ef5b9546">https://www.jianshu.com/p/a2e3ef5b9546</a></p>
 <p>PYC文件结构</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_35967330/article/details/114390031">https://blog.csdn.net/weixin_35967330/article/details/114390031</a></p>
 </blockquote>
-<h3 id="如何生成pyc"><a href="#如何生成pyc" class="headerlink" title="如何生成pyc"></a>如何生成pyc</h3><blockquote>
-<p>python -m code.py</p>
+<h3 id="如何生成pyc">如何生成pyc</h3>
+<blockquote>
+<p>python -m <a target="_blank" rel="noopener" href="http://code.py">code.py</a></p>
 </blockquote>
 <p>生成的<code>pyc</code>文件是可以运行的</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python code.pyc<br></code></pre></td></tr></table></figure>
-
 <p><code>.pyc</code>分成两种情况，一种是不带花指令的，另一种是带花指令的</p>
-<h3 id="不带花指令"><a href="#不带花指令" class="headerlink" title="不带花指令"></a>不带花指令</h3><p>对于不带花指令的<code>.pyc</code>文件，我们可以直接使用<code>uncompyle6</code>对其进行转换，可以直接得到对应的源代码<code>.py</code>文件</p>
+<h3 id="不带花指令">不带花指令</h3>
+<p>对于不带花指令的<code>.pyc</code>文件，我们可以直接使用<code>uncompyle6</code>对其进行转换，可以直接得到对应的源代码<code>.py</code>文件</p>
 <p>如下图：</p>
-<p><img src="https://s2.loli.net/2022/05/22/7eH3g2CbGKkYlnr.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="带花指令"><a href="#带花指令" class="headerlink" title="带花指令"></a>带花指令</h3><p>对于带花指令的<code>.pyc</code>文件我们如果直接使用<code>uncompyle6</code>对其进行转换会出现如下状况：</p>
-<p><img src="https://s2.loli.net/2022/05/22/DCbWFe1sHVQiRcg.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/05/22/7eH3g2CbGKkYlnr.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="带花指令">带花指令</h3>
+<p>对于带花指令的<code>.pyc</code>文件我们如果直接使用<code>uncompyle6</code>对其进行转换会出现如下状况：</p>
+<p><img src="https://s2.loli.net/2022/05/22/DCbWFe1sHVQiRcg.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>会提示我们数组发生了越界，证明在这个<code>.pyc</code>文件中添加了一些花指令，让我们无法直接进行转换得到<code>.py</code>，那么应该怎么解决呢？</p>
 <p>我们通过导入<code>dis</code>，<code>marshal</code>两个库来进行查看对应<code>pyc</code>的字节码</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> dis,marshal<br>f = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;[对应pyc名字]&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>).read()<br>code = marshal.loads(f[<span class="hljs-number">8</span>:]) <span class="hljs-comment"># 前8个为pyc对应的魔数(好像py2是8，py3是16)</span><br><span class="hljs-comment"># 我们绕过对应魔数进行加载</span><br><span class="hljs-built_in">print</span>(dis.dis(code))<br></code></pre></td></tr></table></figure>
-
 <p>通过上述步骤我们可以看到对应的<code>py</code>的字节码，我们可以看到如下图：</p>
-<p><img src="https://s2.loli.net/2022/05/22/7fUYsdyAphHi2vB.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/05/22/7fUYsdyAphHi2vB.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>那么我们应该怎么进行反编译呢？答案是看对应的字节码，我们可以在<code>python库</code>里找到对应字节码的含义，对其进行翻译，找到对应的花在的地方，之后再到<code>010</code>中进行修改对应字节码的长度和去除对应字节码<code>(花指令的字节码)</code></p>
 <p>在上图中我们可以看到有一个<code>LOAD_CONST 255</code>可以看到在此处发生了报错，在这个语句前一句有一个<code>JUMP_ABSOLUTE 18</code>，对于这条语句就已经强制跳转到<code>LOAD_CONST 255</code>下一条语句了，因此这个语句被判定为一个花，所以我们需要将其去除。</p>
 <p>我们先使用<code>len(code.co_code)</code>来查看对应的<code>pyc</code>字节码长度，之后减去 3 <code>(Python3 好像不太一样)</code>，那么在哪里减呢？我们需要先找到对应的字节码的编号在对应的<code>opcode.h</code>中进行查找</p>
-<p><img src="https://s2.loli.net/2022/05/22/Go14RNqvAs2FMrp.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/05/22/Go14RNqvAs2FMrp.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>查找到后我们在<code>010</code>中进行查找<code>0x71</code>同时比较后面的数字<code>18</code>的十六进制<code>0x12</code>，之后我们可以找到：</p>
-<p><img src="https://s2.loli.net/2022/05/22/v29GHKWY4ATIsmL.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/05/22/v29GHKWY4ATIsmL.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>之后我们可以直接确定后面的<code>64 FF 00</code>这三个字节为对应的花位置，我们将这 6 个十六进制进行去除：</p>
-<p><img src="https://s2.loli.net/2022/05/22/ty3wFHkUJoO975n.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2022/05/22/ty3wFHkUJoO975n.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们将<code>0x1B</code>进行修改为<code>0x15</code>，同时将对应的 6 个字节进行删除，并再次保存为<code>.pyc</code>文件，之后使用<code>uncompyle6</code>进行反编译即可。</p>
-<h2 id="txt-里面写有对应的-Python-字节码"><a href="#txt-里面写有对应的-Python-字节码" class="headerlink" title="txt 里面写有对应的 Python 字节码"></a>txt 里面写有对应的 Python 字节码</h2><p>对于这种题目就只能看对应字节码进行还原，通过这样的方式手动还原为对应的<code>py</code>源代码，之后再进行对应的逆向工作。</p>
+<h2 id="txt-里面写有对应的-Python-字节码">txt 里面写有对应的 Python 字节码</h2>
+<p>对于这种题目就只能看对应字节码进行还原，通过这样的方式手动还原为对应的<code>py</code>源代码，之后再进行对应的逆向工作。</p>
 <p>如我们有源码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check</span>(<span class="hljs-params">a</span>):</span><br>	flag = <span class="hljs-string">&#x27;123&#x27;</span><br>    <span class="hljs-keyword">if</span> flag == a :<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Yes!&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;NO!&quot;</span>)<br>        <br>        <br>a = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;请输入对应flag：&quot;</span>)<br>check(a)<br></code></pre></td></tr></table></figure>
-
 <p>我们通过<code>python</code>将其编译为<code>.pyc</code>文件后导入<code>dis</code>库进行反编译为字节码</p>
 <blockquote>
 <p>与之前转换<code>pyc</code>为字节码相同</p>
@@ -352,39 +357,48 @@
 <p>将 <code>co_consts[consti]</code> 推入栈顶。</p>
 <p><code>MAKE_FUNCTION</code>(<em>flags</em>)</p>
 <p>将一个新函数对象推入栈顶。</p>
-<p>….</p>
+<p>…</p>
 </blockquote>
 <p>同样我们举出一个例子来尝试逆向(下面为<code>python3</code>字节码)：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs py">	  <span class="hljs-number">0</span> LOAD_CONST               <span class="hljs-number">1</span> (<span class="hljs-number">0</span>)<br>            <span class="hljs-number">2</span> STORE_FAST               <span class="hljs-number">1</span> (num)<br><br><span class="hljs-number">3</span>           <span class="hljs-number">4</span> SETUP_LOOP              <span class="hljs-number">42</span> (to <span class="hljs-number">48</span>)<br>            <span class="hljs-number">6</span> LOAD_GLOBAL              <span class="hljs-number">0</span> (<span class="hljs-built_in">range</span>)<br>            <span class="hljs-number">8</span> LOAD_CONST               <span class="hljs-number">2</span> (<span class="hljs-number">8</span>)<br>           <span class="hljs-number">10</span> CALL_FUNCTION            <span class="hljs-number">1</span><br>           <span class="hljs-number">12</span> GET_ITER<br>      &gt;&gt;   <span class="hljs-number">14</span> FOR_ITER                <span class="hljs-number">30</span> (to <span class="hljs-number">46</span>)<br>           <span class="hljs-number">16</span> STORE_FAST               <span class="hljs-number">2</span> (i)<br><br><span class="hljs-number">4</span>          <span class="hljs-number">18</span> LOAD_FAST                <span class="hljs-number">1</span> (num)<br>           <span class="hljs-number">20</span> LOAD_CONST               <span class="hljs-number">3</span> (<span class="hljs-number">7508399208111569251</span>)<br>           <span class="hljs-number">22</span> BINARY_SUBTRACT<br>           <span class="hljs-number">24</span> LOAD_CONST               <span class="hljs-number">4</span> (<span class="hljs-number">4294967295</span>)<br>           <span class="hljs-number">26</span> BINARY_MODULO<br>           <span class="hljs-number">28</span> STORE_FAST               <span class="hljs-number">1</span> (num)<br></code></pre></td></tr></table></figure>
-
 <p>首先我们可以看到程序加载了一个常数加载到<code>num</code>中，即可以转换为：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">num = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-
 <blockquote>
-<p>0 LOAD_CONST               1 (0)<br>2 STORE_FAST               1 (num)</p>
+<p>0 LOAD_CONST               1 (0)<br>
+2 STORE_FAST               1 (num)</p>
 </blockquote>
 <p>随后其有设置一个循环(<code>SETUP_LOOP</code>)，从 0 到 8</p>
 <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">for</span> <span class="hljs-selector-tag">i</span> <span class="hljs-selector-tag">in</span> <span class="hljs-selector-tag">range</span>(<span class="hljs-number">8</span>):<br></code></pre></td></tr></table></figure>
-
 <blockquote>
-<p>  3           4 SETUP_LOOP              42 (to 48)<br>             6 LOAD_GLOBAL              0 (range)<br>             8 LOAD_CONST               2 (8)<br>            10 CALL_FUNCTION            1<br>            12 GET_ITER<br>       &gt;&gt;   14 FOR_ITER                30 (to 46)<br>            16 STORE_FAST               2 (i)</p>
+<p>3           4 SETUP_LOOP              42 (to 48)<br>
+6 LOAD_GLOBAL              0 (range)<br>
+8 LOAD_CONST               2 (8)<br>
+10 CALL_FUNCTION            1<br>
+12 GET_ITER<br>
+&gt;&gt;   14 FOR_ITER                30 (to 46)<br>
+16 STORE_FAST               2 (i)</p>
 </blockquote>
 <p>然后我们将一个数字加载到<code>num</code>中，再进行减运算，最后存储到<code>num</code>里</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">num</span> = (num - <span class="hljs-number">7508399208111569251</span>) % <span class="hljs-number">4294967295</span><br></code></pre></td></tr></table></figure>
-
 <blockquote>
 <p><code>BINARY_MODULO</code></p>
 <p>实现 <code>TOS = TOS1 % TOS</code> ,<code>TOS</code>为栈顶 <code>TOS1</code>为栈中下一位数据的值</p>
 </blockquote>
 <blockquote>
-<p> 4          18 LOAD_FAST                1 (num)<br>           20 LOAD_CONST               3 (7508399208111569251)<br>           22 BINARY_SUBTRACT<br>           24 LOAD_CONST               4 (4294967295)<br>           26 BINARY_MODULO<br>           28 STORE_FAST               1 (num)</p>
+<p>4          18 LOAD_FAST                1 (num)<br>
+20 LOAD_CONST               3 (7508399208111569251)<br>
+22 BINARY_SUBTRACT<br>
+24 LOAD_CONST               4 (4294967295)<br>
+26 BINARY_MODULO<br>
+28 STORE_FAST               1 (num)</p>
 </blockquote>
 <p>综上我们可以得到对应的代码为：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">num = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>	num = (num - <span class="hljs-number">7508399208111569251</span>) % <span class="hljs-number">4294967295</span><br></code></pre></td></tr></table></figure>
-
 <p>至此<code>py</code>的字节码逆向就结束了</p>
-<h2 id="Python打包EXE"><a href="#Python打包EXE" class="headerlink" title="Python打包EXE"></a>Python打包EXE</h2><p>对于这个我们通过一个<code>py</code>脚本<code>(pyinstxtractor.py)</code>将其变成结构体和一个<code>pyc</code>文件，需要注意的是，在得到的对应<code>pyc</code>文件中缺少了时间属性和对应版本的魔术字，需要我们进行手动修复，通过找到<code>struct.pyc</code>文件里面的对应的字节，我们复制到我们题目的<code>.pyc</code>文件前，之后便可以使用<code>uncompyle6</code>进行反编译</p>
-<p>假如我们无法直观识别呢？我们直接将其拖入到<code>IDA</code>中进行观察一下：<br><img src="https://s2.loli.net/2022/07/13/FhkOX58WQxyDPnt.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
+<h2 id="Python打包EXE">Python打包EXE</h2>
+<p>对于这个我们通过一个<code>py</code>脚本<code>(pyinstxtractor.py)</code>将其变成结构体和一个<code>pyc</code>文件，需要注意的是，在得到的对应<code>pyc</code>文件中缺少了时间属性和对应版本的魔术字，需要我们进行手动修复，通过找到<code>struct.pyc</code>文件里面的对应的字节，我们复制到我们题目的<code>.pyc</code>文件前，之后便可以使用<code>uncompyle6</code>进行反编译</p>
+<p>假如我们无法直观识别呢？我们直接将其拖入到<code>IDA</code>中进行观察一下：<br>
+<img src="https://s2.loli.net/2022/07/13/FhkOX58WQxyDPnt.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
 <p>我们可以注意到在字符串中存在大量的<code>Py</code>开头的东西，这个是一般程序逆向所遇不到的，至此我们便可以识别出来这个程序是一个<code>python</code>所打包构成的<code>exe</code>文件</p>
 <p>我们尝试进行解包，来拿到我们想要的数据：</p>
 <p><img src="https://s2.loli.net/2022/07/13/ZEw2QHj6qBRnert.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
@@ -574,6 +588,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -792,6 +812,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

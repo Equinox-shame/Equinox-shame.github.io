@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习  学习视频链接：人工智能实践：Tensorflow笔记_中国大学MOOC(慕课)  Tensorflow &amp; Numpy 部分函数基础入门张量概念   维数 阶 名字 例子    0-D 0 标量 scalar s &#x3D; 1 2 3   1-D 1 向量">
+    <meta name="description" content="前言 本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习  学习视频链接：人工智能实践：Tensorflow笔记_中国大学MOOC(慕课)  Tensorflow &amp; Numpy 部分函数基础入门 张量概念    维数 阶 名字 例子     0-D 0 标量 scalar s &#x3D; 1 2 3   1-D">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensorflow入门到入土(轻量版)">
 <meta property="og:url" content="https://equinox-shame.github.io/2023/01/26/Tensorflow/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习  学习视频链接：人工智能实践：Tensorflow笔记_中国大学MOOC(慕课)  Tensorflow &amp; Numpy 部分函数基础入门张量概念   维数 阶 名字 例子    0-D 0 标量 scalar s &#x3D; 1 2 3   1-D 1 向量">
+<meta property="og:description" content="前言 本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习  学习视频链接：人工智能实践：Tensorflow笔记_中国大学MOOC(慕课)  Tensorflow &amp; Numpy 部分函数基础入门 张量概念    维数 阶 名字 例子     0-D 0 标量 scalar s &#x3D; 1 2 3   1-D">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2023/01/16/Q4cINnzEl2PMCDA.png">
 <meta property="og:image" content="https://s2.loli.net/2023/01/16/8u6CksHqv1FtJ79.png">
@@ -304,176 +304,223 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习</p>
+                <h2 id="前言">前言</h2>
+<p>本笔记算是对 北京大学 软件与微电子学院 曹健老师 的人工智能实践课程的总结与归纳，收录了课程中的一些函数以及思想方法，方便后来人学习</p>
 <blockquote>
 <p>学习视频链接：<a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/PKU-1002536002?tid=1462067447#/learn/announce">人工智能实践：Tensorflow笔记_中国大学MOOC(慕课)</a></p>
 </blockquote>
-<h2 id="Tensorflow-amp-Numpy-部分函数基础入门"><a href="#Tensorflow-amp-Numpy-部分函数基础入门" class="headerlink" title="Tensorflow &amp; Numpy 部分函数基础入门"></a>Tensorflow &amp; Numpy 部分函数基础入门</h2><h3 id="张量概念"><a href="#张量概念" class="headerlink" title="张量概念"></a>张量概念</h3><table>
+<h2 id="Tensorflow-Numpy-部分函数基础入门">Tensorflow &amp; Numpy 部分函数基础入门</h2>
+<h3 id="张量概念">张量概念</h3>
+<table>
 <thead>
 <tr>
-<th align="center">维数</th>
-<th align="center">阶</th>
-<th align="center">名字</th>
-<th align="center">例子</th>
+<th style="text-align:center">维数</th>
+<th style="text-align:center">阶</th>
+<th style="text-align:center">名字</th>
+<th style="text-align:center">例子</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">0-D</td>
-<td align="center">0</td>
-<td align="center">标量 scalar</td>
-<td align="center">s = 1 2 3</td>
+<tbody>
+<tr>
+<td style="text-align:center">0-D</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">标量 scalar</td>
+<td style="text-align:center">s = 1 2 3</td>
 </tr>
 <tr>
-<td align="center">1-D</td>
-<td align="center">1</td>
-<td align="center">向量 vector</td>
-<td align="center">v = [1,2,3]</td>
+<td style="text-align:center">1-D</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">向量 vector</td>
+<td style="text-align:center">v = [1,2,3]</td>
 </tr>
 <tr>
-<td align="center">2-D</td>
-<td align="center">2</td>
-<td align="center">矩阵 matrix</td>
-<td align="center">m = [[1,2,3],[4,5,6],[7,8,9]]</td>
+<td style="text-align:center">2-D</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">矩阵 matrix</td>
+<td style="text-align:center">m = [[1,2,3],[4,5,6],[7,8,9]]</td>
 </tr>
 <tr>
-<td align="center">n-D</td>
-<td align="center">n</td>
-<td align="center">张量 tensor</td>
-<td align="center">t = [[[ …]]] (有n个[])</td>
+<td style="text-align:center">n-D</td>
+<td style="text-align:center">n</td>
+<td style="text-align:center">张量 tensor</td>
+<td style="text-align:center">t = [[[ …]]] (有n个[])</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>张量可以表示 0 阶到 n 阶数组 (列表)</p>
-<h3 id="张量创建"><a href="#张量创建" class="headerlink" title="张量创建"></a>张量创建</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-comment"># 维度：</span><br><span class="hljs-comment"># 一维 直接写个数</span><br><span class="hljs-comment"># 二维 用 [行,列]</span><br><span class="hljs-comment"># 多维 用 [n,m,j,k...]</span><br><span class="hljs-comment"># 创建全为 0 的张量</span><br>tf.zeros(维度)<br><span class="hljs-comment"># 创建全为 1 的张量</span><br>tf.ones(维度)<br><span class="hljs-comment"># 创建全为指定值的张量</span><br>tf.fill(维度,指定值)<br></code></pre></td></tr></table></figure>
-
-<h3 id="随机数生成"><a href="#随机数生成" class="headerlink" title="随机数生成"></a>随机数生成</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-comment"># 生成正太分布的随机数，默认均值为 0，标准差为 1</span><br>tf.random.normal(维度,mean=维度,stddev=标准差)<br><span class="hljs-comment"># 生成截断式正态分布的随机数 (生成的随机数更为集中)</span><br>tf.random.truncated_normal(维度,mean=维度,stddev=标准差)<br></code></pre></td></tr></table></figure>
-
-<p>在<code>tf.truncated_normal</code>中如果随机生成数据的取值在（μ-2σ，μ+2σ）之则重新进行生成，保证了生成值在均值附近。<br>μ：均值     σ：标准差<br>$$<br>σ = \sqrt{\frac{\sum_{i=1}^n(x_i-\bar x)^2}{n}}<br>$$</p>
+<h3 id="张量创建">张量创建</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-comment"># 维度：</span><br><span class="hljs-comment"># 一维 直接写个数</span><br><span class="hljs-comment"># 二维 用 [行,列]</span><br><span class="hljs-comment"># 多维 用 [n,m,j,k...]</span><br><span class="hljs-comment"># 创建全为 0 的张量</span><br>tf.zeros(维度)<br><span class="hljs-comment"># 创建全为 1 的张量</span><br>tf.ones(维度)<br><span class="hljs-comment"># 创建全为指定值的张量</span><br>tf.fill(维度,指定值)<br></code></pre></td></tr></table></figure>
+<h3 id="随机数生成">随机数生成</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-comment"># 生成正太分布的随机数，默认均值为 0，标准差为 1</span><br>tf.random.normal(维度,mean=维度,stddev=标准差)<br><span class="hljs-comment"># 生成截断式正态分布的随机数 (生成的随机数更为集中)</span><br>tf.random.truncated_normal(维度,mean=维度,stddev=标准差)<br></code></pre></td></tr></table></figure>
+<p>在<code>tf.truncated_normal</code>中如果随机生成数据的取值在（μ-2σ，μ+2σ）之则重新进行生成，保证了生成值在均值附近。<br>
+μ：均值 	σ：标准差<br>
+$$<br>
+σ = \sqrt{\frac{\sum_{i=1}^n(x_i-\bar x)^2}{n}}<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 生成均匀分布随机数 [min,max)</span><br>tf.random.uniform(维度,minval=最小值,maxval=最大值)<br><span class="hljs-comment"># 返回一个[0,1)之间的随机数</span><br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>np.random.RandomState.rand(维度) <span class="hljs-comment"># 维度为空，返回标量</span><br><span class="hljs-comment"># 维度eg</span><br>rdm = np.random.RandomState(seed=<span class="hljs-number">1</span>)<br>a = rdm.rand() <span class="hljs-comment"># 返回一共随机标量</span><br>b = rdm.rand(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) <span class="hljs-comment"># 返回一共维度为 2 行 3 列的随机数矩阵</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 强制tensor转换为该数据类型</span><br>tf.cast(张量名,dtype=数据类型)<br><span class="hljs-comment"># 计算张量维度上元素的最小值</span><br>tf.reduce_min(张量名)<br><span class="hljs-comment"># 计算张量维度上元素的最大值</span><br>tf.reduce_max(张量名)<br></code></pre></td></tr></table></figure>
-
-<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><p><strong>axis</strong> : axis 代表着在一共二维张量或者数组中，可以通过调整 axis 等于 0或者 1 控制执行维度，<code>axis=0</code>时代表跨行，即对列进行操作。当<code>axis=1</code>的时候代表跨列，即对列进行操作，如果不指定 axis 则所有元素参与计算</p>
-<p><img src="https://s2.loli.net/2023/01/16/Q4cINnzEl2PMCDA.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="常用函数">常用函数</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 强制tensor转换为该数据类型</span><br>tf.cast(张量名,dtype=数据类型)<br><span class="hljs-comment"># 计算张量维度上元素的最小值</span><br>tf.reduce_min(张量名)<br><span class="hljs-comment"># 计算张量维度上元素的最大值</span><br>tf.reduce_max(张量名)<br></code></pre></td></tr></table></figure>
+<h4 id="索引">索引</h4>
+<p><strong>axis</strong> : axis 代表着在一共二维张量或者数组中，可以通过调整 axis 等于 0或者 1 控制执行维度，<code>axis=0</code>时代表跨行，即对列进行操作。当<code>axis=1</code>的时候代表跨列，即对列进行操作，如果不指定 axis 则所有元素参与计算</p>
+<p><img src="https://s2.loli.net/2023/01/16/Q4cINnzEl2PMCDA.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 计算张量沿着指定维度的平均值</span><br>tf.reduce_mean(张量名, axis=操作轴)<br><span class="hljs-comment"># 计算张量沿着指定维度的和</span><br>tf.reduce_sum(张量名, axis=操作轴)<br></code></pre></td></tr></table></figure>
-
 <p>当我们需要返回沿着指定维度最大值或者最小值的索引使，我们可以使用如下函数</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.argmax(张量名,axis=操作轴)<br>tf.argmin(张量名,axis=操作轴)<br><span class="hljs-comment"># 找到每一列最大值索引</span><br>tf.argmax(x,axis = <span class="hljs-number">0</span>)<br><span class="hljs-comment"># 找到每一行最大值索引</span><br>tf.argmax(x,axis = <span class="hljs-number">1</span>)<br><span class="hljs-comment"># 同理于最小值</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="将变量标记为”可训练“"><a href="#将变量标记为”可训练“" class="headerlink" title="将变量标记为”可训练“"></a>将变量标记为”可训练“</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 将变量标记为可训练，被标记的变量会在反向传播中记录梯度信息，通常用该函数标记待训练参数</span><br>tf.Variable(初始值)<br></code></pre></td></tr></table></figure>
-
-<h4 id="数学运算"><a href="#数学运算" class="headerlink" title="数学运算"></a>数学运算</h4><p>需要注意维度相同的张量才可以做四则运算</p>
+<h4 id="将变量标记为”可训练“">将变量标记为”可训练“</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 将变量标记为可训练，被标记的变量会在反向传播中记录梯度信息，通常用该函数标记待训练参数</span><br>tf.Variable(初始值)<br></code></pre></td></tr></table></figure>
+<h4 id="数学运算">数学运算</h4>
+<p>需要注意维度相同的张量才可以做四则运算</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 四则运算</span><br>tf.add tf.subtract tf.multiply tf.divide<br><span class="hljs-comment"># 平方、次方与开方</span><br>tf.square tf.<span class="hljs-built_in">pow</span> tf.sqrt<br><span class="hljs-comment"># 矩阵乘</span><br>tf.matmul<br></code></pre></td></tr></table></figure>
-
-<h4 id="将标签与张量进行配对构成数据集"><a href="#将标签与张量进行配对构成数据集" class="headerlink" title="将标签与张量进行配对构成数据集"></a>将标签与张量进行配对构成数据集</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 切分传入张量的第一维度，生成输入特征/标签对，构建数据集</span><br>tf.data.Dataset.from_tensor_slices((输入特征,标签)) <span class="hljs-comment"># numpy和tensor格式都可以用该语句读入数据</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="某个函数对指定参数求导计算"><a href="#某个函数对指定参数求导计算" class="headerlink" title="某个函数对指定参数求导计算"></a>某个函数对指定参数求导计算</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 一般结合with结构记录计算过程，gradient求出张量的梯度</span><br>tf.GradientTape()<br><span class="hljs-comment"># 一般采用如下方式计算</span><br><span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> tape: <span class="hljs-comment"># 若干个计算过程</span><br>    grad = tape.gradient(函数,对谁求导)<br></code></pre></td></tr></table></figure>
-
-<h4 id="枚举-enumerate"><a href="#枚举-enumerate" class="headerlink" title="枚举 enumerate"></a>枚举 enumerate</h4><p>返回对应的索引以及元素通常在 for 循环中使用</p>
+<h4 id="将标签与张量进行配对构成数据集">将标签与张量进行配对构成数据集</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 切分传入张量的第一维度，生成输入特征/标签对，构建数据集</span><br>tf.data.Dataset.from_tensor_slices((输入特征,标签)) <span class="hljs-comment"># numpy和tensor格式都可以用该语句读入数据</span><br></code></pre></td></tr></table></figure>
+<h4 id="某个函数对指定参数求导计算">某个函数对指定参数求导计算</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 一般结合with结构记录计算过程，gradient求出张量的梯度</span><br>tf.GradientTape()<br><span class="hljs-comment"># 一般采用如下方式计算</span><br><span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> tape: <span class="hljs-comment"># 若干个计算过程</span><br>    grad = tape.gradient(函数,对谁求导)<br></code></pre></td></tr></table></figure>
+<h4 id="枚举-enumerate">枚举 enumerate</h4>
+<p>返回对应的索引以及元素通常在 for 循环中使用</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># enumerate 是 Python 的内建函数，可以遍历每个元素</span><br><span class="hljs-built_in">enumerate</span>(列表名)<br><span class="hljs-comment"># eg:</span><br>seq = [<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-string">&#x27;three&#x27;</span>]<br><span class="hljs-keyword">for</span> i, element <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(seq):<br>    <span class="hljs-built_in">print</span>(i, element)<br><span class="hljs-comment"># 输出</span><br><span class="hljs-number">0</span> one<br><span class="hljs-number">1</span> two<br><span class="hljs-number">2</span> three<br></code></pre></td></tr></table></figure>
-
-<h4 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h4><p>对于标签我们常用独热编码表示标签</p>
+<h4 id="标签">标签</h4>
+<p>对于标签我们常用独热编码表示标签</p>
 <blockquote>
 <p>独热编码：在分类问题中常用独热码做标签，标记类别：1表示是，0表示非</p>
 </blockquote>
 <p>我们可以使用下面的函数，将待转换数据直接转换为独热码形式</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 相当于取对应维度的张量来构成一个对应的张量，其下标使得对应的位置为 1 反之为 0</span><br>tf.one_hot(待转换数据,depth=几分类)<br><span class="hljs-comment"># eg</span><br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>classes = <span class="hljs-number">2</span><br>labels = tf.constant([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>])  <span class="hljs-comment"># 输入的元素值最小为0，最大为2</span><br>output = tf.one_hot(labels, depth=classes)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;result of labels1:&quot;</span>, output)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\n&quot;</span>)<br><span class="hljs-comment"># 输出</span><br>result of labels1: tf.Tensor(<br>[[<span class="hljs-number">0.</span> <span class="hljs-number">1.</span>]<br> [<span class="hljs-number">1.</span> <span class="hljs-number">0.</span>]<br> [<span class="hljs-number">0.</span> <span class="hljs-number">0.</span>]], shape=(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>), dtype=float32)<br></code></pre></td></tr></table></figure>
-
-<h4 id="概率统计"><a href="#概率统计" class="headerlink" title="概率统计"></a>概率统计</h4><p>对于分类问题，神经网络完成前向传播，计算出了每种类型的可能性大小，需要输出符合了概率分布时，才可以与独热码的标签作比较<br>$$<br>Softmax(y_i)=\frac{e^{y_i}}{\sum ^n_{j=0}e^{y_i}}<br>$$</p>
+<h4 id="概率统计">概率统计</h4>
+<p>对于分类问题，神经网络完成前向传播，计算出了每种类型的可能性大小，需要输出符合了概率分布时，才可以与独热码的标签作比较<br>
+$$<br>
+Softmax(y_i)=\frac{e^{y_i}}{\sum ^n_{j=0}e^{y_i}}<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 使输出符合概率分布</span><br>tf.nn.softmax(x)<br><span class="hljs-comment"># eg</span><br>y = tf.constant([<span class="hljs-number">1.01</span>,<span class="hljs-number">2.01</span>,-<span class="hljs-number">0.66</span>])<br>y_pro = tf.nn.softmax(y)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;After softmax,y_pro is:&quot;</span>,y_pro)<br><span class="hljs-comment"># 输出</span><br>After softmax,y_pro <span class="hljs-keyword">is</span>:tf.Tensor([<span class="hljs-number">0.25598174</span> <span class="hljs-number">0.69583046</span> <span class="hljs-number">0.0481878</span>],shape=(<span class="hljs-number">3</span>,),dtype=float32)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/16/8u6CksHqv1FtJ79.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/16/8u6CksHqv1FtJ79.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>一般情况下我们将神经网络正向传播后的结果组成张量然后使用该函数对其进行统计概率分布，对于高维我们还可以使用 squeeze 去除大小为 1 的维度</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># &#x27;t&#x27; = [1, 2, 1, 3, 1, 1]</span><br>tf.shape(tf.squeeze(t))  <span class="hljs-comment"># [2, 3]</span><br></code></pre></td></tr></table></figure>
-
 <p>或者,要删除特定的大小为1的维度：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># &#x27;t&#x27; = [1, 2, 1, 3, 1, 1]</span><br>tf.shape(tf.squeeze(t, [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>]))  <span class="hljs-comment"># [1, 2, 3, 1]</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="参数自更新"><a href="#参数自更新" class="headerlink" title="参数自更新"></a>参数自更新</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 赋值操作，更新参数的值并返回</span><br><span class="hljs-comment"># 调用assign_sub前，先用 tf.Variable定义变量w为可训练（可自更新）</span><br>w.assign_sub(w要自减的内容)<br><span class="hljs-comment"># eg</span><br>w = tf.Variable(<span class="hljs-number">4</span>)<br>w.assign_sub(<span class="hljs-number">1</span>) <span class="hljs-comment"># w = w - 1 </span><br><span class="hljs-built_in">print</span>(w)<br><span class="hljs-comment"># 输出</span><br>&lt;tf.Variable <span class="hljs-string">&#x27;Variable:0&#x27;</span> shape=() dtype=int32, numpy=<span class="hljs-number">3</span>&gt;<br></code></pre></td></tr></table></figure>
-
-<h4 id="条件判别"><a href="#条件判别" class="headerlink" title="条件判别"></a>条件判别</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 条件语句真返回 A，条件语句假返回 B</span><br>tf.where(条件语句,真返回A,假返回B)<br><span class="hljs-comment"># eg</span><br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br>a = tf.constant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>])<br>b = tf.constant([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])<br>c = tf.where(tf.greater(a, b), a, b)  <span class="hljs-comment"># 若a&gt;b，返回a对应位置的元素，否则返回b对应位置的元素</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;c:&quot;</span>, c)<br><span class="hljs-comment"># 输出</span><br>c:tf.Tensor([<span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span>], shape=(<span class="hljs-number">5</span>,), dtype=int32)<br></code></pre></td></tr></table></figure>
-
-<h4 id="垂直叠加"><a href="#垂直叠加" class="headerlink" title="垂直叠加"></a>垂直叠加</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 将两个数组按垂直方向叠加</span><br>np.vstack((数组<span class="hljs-number">1</span>,数组<span class="hljs-number">2</span>)) <span class="hljs-comment"># numpy 中的方法</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="网格坐标点生成"><a href="#网格坐标点生成" class="headerlink" title="网格坐标点生成"></a>网格坐标点生成</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 生成等间隔数值点 [起始值,结束值)</span><br>np.mgrid[起始值:结束值:步长,起始值:结束值:步长,...]<br><span class="hljs-comment"># 将 x 变为一位数组，即把 . 前变量拉直</span><br>x.ravel()<br><span class="hljs-comment"># 使返回的间隔数值点配对</span><br>np.c_[数组<span class="hljs-number">1</span>,数组<span class="hljs-number">2</span>,...]<br><span class="hljs-comment"># 通常上述三个方法一起使用</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="神经网络-NN-复杂度"><a href="#神经网络-NN-复杂度" class="headerlink" title="神经网络(NN)复杂度"></a>神经网络(NN)复杂度</h2><p><img src="https://s2.loli.net/2023/01/17/47SmovxDgFLbifd.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="参数自更新">参数自更新</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 赋值操作，更新参数的值并返回</span><br><span class="hljs-comment"># 调用assign_sub前，先用 tf.Variable定义变量w为可训练（可自更新）</span><br>w.assign_sub(w要自减的内容)<br><span class="hljs-comment"># eg</span><br>w = tf.Variable(<span class="hljs-number">4</span>)<br>w.assign_sub(<span class="hljs-number">1</span>) <span class="hljs-comment"># w = w - 1 </span><br><span class="hljs-built_in">print</span>(w)<br><span class="hljs-comment"># 输出</span><br>&lt;tf.Variable <span class="hljs-string">&#x27;Variable:0&#x27;</span> shape=() dtype=int32, numpy=<span class="hljs-number">3</span>&gt;<br></code></pre></td></tr></table></figure>
+<h4 id="条件判别">条件判别</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 条件语句真返回 A，条件语句假返回 B</span><br>tf.where(条件语句,真返回A,假返回B)<br><span class="hljs-comment"># eg</span><br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br>a = tf.constant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>])<br>b = tf.constant([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])<br>c = tf.where(tf.greater(a, b), a, b)  <span class="hljs-comment"># 若a&gt;b，返回a对应位置的元素，否则返回b对应位置的元素</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;c:&quot;</span>, c)<br><span class="hljs-comment"># 输出</span><br>c:tf.Tensor([<span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span>], shape=(<span class="hljs-number">5</span>,), dtype=int32)<br></code></pre></td></tr></table></figure>
+<h4 id="垂直叠加">垂直叠加</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 将两个数组按垂直方向叠加</span><br>np.vstack((数组<span class="hljs-number">1</span>,数组<span class="hljs-number">2</span>)) <span class="hljs-comment"># numpy 中的方法</span><br></code></pre></td></tr></table></figure>
+<h4 id="网格坐标点生成">网格坐标点生成</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 生成等间隔数值点 [起始值,结束值)</span><br>np.mgrid[起始值:结束值:步长,起始值:结束值:步长,...]<br><span class="hljs-comment"># 将 x 变为一位数组，即把 . 前变量拉直</span><br>x.ravel()<br><span class="hljs-comment"># 使返回的间隔数值点配对</span><br>np.c_[数组<span class="hljs-number">1</span>,数组<span class="hljs-number">2</span>,...]<br><span class="hljs-comment"># 通常上述三个方法一起使用</span><br></code></pre></td></tr></table></figure>
+<h2 id="神经网络-NN-复杂度">神经网络(NN)复杂度</h2>
+<p><img src="https://s2.loli.net/2023/01/17/47SmovxDgFLbifd.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们对于神经网络的复杂度统计只统计具有运算能力的层，同时在输入层和输出层中间的所有层都称之为隐藏层</p>
-<h2 id="学习率"><a href="#学习率" class="headerlink" title="学习率"></a>学习率</h2><h3 id="指数衰减学习率"><a href="#指数衰减学习率" class="headerlink" title="指数衰减学习率"></a>指数衰减学习率</h3><p>可以先用较大的学习率，快速得到最优解，然后逐步减小学习率，使模型在训练后期稳定<br>$$<br>指数衰减学习率 = 初始学习率*学习率衰减率^{\frac{当前轮数}{多少轮衰减一次}}<br>$$</p>
+<h2 id="学习率">学习率</h2>
+<h3 id="指数衰减学习率">指数衰减学习率</h3>
+<p>可以先用较大的学习率，快速得到最优解，然后逐步减小学习率，使模型在训练后期稳定<br>
+$$<br>
+指数衰减学习率 = 初始学习率*学习率衰减率^{\frac{当前轮数}{多少轮衰减一次}}<br>
+$$</p>
 <blockquote>
 <p>初始学习率 与 学习衰减率 与 多少轮衰减一次 为超参数</p>
 </blockquote>
-<h2 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h2><h3 id="Sigmoid-函数"><a href="#Sigmoid-函数" class="headerlink" title="Sigmoid 函数"></a>Sigmoid 函数</h3><p>Sigmoid函数也叫Logistic函数，用于隐层神经元输出，取值范围为(0,1)，它可以将一个实数映射到(0,1)的区间，可以用来做二分类。在特征相差比较复杂或是相差不是特别大时效果比较好。sigmoid是一个十分常见的激活函数，函数的表达式如下：<br>$$<br>f(x)=\frac{1}{1+e^{-x}}<br>$$</p>
+<h2 id="激活函数">激活函数</h2>
+<h3 id="Sigmoid-函数">Sigmoid 函数</h3>
+<p>Sigmoid函数也叫Logistic函数，用于隐层神经元输出，取值范围为(0,1)，它可以将一个实数映射到(0,1)的区间，可以用来做二分类。在特征相差比较复杂或是相差不是特别大时效果比较好。sigmoid是一个十分常见的激活函数，函数的表达式如下：<br>
+$$<br>
+f(x)=\frac{1}{1+e^{-x}}<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.nn.sigmoid(x)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/17/jcmCBlfDOtUkbT7.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="在什么情况下适合使用-Sigmoid-激活函数呢？"><a href="#在什么情况下适合使用-Sigmoid-激活函数呢？" class="headerlink" title="在什么情况下适合使用 Sigmoid 激活函数呢？"></a>在什么情况下适合使用 Sigmoid 激活函数呢？</h4><ul>
+<p><img src="https://s2.loli.net/2023/01/17/jcmCBlfDOtUkbT7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="在什么情况下适合使用-Sigmoid-激活函数呢？">在什么情况下适合使用 Sigmoid 激活函数呢？</h4>
+<ul>
 <li>Sigmoid 函数的输出范围是 0 到 1。由于输出值限定在 0 到1，因此它对每个神经元的输出进行了归一化；</li>
 <li>用于将预测概率作为输出的模型。由于概率的取值范围是 0 到 1，因此 Sigmoid 函数非常合适；</li>
 <li>梯度平滑，避免「跳跃」的输出值；</li>
 <li>函数是可微的。这意味着可以找到任意两个点的 sigmoid 曲线的斜率；</li>
 <li>明确的预测，即非常接近 1 或 0。</li>
 </ul>
-<h4 id="Sigmoid-激活函数存在的不足："><a href="#Sigmoid-激活函数存在的不足：" class="headerlink" title="Sigmoid 激活函数存在的不足："></a>Sigmoid 激活函数存在的不足：</h4><ul>
+<h4 id="Sigmoid-激活函数存在的不足：">Sigmoid 激活函数存在的不足：</h4>
+<ul>
 <li><strong>梯度消失</strong>：注意：Sigmoid 函数趋近 0 和 1 的时候变化率会变得平坦，也就是说，Sigmoid 的梯度趋近于 0。神经网络使用 Sigmoid 激活函数进行反向传播时，输出接近 0 或 1 的神经元其梯度趋近于 0。这些神经元叫作饱和神经元。因此，这些神经元的权重不会更新。此外，与此类神经元相连的神经元的权重也更新得很慢。该问题叫作梯度消失。因此，想象一下，如果一个大型神经网络包含 Sigmoid 神经元，而其中很多个都处于饱和状态，那么该网络无法执行反向传播。</li>
 <li><strong>不以零为中心</strong>：Sigmoid 输出不以零为中心的,，输出恒大于0，非零中心化的输出会使得其后一层的神经元的输入发生偏置偏移（Bias Shift），并进一步使得梯度下降的收敛速度变慢。</li>
 <li><strong>计算成本高昂</strong>：exp() 函数与其他非线性激活函数相比，计算成本高昂，计算机运行起来速度较慢。</li>
 </ul>
-<h3 id="Tanh-函数"><a href="#Tanh-函数" class="headerlink" title="Tanh 函数"></a>Tanh 函数</h3><p>Tanh 激活函数又叫作双曲正切激活函数（hyperbolic tangent activation function）。与 Sigmoid 函数类似，Tanh 函数也使用真值，但 Tanh 函数将其压缩至-1 到 1 的区间内。与 Sigmoid 不同，Tanh 函数的输出以零为中心，因为区间在-1 到 1 之间。</p>
-<p>函数表达式：<br>$$<br>f(x)=\frac{1-e^{-2x}}{1+e^{-2x}}<br>$$</p>
+<h3 id="Tanh-函数">Tanh 函数</h3>
+<p>Tanh 激活函数又叫作双曲正切激活函数（hyperbolic tangent activation function）。与 Sigmoid 函数类似，Tanh 函数也使用真值，但 Tanh 函数将其压缩至-1 到 1 的区间内。与 Sigmoid 不同，Tanh 函数的输出以零为中心，因为区间在-1 到 1 之间。</p>
+<p>函数表达式：<br>
+$$<br>
+f(x)=\frac{1-e^{-2x}}{1+e^{-2x}}<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.math.tanh(x)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/17/XOkYnq9lHR5cMj2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/17/XOkYnq9lHR5cMj2.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>在实践中，Tanh 函数的使用优先性高于 Sigmoid 函数。负数输入被当作负值，零输入值的映射接近零，正数输入被当作正值：</p>
 <ul>
 <li>当输入较大或较小时，输出几乎是平滑的并且梯度较小，这不利于权重更新。二者的区别在于输出间隔，tanh 的输出间隔为 1，并且整个函数以 0 为中心，比 sigmoid 函数更好；</li>
 <li>在 tanh 图中，负输入将被强映射为负，而零输入被映射为接近零。</li>
 </ul>
-<h3 id="Relu-函数"><a href="#Relu-函数" class="headerlink" title="Relu 函数"></a>Relu 函数</h3><p>ReLU函数又称为修正线性单元（Rectified Linear Unit），是一种分段线性函数，其弥补了sigmoid函数以及tanh函数的梯度消失问题，在目前的深度神经网络中被广泛使用。ReLU函数本质上是一个斜坡（ramp）函数，公式及函数图像如下：<br>$$<br>f(x)=max(x,0)\\ \ \ \ \ \ \ \ \ \ \ \ \ =\begin{cases} 0\ \ \ \ \  x&lt;0 \x\ \ \ \ \ x&gt;=0 \end{cases}<br>$$</p>
+<h3 id="Relu-函数">Relu 函数</h3>
+<p>ReLU函数又称为修正线性单元（Rectified Linear Unit），是一种分段线性函数，其弥补了sigmoid函数以及tanh函数的梯度消失问题，在目前的深度神经网络中被广泛使用。ReLU函数本质上是一个斜坡（ramp）函数，公式及函数图像如下：<br>
+$$<br>
+f(x)=max(x,0)\\ \ \ \ \ \ \ \ \ \ \ \ \ =\begin{cases} 0\ \ \ \ \  x&lt;0 \x\ \ \ \ \ x&gt;=0 \end{cases}<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.nn.relu(x)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/17/RbhA2iY4pDC1Z9F.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="Leaky-Relu-函数"><a href="#Leaky-Relu-函数" class="headerlink" title="Leaky Relu 函数"></a>Leaky Relu 函数</h3><p>为了解决 ReLU 激活函数中的梯度消失问题，当 x &lt; 0 时，我们使用 Leaky ReLU —— 该函数试图修复 dead ReLU 问题。</p>
-<p>函数表达式以及图像如下：<br>$$<br>f(x)=max(ax,x)<br>$$</p>
+<p><img src="https://s2.loli.net/2023/01/17/RbhA2iY4pDC1Z9F.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Leaky-Relu-函数">Leaky Relu 函数</h3>
+<p>为了解决 ReLU 激活函数中的梯度消失问题，当 x &lt; 0 时，我们使用 Leaky ReLU —— 该函数试图修复 dead ReLU 问题。</p>
+<p>函数表达式以及图像如下：<br>
+$$<br>
+f(x)=max(ax,x)<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.nn.leaky_relu(x)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/17/BbarcHQwtZVSFGU.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h3><p>Softmax 是用于多类分类问题的激活函数，在多类分类问题中，超过两个类标签则需要类成员关系。对于长度为 K 的任意实向量，Softmax 可以将其压缩为长度为 K，值在（0，1）范围内，并且向量中元素的总和为 1 的实向量。</p>
-<p>函数表达式如下：<br>$$<br>S_i=\frac{e^i}{\sum_je^j}<br>$$</p>
-<h4 id="Softmax-激活函数的不足："><a href="#Softmax-激活函数的不足：" class="headerlink" title="Softmax 激活函数的不足："></a>Softmax 激活函数的不足：</h4><ul>
+<p><img src="https://s2.loli.net/2023/01/17/BbarcHQwtZVSFGU.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="softmax">softmax</h3>
+<p>Softmax 是用于多类分类问题的激活函数，在多类分类问题中，超过两个类标签则需要类成员关系。对于长度为 K 的任意实向量，Softmax 可以将其压缩为长度为 K，值在（0，1）范围内，并且向量中元素的总和为 1 的实向量。</p>
+<p>函数表达式如下：<br>
+$$<br>
+S_i=\frac{e^i}{\sum_je^j}<br>
+$$</p>
+<h4 id="Softmax-激活函数的不足：">Softmax 激活函数的不足：</h4>
+<ul>
 <li>在零点不可微；</li>
 <li>负输入的梯度为零，这意味着对于该区域的激活，权重不会在反向传播期间更新，因此会产生永不激活的死亡神经元。</li>
 </ul>
-<h3 id="一些建议-——-对于初学者"><a href="#一些建议-——-对于初学者" class="headerlink" title="一些建议 —— 对于初学者"></a>一些建议 —— 对于初学者</h3><ol>
+<h3 id="一些建议-——-对于初学者">一些建议 —— 对于初学者</h3>
+<ol>
 <li>首选relu激活函数</li>
 <li>学习率设置较小值</li>
 <li>输入特征标准化，即让输入特征满足以 0 为均值，1 为标准差的正态分布</li>
 <li>初始参数中心化，即让随机生成的参数满足以 0 为均值，$\sqrt{\frac{2}{当前层输入特征个数}}$为标准差的正态分布</li>
 </ol>
-<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数(loss)：预测值(y)与已知答案(y_)的差距</p>
+<h2 id="损失函数">损失函数</h2>
+<p>损失函数(loss)：预测值(y)与已知答案(y_)的差距</p>
 <p>NN优化目标 -&gt; loss 最小</p>
-<h3 id="mse-损失函数"><a href="#mse-损失函数" class="headerlink" title="mse 损失函数"></a>mse 损失函数</h3><p>$$<br>MSE(y,y_)=\frac{\sum_{k=0}^{n}(y-y_)^2} n<br>$$</p>
+<h3 id="mse-损失函数">mse 损失函数</h3>
+<p>$$<br>
+MSE(y,y_)=\frac{\sum_{k=0}^{n}(y-y_)^2} n<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">loss_mse = tf.reduce_mean(tf.square(y-y_))<br></code></pre></td></tr></table></figure>
-
-<h3 id="自定义损失函数"><a href="#自定义损失函数" class="headerlink" title="自定义损失函数"></a>自定义损失函数</h3><p>$$<br>loss(y_,y)=\sum_n f(y_,y)<br>$$</p>
+<h3 id="自定义损失函数">自定义损失函数</h3>
+<p>$$<br>
+loss(y_,y)=\sum_n f(y_,y)<br>
+$$</p>
 <blockquote>
-<p>y_ : 标准答案数据集的     y : 预测答案计算出的 </p>
+<p>y_ : 标准答案数据集的 	y : 预测答案计算出的</p>
 </blockquote>
-<p>即我们可以自己定义对应不同情况下的损失率，对于不同的情况下定义相应的 f(y_,y) </p>
-<h3 id="交叉熵-CE"><a href="#交叉熵-CE" class="headerlink" title="交叉熵 CE"></a>交叉熵 CE</h3><p>其表示两个概率分布之间的距离<br>$$<br>H(y_,y)=-\sum y*\ln y<br>$$</p>
+<p>即我们可以自己定义对应不同情况下的损失率，对于不同的情况下定义相应的 f(y_,y)</p>
+<h3 id="交叉熵-CE">交叉熵 CE</h3>
+<p>其表示两个概率分布之间的距离<br>
+$$<br>
+H(y_,y)=-\sum y*\ln y<br>
+$$</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.losses.categorical_crosseentropy(y_,y)<br></code></pre></td></tr></table></figure>
-
 <p>当交叉熵越小时，对应的预测更为准确</p>
 <p>一般来说我们通常先将输出通过 softmax 转换为符合概率分布的结果，再计算 y 与 y_ 的交叉熵损失函数</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.nn.softmax_cross_entropy_with_logits(y,y_)<br><span class="hljs-comment"># 等价于下面两条语句</span><br>y_pro = tf.nn.softmax(y)<br>tf.losses.catgorical_crossentropy(y_,y_pro)<br></code></pre></td></tr></table></figure>
-
-<h2 id="欠拟合与过拟合"><a href="#欠拟合与过拟合" class="headerlink" title="欠拟合与过拟合"></a>欠拟合与过拟合</h2><p><img src="https://s2.loli.net/2023/01/17/ztWVb1SYs3XymJR.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="欠拟合与过拟合">欠拟合与过拟合</h2>
+<p><img src="https://s2.loli.net/2023/01/17/ztWVb1SYs3XymJR.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>对于欠拟合我们有如下解决方法：</p>
 <ol>
-<li><p>增加输入特征选项</p>
+<li>
+<p>增加输入特征选项</p>
 </li>
-<li><p>增加网络参数</p>
+<li>
+<p>增加网络参数</p>
 </li>
-<li><p>减少正则化参数</p>
+<li>
+<p>减少正则化参数</p>
 </li>
 </ol>
 <p>对于过拟合我们有如下方法：</p>
@@ -487,7 +534,8 @@
 <p>正则化：在损失函数中引入模型复杂度指标，通过给 w 添加权值，而弱化训练数据的噪声 (一般不正则化 b)</p>
 <p><img src="https://s2.loli.net/2023/01/17/zpyT1RG92W5qead.png" srcset="/img/loading.gif" lazyload alt="image-20230117211145111"></p>
 </blockquote>
-<h2 id="参数优化器"><a href="#参数优化器" class="headerlink" title="参数优化器"></a>参数优化器</h2><p>优化器是引导神经网络更新参数的工具</p>
+<h2 id="参数优化器">参数优化器</h2>
+<p>优化器是引导神经网络更新参数的工具</p>
 <p>我们定义如下参数：待优化参数 w，损失函数 loss，学习率 Lr，每次迭代一个 batch，t 表示当前 batch 迭代的总次数</p>
 <ol>
 <li>计算 t 时刻损失函数关于当前参数的梯度 $g_t=\nabla loss = \frac {\partial loss}{\partial(w_t)}$</li>
@@ -500,134 +548,151 @@
 <p>二阶动量：与梯度平方相关的函数</p>
 <p>对于不同的优化器，实质上只是定义了不同的一阶动量和二阶动量公式</p>
 </blockquote>
-<h3 id="SGD-优化器"><a href="#SGD-优化器" class="headerlink" title="SGD 优化器"></a>SGD 优化器</h3><p>SGD是最常用的随机梯度下降法，当不含动量时其定义了如下动量计算方式</p>
-<p><img src="https://s2.loli.net/2023/01/18/7lGLsjBFgWC1EAK.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="SGD-优化器">SGD 优化器</h3>
+<p>SGD是最常用的随机梯度下降法，当不含动量时其定义了如下动量计算方式</p>
+<p><img src="https://s2.loli.net/2023/01/18/7lGLsjBFgWC1EAK.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <blockquote>
 <p>$g_t$ ：对应的各时刻梯度值</p>
 </blockquote>
-<h3 id="SGDM-优化器"><a href="#SGDM-优化器" class="headerlink" title="SGDM 优化器"></a>SGDM 优化器</h3><p>在 SGD 的基础上增加一阶动量</p>
-<p><img src="https://s2.loli.net/2023/01/19/qN714Y95IsSPQWz.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="SGDM-优化器">SGDM 优化器</h3>
+<p>在 SGD 的基础上增加一阶动量</p>
+<p><img src="https://s2.loli.net/2023/01/19/qN714Y95IsSPQWz.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <blockquote>
 <p>$m_t$ ： 表示各时刻梯度方向的指数滑动平均值</p>
 </blockquote>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 超参数设置</span><br>m_w, m_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>beta = <span class="hljs-number">0.9</span> <span class="hljs-comment"># 经验值是 0.9</span><br><span class="hljs-comment"># sgd-momentun  </span><br>m_w = beta * m_w + (<span class="hljs-number">1</span>- beta) * grads[<span class="hljs-number">0</span>]<br>m_b = beta * m_b + (<span class="hljs-number">1</span>- beta) * grads[<span class="hljs-number">1</span>]<br>w1.assign_sub(lr * m_w)<br>b1.assigen_sub(lr * m_b)<br></code></pre></td></tr></table></figure>
-
-<h3 id="Adagrad-优化器"><a href="#Adagrad-优化器" class="headerlink" title="Adagrad 优化器"></a>Adagrad 优化器</h3><p>其在SGD的基础上增加二阶动量</p>
-<p><img src="https://s2.loli.net/2023/01/19/TieC9ZPYDEfbw56.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Adagrad-优化器">Adagrad 优化器</h3>
+<p>其在SGD的基础上增加二阶动量</p>
+<p><img src="https://s2.loli.net/2023/01/19/TieC9ZPYDEfbw56.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 超参数设置</span><br>v_w, v_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br><span class="hljs-comment"># adagrad</span><br>v_w += tf.square(grads[<span class="hljs-number">0</span>])<br>v_b += tf.square(grads[<span class="hljs-number">1</span>])<br>w1.assign_sub(lr * grads[<span class="hljs-number">0</span>] / tf.sqrt(v_w))<br>b1.assign_sub(lr * grads[<span class="hljs-number">0</span>] / tf.sqrt(v_b))<br></code></pre></td></tr></table></figure>
-
 <p>RMSProp 优化器</p>
 <p>在SGD的基础上增加二阶动量</p>
-<p><img src="https://s2.loli.net/2023/01/19/Wh9XjlTyrSBt54Q.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/19/Wh9XjlTyrSBt54Q.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 超参数设置</span><br>v_w, v_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>beta = <span class="hljs-number">0.9</span><br><span class="hljs-comment"># RMSProp</span><br>v_w = beta * v_w + (<span class="hljs-number">1</span>- beta) * tf.square(grads[<span class="hljs-number">0</span>])<br>v_b = beta * v_b + (<span class="hljs-number">1</span>- beta) * tf.square(grads[<span class="hljs-number">1</span>])<br>w1.assign_sub(lr * grads[<span class="hljs-number">0</span>] / tf.sqrt(v_w))<br>b1.assign_sub(lr * grads[<span class="hljs-number">0</span>] / tf.sqrt(v_b))<br></code></pre></td></tr></table></figure>
-
-<h3 id="Adam-优化器"><a href="#Adam-优化器" class="headerlink" title="Adam 优化器"></a>Adam 优化器</h3><p>同时结合了SGDM一阶动量和RMSProp二阶动量</p>
-<p><img src="https://s2.loli.net/2023/01/19/nvL2x1hlWreouXp.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Adam-优化器">Adam 优化器</h3>
+<p>同时结合了SGDM一阶动量和RMSProp二阶动量</p>
+<p><img src="https://s2.loli.net/2023/01/19/nvL2x1hlWreouXp.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 超参数设置</span><br>m_w, m_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>v_w, v_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>beta1, beta2 = <span class="hljs-number">0.9</span>, <span class="hljs-number">0.999</span><br>delta_w, delta_b = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>global_step = <span class="hljs-number">0</span><br><span class="hljs-comment"># 训练过程</span><br><span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(epoch):  <span class="hljs-comment"># 数据集级别的循环，每个epoch循环一次数据集</span><br>    <span class="hljs-keyword">for</span> step, (x_train, y_train) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_db):  <span class="hljs-comment"># batch级别的循环 ，每个step循环一个batch</span><br>		global_step += <span class="hljs-number">1</span><br>		...<br><span class="hljs-comment"># Adam</span><br>		m_w = beta1 * m_w + (<span class="hljs-number">1</span> - beta1) * grads[<span class="hljs-number">0</span>]<br>        m_b = beta1 * m_b + (<span class="hljs-number">1</span> - beta1) * grads[<span class="hljs-number">1</span>]<br>        v_w = beta2 * v_w + (<span class="hljs-number">1</span> - beta2) * tf.square(grads[<span class="hljs-number">0</span>])<br>        v_b = beta2 * v_b + (<span class="hljs-number">1</span> - beta2) * tf.square(grads[<span class="hljs-number">1</span>])<br><br>        m_w_correction = m_w / (<span class="hljs-number">1</span> - tf.<span class="hljs-built_in">pow</span>(beta1, <span class="hljs-built_in">int</span>(global_step)))<br>        m_b_correction = m_b / (<span class="hljs-number">1</span> - tf.<span class="hljs-built_in">pow</span>(beta1, <span class="hljs-built_in">int</span>(global_step)))<br>        v_w_correction = v_w / (<span class="hljs-number">1</span> - tf.<span class="hljs-built_in">pow</span>(beta2, <span class="hljs-built_in">int</span>(global_step)))<br>        v_b_correction = v_b / (<span class="hljs-number">1</span> - tf.<span class="hljs-built_in">pow</span>(beta2, <span class="hljs-built_in">int</span>(global_step)))<br><br>        w1.assign_sub(lr * m_w_correction / tf.sqrt(v_w_correction))<br>        b1.assign_sub(lr * m_b_correction / tf.sqrt(v_b_correction))<br></code></pre></td></tr></table></figure>
-
-<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><h3 id="损失函数-1"><a href="#损失函数-1" class="headerlink" title="损失函数"></a>损失函数</h3><p><img src="https://s2.loli.net/2023/01/15/2KHomxLuebwnaqR.png" srcset="/img/loading.gif" lazyload><br>$$<br>MSE(y,y_)=\frac{\sum_{k=0}^{n}(y-y_)^2} n<br>$$<br>上述<code>特征x * w + b = y</code>的过程被称为正向传播，而我们的目的是找到一组参数w和b，使得损失函数最小</p>
+<h2 id="梯度下降">梯度下降</h2>
+<h3 id="损失函数-2">损失函数</h3>
+<p><img src="https://s2.loli.net/2023/01/15/2KHomxLuebwnaqR.png" srcset="/img/loading.gif" lazyload alt=""><br>
+$$<br>
+MSE(y,y_)=\frac{\sum_{k=0}^{n}(y-y_)^2} n<br>
+$$<br>
+上述<code>特征x * w + b = y</code>的过程被称为正向传播，而我们的目的是找到一组参数w和b，使得损失函数最小</p>
 <p><strong>梯度下降法</strong>:沿损失函数梯度下降的方向，寻找损失函数的最小值，得到最优参数的方法。</p>
 <p><strong>学习率</strong>(Lr):当学习率设置的过小时，收敛过程将变得分缓慢。而当学习率设置的过大时，梯度可能会在最小值附近来回震荡,甚至可能无法收敛。</p>
-<h3 id="梯度下降算法"><a href="#梯度下降算法" class="headerlink" title="梯度下降算法"></a>梯度下降算法</h3><p>$$<br>W_{t+1} =W_t-Lr*\frac{\partial loss}{\partial W_t}<br>$$</p>
-<p>$$<br>b_{t+1}=b-Lr*\frac{\partial loss}{\partial b_t}<br>$$</p>
-<p>$$<br>W_{t+1}*x+b_{t+1}\rightarrow y<br>$$</p>
+<h3 id="梯度下降算法">梯度下降算法</h3>
+<p>$$<br>
+W_{t+1} =W_t-Lr*\frac{\partial loss}{\partial W_t}<br>
+$$</p>
+<p>$$<br>
+b_{t+1}=b-Lr*\frac{\partial loss}{\partial b_t}<br>
+$$</p>
+<p>$$<br>
+W_{t+1}*x+b_{t+1}\rightarrow y<br>
+$$</p>
 <p><strong>反向传播</strong>:从S后向前，逐层求损失函数对每层神经元参数的偏导数，迭代更新所有参数</p>
-<p><img src="https://s2.loli.net/2023/01/15/Muc4NL2tvieE6sd.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="Keras-搭建神经网络"><a href="#Keras-搭建神经网络" class="headerlink" title="Keras 搭建神经网络"></a>Keras 搭建神经网络</h2><p>Keras是tensorflow的一个模块，用于快速搭建神经网络</p>
+<p><img src="https://s2.loli.net/2023/01/15/Muc4NL2tvieE6sd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Keras-搭建神经网络">Keras 搭建神经网络</h2>
+<p>Keras是tensorflow的一个模块，用于快速搭建神经网络</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>model = tf.keras.models.Sequential([网络结构]) <span class="hljs-comment"># 描述各层网络</span><br><span class="hljs-comment"># 网络结构举例</span><br><span class="hljs-comment"># 拉直层</span><br>tf.keras.layers.Flatten()<br><span class="hljs-comment"># 全链接层</span><br>tf.keras.layers.Dense(神经元个数,activation=<span class="hljs-string">&quot;激活函数&quot;</span>,kernel_regularizer=正则化方式)<br><span class="hljs-comment"># activation可选: relu、softmax、sigmoid、tanh</span><br><span class="hljs-comment"># kernel_regularizer可选: tf.keras.regularizers.l1()、tf.keras.regularizers.l2()</span><br><span class="hljs-comment"># 卷积层</span><br>tf.keras.layers.Conv2D(filters=卷积核个数,kernel_size=卷积核尺寸,strides=卷积步长,padding=<span class="hljs-string">&quot;vaild&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;same&quot;</span>)<br><span class="hljs-comment"># LSTM层</span><br>tf.keras.layers.LSTM()<br></code></pre></td></tr></table></figure>
-
-<h3 id="配置神经网络方法"><a href="#配置神经网络方法" class="headerlink" title="配置神经网络方法"></a>配置神经网络方法</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs py">model.<span class="hljs-built_in">compile</span>(optimizer=优化器,loss=损失函数,metrics=[<span class="hljs-string">&quot;准确率&quot;</span>])<br><span class="hljs-comment"># 优化器可选项</span><br><span class="hljs-string">&#x27;sgd&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.SGD(lr=学习率,momentum=动量参数)<br><span class="hljs-string">&#x27;adagrad&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adagrad(lr=学习率)<br><span class="hljs-string">&#x27;adadelta&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adadelta(lr=学习率)<br><span class="hljs-string">&#x27;adam&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adam(lr=学习率,beta_1=<span class="hljs-number">0.9</span>,beta_2=<span class="hljs-number">0.999</span>)<br><span class="hljs-comment"># loss 可选项</span><br><span class="hljs-string">&#x27;mse&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.losses.MeanSquaredError()<br><span class="hljs-string">&#x27;sparse_categorical_crossentropy&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="hljs-literal">False</span>) <span class="hljs-comment"># 设置损失函数时常用，from_logits参数用于询问是否使用原始输出，即没有经过概率分布的输出</span><br><span class="hljs-comment"># Metrics 可选项</span><br><span class="hljs-string">&#x27;accuracy&#x27;</span> : y_ 与 y 都是数值，如:y_=[<span class="hljs-number">1</span>],y=[<span class="hljs-number">1</span>]<br><span class="hljs-string">&#x27;categorical_accuracy&#x27;</span> : y_ 与 y 都是独热码(概率分布)，如:y_=[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],y=[<span class="hljs-number">0.235</span>,<span class="hljs-number">0.648</span>,<span class="hljs-number">0.117</span>]<br><span class="hljs-string">&#x27;sparse_categorical_accuracy&#x27;</span> : y_是数值，y是独热码(概率分布)，如:y_=[<span class="hljs-number">1</span>],y=[<span class="hljs-number">0.235</span>,<span class="hljs-number">0.648</span>,<span class="hljs-number">0.117</span>]<br></code></pre></td></tr></table></figure>
-
+<h3 id="配置神经网络方法">配置神经网络方法</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs py">model.<span class="hljs-built_in">compile</span>(optimizer=优化器,loss=损失函数,metrics=[<span class="hljs-string">&quot;准确率&quot;</span>])<br><span class="hljs-comment"># 优化器可选项</span><br><span class="hljs-string">&#x27;sgd&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.SGD(lr=学习率,momentum=动量参数)<br><span class="hljs-string">&#x27;adagrad&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adagrad(lr=学习率)<br><span class="hljs-string">&#x27;adadelta&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adadelta(lr=学习率)<br><span class="hljs-string">&#x27;adam&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.optimizers.Adam(lr=学习率,beta_1=<span class="hljs-number">0.9</span>,beta_2=<span class="hljs-number">0.999</span>)<br><span class="hljs-comment"># loss 可选项</span><br><span class="hljs-string">&#x27;mse&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.losses.MeanSquaredError()<br><span class="hljs-string">&#x27;sparse_categorical_crossentropy&#x27;</span> <span class="hljs-keyword">or</span> tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="hljs-literal">False</span>) <span class="hljs-comment"># 设置损失函数时常用，from_logits参数用于询问是否使用原始输出，即没有经过概率分布的输出</span><br><span class="hljs-comment"># Metrics 可选项</span><br><span class="hljs-string">&#x27;accuracy&#x27;</span> : y_ 与 y 都是数值，如:y_=[<span class="hljs-number">1</span>],y=[<span class="hljs-number">1</span>]<br><span class="hljs-string">&#x27;categorical_accuracy&#x27;</span> : y_ 与 y 都是独热码(概率分布)，如:y_=[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],y=[<span class="hljs-number">0.235</span>,<span class="hljs-number">0.648</span>,<span class="hljs-number">0.117</span>]<br><span class="hljs-string">&#x27;sparse_categorical_accuracy&#x27;</span> : y_是数值，y是独热码(概率分布)，如:y_=[<span class="hljs-number">1</span>],y=[<span class="hljs-number">0.235</span>,<span class="hljs-number">0.648</span>,<span class="hljs-number">0.117</span>]<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>初学建议直接使用字符串形式的参数，对于熟悉后可以查询相关文档后使用后者，修改相关的超参数</p>
 </blockquote>
-<h3 id="执行训练"><a href="#执行训练" class="headerlink" title="执行训练"></a>执行训练</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py">model.fit(训练集的输入特征,训练集的标签,<br>         batch_size= , epochs= ,<br>         validation_data=(测试机的输入特征,测试集的标签),<br>         validation_freq=多少次epoch测试一次)<br><span class="hljs-comment"># 或者</span><br>model.fit(训练集的输入特征,训练集的标签,<br>         batch_size= , epochs= ,<br>         validation_split=从训练集划分多少比例给测试集,<br>         validation_freq=多少次epoch测试一次)<br></code></pre></td></tr></table></figure>
-
-<h3 id="网络参数和结构统计"><a href="#网络参数和结构统计" class="headerlink" title="网络参数和结构统计"></a>网络参数和结构统计</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">model.summary()<br></code></pre></td></tr></table></figure>
-
-<h3 id="自制数据集"><a href="#自制数据集" class="headerlink" title="自制数据集"></a>自制数据集</h3><p>需要我们设计一共函数来将我们的数据集进行读入，对此我们可能需要创建对应的文件或者是对于对应的目录下的文件进行检测，对此我们需要导入 os，利用其内置库进行读写与判断,此处以读入图片进行训练为例子：</p>
+<h3 id="执行训练">执行训练</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py">model.fit(训练集的输入特征,训练集的标签,<br>         batch_size= , epochs= ,<br>         validation_data=(测试机的输入特征,测试集的标签),<br>         validation_freq=多少次epoch测试一次)<br><span class="hljs-comment"># 或者</span><br>model.fit(训练集的输入特征,训练集的标签,<br>         batch_size= , epochs= ,<br>         validation_split=从训练集划分多少比例给测试集,<br>         validation_freq=多少次epoch测试一次)<br></code></pre></td></tr></table></figure>
+<h3 id="网络参数和结构统计">网络参数和结构统计</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">model.summary()<br></code></pre></td></tr></table></figure>
+<h3 id="自制数据集">自制数据集</h3>
+<p>需要我们设计一共函数来将我们的数据集进行读入，对此我们可能需要创建对应的文件或者是对于对应的目录下的文件进行检测，对此我们需要导入 os，利用其内置库进行读写与判断,此处以读入图片进行训练为例子：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><br>train_path = XXX<br>train_txt = XXX<br>x_train_savepath = XXX<br>y_train_savepath = XXX<br><br>test_path = XXX<br>test_txt = XXX<br>x_test_savepath = XXX<br>y_test_savepath = XXX<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GenerateData</span>(<span class="hljs-params">path,txt</span>):</span><br>    f = <span class="hljs-built_in">open</span>(txt,<span class="hljs-string">&#x27;r&#x27;</span>)<br>    data = f.readlines()<br>    f.close()<br>    x, y_=[], []<br>    <span class="hljs-keyword">for</span> content <span class="hljs-keyword">in</span> data:<br>        value = content.split() <span class="hljs-comment"># 以空格进行分割数据</span><br>        img_path = path + value[<span class="hljs-number">0</span>] <span class="hljs-comment"># 构建图片位置</span><br>        img = Image.<span class="hljs-built_in">open</span>(img_path) <span class="hljs-comment"># 打开图片</span><br>        img = np.array(img.convert(<span class="hljs-string">&#x27;L&#x27;</span>)) <span class="hljs-comment"># 将图片转为8位宽灰度值，通过np.array进行读入</span><br>        img  = img / <span class="hljs-number">256</span> <span class="hljs-comment"># 数据归一化</span><br>        x.append(img)<br>        y_.append(value[<span class="hljs-number">1</span>])<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;loading: &quot;</span> + img_path) <span class="hljs-comment"># 提示信息</span><br>        <br>    x = np.array(x) <span class="hljs-comment"># 变为np.array格式</span><br>    y_ = np.array(y_) <span class="hljs-comment"># 变为np.array格式</span><br>    y_ = y_.astype(np.int64) <span class="hljs-comment"># 变为np.int64整型</span><br>    <span class="hljs-keyword">return</span> x,y_<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check</span>(<span class="hljs-params">x_train_savepath,y_train_savepath,x_test_savepath,y_test_savepath</span>):</span><br>    <span class="hljs-keyword">if</span> os.path.exists(x_train_savepath) <span class="hljs-keyword">and</span> os.path.exists(y_train_savepath) <br>    <span class="hljs-keyword">and</span> os.path.exists(x_test_savepath) <span class="hljs-keyword">and</span> os.path.exists(y_test_savepath):<br>        <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-------------Load Datasets-----------------&#x27;</span>)<br>    <br>    x_train_save = np.load(x_train_savepath)<br>    y_train = np.load(y_train_savepath)<br>    x_test_save = np.load(x_test_savepath)<br>    y_test = np.load(y_test_savepath)<br>    x_train = np.reshape(x_train_save, (<span class="hljs-built_in">len</span>(x_train_save), <span class="hljs-number">28</span>, <span class="hljs-number">28</span>))<br>    x_test = np.reshape(x_test_save, (<span class="hljs-built_in">len</span>(x_test_save), <span class="hljs-number">28</span>, <span class="hljs-number">28</span>))<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-------------Generate Datasets-----------------&#x27;</span>)<br>    <br>    x_train, y_train = generateds(train_path, train_txt)<br>    x_test, y_test = generateds(test_path, test_txt)<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-------------Save Datasets-----------------&#x27;</span>)<br>    <br>    x_train_save = np.reshape(x_train, (<span class="hljs-built_in">len</span>(x_train), -<span class="hljs-number">1</span>)) <span class="hljs-comment"># 将数组拉成一维数组</span><br>    x_test_save = np.reshape(x_test, (<span class="hljs-built_in">len</span>(x_test), -<span class="hljs-number">1</span>)) <span class="hljs-comment"># 将数组拉成一维数组</span><br>    np.save(x_train_savepath, x_train_save)<br>    np.save(y_train_savepath, y_train)<br>    np.save(x_test_savepath, x_test_save)<br>    np.save(y_test_savepath, y_test)<br></code></pre></td></tr></table></figure>
-
-<h3 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h3><p>数据增强可以帮助我们扩充数据集，对于图像而言就是简单的形变，可以用于应对图片拍照角度的不同而照成的一定形变</p>
+<h3 id="数据增强">数据增强</h3>
+<p>数据增强可以帮助我们扩充数据集，对于图像而言就是简单的形变，可以用于应对图片拍照角度的不同而照成的一定形变</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py">image_gen_train = tf.keras.preprocessing.image.ImageDataGenerator(<br>	rescale=所有数据将乘以该数值, <span class="hljs-comment"># 当为图像的时候，分母为255时，可以归至 0~1 的区间</span><br>	rotation_range=随机旋转角度数范围,<br>    width_shift_range=随机宽度偏移量, <br>    height_shift_range =随机高度偏移量,<br>	horizontal_flip=是否随机水平翻转 <span class="hljs-comment"># True or False</span><br>	zoom_range =随机缩放的范围[<span class="hljs-number">1</span>-n,<span class="hljs-number">1</span>+n] )  <span class="hljs-comment"># eg： 0.5</span><br><br>image_gen_train.fit(x_train)<br></code></pre></td></tr></table></figure>
-
-<h3 id="断点续训"><a href="#断点续训" class="headerlink" title="断点续训"></a>断点续训</h3><p>断点续训可以让我们训练不用每次都从头开始训练，而不用每次重头开始训练</p>
+<h3 id="断点续训">断点续训</h3>
+<p>断点续训可以让我们训练不用每次都从头开始训练，而不用每次重头开始训练</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 读取模型</span><br>load_weights(路径文件名) <span class="hljs-comment"># .ckpt 文件</span><br><span class="hljs-comment"># 保存模型</span><br>tf.keras.callbacks.ModelCheckpoint(<br>	filepath=文件名,<br>	save_weights_only=<span class="hljs-literal">True</span>/<span class="hljs-literal">False</span>,<br>	save_best_only=<span class="hljs-literal">True</span>/<span class="hljs-literal">False</span>)<br><br>history = model.fit(callbacks=[cp_callback])<br></code></pre></td></tr></table></figure>
-
-<h3 id="参数提取"><a href="#参数提取" class="headerlink" title="参数提取"></a>参数提取</h3><p>我们可以把参数存入文本，观察训练的参数，我们可以采用print进行输出，但是当输出信息过长时中间的部分会被省略号所替代，我们可以通过下面的函数把我们模型中可以训练的参数进行打印</p>
+<h3 id="参数提取">参数提取</h3>
+<p>我们可以把参数存入文本，观察训练的参数，我们可以采用print进行输出，但是当输出信息过长时中间的部分会被省略号所替代，我们可以通过下面的函数把我们模型中可以训练的参数进行打印</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 返回模型中可训练的参数</span><br>model.trainable_variables<br><span class="hljs-comment"># 设置print输出格式</span><br>np.set_printoptions(threshold=超过多少省略显示) <span class="hljs-comment"># np.inf 表示无限大</span><br><span class="hljs-comment"># eg</span><br>np.set_printoptions(threshold=np.inf)<br><span class="hljs-built_in">print</span>(model.trainable_variables)<br>file = <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;./weights.txt&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>)<br><span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> model.trainable_variables:<br>    file.write(<span class="hljs-built_in">str</span>(v.name)+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>    file.write(<span class="hljs-built_in">str</span>(v.shape)+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>    file.write(<span class="hljs-built_in">str</span>(v.numpy())+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>    <br>file.close()<br></code></pre></td></tr></table></figure>
-
-<h3 id="acc-loss-可视化"><a href="#acc-loss-可视化" class="headerlink" title="acc/loss 可视化"></a>acc/loss 可视化</h3><p>在训练过程中其实对训练集、测试集、训练集准确率、测试集准确率都有着对应的记录，我们可以将其进行提取，以可视化的方式来观察我们训练的效果</p>
+<h3 id="acc-loss-可视化">acc/loss 可视化</h3>
+<p>在训练过程中其实对训练集、测试集、训练集准确率、测试集准确率都有着对应的记录，我们可以将其进行提取，以可视化的方式来观察我们训练的效果</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 提取方式</span><br>history = model.fit(训练集的输入特征,训练集的标签,<br>         batch_size= , epochs= ,<br>         validation_split=从训练集划分多少比例给测试集,<br>         validation_freq=多少次epoch测试一次)<br><span class="hljs-comment"># history </span><br>训练集 loss : loss<br>测试集 loss : val_loss<br>训练集准确率 : sparse_categorical_accuracy<br>测试集准确率 : val_sparse_categorical_accuracy<br></code></pre></td></tr></table></figure>
-
 <p>当我们拿到对应的数据后我们便可以用 matplotlib 进行绘图</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment">#需要导入下面的包</span><br><span class="hljs-keyword">from</span> matplotlib <span class="hljs-keyword">import</span> pyplot <span class="hljs-keyword">as</span> plt <br><span class="hljs-comment"># 绘图</span><br>acc = history.history[<span class="hljs-string">&#x27;sparse_categorical_accuracy&#x27;</span>] <span class="hljs-comment"># 训练集准确率</span><br>val_acc = history.history[<span class="hljs-string">&#x27;val_sparse_categorical_accuracy&#x27;</span>] <span class="hljs-comment"># 测试集准确率</span><br>loss = history.history[<span class="hljs-string">&#x27;loss&#x27;</span>] <span class="hljs-comment"># 训练集 loss</span><br>val_loss = history.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>] <span class="hljs-comment"># 测试集 loss</span><br><br><span class="hljs-comment"># plt.subplot 将图像分为一行两列</span><br>plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>) <span class="hljs-comment"># 划出第一列</span><br>plt.plot(acc, label=<span class="hljs-string">&#x27;Training Accuracy&#x27;</span>) <span class="hljs-comment"># 设置图标题</span><br>plt.plot(val_acc, label=<span class="hljs-string">&#x27;Validation Accuracy&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;Training and Validation Accuracy&#x27;</span>)<br>plt.legend() <span class="hljs-comment"># 画出图例</span><br><br>plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>) <span class="hljs-comment"># 划出第二列</span><br>plt.plot(loss, label=<span class="hljs-string">&#x27;Training Loss&#x27;</span>)<br>plt.plot(val_loss, label=<span class="hljs-string">&#x27;Validation Loss&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;Training and Validation Loss&#x27;</span>)<br>plt.legend()<br>plt.show()<br></code></pre></td></tr></table></figure>
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>之前所用到的东西都不同于其他的程序，仅仅有了一个网络，但是要想真正运行起来需要我们编写一个应用程序，可以将我们的输入进行预测，给出一共预测的结果，在 tensorflow 中有对应的函数将我们的前向传播进行执行应用给出一个对应的预测</p>
+<h3 id="应用">应用</h3>
+<p>之前所用到的东西都不同于其他的程序，仅仅有了一个网络，但是要想真正运行起来需要我们编写一个应用程序，可以将我们的输入进行预测，给出一共预测的结果，在 tensorflow 中有对应的函数将我们的前向传播进行执行应用给出一个对应的预测</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># 返回前向传播计算结果</span><br>predict(输入特征,batch_size=整数)<br><span class="hljs-comment"># eg</span><br>model = tf.keras.models.Sequential([<br>	tf.keras.layers.Flatten(),<br>	tf.keras.layers.Dense(<span class="hljs-number">128</span>,actvation=<span class="hljs-string">&#x27;relu&#x27;</span>),<br>	tf.keras.layers.Dense(<span class="hljs-number">10</span>,activation=<span class="hljs-string">&#x27;softmax&#x27;</span>)<br>]) <span class="hljs-comment"># 复现模型 —— 前向传播</span><br>model.load_weights(model_save_path) <span class="hljs-comment"># 加载参数</span><br>result = model.predict(x_predict) <span class="hljs-comment"># 预测结果</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h2><p>卷积就是特征提取器：卷积-&gt;批标准化-&gt;激活-&gt;池化</p>
+<h2 id="卷积神经网络">卷积神经网络</h2>
+<p>卷积就是特征提取器：卷积-&gt;批标准化-&gt;激活-&gt;池化</p>
 <p>卷积神经网络便是借助卷积核提取特征后送入全连接网络</p>
-<h3 id="卷积计算过程"><a href="#卷积计算过程" class="headerlink" title="卷积计算过程"></a>卷积计算过程</h3><p>卷积计算那是一种有效提取图像特征的方法</p>
+<h3 id="卷积计算过程">卷积计算过程</h3>
+<p>卷积计算那是一种有效提取图像特征的方法</p>
 <p>一般会用一个正方形的卷积核,按指定步长,在输入特征图上滑动，遍历输入特征图中的每个像素点。每一个步长，卷积核会与输入特征图出现重合区域，重合区域对应元素相乘、求和再加上偏置项得到输出特征的一个像素点</p>
 <p>输入特征图的深度(channel数)，决定了当前层卷积核的深度;当前层卷积核的个数，决定了当前层输出特征图的深度。</p>
-<p><img src="https://s2.loli.net/2023/01/26/BjVtpJM9Znq3deN.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/26/BjVtpJM9Znq3deN.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>对应元素相乘之后求和再加上对应的偏置项 b</p>
-<h3 id="感受野-Receptive-Field"><a href="#感受野-Receptive-Field" class="headerlink" title="感受野(Receptive Field)"></a>感受野(Receptive Field)</h3><p>卷积神经网络各输出特征图中的每个像素点，在原始输入图片上映射区域的大小。</p>
-<h3 id="全零填充-Padding"><a href="#全零填充-Padding" class="headerlink" title="全零填充(Padding)"></a>全零填充(Padding)</h3><p>卷积计算保持输入特征图的尺寸不变可以使用全零填充</p>
-<p><img src="https://s2.loli.net/2023/01/26/OTXjgQCDPcwyqiL.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="卷积核计算"><a href="#卷积核计算" class="headerlink" title="卷积核计算"></a>卷积核计算</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.Conv2D(<br>	filters=卷积核个数,<br>	kernel_size=卷积核尺寸, <span class="hljs-comment"># 正方形写核长整数，或(核高 h ，核宽 w)</span><br>	strides=滑动步长, <span class="hljs-comment"># 横纵向相同写步长整数，或(纵向步长 h ，横向步长 w)，默认为 1</span><br>    padding=<span class="hljs-string">&quot;same&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;valid&quot;</span> <span class="hljs-comment"># 使用全零填充是&quot;same&quot;，不使用是&quot;valid&quot;(默认)</span><br>    activation=<span class="hljs-string">&quot;relu&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;sigmoid&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;softmax&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;tanh&quot;</span> <span class="hljs-comment"># 如有批标准化此处不写</span><br>    input_shape=(高,宽,通道数) <span class="hljs-comment"># 输入特征图维度，可省略</span><br>)<br><span class="hljs-comment"># eg</span><br>model = tf.keras.models.Sequential([<br>    Conv2D(<span class="hljs-number">6</span>,<span class="hljs-number">5</span>,padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>),<br>    Conv2D(<span class="hljs-number">6</span>,(<span class="hljs-number">5</span>,<span class="hljs-number">5</span>),padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(<span class="hljs-number">2</span>,(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)),<br>    Conv2D(filters=<span class="hljs-number">6</span>, kernel_size=(<span class="hljs-number">5</span>,<span class="hljs-number">5</span>),padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>),strides=<span class="hljs-number">2</span>),<br>    Flatten(),<br>    Dense(<span class="hljs-number">10</span>,activation=<span class="hljs-string">&#x27;softmax&#x27;</span>)<br>])<br></code></pre></td></tr></table></figure>
-
-<h3 id="批标准化-BN"><a href="#批标准化-BN" class="headerlink" title="批标准化(BN)"></a>批标准化(BN)</h3><p>标准化：使数据符合 0 均值， 1 为标准差的分布</p>
+<h3 id="感受野-Receptive-Field">感受野(Receptive Field)</h3>
+<p>卷积神经网络各输出特征图中的每个像素点，在原始输入图片上映射区域的大小。</p>
+<h3 id="全零填充-Padding">全零填充(Padding)</h3>
+<p>卷积计算保持输入特征图的尺寸不变可以使用全零填充</p>
+<p><img src="https://s2.loli.net/2023/01/26/OTXjgQCDPcwyqiL.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="卷积核计算">卷积核计算</h3>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.Conv2D(<br>	filters=卷积核个数,<br>	kernel_size=卷积核尺寸, <span class="hljs-comment"># 正方形写核长整数，或(核高 h ，核宽 w)</span><br>	strides=滑动步长, <span class="hljs-comment"># 横纵向相同写步长整数，或(纵向步长 h ，横向步长 w)，默认为 1</span><br>    padding=<span class="hljs-string">&quot;same&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;valid&quot;</span> <span class="hljs-comment"># 使用全零填充是&quot;same&quot;，不使用是&quot;valid&quot;(默认)</span><br>    activation=<span class="hljs-string">&quot;relu&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;sigmoid&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;softmax&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;tanh&quot;</span> <span class="hljs-comment"># 如有批标准化此处不写</span><br>    input_shape=(高,宽,通道数) <span class="hljs-comment"># 输入特征图维度，可省略</span><br>)<br><span class="hljs-comment"># eg</span><br>model = tf.keras.models.Sequential([<br>    Conv2D(<span class="hljs-number">6</span>,<span class="hljs-number">5</span>,padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>),<br>    Conv2D(<span class="hljs-number">6</span>,(<span class="hljs-number">5</span>,<span class="hljs-number">5</span>),padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(<span class="hljs-number">2</span>,(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)),<br>    Conv2D(filters=<span class="hljs-number">6</span>, kernel_size=(<span class="hljs-number">5</span>,<span class="hljs-number">5</span>),padding=<span class="hljs-string">&#x27;valid&#x27;</span>,activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>),<br>    MaxPool2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>),strides=<span class="hljs-number">2</span>),<br>    Flatten(),<br>    Dense(<span class="hljs-number">10</span>,activation=<span class="hljs-string">&#x27;softmax&#x27;</span>)<br>])<br></code></pre></td></tr></table></figure>
+<h3 id="批标准化-BN">批标准化(BN)</h3>
+<p>标准化：使数据符合 0 均值， 1 为标准差的分布</p>
 <p>批标准化：对一小批数据(batch)进行标准化处理，常用在卷积和激活之间</p>
 <blockquote>
 <p>卷积 -&gt; 批标准化 -&gt; 激活</p>
 </blockquote>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.BatchNormalizaton()<br><span class="hljs-comment"># eg</span><br>model = tf.keras.models.Sequential([<br>    Conv2D(filters=<span class="hljs-number">6</span>,kernel_size=(<span class="hljs-number">5</span>,<span class="hljs-number">5</span>),padding=<span class="hljs-string">&#x27;same&#x27;</span>),<span class="hljs-comment"># 卷积层</span><br>    BatchNormalization(), <span class="hljs-comment"># BN 层</span><br>    Activation(<span class="hljs-string">&#x27;relu&#x27;</span>), <span class="hljs-comment"># 激活层</span><br>    MaxPool2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>),strides=<span class="hljs-number">2</span>,padding=<span class="hljs-string">&#x27;same&#x27;</span>), <span class="hljs-comment"># 池化层</span><br>    Dropout(<span class="hljs-number">0.2</span>) <span class="hljs-comment"># dropout 层</span><br>])<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/26/5BcELTauxlSUp2F.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/26/5BcELTauxlSUp2F.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>批标准化操作会让每个像素点进行减均值除以标准差的自更新计算，在经过标准化操作后将其重新拉回到 0 均值，数据更集中于激活函数的线性区域，提升了激活函数对输入数据的区分力</p>
 <p>但是简单的数据标准化使特征数据完全满足了正态分布，集中在激活函数中间的线性区域，使激活函数失去了非线性特性，因此BN操作中为每个卷积核引入了两个可训练参数用于控制缩放和偏移</p>
-<p><img src="https://s2.loli.net/2023/01/26/VaAutgynBvhpbFm.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://s2.loli.net/2023/01/26/VaAutgynBvhpbFm.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>在反向传播中使其一起被优化，进而优化数据的分布</p>
-<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化操作用于减少卷积神经网络中特征数据量，最大值池化可提取图片纹理，均值池化可保留背景特征。</p>
+<h3 id="池化">池化</h3>
+<p>池化操作用于减少卷积神经网络中特征数据量，最大值池化可提取图片纹理，均值池化可保留背景特征。</p>
 <p>最大池化：将池化核中的最大值进行保留</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.MaxPool2D(<br>	pool_size=池化核尺寸, <span class="hljs-comment"># 正方形写核长整数，或(核高 h ，核宽 w)</span><br>    strides=池化步长, <span class="hljs-comment"># 横纵向相同写步长整数，或(纵向步长 h ，横向步长 w)，默认为 pool_size</span><br>    padding=<span class="hljs-string">&quot;same&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;valid&quot;</span> <span class="hljs-comment"># 使用全零填充是&quot;same&quot;，不使用是&quot;valid&quot;(默认)</span><br>)<br></code></pre></td></tr></table></figure>
-
 <p>均值池化：将池化核中的数据的平均值进行替代</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.AveragePooling2D(<br>	pool_size=池化核尺寸, <span class="hljs-comment"># 正方形写核长整数，或(核高 h ，核宽 w)</span><br>    strides=池化步长, <span class="hljs-comment"># 横纵向相同写步长整数，或(纵向步长 h ，横向步长 w)，默认为 pool_size</span><br>    padding=<span class="hljs-string">&quot;same&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;valid&quot;</span> <span class="hljs-comment"># 使用全零填充是&quot;same&quot;，不使用是&quot;valid&quot;(默认)</span><br>)<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2023/01/26/AHRCp17FoYqsyxV.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="舍弃"><a href="#舍弃" class="headerlink" title="舍弃"></a>舍弃</h3><p>在神经网络训练时，将将隐藏层的一部分神经元按照一定概率从神经网络中暂时舍弃。神经网络使用时，被舍弃的神经元恢复链接。</p>
+<p><img src="https://s2.loli.net/2023/01/26/AHRCp17FoYqsyxV.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="舍弃">舍弃</h3>
+<p>在神经网络训练时，将将隐藏层的一部分神经元按照一定概率从神经网络中暂时舍弃。神经网络使用时，被舍弃的神经元恢复链接。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.Dropout(舍弃的概率)<br></code></pre></td></tr></table></figure>
-
-<h2 id="循环神经网络"><a href="#循环神经网络" class="headerlink" title="循环神经网络"></a>循环神经网络</h2><p>使用循环神经网络实现连续数据的预测，即借助循环核提取时间特征后送入全链接网络</p>
-<h4 id="循环核"><a href="#循环核" class="headerlink" title="循环核"></a>循环核</h4><p>参数时间共享，循环层提取时间信息</p>
-<p><img src="https://s2.loli.net/2023/01/26/D6CsmWwzo1p4BZa.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="循环计算层"><a href="#循环计算层" class="headerlink" title="循环计算层"></a>循环计算层</h3><p>循环计算层向输出方向生长</p>
+<h2 id="循环神经网络">循环神经网络</h2>
+<p>使用循环神经网络实现连续数据的预测，即借助循环核提取时间特征后送入全链接网络</p>
+<h4 id="循环核">循环核</h4>
+<p>参数时间共享，循环层提取时间信息</p>
+<p><img src="https://s2.loli.net/2023/01/26/D6CsmWwzo1p4BZa.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="循环计算层">循环计算层</h3>
+<p>循环计算层向输出方向生长</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.SimpleRNN(记忆体个数,activation=<span class="hljs-string">&#x27;激活函数&#x27;</span>,return_sequences=是否每个时刻输出ht到下一层) <span class="hljs-comment"># ht 为记忆体内存储的状态信息</span><br><span class="hljs-comment"># activation 不写默认使用tanh</span><br><span class="hljs-comment"># return_sequences=True 各时间步输出ht</span><br><span class="hljs-comment"># return_sequences=False 仅最后时间步输出ht (默认)</span><br><span class="hljs-comment"># eg</span><br>SimpleRNN(<span class="hljs-number">3</span>,return_sequences=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
-
 <p>入RNN时，x_train维度：[送入样本数,循环核时间展开步数,每个时间步输入特征个数]</p>
-<p><img src="https://s2.loli.net/2023/01/26/Iv3usBQFLTnoeOJ.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="Embedding-单词编码"><a href="#Embedding-单词编码" class="headerlink" title="Embedding 单词编码"></a>Embedding 单词编码</h3><p>独热码:数据量大过于稀疏，映射之间是独立的，没有表现出关联性</p>
+<p><img src="https://s2.loli.net/2023/01/26/Iv3usBQFLTnoeOJ.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Embedding-单词编码">Embedding 单词编码</h3>
+<p>独热码:数据量大过于稀疏，映射之间是独立的，没有表现出关联性</p>
 <p>Embedding:是一种单词编码方法，用低维向量实现了编码，这种编码通过神经网络训练优化，能表达出单词间的相关性。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">tf.keras.layers.Embedding(词汇表大小,编码维度)<br></code></pre></td></tr></table></figure>
-
 <p>编码维度就是用几个数字表达一个单词</p>
 <p>对1-100进行编码，[4]编码为[0.25，0.1,0.11]</p>
 <p>例:tf.keras.layers.Embedding(100,3)</p>
 <p>入Embedding时， x_train维度:[送入样本数，循环核时间展开步数]</p>
-<h3 id="LSTM-长短记忆网络"><a href="#LSTM-长短记忆网络" class="headerlink" title="LSTM 长短记忆网络"></a>LSTM 长短记忆网络</h3><p><img src="https://s2.loli.net/2023/01/26/M62GFqoZHlP3sdW.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="LSTM-长短记忆网络">LSTM 长短记忆网络</h3>
+<p><img src="https://s2.loli.net/2023/01/26/M62GFqoZHlP3sdW.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <blockquote>
 <p>$W_i$、$b_i$、$W_f$、$b_f$、$W_o$、$b_o$均为待训练参数，再Sigmoid函数的作用下归一化</p>
 <p>门限取值范围为(0,1)</p>
 </blockquote>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.LSTM(记忆体个数,return_sequences=是否返回输出)<br><span class="hljs-comment"># return_sequences=True 各时间步输出ht</span><br><span class="hljs-comment"># return_sequences=False 仅最后时间输出ht(默认)</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="GRU-网络"><a href="#GRU-网络" class="headerlink" title="GRU 网络"></a>GRU 网络</h3><p>GRU使记忆体 ht 融合了长期记忆和短期记忆</p>
-<p><img src="https://s2.loli.net/2023/01/26/nI3pVMDFJe6kQ7d.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="GRU-网络">GRU 网络</h3>
+<p>GRU使记忆体 ht 融合了长期记忆和短期记忆</p>
+<p><img src="https://s2.loli.net/2023/01/26/nI3pVMDFJe6kQ7d.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs py">tf.keras.layers.GRU(记忆体个数,return_sequences=是否返回输出)<br><span class="hljs-comment"># return_sequences=True 各时间步输出ht</span><br><span class="hljs-comment"># return_sequences=False 仅最后时间输出ht(默认)</span><br></code></pre></td></tr></table></figure>
-
 
                 
               </div>
@@ -798,6 +863,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -1016,6 +1087,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

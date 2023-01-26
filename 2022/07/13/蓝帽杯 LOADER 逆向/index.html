@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数 直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些地方">
+    <meta name="description" content="前言 逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数  直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2022蓝帽杯 Loader 题解">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/07/13/%E8%93%9D%E5%B8%BD%E6%9D%AF%20LOADER%20%E9%80%86%E5%90%91/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数 直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些地方">
+<meta property="og:description" content="前言 逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助 子程序程序主函数  直接拖到IDA中，程序会分析出来对应的主函数，在主函数我们可以观察到一个VirtuaalProtect函数，通过程序名称我们也可以知道程序是一个加载一个新的PE来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按P进行构建函数，通过不断的测试哪些">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png">
 <meta property="og:image" content="https://s2.loli.net/2022/07/13/SldJ18VxacbLNzG.png">
@@ -290,12 +290,15 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助</p>
-<h2 id="子程序程序主函数"><a href="#子程序程序主函数" class="headerlink" title="子程序程序主函数"></a>子程序程序主函数</h2><p><img src="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
+                <h2 id="前言">前言</h2>
+<p>逆向这个属于是费神，费力…主要函数功能还是要靠调试和猜测来进行得出…写此篇文章也希望能对后续的复现者能够有所帮助</p>
+<h2 id="子程序程序主函数">子程序程序主函数</h2>
+<p><img src="https://s2.loli.net/2022/07/13/HexwTGqRPtX8krV.png" srcset="/img/loading.gif" lazyload alt="1.png"></p>
 <p>直接拖到<code>IDA</code>中，程序会分析出来对应的主函数，在主函数我们可以观察到一个<code>VirtuaalProtect</code>函数，通过程序名称我们也可以知道程序是一个加载一个新的<code>PE</code>来完成对应的功能。为了到新的子程序中，我们采用调试将对应的数据段按<code>P</code>进行构建函数，通过不断的测试哪些地方会调用输出的方式我们找到对应子程序的<code>main</code></p>
 <p><img src="https://s2.loli.net/2022/07/13/SldJ18VxacbLNzG.png" srcset="/img/loading.gif" lazyload alt="2.png"></p>
 <p>找到之后就是开始我们漫长的调试之路了…</p>
-<h2 id="过程分析"><a href="#过程分析" class="headerlink" title="过程分析"></a>过程分析</h2><p>进入到子程序的主函数后，我们调试可以得出一些信息，比如哪些是输出，和输入，同时我们会注意到检测<code>flag</code>的格式的部分：</p>
+<h2 id="过程分析">过程分析</h2>
+<p>进入到子程序的主函数后，我们调试可以得出一些信息，比如哪些是输出，和输入，同时我们会注意到检测<code>flag</code>的格式的部分：</p>
 <p><img src="https://s2.loli.net/2022/07/13/M7G8aldpguYyrn3.png" srcset="/img/loading.gif" lazyload alt="3.png"></p>
 <p>可以判断出来程序的主要部分是<code>flag&#123;XXX&#125;</code>总共的长度是<code>42</code>位</p>
 <p><img src="https://s2.loli.net/2022/07/13/wJzSc8k5rjKTLeY.png" srcset="/img/loading.gif" lazyload alt="4.png"></p>
@@ -311,7 +314,11 @@
 <p>同时一个数据比较坑的是下面的一个<code>减法</code>运算，和进行比较最后的<code>a3</code>处的偏移地址的值是否等于<code>9</code></p>
 <p><img src="https://s2.loli.net/2022/07/13/5F9S31KA2rMHowq.png" srcset="/img/loading.gif" lazyload alt="8.png"></p>
 <p>在减法运算中，两个数据被转换为了<code>unsigned int</code>类型而加的<code>0x100000000i64</code>已经发生了溢出，对应的后32位字节我们得到的是 0 ，因此在加法运算中我们将其忽略即可。<img src="https://s2.loli.net/2022/07/13/fxi5yX9uWHPvcYs.png" srcset="/img/loading.gif" lazyload alt="9.png"></p>
-<p>大致流程在多次调试后可以理出来一个计算公式：<br>$$<br>input1^2-11*(input2^2)=9<br>$$<br>其中输入的要求长度为<code>42</code>，我们减去<code>flag&#123;&#125;</code>的长度可以发现是<code>18*2  (36)</code>同时我们的输入也是拆成了两个长<code>18</code>的数据进行计算，因此<code>input1</code>为我们输入<code>36</code>位数字的前<code>18</code>个，<code>input2</code>为输入的后<code>18</code>位数字</p>
+<p>大致流程在多次调试后可以理出来一个计算公式：<br>
+$$<br>
+input1^2-11*(input2^2)=9<br>
+$$<br>
+其中输入的要求长度为<code>42</code>，我们减去<code>flag&#123;&#125;</code>的长度可以发现是<code>18*2  (36)</code>同时我们的输入也是拆成了两个长<code>18</code>的数据进行计算，因此<code>input1</code>为我们输入<code>36</code>位数字的前<code>18</code>个，<code>input2</code>为输入的后<code>18</code>位数字</p>
 <p>对此我们可以采用：<a target="_blank" rel="noopener" href="https://www.wolframalpha.com/">https://www.wolframalpha.com/</a> 进行求解</p>
 <p><img src="https://s2.loli.net/2022/07/13/2JrDQoVc5y47uRB.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
 <p>发现计算出来的<code>y</code>少了一位，我们将其补上一个前缀<code>0</code>即可得到<code>flag</code>：</p>
@@ -491,6 +498,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -709,6 +722,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

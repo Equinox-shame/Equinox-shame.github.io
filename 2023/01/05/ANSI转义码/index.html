@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia.">
+    <meta name="description" content="前言 最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ANSI转义码">
 <meta property="og:url" content="https://equinox-shame.github.io/2023/01/05/ANSI%E8%BD%AC%E4%B9%89%E7%A0%81/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia.">
+<meta property="og:description" content="前言 最近期末考试考了一部分，间隙逛群的时候发现群友打的CatCTF的Misc中的CatFlag有点意思，通过一个简单的cat flag操作就可以拿到flag，但是在vim、010Editor下拿flag比较的困难，同时如果直接使用strings flag也是拿不到flag，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理  https:&#x2F;&#x2F;en.wikipedia">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2023/01/04/RZd8TSV9lvFJ5m3.png">
 <meta property="og:image" content="https://s2.loli.net/2023/01/04/Cbr6XUvVx9hIwY7.png">
@@ -289,33 +289,33 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近期末考试考了一部分，间隙逛群的时候发现群友打的<code>CatCTF</code>的<code>Misc</code>中的<code>CatFlag</code>有点意思，通过一个简单的<code>cat flag</code>操作就可以拿到<code>flag</code>，但是在<code>vim</code>、<code>010Editor</code>下拿<code>flag</code>比较的困难，同时如果直接使用<code>strings flag</code>也是拿不到<code>flag</code>，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理</p>
+                <h2 id="前言">前言</h2>
+<p>最近期末考试考了一部分，间隙逛群的时候发现群友打的<code>CatCTF</code>的<code>Misc</code>中的<code>CatFlag</code>有点意思，通过一个简单的<code>cat flag</code>操作就可以拿到<code>flag</code>，但是在<code>vim</code>、<code>010Editor</code>下拿<code>flag</code>比较的困难，同时如果直接使用<code>strings flag</code>也是拿不到<code>flag</code>，作为一个签到题，可能确实签到(对我这种彩笔可能拿不到),同时作者也给出了出题原理</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/ANSI_escape_code">https://en.wikipedia.org/wiki/ANSI_escape_code</a></p>
 </blockquote>
 <p>简单的去了解了一下，发现了一些比较好玩的东西，同时也顺便了解到一些题目中<code>shell</code>窗口是如何实现输出彩色字以及彩色背景等有关内容(XD)，本文记录一下关于这个题涉及到的<code>ANSI转义码</code>中的一些小玩意</p>
-<h2 id="富文本"><a href="#富文本" class="headerlink" title="富文本"></a>富文本</h2><h3 id="字体颜色"><a href="#字体颜色" class="headerlink" title="字体颜色"></a>字体颜色</h3><p>有没有觉得直接输出一个白色字符串有些多少单调且无聊？想不想输出彩色的字符？</p>
+<h2 id="富文本">富文本</h2>
+<h3 id="字体颜色">字体颜色</h3>
+<p>有没有觉得直接输出一个白色字符串有些多少单调且无聊？想不想输出彩色的字符？</p>
 <p>最基本的<code>ANSI转义码</code>是涉及呈现文本的代码，可以让我们修改文字的颜色、背景或者是添加一些修饰等，我们以<code>Python3</code>的环境为例子：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Hello&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>我们在控制台输入这个指令，可以看到字体是白色的：</p>
 <p><img src="https://s2.loli.net/2023/01/04/RZd8TSV9lvFJ5m3.png" srcset="/img/loading.gif" lazyload alt="image-20230104232231945"></p>
 <p>但是我们加入一个<code>ANSI转义码</code>：<code>\u001b[31m</code></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[31mHello&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>此时的输出是：</p>
 <p><img src="https://s2.loli.net/2023/01/04/Cbr6XUvVx9hIwY7.png" srcset="/img/loading.gif" lazyload alt="image-20230104232349539"></p>
 <p>可以看到我们的输出结果变成了红色，且下面一行也是红色，而这便是<code>ANSI颜色</code>的一种工作方式，当我们设置了某种颜色后，其便会一直存在，直到我们换了一种颜色或者打出重置代码</p>
 <p>我们输入重置代码来进行恢复：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/mfwh1SQ4HTtb8kA.png" srcset="/img/loading.gif" lazyload alt="image-20230104232612082"></p>
 <p>可以看到已经变回了原来的白色了。根据<code>ANSI颜色</code>的工作特性，我们一般都是讲要输入的字符串包裹在颜色代码以及重置代码之间,以此来控制我们所需要的彩色部分</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[31mHello\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/kYT89Hx6EnRaVQJ.png" srcset="/img/loading.gif" lazyload alt="image-20230104232815303"></p>
 <p>我们简单的了解了颜色的工作原理后我们列出一些颜色供给大家进行选择：</p>
-<h4 id="8-色彩"><a href="#8-色彩" class="headerlink" title="8 色彩"></a>8 色彩</h4><p>基本上所有的控制台都支持以下的颜色：</p>
+<h4 id="8-色彩">8 色彩</h4>
+<p>基本上所有的控制台都支持以下的颜色：</p>
 <ul>
 <li>黑色：<code>\u001b[30m</code></li>
 <li>红色：<code>\u001b[31m</code></li>
@@ -328,7 +328,8 @@
 </ul>
 <p>我们将其都进行输出：</p>
 <p><img src="https://s2.loli.net/2023/01/04/z5I4JQr8RPcBhnu.png" srcset="/img/loading.gif" lazyload alt="image-20230104233241429"></p>
-<h4 id="16-色彩"><a href="#16-色彩" class="headerlink" title="16 色彩"></a>16 色彩</h4><p>对于大多数终端，除了上述 8 种基本的颜色集外，还支持更明亮的颜色：</p>
+<h4 id="16-色彩">16 色彩</h4>
+<p>对于大多数终端，除了上述 8 种基本的颜色集外，还支持更明亮的颜色：</p>
 <ul>
 <li>亮黑色：<code>\u001b[30;1m</code></li>
 <li>亮红色：<code>\u001b[31;1m</code></li>
@@ -341,13 +342,14 @@
 </ul>
 <p>其与 8 个基本的色彩的区别在于其代码中间增加了一个：<code>;1</code></p>
 <p><img src="https://s2.loli.net/2023/01/04/dROajFy3XmhKLUt.png" srcset="/img/loading.gif" lazyload alt="image-20230104233700947"></p>
-<h4 id="256-色彩"><a href="#256-色彩" class="headerlink" title="256 色彩"></a>256 色彩</h4><p>一些终端支持256色扩展颜色集，其颜色代码形势如下：<code>\u001b[38;5;$&#123;ID&#125;m</code></p>
+<h4 id="256-色彩">256 色彩</h4>
+<p>一些终端支持256色扩展颜色集，其颜色代码形势如下：<code>\u001b[38;5;$&#123;ID&#125;m</code></p>
 <p>我们换到<code>VSC</code>的<code>shell</code>进行演示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>        code = <span class="hljs-built_in">str</span>(i * <span class="hljs-number">16</span> + j)<br>        sys.stdout.write(<span class="hljs-string">u&quot;\u001b[38;5;&quot;</span> + code + <span class="hljs-string">&quot;m &quot;</span> + code.ljust(<span class="hljs-number">4</span>))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/yEhP3Ulj5ZrzpWo.png" srcset="/img/loading.gif" lazyload alt="image-20230104234048257"></p>
 <p>我们此处使用<code>sys.stdout.write</code>而不是<code>print</code>，这样我们可以在一行上打印多个</p>
-<h3 id="背景颜色"><a href="#背景颜色" class="headerlink" title="背景颜色"></a>背景颜色</h3><p><code>ANSI转义码</code>还支持你设置对应的文本背景颜色，和设置字体颜色一样，其重置的方式代码仍然是<code>\u001b[0m]</code></p>
+<h3 id="背景颜色">背景颜色</h3>
+<p><code>ANSI转义码</code>还支持你设置对应的文本背景颜色，和设置字体颜色一样，其重置的方式代码仍然是<code>\u001b[0m]</code></p>
 <ul>
 <li>背景黑色：<code>\u001b[40m</code></li>
 <li>背景红色：<code>\u001b[41m</code></li>
@@ -359,7 +361,6 @@
 <li>背景白色：<code>\u001b[47m</code></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>, <span class="hljs-number">48</span>):<br>    sys.stdout.write(<span class="hljs-string">&quot;\u001b[&quot;</span> + <span class="hljs-built_in">str</span>(i) + <span class="hljs-string">&quot;m&quot;</span>+<span class="hljs-string">&quot;  &quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/XajNnA8mopDeB2y.png" srcset="/img/loading.gif" lazyload alt="image-20230104235121754"></p>
 <p>亮色版本：</p>
 <ul>
@@ -373,22 +374,21 @@
 <li>背景亮白色：<code>\u001b[47;1m</code></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>, <span class="hljs-number">48</span>):<br>    sys.stdout.write(<span class="hljs-string">u&quot;\u001b[&quot;</span> + <span class="hljs-built_in">str</span>(i) + <span class="hljs-string">&quot;m&quot;</span>+<span class="hljs-string">&quot;  &quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">u&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>对于 256 颜色也是一样的：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">16</span>):<br>        code = <span class="hljs-built_in">str</span>(i * <span class="hljs-number">16</span> + j)<br>        sys.stdout.write(<span class="hljs-string">&quot;\u001b[48;5;&quot;</span> + code + <span class="hljs-string">&quot;m &quot;</span> + code.ljust(<span class="hljs-number">4</span>))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/acHMCVNkPvElL3p.png" srcset="/img/loading.gif" lazyload alt="image-20230104235619983"></p>
-<h3 id="修饰"><a href="#修饰" class="headerlink" title="修饰"></a>修饰</h3><p>除了字体颜色以及背景可以提供修改，我们还可以加入粗体，下划线，反转等修饰</p>
+<h3 id="修饰">修饰</h3>
+<p>除了字体颜色以及背景可以提供修改，我们还可以加入粗体，下划线，反转等修饰</p>
 <ul>
 <li>粗体：<code>\u001b[1m</code></li>
 <li>下划线：<code>\u001b[4m</code> (好像VSC控制台会吃掉这个下划线，但是控制台不会)</li>
 <li>反转：<code>\u001b[7m</code></li>
 </ul>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\u001b[1m BOLD \u001b[0m\u001b[4m Underline \u001b[0m\u001b[7m Reversed \u001b[0m&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p><img src="https://s2.loli.net/2023/01/04/a5VWwdTbErNmJnG.png" srcset="/img/loading.gif" lazyload alt="image-20230104235902453"></p>
 <p>这几个也可以一起搭配前面所提到的修改字符颜色以及背景一起使用，此处就不再赘述</p>
-<h2 id="光标控制"><a href="#光标控制" class="headerlink" title="光标控制"></a>光标控制</h2><p>顾名思义，我们可以使用<code>ANSI转义码</code>来控制光标的位置，以此来达到模仿输入的操作</p>
+<h2 id="光标控制">光标控制</h2>
+<p>顾名思义，我们可以使用<code>ANSI转义码</code>来控制光标的位置，以此来达到模仿输入的操作</p>
 <p>其中基本的为：<code>上下左右</code>控制</p>
 <ul>
 <li>向上：<code>\u001b[&#123;n&#125;A</code></li>
@@ -402,10 +402,8 @@
 </blockquote>
 <p>在输出时，会先解析对应的ANSI转义码，将光标进行移动，之后在进行输出，借助这个特性我们可以写一个进度显示器，而不需要使用类似<code>tqdm</code>的库</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> time, sys<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">loading</span>():</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Loading...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        sys.stdout.write(<span class="hljs-string">u&quot;\u001b[3D&quot;</span> + <span class="hljs-built_in">str</span>(i + <span class="hljs-number">1</span>) + <span class="hljs-string">&quot;%&quot;</span>) <span class="hljs-comment"># 3 可以是大于它的数字，我们仅仅只是需要将其移动到最前面将输出覆盖即可</span><br>        sys.stdout.flush()<br>    <span class="hljs-built_in">print</span>()<br>    <br>loading()<br></code></pre></td></tr></table></figure>
-
 <p>或者是类似加载条的形式：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> time, sys<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">loading</span>():</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Loading...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>):<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        width = (i + <span class="hljs-number">1</span>) / <span class="hljs-number">4</span><br>        bar = <span class="hljs-string">&quot;[&quot;</span> + <span class="hljs-string">&quot;#&quot;</span> * width + <span class="hljs-string">&quot; &quot;</span> * (<span class="hljs-number">25</span> - width) + <span class="hljs-string">&quot;]&quot;</span><br>        sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span> +  bar)<br>        sys.stdout.flush()<br>    <span class="hljs-built_in">print</span>()<br>    <br>loading()<br></code></pre></td></tr></table></figure>
-
 <p>以上的进度条都没有任何的监控进度的完成，但是我们可以加入对应的监控项目，然后降至转化为真正的进度监控，或者结合上面提到的字体颜色以及背景的更改来设计更为花哨的进度条</p>
 <p>对于下一行的操作<code>ANSI转义码</code>也提供了一些方法：</p>
 <ul>
@@ -417,27 +415,28 @@
 <li>保存位置：保存当前光标位置<code>\u001b[&#123;s&#125;</code></li>
 <li>保存位置：将光标恢复到上次保存的位置<code>\u001b[&#123;u&#125;</code></li>
 </ul>
-<h2 id="编写命令行"><a href="#编写命令行" class="headerlink" title="编写命令行"></a>编写命令行</h2><p><code>ANSI转义</code>码的主要目的就是实现命令行，我们可以根据用户的输入来产生对应的输出</p>
+<h2 id="编写命令行">编写命令行</h2>
+<p><code>ANSI转义</code>码的主要目的就是实现命令行，我们可以根据用户的输入来产生对应的输出</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys, tty<br> <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">command_line</span>():</span><br>    tty.setraw(sys.stdin) <span class="hljs-comment"># 将我们的命令行设置成raw模式，避免shell帮我们解析方向键、回退键(Backspace)以及用户输入进行缓冲</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>: <br>        <span class="hljs-built_in">input</span> = <span class="hljs-string">&quot;&quot;</span><br>        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>: <span class="hljs-comment"># 循环来控制每一个字符</span><br>            char = <span class="hljs-built_in">ord</span>(sys.stdin.read(<span class="hljs-number">1</span>)) <span class="hljs-comment"># 每次只读入一个字符</span><br>            <br>            <span class="hljs-keyword">if</span> char == <span class="hljs-number">3</span>: <span class="hljs-comment"># CTRL-C</span><br>                <span class="hljs-keyword">return</span><br>            <span class="hljs-keyword">elif</span> <span class="hljs-number">32</span> &lt;= char &lt;= <span class="hljs-number">126</span>: <span class="hljs-comment"># 普通字符</span><br>                <span class="hljs-built_in">input</span> = <span class="hljs-built_in">input</span> + <span class="hljs-built_in">chr</span>(char)<br>            <span class="hljs-keyword">elif</span> char <span class="hljs-keyword">in</span> &#123;<span class="hljs-number">10</span>, <span class="hljs-number">13</span>&#125;: <span class="hljs-comment"># 如果是回车时</span><br>                sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span>)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;\necho something ... &quot;</span>, <span class="hljs-built_in">input</span>)<br>                <span class="hljs-built_in">input</span> = <span class="hljs-string">&quot;&quot;</span><br>                <br>            sys.stdout.write(<span class="hljs-string">&quot;\u001b[1000D&quot;</span>)  <span class="hljs-comment"># 光标移动到最左侧</span><br>            sys.stdout.write(<span class="hljs-built_in">input</span>) <span class="hljs-comment"># 重新输出 input</span><br>            sys.stdout.flush()<br></code></pre></td></tr></table></figure>
-
 <blockquote>
 <p>需要注意的是上述代码中导入了<code>tty</code>库，我们使用这个库的时候需要有<code>termios</code>库，此库仅适用于<code>Unix</code>，因此上述代码在<code>Windows端</code>无法执行</p>
 </blockquote>
 <p>因为我们采用了<code>raw</code>模式，不移动光标照顾护额打印会出现光标不会移动到行首的问题，我们我们再次输出一个<code>\u001b[1000D</code>确保其回到开头</p>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>但是我们想要实现删除时，我们采用覆写的方式在某种意义上也算是完成了我们的需要，但是假如我们需要删掉一个字符呢？我们覆写模式还是需要将字符串后面的内容再次进行输出，稍微有点麻烦，对此<code>ANSI转义码</code>也提供了删除这一操作</p>
+<h3 id="删除">删除</h3>
+<p>但是我们想要实现删除时，我们采用覆写的方式在某种意义上也算是完成了我们的需要，但是假如我们需要删掉一个字符呢？我们覆写模式还是需要将字符串后面的内容再次进行输出，稍微有点麻烦，对此<code>ANSI转义码</code>也提供了删除这一操作</p>
 <ul>
-<li><p>清除屏幕：清除屏幕</p>
+<li>
+<p>清除屏幕：清除屏幕</p>
 <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="xml">\u001b[</span><span class="hljs-template-variable">&#123;n&#125;</span><span class="xml">J</span><br></code></pre></td></tr></table></figure>
-
 <ul>
 <li><code>n=0</code>从光标中清除，直到屏幕结束，</li>
 <li><code>n=1</code>从光标清除到屏幕开头</li>
 <li><code>n=2</code>清除整个屏幕</li>
 </ul>
 </li>
-<li><p>清除行：清除当前行</p>
+<li>
+<p>清除行：清除当前行</p>
 <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="xml">\u001b[</span><span class="hljs-template-variable">&#123;n&#125;</span><span class="xml">K</span><br></code></pre></td></tr></table></figure>
-
 <ul>
 <li><code>n=0</code>从光标清除到行尾</li>
 <li><code>n=1</code>从光标清除到行首</li>
@@ -445,7 +444,8 @@
 </ul>
 </li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们简答的了解了一下<code>ANSI转义码</code>的使用，对于更多的指令大家可以参考下面的表格</p>
+<h2 id="总结">总结</h2>
+<p>我们简答的了解了一下<code>ANSI转义码</code>的使用，对于更多的指令大家可以参考下面的表格</p>
 <table>
 <thead>
 <tr>
@@ -455,7 +455,8 @@
 <th></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>A</td>
 <td>Cursor Up</td>
 <td>(n=1)</td>
@@ -551,7 +552,8 @@
 <td>(*)</td>
 <td>Set graphics mode. More below【见下一个表格】</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>关于SGR的作用我们在下面一个表格进行简单说明：</p>
 <table>
 <thead>
@@ -560,7 +562,8 @@
 <th>name / description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>0</td>
 <td>Reset: turn off all attributes 【重置：关闭所有属性】</td>
 </tr>
@@ -608,7 +611,8 @@
 <td>100–107</td>
 <td>Set background colour from the bright colour palette of 0–7</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>其中有些没有列出来，感兴趣可以自己去看看<code>Wiki</code></p>
 <p>我们可以通过<code>ANSI转义码</code>来实现<code>Shell</code>端的游戏、命令行、Vim等功能，更多的小玩意可以靠大家的想象去实现与完成</p>
 
@@ -787,6 +791,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -1005,6 +1015,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 

@@ -16,12 +16,12 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="初始化大整数1234import gmpy2gmpy2.mpz(909090)result:mpz(909090)  求大整数a,b的最大公因数1234import gmpy2gmpy2.gcd(6,18)result:mpz(6)  求大整数x模m的逆元y12345import gmpy2#4*6 ≡ 1 mod 23gmpy2.invert(4,23)result:mpz(6)  检验大整数是">
+    <meta name="description" content="初始化大整数 1234import gmpy2gmpy2.mpz(909090)result:mpz(909090) 求大整数a,b的最大公因数 1234import gmpy2gmpy2.gcd(6,18)result:mpz(6) 求大整数x模m的逆元y 12345import gmpy2#4*6 ≡ 1 mod 23gmpy2.invert(4,23)result:mpz(6) 检验大整数是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gmpy2常见函数使用">
 <meta property="og:url" content="https://equinox-shame.github.io/2022/08/03/gmpy2%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="初始化大整数1234import gmpy2gmpy2.mpz(909090)result:mpz(909090)  求大整数a,b的最大公因数1234import gmpy2gmpy2.gcd(6,18)result:mpz(6)  求大整数x模m的逆元y12345import gmpy2#4*6 ≡ 1 mod 23gmpy2.invert(4,23)result:mpz(6)  检验大整数是">
+<meta property="og:description" content="初始化大整数 1234import gmpy2gmpy2.mpz(909090)result:mpz(909090) 求大整数a,b的最大公因数 1234import gmpy2gmpy2.gcd(6,18)result:mpz(6) 求大整数x模m的逆元y 12345import gmpy2#4*6 ≡ 1 mod 23gmpy2.invert(4,23)result:mpz(6) 检验大整数是">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-03T03:49:53.581Z">
 <meta property="article:modified_time" content="2022-08-03T03:49:38.564Z">
@@ -278,22 +278,22 @@
             
               <div class="markdown-body">
                 
-                <h2 id="初始化大整数"><a href="#初始化大整数" class="headerlink" title="初始化大整数"></a>初始化大整数</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.mpz(<span class="hljs-number">909090</span>)<br><br>result:mpz(<span class="hljs-number">909090</span>)<br></code></pre></td></tr></table></figure>
-
-<h2 id="求大整数a-b的最大公因数"><a href="#求大整数a-b的最大公因数" class="headerlink" title="求大整数a,b的最大公因数"></a>求大整数a,b的最大公因数</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.gcd(<span class="hljs-number">6</span>,<span class="hljs-number">18</span>)<br><br>result:mpz(<span class="hljs-number">6</span>)<br></code></pre></td></tr></table></figure>
-
-<h2 id="求大整数x模m的逆元y"><a href="#求大整数x模m的逆元y" class="headerlink" title="求大整数x模m的逆元y"></a>求大整数x模m的逆元y</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br><span class="hljs-comment">#4*6 ≡ 1 mod 23</span><br>gmpy2.invert(<span class="hljs-number">4</span>,<span class="hljs-number">23</span>)<br><br>result:mpz(<span class="hljs-number">6</span>)<br></code></pre></td></tr></table></figure>
-
-<h2 id="检验大整数是否为偶数"><a href="#检验大整数是否为偶数" class="headerlink" title="检验大整数是否为偶数"></a>检验大整数是否为偶数</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_even(<span class="hljs-number">6</span>)<br><br>result:<span class="hljs-literal">True</span><br><br>-----------<br><br><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_even(<span class="hljs-number">7</span>)<br><br>result:<span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="检验大整数是否为奇数"><a href="#检验大整数是否为奇数" class="headerlink" title="检验大整数是否为奇数"></a>检验大整数是否为奇数</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_odd(<span class="hljs-number">6</span>)<br><br>result:<span class="hljs-literal">False</span><br><br>-----------<br><br><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_odd(<span class="hljs-number">7</span>)<br><br>result:<span class="hljs-literal">True</span><br><br></code></pre></td></tr></table></figure>
-
-<h2 id="检验大整数是否为素数"><a href="#检验大整数是否为素数" class="headerlink" title="检验大整数是否为素数"></a>检验大整数是否为素数</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_prime(<span class="hljs-number">5</span>)<br><br>result:<span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="求大整数x开n次根"><a href="#求大整数x开n次根" class="headerlink" title="求大整数x开n次根"></a>求大整数x开n次根</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.iroot(<span class="hljs-number">81</span>,<span class="hljs-number">2</span>)<br><br>result:(mpz(<span class="hljs-number">9</span>),<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
-
-<h2 id="求大整数x的y次幂模m取余"><a href="#求大整数x的y次幂模m取余" class="headerlink" title="求大整数x的y次幂模m取余"></a>求大整数x的y次幂模m取余</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br><span class="hljs-comment">#2^4 mod 5 </span><br>gmpy2.powmod(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>,<span class="hljs-number">15</span>)<br><br>result:mpz(<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-
+                <h2 id="初始化大整数">初始化大整数</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.mpz(<span class="hljs-number">909090</span>)<br><br>result:mpz(<span class="hljs-number">909090</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="求大整数a-b的最大公因数">求大整数a,b的最大公因数</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.gcd(<span class="hljs-number">6</span>,<span class="hljs-number">18</span>)<br><br>result:mpz(<span class="hljs-number">6</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="求大整数x模m的逆元y">求大整数x模m的逆元y</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br><span class="hljs-comment">#4*6 ≡ 1 mod 23</span><br>gmpy2.invert(<span class="hljs-number">4</span>,<span class="hljs-number">23</span>)<br><br>result:mpz(<span class="hljs-number">6</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="检验大整数是否为偶数">检验大整数是否为偶数</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_even(<span class="hljs-number">6</span>)<br><br>result:<span class="hljs-literal">True</span><br><br>-----------<br><br><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_even(<span class="hljs-number">7</span>)<br><br>result:<span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
+<h2 id="检验大整数是否为奇数">检验大整数是否为奇数</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_odd(<span class="hljs-number">6</span>)<br><br>result:<span class="hljs-literal">False</span><br><br>-----------<br><br><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_odd(<span class="hljs-number">7</span>)<br><br>result:<span class="hljs-literal">True</span><br><br></code></pre></td></tr></table></figure>
+<h2 id="检验大整数是否为素数">检验大整数是否为素数</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.is_prime(<span class="hljs-number">5</span>)<br><br>result:<span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+<h2 id="求大整数x开n次根">求大整数x开n次根</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br>gmpy2.iroot(<span class="hljs-number">81</span>,<span class="hljs-number">2</span>)<br><br>result:(mpz(<span class="hljs-number">9</span>),<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="求大整数x的y次幂模m取余">求大整数x的y次幂模m取余</h2>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">import</span> gmpy2<br><span class="hljs-comment">#2^4 mod 5 </span><br>gmpy2.powmod(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>,<span class="hljs-number">15</span>)<br><br>result:mpz(<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -470,6 +470,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -688,6 +694,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script defer src="/js/leancloud.js" ></script>
 
