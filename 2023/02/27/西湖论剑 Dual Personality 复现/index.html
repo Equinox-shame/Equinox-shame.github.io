@@ -1,0 +1,797 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前置知识 本题主要涉及到了Heaven’s Gate的一种技术，在32位WoW64进程中执行64位代码的过程，以及直接调用64位下win32的API函数 其主要过程便是修改CS的值。将其切换到64位模式，然后使用jmp far来进行远跳转到达64位汇编代码处  CS(代码段选择器)在32位下值为 0x23 ，64位为 0x33 通常情况下一个 0x33 以及 jmp far 是我们判断的主要依据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="西湖论剑 Dual Personality 复现">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/02/27/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20Dual%20Personality%20%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前置知识 本题主要涉及到了Heaven’s Gate的一种技术，在32位WoW64进程中执行64位代码的过程，以及直接调用64位下win32的API函数 其主要过程便是修改CS的值。将其切换到64位模式，然后使用jmp far来进行远跳转到达64位汇编代码处  CS(代码段选择器)在32位下值为 0x23 ，64位为 0x33 通常情况下一个 0x33 以及 jmp far 是我们判断的主要依据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/vl2RdVbrwECetcx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/M2QbC9xJYlV5uWf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/Swlireb8EI1jQXM.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/cTaw4xKd6HMnbku.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/IG5h9WEwoby4cDH.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/wsWdm6Au2rplaeN.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/qDJGTpFxYIRtkBc.png">
+<meta property="og:image" content="https://s2.loli.net/2023/02/27/4AXO3EN9Hef6WFh.png">
+<meta property="article:published_time" content="2023-02-27T13:43:18.511Z">
+<meta property="article:modified_time" content="2023-02-27T13:42:46.700Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/02/27/vl2RdVbrwECetcx.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>西湖论剑 Dual Personality 复现 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="西湖论剑 Dual Personality 复现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-27 21:43" pubdate>
+          2023年2月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">西湖论剑 Dual Personality 复现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前置知识">前置知识</h2>
+<p>本题主要涉及到了Heaven’s Gate的一种技术，在32位WoW64进程中执行64位代码的过程，以及直接调用64位下win32的API函数</p>
+<p>其主要过程便是修改CS的值。将其切换到64位模式，然后使用jmp far来进行远跳转到达64位汇编代码处</p>
+<blockquote>
+<p>CS(代码段选择器)在32位下值为 0x23 ，64位为 0x33</p>
+<p>通常情况下一个 0x33 以及 jmp far 是我们判断的主要依据</p>
+</blockquote>
+<p>此处引用一下 Sheng-Hao Ma 大佬的PPT图片来展示其对应的调用过程</p>
+<img src="https://s2.loli.net/2023/02/27/vl2RdVbrwECetcx.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>以<code>ZwOpenProcess</code>函数的调用为例：</p>
+<ol>
+<li>a.exe首先调用32位<code>ntdll.dll</code>（以下简称ntdll32）中的<code>ZwOpenProcess</code>函数</li>
+<li>ntdll32调用<code>wow64cpu.dll</code>中的<code>X86SwitchTo64BitMode</code>，顾名思义，调用该函数后进程从32位模式切换到64位模式</li>
+<li>由<code>wow64.dll</code>将32位的系统调用转化为64位</li>
+<li>调用64位<code>ntdll.dll</code>的<code>ZwOpenProcess</code>函数</li>
+<li>切换到内核态（Ring0）执行系统调用</li>
+</ol>
+<h3 id="学习参考">学习参考</h3>
+<p><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-270153.htm">天堂之门 (Heaven’s Gate) C语言实现-软件逆向-看雪论坛</a></p>
+<p><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-221236.htm">汇编里看Wow64的原理（浅谈32位程序是怎样在windows 64上运行的？）-软件逆向-看雪论坛</a></p>
+<p><a target="_blank" rel="noopener" href="https://rce.co/knockin-on-heavens-gate-dynamic-processor-mode-switching/">Knockin’ on Heaven’s Gate – Dynamic Processor Mode Switching | RCE.co</a></p>
+<h2 id="逆向分析">逆向分析</h2>
+<p>我们加载后可以看到main函数处一片的红，无法被ida进行识别</p>
+<img src="https://s2.loli.net/2023/02/27/M2QbC9xJYlV5uWf.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>在下面我们可以注意到输入后的一个函数</p>
+<img src="https://s2.loli.net/2023/02/27/Swlireb8EI1jQXM.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>我们进入分析该函数，可以观察到明显的0x33特征，通过调试分析我们也可以看到对应修改后的数据</p>
+<img src="https://s2.loli.net/2023/02/27/cTaw4xKd6HMnbku.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
+<p>修改后有如下jmp far</p>
+<img src="https://s2.loli.net/2023/02/27/IG5h9WEwoby4cDH.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<p>我们对我们的输入下一个硬件断点，当出现对应的读入或者写的时候便断下来</p>
+<p>此时我们进入了第一部分，通过观察汇编我们不难看出来对应功能是每四位一组，加上 operator_data,之后在于其进行异或处理</p>
+<img src="https://s2.loli.net/2023/02/27/wsWdm6Au2rplaeN.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<p>需要注意的是在下面存在有对operator_data的反调试，当检测到调试时便会得到 operator_data 的值为 0xDEADBEEF，不过影响不是很大，我们可以直接手动解密得到 operator_data 应该为 0x3CA7259D</p>
+<img src="https://s2.loli.net/2023/02/27/qDJGTpFxYIRtkBc.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<blockquote>
+<p>通过 ds:60 进行访问PEB表，随后[eax+2]拿到调试状态的值</p>
+</blockquote>
+<p>之后我们一步步进行调试，我们可以发现又对输入进行了如下变换</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> __stdcall <span class="hljs-title">sub_401200</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a1, <span class="hljs-keyword">int</span> a2)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">void</span> *retaddr[<span class="hljs-number">2</span>]; <span class="hljs-comment">// [esp+4h] [ebp+4h]</span><br><br>  <span class="hljs-keyword">if</span> ( byte_40705C )<br>  &#123;<br>    *(_DWORD *)(a2 - <span class="hljs-number">3</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">1</span>), <span class="hljs-number">32</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">6</span> + <span class="hljs-number">8</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">4</span> + <span class="hljs-number">8</span>), <span class="hljs-number">32</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">9</span> + <span class="hljs-number">16</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">7</span> + <span class="hljs-number">16</span>), <span class="hljs-number">32</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">12</span> + <span class="hljs-number">24</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">10</span> + <span class="hljs-number">24</span>), <span class="hljs-number">32</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    *(_DWORD *)(a2 - <span class="hljs-number">3</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">1</span>), <span class="hljs-number">12</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">6</span> + <span class="hljs-number">8</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">4</span> + <span class="hljs-number">8</span>), <span class="hljs-number">34</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">9</span> + <span class="hljs-number">16</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">7</span> + <span class="hljs-number">16</span>), <span class="hljs-number">56</span>);<br>    *(_DWORD *)(a2 - <span class="hljs-number">12</span> + <span class="hljs-number">24</span>) = __ROL4__(*(_DWORD *)(a2 - <span class="hljs-number">10</span> + <span class="hljs-number">24</span>), <span class="hljs-number">14</span>);<br>  &#125;<br>  <span class="hljs-keyword">return</span> MK_FP(retaddr[<span class="hljs-number">0</span>], retaddr[<span class="hljs-number">0</span>])(a1, a2);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>之后还经过了如下加密：</p>
+<p><img src="https://s2.loli.net/2023/02/27/4AXO3EN9Hef6WFh.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>最后我们大致可以将主函数修复成如下模样，相对来说会好看一点…</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v3; <span class="hljs-comment">// eax</span><br>  <span class="hljs-keyword">int</span> v4; <span class="hljs-comment">// eax</span><br>  <span class="hljs-keyword">char</span> Buf2[<span class="hljs-number">44</span>]; <span class="hljs-comment">// [esp+D0h] [ebp-70h] BYREF</span><br>  <span class="hljs-keyword">int</span> v7; <span class="hljs-comment">// [esp+FCh] [ebp-44h]</span><br>  <span class="hljs-keyword">int</span> v8; <span class="hljs-comment">// [esp+100h] [ebp-40h]</span><br>  <span class="hljs-keyword">int</span> v9; <span class="hljs-comment">// [esp+104h] [ebp-3Ch]</span><br>  <span class="hljs-keyword">int</span> v10; <span class="hljs-comment">// [esp+108h] [ebp-38h]</span><br>  <span class="hljs-keyword">int</span> v11; <span class="hljs-comment">// [esp+10Ch] [ebp-34h]</span><br>  <span class="hljs-keyword">int</span> v12; <span class="hljs-comment">// [esp+110h] [ebp-30h]</span><br>  <span class="hljs-keyword">int</span> v13; <span class="hljs-comment">// [esp+114h] [ebp-2Ch]</span><br>  <span class="hljs-keyword">int</span> v14; <span class="hljs-comment">// [esp+118h] [ebp-28h]</span><br>  <span class="hljs-keyword">char</span> v15; <span class="hljs-comment">// [esp+11Ch] [ebp-24h]</span><br>  <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// [esp+128h] [ebp-18h]</span><br>  <span class="hljs-keyword">int</span> *v17; <span class="hljs-comment">// [esp+134h] [ebp-Ch]</span><br><br>  sub_401000();<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%99s&quot;</span>, input);<br>  v3 = decode_0(<span class="hljs-number">7u</span>, (<span class="hljs-keyword">int</span>)sub_4011D0);<br>  <span class="hljs-keyword">if</span> ( v3 )<br>    v3 = operator_data;<br>  operator_data = v3 - <span class="hljs-number">0x21524111</span>;<br>  v17 = input;<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">8</span>; ++i )<br>  &#123;<br>    v17[i] += operator_data;<br>    operator_data ^= v17[i];<br>  &#125;<br>  MK_FP(*((_WORD *)&amp;byte_40700C + <span class="hljs-number">2</span>), byte_40700C)(input, <span class="hljs-number">0</span>);<br>  decode_0(<span class="hljs-number">7u</span>, (<span class="hljs-keyword">int</span>)sub_401290);  <span class="hljs-comment">// 这里还有一个加密</span><br>  <span class="hljs-keyword">while</span> ( ::i != <span class="hljs-number">33</span> )<br>  &#123;<br>    v4 = ::i - <span class="hljs-number">1</span>;<br>    *(_BYTE *)(::i - <span class="hljs-number">1</span> + <span class="hljs-number">4223072</span>) ^= LOBYTE(dword_407014[(::i - <span class="hljs-number">4</span>) % <span class="hljs-number">4u</span>]);  <span class="hljs-comment">// 此处就是输入进行异或处理</span><br>    ::i = v4 - <span class="hljs-number">1</span>;<br>  &#125;<br>  v7 = <span class="hljs-number">0</span>;<br>  v8 = <span class="hljs-number">0</span>;<br>  v9 = <span class="hljs-number">0</span>;<br>  v10 = <span class="hljs-number">0</span>;<br>  v11 = <span class="hljs-number">0</span>;<br>  v12 = <span class="hljs-number">0</span>;<br>  v13 = <span class="hljs-number">0</span>;<br>  v14 = <span class="hljs-number">0</span>;<br>  v15 = <span class="hljs-number">0</span>;<br>  Buf2[<span class="hljs-number">0</span>] = <span class="hljs-number">-86</span>;<br>  Buf2[<span class="hljs-number">1</span>] = <span class="hljs-number">79</span>;<br>  Buf2[<span class="hljs-number">2</span>] = <span class="hljs-number">15</span>;<br>  Buf2[<span class="hljs-number">3</span>] = <span class="hljs-number">-30</span>;<br>  Buf2[<span class="hljs-number">4</span>] = <span class="hljs-number">-28</span>;<br>  Buf2[<span class="hljs-number">5</span>] = <span class="hljs-number">65</span>;<br>  Buf2[<span class="hljs-number">6</span>] = <span class="hljs-number">-103</span>;<br>  Buf2[<span class="hljs-number">7</span>] = <span class="hljs-number">84</span>;<br>  Buf2[<span class="hljs-number">8</span>] = <span class="hljs-number">44</span>;<br>  Buf2[<span class="hljs-number">9</span>] = <span class="hljs-number">43</span>;<br>  Buf2[<span class="hljs-number">10</span>] = <span class="hljs-number">-124</span>;<br>  Buf2[<span class="hljs-number">11</span>] = <span class="hljs-number">126</span>;<br>  Buf2[<span class="hljs-number">12</span>] = <span class="hljs-number">-68</span>;<br>  Buf2[<span class="hljs-number">13</span>] = <span class="hljs-number">-113</span>;<br>  Buf2[<span class="hljs-number">14</span>] = <span class="hljs-number">-117</span>;<br>  Buf2[<span class="hljs-number">15</span>] = <span class="hljs-number">120</span>;<br>  Buf2[<span class="hljs-number">16</span>] = <span class="hljs-number">-45</span>;<br>  Buf2[<span class="hljs-number">17</span>] = <span class="hljs-number">115</span>;<br>  Buf2[<span class="hljs-number">18</span>] = <span class="hljs-number">-120</span>;<br>  Buf2[<span class="hljs-number">19</span>] = <span class="hljs-number">94</span>;<br>  Buf2[<span class="hljs-number">20</span>] = <span class="hljs-number">-82</span>;<br>  Buf2[<span class="hljs-number">21</span>] = <span class="hljs-number">71</span>;<br>  Buf2[<span class="hljs-number">22</span>] = <span class="hljs-number">-123</span>;<br>  Buf2[<span class="hljs-number">23</span>] = <span class="hljs-number">112</span>;<br>  Buf2[<span class="hljs-number">24</span>] = <span class="hljs-number">49</span>;<br>  Buf2[<span class="hljs-number">25</span>] = <span class="hljs-number">-77</span>;<br>  Buf2[<span class="hljs-number">26</span>] = <span class="hljs-number">9</span>;<br>  Buf2[<span class="hljs-number">27</span>] = <span class="hljs-number">-50</span>;<br>  Buf2[<span class="hljs-number">28</span>] = <span class="hljs-number">19</span>;<br>  Buf2[<span class="hljs-number">29</span>] = <span class="hljs-number">-11</span>;<br>  Buf2[<span class="hljs-number">30</span>] = <span class="hljs-number">13</span>;<br>  Buf2[<span class="hljs-number">31</span>] = <span class="hljs-number">-54</span>;<br>  Buf2[<span class="hljs-number">32</span>] = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">if</span> ( !<span class="hljs-built_in">memcmp</span>(input, Buf2, <span class="hljs-number">0x20</span>u) )<br>  &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;Right, flag is DASCTF&#123;your input&#125;&quot;</span>);<br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>  &#125;<br>  <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;Wrong flag&quot;</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>根据上面的逻辑我们可以写出解密过程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">ror</span>(<span class="hljs-params">x,n</span>):</span><br>    <span class="hljs-keyword">return</span>  ((x&gt;&gt;n) | (x&lt;&lt;(<span class="hljs-number">64</span>-n)&amp;<span class="hljs-number">0xffffffffffffffff</span>))&amp;<span class="hljs-number">0xffffffffffffffff</span><br><br>enc = [<span class="hljs-number">0xE20F4FAA</span>, <span class="hljs-number">0x549941E4</span>, <span class="hljs-number">0x7E842B2C</span>, <span class="hljs-number">0x788B8FBC</span>, <span class="hljs-number">0x5E8873D3</span>, <span class="hljs-number">0x708547AE</span>, <span class="hljs-number">0xCE09B331</span>, <span class="hljs-number">0xCA0DF513</span>]<br><br><span class="hljs-comment"># 将加密过程逆置解密</span><br><span class="hljs-comment"># part 3</span><br><span class="hljs-comment"># key3 = [0x04, 0x77, 0x82, 0x4A] # 使用这个key时需要对 enc 修改为 byte</span><br>key3 = <span class="hljs-number">0x4A827704</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>    enc[i] ^= key3<br><br><span class="hljs-comment"># part 2</span><br>key2 = [<span class="hljs-number">0xc</span>,<span class="hljs-number">0x22</span>,<span class="hljs-number">0x38</span>,<span class="hljs-number">0xe</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-number">8</span>,<span class="hljs-number">2</span>):<br>    tmp=(enc[i+<span class="hljs-number">1</span>]&lt;&lt;<span class="hljs-number">32</span> | enc[i])<br>    tmp=ror(tmp,key2[i//<span class="hljs-number">2</span>])<br>    enc[i]=tmp&amp;<span class="hljs-number">0xffffffff</span><br>    enc[i+<span class="hljs-number">1</span>]=tmp&gt;&gt;<span class="hljs-number">32</span><br><br><span class="hljs-comment"># part 1</span><br>key1 = <span class="hljs-number">0x3CA7259D</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>    tmp=enc[i]<br>    enc[i]=(enc[i]-key1+<span class="hljs-number">0x100000000</span>)%<span class="hljs-number">0x100000000</span> <span class="hljs-comment"># 加上 0x100000000 防止Python数据类型溢出</span><br>    key1^=tmp<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> enc:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">int</span>.to_bytes(i,<span class="hljs-number">4</span>,<span class="hljs-string">&#x27;little&#x27;</span>).decode(),end=<span class="hljs-string">&#x27;&#x27;</span>)<br><br><span class="hljs-comment"># 6cc1e44811647d38a15017e389b3f704</span><br></code></pre></td></tr></table></figure>
+<h2 id="后记">后记</h2>
+<p>第一次写这种题目，很多地方不是很熟悉，文章必然存在有许多的不足之处，还请师傅们多多指教。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>西湖论剑 Dual Personality 复现</div>
+      <div>https://equinox-shame.github.io/2023/02/27/西湖论剑 Dual Personality 复现/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/01/HGAME2023%20RE%20KunMusic/" title="HGAME CTF 2023 RE——KunMusic">
+                        <span class="hidden-mobile">HGAME CTF 2023 RE——KunMusic</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
