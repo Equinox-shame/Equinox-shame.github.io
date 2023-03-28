@@ -16,39 +16,36 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 本实验过程相当于复现周壑大佬的相关实验过程，期间可能存在许多理解错误或者是不正确的地方，还请多多指正  内容来源：windows内核实验02_中断提权  环境搭建 在开始实验之前你需要一个虚拟机(本文以XP为示例)、VS进行开发以及一个WinDbg来对内核进行调试 虚拟机部分 我们创建一个32位的XP虚拟机，具体创建过程略去 在创建完成后，我们需要对虚拟机进行设置  将原来打印机带的串口删除">
+    <meta name="description" content="前言 在上一次中断提权实验中，我们采用的是单核，但是我们日常中使用的都是多核，那么同样的在多核中存在有一些特性，本次实验将关注于多核下的一些特性，同样因笔者知识有限，同样可能存在些不正确与不严谨的部分，还请多多指正 实验过程 我们还是一样的环境，因此不需要额外的搭建新的虚拟机，我们将原来的单处理器单内核进行修改  保存后我们启动虚拟机，还是同样的使用 WinDbg 来对其进行调试  我们中断下来时">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows 内核实验 ——— 中断提权">
-<meta property="og:url" content="https://equinox-shame.github.io/2023/03/27/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%E2%80%94%E2%80%94%20%E4%B8%AD%E6%96%AD%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:title" content="Windows 内核实验 ——— 多核复杂性">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/03/28/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%A4%9A%E6%A0%B8%E5%A4%8D%E6%9D%82%E6%80%A7/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言 本实验过程相当于复现周壑大佬的相关实验过程，期间可能存在许多理解错误或者是不正确的地方，还请多多指正  内容来源：windows内核实验02_中断提权  环境搭建 在开始实验之前你需要一个虚拟机(本文以XP为示例)、VS进行开发以及一个WinDbg来对内核进行调试 虚拟机部分 我们创建一个32位的XP虚拟机，具体创建过程略去 在创建完成后，我们需要对虚拟机进行设置  将原来打印机带的串口删除">
+<meta property="og:description" content="前言 在上一次中断提权实验中，我们采用的是单核，但是我们日常中使用的都是多核，那么同样的在多核中存在有一些特性，本次实验将关注于多核下的一些特性，同样因笔者知识有限，同样可能存在些不正确与不严谨的部分，还请多多指正 实验过程 我们还是一样的环境，因此不需要额外的搭建新的虚拟机，我们将原来的单处理器单内核进行修改  保存后我们启动虚拟机，还是同样的使用 WinDbg 来对其进行调试  我们中断下来时">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/kiQXC2UaevLhyVn.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/SANFLZRuGgbB9Ua.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/AQS14urLbohKTDk.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/5nqtaU8QAVhzWHJ.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/24/BxZhaQzo3MNjdYq.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/24/3cIfVlCtTWoNvEx.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/24/4bAhIDQJc7fMqHj.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/24/ynjml6vNDRht9aZ.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/HmDnjGdJRw1YI2B.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/sMXJn9mNcdHU47Q.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/23/wE3X82dolm1i5zO.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/27/7W5qX6DKrxa3w8I.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/27/oWe7g15C3ETIf4P.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/27/9yL5ZH6KYvD8IFW.png">
-<meta property="og:image" content="https://s2.loli.net/2023/03/27/cU49hzdNBeyxAst.png">
-<meta property="article:published_time" content="2023-03-27T04:58:45.915Z">
-<meta property="article:modified_time" content="2023-03-27T04:55:21.789Z">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/6HXrQmtu7WPLvhj.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/LSpRrz9Xi8NJ5jx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/zVkBTMsPyf3AES7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/E7TGPROLmQoN15n.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/CzNdhJcAoWv83H4.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/FqVw3ZQnDMkUu4r.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/jX9w6x5YJpndmK7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/27/ekrjUD64Z9anmc5.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/28/6VMntHWG8BXda4o.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/28/QCIPxjdX3pWTkgf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/28/TosbcmDkzYZhGfR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/28/VLjCSeYMQ53dh2y.png">
+<meta property="article:published_time" content="2023-03-28T15:35:02.463Z">
+<meta property="article:modified_time" content="2023-03-28T15:34:04.888Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2023/03/23/kiQXC2UaevLhyVn.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/03/27/6HXrQmtu7WPLvhj.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Windows 内核实验 ——— 中断提权 - Autumnal</title>
+  <title>Windows 内核实验 ——— 多核复杂性 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Windows 内核实验 ——— 中断提权"></span>
+            <span id="subtitle" data-typed-text="Windows 内核实验 ——— 多核复杂性"></span>
           
         </div>
 
@@ -229,8 +226,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-27 12:58" pubdate>
-          2023年3月27日 下午
+        <time datetime="2023-03-28 23:35" pubdate>
+          2023年3月28日 晚上
         </time>
       </span>
     
@@ -241,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          2.1k 字
         
       </span>
     
@@ -289,79 +286,50 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Windows 内核实验 ——— 中断提权</h1>
+            <h1 style="display: none">Windows 内核实验 ——— 多核复杂性</h1>
             
             
               <div class="markdown-body">
                 
                 <h2 id="前言">前言</h2>
-<p>本实验过程相当于复现周壑大佬的相关实验过程，期间可能存在许多理解错误或者是不正确的地方，还请多多指正</p>
-<blockquote>
-<p>内容来源：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Eb411P7K5/?spm_id_from=333.999.0.0&amp;vd_source=7e542cd595a18ecd80a56eb1779810cb">windows内核实验02_中断提权</a></p>
-</blockquote>
-<h2 id="环境搭建">环境搭建</h2>
-<p>在开始实验之前你需要一个虚拟机(本文以XP为示例)、VS进行开发以及一个WinDbg来对内核进行调试</p>
-<h3 id="虚拟机部分">虚拟机部分</h3>
-<p>我们创建一个32位的XP虚拟机，具体创建过程略去</p>
-<p>在创建完成后，我们需要对虚拟机进行设置</p>
-<p><img src="https://s2.loli.net/2023/03/23/kiQXC2UaevLhyVn.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>将原来打印机带的串口删除后，我们添加一个自己的串口：<code>\\.\pipe\com_1</code>，之后我们将通过WinDbg来进行链接此串口</p>
-<p>开启虚拟机，在运行中打开<code>boot.ini</code>(修改启动项，然后开启调试模式)，可以输入如下命令：<code>C:\boot.ini</code></p>
-<p><img src="https://s2.loli.net/2023/03/23/SANFLZRuGgbB9Ua.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后再里面添加对应命令：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">multi(0)disk(0)rdisk(0)partition(1)\<span class="hljs-attribute">WINDOWS</span>=<span class="hljs-string">&quot;Microsoft Windows XP Professional&quot;</span> /<span class="hljs-attribute">noexecute</span>=optin /fastdetect /<span class="hljs-builtin-name">debug</span> /<span class="hljs-attribute">debugport</span>=com_1 /<span class="hljs-attribute">baudrate</span>=115200<br></code></pre></td></tr></table></figure>
-<p>之后在运行中输入：<code>msconfig</code></p>
-<p><img src="https://s2.loli.net/2023/03/23/AQS14urLbohKTDk.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后在打开的页面修改<code>Boot.ini</code>，将我们修改的设置为默认项，然后将超时时间修改短一些</p>
-<p><img src="https://s2.loli.net/2023/03/23/5nqtaU8QAVhzWHJ.png" srcset="/img/loading.gif" lazyload alt="image-20230323234412153"></p>
-<p>至此虚拟机设置部分就已经完成了</p>
-<h3 id="VS-部分">VS 部分</h3>
-<p>因为微软已经停止了对 XP 的维护，导致我们在高版本的 VS 下编译的程序无法在 XP 中正确运行，对此我们需在在 VS 的组件中添加一下相关组件</p>
-<p><img src="https://s2.loli.net/2023/03/24/BxZhaQzo3MNjdYq.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>然后再开启的项目中进行一些其他的设置：</p>
-<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="https://s2.loli.net/2023/03/24/3cIfVlCtTWoNvEx.png" srcset="/img/loading.gif" lazyload alt=""></div><div class="group-image-wrap"><img src="https://s2.loli.net/2023/03/24/4bAhIDQJc7fMqHj.png" srcset="/img/loading.gif" lazyload alt=""></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="https://s2.loli.net/2023/03/24/ynjml6vNDRht9aZ.png" srcset="/img/loading.gif" lazyload alt=""></div></div></div>
-<h3 id="WinDbg-部分">WinDbg 部分</h3>
-<p>网上有些搭建教程上会要求去下载 WDK 开发包，然后在里面带有的 WinDbg 设置相关启动参数来进行调试操作，笔者感觉可能较为复杂，因此建议可以去微软官方工具库里下载一个新版的 WinDbg 即可，而不用煞费苦心的装半天 WDK 然后发现VS插件不兼容，然后折腾半天</p>
-<blockquote>
-<p>又回想起来当初跟着别人教程装了半天都没折腾明白的环境以及VS插件不兼容问题…</p>
-</blockquote>
-<p>在 WinDbg 下载完成后，我们选择附加到内核</p>
-<p><img src="https://s2.loli.net/2023/03/23/HmDnjGdJRw1YI2B.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>设置完毕后 WinDbg 会弹出如下信息：</p>
-<p><img src="https://s2.loli.net/2023/03/23/sMXJn9mNcdHU47Q.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>出现如下信息后，我们重启一下虚拟机，等待一段时间便会出现相应的链接信息，然后自己断下</p>
-<p><img src="https://s2.loli.net/2023/03/23/wE3X82dolm1i5zO.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后就可以开始你的实验之旅了</p>
-<blockquote>
-<p>可能在后续的实验操作中不会出现 WinDbg 自己下载符号加载符号的过程，可以尝试在主机中添加对应的环境变量值，然后让其下载然后加载对应符号，其中的路径可以自己改成你想要存放符号表的位置</p>
-<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">_NT_SYMBOL_PATH     SRV<span class="hljs-symbol">\*</span>D:<span class="hljs-symbol">\M</span>yself_Software<span class="hljs-symbol">\W</span>indows_soft<span class="hljs-symbol">\s</span>ymbols<span class="hljs-symbol">\*</span> http://msdl.microsoft.com/download/symbols<br></code></pre></td></tr></table></figure>
-</blockquote>
+<p>在上一次中断提权实验中，我们采用的是单核，但是我们日常中使用的都是多核，那么同样的在多核中存在有一些特性，本次实验将关注于多核下的一些特性，同样因笔者知识有限，同样可能存在些不正确与不严谨的部分，还请多多指正</p>
 <h2 id="实验过程">实验过程</h2>
-<p>我们可以下载一个 PCHunter 来观察系统中断表，方便我们后续对其进行修改后的观察</p>
+<p>我们还是一样的环境，因此不需要额外的搭建新的虚拟机，我们将原来的单处理器单内核进行修改</p>
+<p><img src="https://s2.loli.net/2023/03/27/6HXrQmtu7WPLvhj.png" srcset="/img/loading.gif" lazyload alt="image-20230327211540410.png"></p>
+<p>保存后我们启动虚拟机，还是同样的使用 WinDbg 来对其进行调试</p>
+<p><img src="https://s2.loli.net/2023/03/27/LSpRrz9Xi8NJ5jx.png" srcset="/img/loading.gif" lazyload alt="image-20230327212858642.png"></p>
+<p>我们中断下来时，可以发现多出来了一个 0，那么它是什么呢？还记得吗，我们之前将单内核修改为了 2，不难猜测这个是两个内核中的一个，我们查看 0 号内核的系统中断表</p>
+<p><img src="https://s2.loli.net/2023/03/27/zVkBTMsPyf3AES7.png" srcset="/img/loading.gif" lazyload alt="image-20230327213139013.png"></p>
+<p>简单观察一下，可以发现其中断表和我们之前提权实验相同，但是我们如果切换到 1 号内核呢，查看其内核</p>
 <blockquote>
-<p>下载链接：<a target="_blank" rel="noopener" href="http://www.xuetr.com/">http://www.xuetr.com/</a></p>
+<p>一般来说多个内核会存在有多个寄存器以及中断表，在内核 0 中存在有 eax 等寄存器，那么我们也可以在内核 1 中找到 eax，但是两个的值似乎不太一样，同理于我们将要查看的系统中断表</p>
+<p>WinDbg 切换内核</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs WINDBG">~1<br></code></pre></td></tr></table></figure>
+<p>上述代码为切换到 1 号内核，我们修改波浪线后面的数字便可以切换到对应编号的内核</p>
 </blockquote>
-<p>我们中断下来虚拟机后，输入指令来进行看中断描述表寄存器的地址</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs WinDbg">r idtr<br></code></pre></td></tr></table></figure>
-<p><img src="https://s2.loli.net/2023/03/27/7W5qX6DKrxa3w8I.png" srcset="/img/loading.gif" lazyload alt="image-20230324155624582"></p>
-<p>可以发现中间有许多未使用的 00 ，而我们此次实验的目标是将中断表进行修改，我们插入一个我们自己的函数地址，通过中断来获取 Ring 0 权限，进而达到提权的目的</p>
-<p>对此我们使用一个裸函数(不会开辟栈帧)，方便我们更精准的控制对应执行的细节，我们创建代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Windows.h&gt;</span></span><br><br>DWORD g_tmp = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">void</span> __declspec(naked) <span class="hljs-built_in">IdtEntry</span>() &#123; <span class="hljs-comment">// 裸函数，不会产生对应的开辟栈帧过程</span><br>	<span class="hljs-comment">// 进入到此处是就是 ring 0 的权限</span><br>	<span class="hljs-comment">// 此处注意用一些 ring 3 的指令可能会存在些问题，一般进入到 ring 0 权限后尽量少做操作 ;</span><br>	__asm &#123;<br>		push eax<br>		mov eax, dword ptr ds : [<span class="hljs-number">0x8003f400</span>] ; 因为现在处于 ring <span class="hljs-number">0</span> 需要我们指定对应的段寄存器<br>		mov g_tmp, eax<br>		pop eax<br>		iretd	; 中断返回<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">crash</span><span class="hljs-params">()</span> </span>&#123;<br>	__asm &#123;<br>		<span class="hljs-keyword">int</span> <span class="hljs-number">0x20</span> <span class="hljs-comment">// 我们创建的中断</span><br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-keyword">if</span> ((DWORD)IdtEntry != <span class="hljs-number">0x00401040</span>) &#123;  <span class="hljs-comment">// 此处固定了基址，同时关闭了地址随机化，通过printf进行输出得到</span><br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;wrong addr : %p &quot;</span>, IdtEntry);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br>	<span class="hljs-built_in">crash</span>();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%x\n&quot;</span>, g_tmp); <span class="hljs-comment">// 打印对应地址内容</span><br>	<span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;pause&quot;</span>); <br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>同样的我们在 WinDbg 里面将<code>8003f500</code>处插入我们的<code>00401040</code>地址，同时需要注意的是其地址不是连续的中间插入了一段东西，我们可以看到有些中间的是<code>8e</code>开头，有的是<code>ee</code>开头，我们此处需要改为<code>ee</code>开头的，<code>8e</code>为系统调用，当我们调用的时候会产生错误而导致程序崩溃，而系统弹出对应的提示信息，第一个<code>ee</code>开头的根据<code>PCHunter</code>可以看到是<code>int 3</code>，这个是可以被我们所手动调用的，因此我们把地址修改为同样的形式： 0040ee00`00081040</p>
-<p><img src="https://s2.loli.net/2023/03/27/oWe7g15C3ETIf4P.png" srcset="/img/loading.gif" lazyload alt="image-20230327123040186"></p>
-<p>修改成功后我们将VS编译运行的程序放入到 WinXP 中去，运行我们可以看到对应的输出结果是地址<code>0x8003f400</code>处的值</p>
-<blockquote>
-<p>注意一下编译的程序需要处于 x86 下以及是 Release 版本</p>
-</blockquote>
-<p><img src="https://s2.loli.net/2023/03/27/9yL5ZH6KYvD8IFW.png" srcset="/img/loading.gif" lazyload alt="image-20230327124135766"></p>
-<p>我们也可以通过 WinDbg 来观察对应地址处的值</p>
-<p><img src="https://s2.loli.net/2023/03/27/cU49hzdNBeyxAst.png" srcset="/img/loading.gif" lazyload alt="image-20230327124327680"></p>
-<p>可以发现我们程序输出值和 WinDbg 获取的值一样，至此判断实验成功完成</p>
+<p><img src="https://s2.loli.net/2023/03/27/E7TGPROLmQoN15n.png" srcset="/img/loading.gif" lazyload alt="image-20230327213732832.png"></p>
+<p>我们可以观察到在 1 号内核中我们的系统中断表的地址与 0 号内核不一样，但是其地址里对应的内容是相同的，那么问题来了，如果我们对 0 号内核的系统中断表进行修改那么 1 号内核中的中断表会被修改吗？</p>
+<p><img src="https://s2.loli.net/2023/03/27/CzNdhJcAoWv83H4.png" srcset="/img/loading.gif" lazyload alt="image-20230327214716910.png"></p>
+<p>修改过后我们查看 1 号内核的系统中断表，如下图</p>
+<p><img src="https://s2.loli.net/2023/03/27/FqVw3ZQnDMkUu4r.png" srcset="/img/loading.gif" lazyload alt="image-20230327215013349.png"></p>
+<p>对此我们可以发现两个中断表并不一样，我们可以发现两个内核是相互独立的，如果我们拿提权实验的代码在虚拟机执行会怎么样？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Windows.h&gt;</span></span><br><br>DWORD g_tmp = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">void</span> __declspec(naked) <span class="hljs-built_in">IdtEntry</span>() &#123; <span class="hljs-comment">// 裸函数，不会产生对应的开辟栈帧过程</span><br>	<span class="hljs-comment">// 进入到此处是就是 ring 0 的权限</span><br>	<span class="hljs-comment">// 此处注意用一些 ring 3 的指令可能会存在些问题，一般进入到 ring 0 权限后尽量少做操作 ;</span><br>	__asm &#123;<br>		push eax<br>		mov eax, dword ptr ds : [<span class="hljs-number">0x8003f400</span>] ; 因为现在处于 ring <span class="hljs-number">0</span> 需要我们指定对应的段寄存器<br>		mov g_tmp, eax<br>		pop eax<br>		iretd	; 中断返回<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">crash</span><span class="hljs-params">()</span> </span>&#123;<br>	__asm &#123;<br>		<span class="hljs-keyword">int</span> <span class="hljs-number">0x20</span><br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-keyword">if</span> ((DWORD)IdtEntry != <span class="hljs-number">0x00401040</span>) &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;wrong addr : %p &quot;</span>, IdtEntry);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br>	<span class="hljs-built_in">crash</span>();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%x\n&quot;</span>, g_tmp); <span class="hljs-comment">// 打印对应地址内容</span><br>	<span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;pause&quot;</span>); <br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要注意的是我们需要将两个的内核的断点让其恢复，之后再执行对应程序，我们可以看到一下两种现象</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="https://s2.loli.net/2023/03/27/jX9w6x5YJpndmK7.png" srcset="/img/loading.gif" lazyload alt="image-20230327215920210.png"></div><div class="group-image-wrap"><img src="https://s2.loli.net/2023/03/27/ekrjUD64Z9anmc5.png" srcset="/img/loading.gif" lazyload alt="image-20230327220027517.png"></div></div></div>
+<p>为什么会出现上述情况？</p>
+<p>在操作系统中两个内核是并行运行的，我们之前修改了 0 号内核，而未修改 1 号内核，当 CPU 调度 0 号内核运行时，那么我们便会打印出对应的地址值，而当调用 1 号内核时，因为我们没有修改中断表，因此无法实现提权的过程进而无法打印出对应地址处的值了</p>
+<p>我们尝试在中断处理函数中将一些东西写入到内核中的地址去</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">void</span> __declspec(naked) <span class="hljs-built_in">IdtEntry2</span>() &#123;<br>	__asm &#123;<br>		cli; 将中断标志器置<span class="hljs-number">0</span>，不允许中断<br>		push eax<br>		mov eax, cr0; CR0的位<span class="hljs-number">16</span>是写保护 ，我们将写保护关闭后尝试在系统某些位置写入一些地址<br>		<span class="hljs-keyword">and</span> eax, ~<span class="hljs-number">10000</span>h<br>		mov cr0, eax<br>		mov eax, <span class="hljs-number">0xFFFFFFFF</span><br>		mov ds : [<span class="hljs-number">0x80542520</span>] , eax; 百分百会出问题，<span class="hljs-number">0x80542520</span>为三环到零换转换函数 KiFastCallEntry地址，会经常被调用<br>		; 因为我们将一个有写保护的地址进行修改，当我们的某个内核执行到此处时便会触发异常，导致蓝屏<br>		iretd<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当我们调用<code>IdtEntry2</code>函数时虚拟机会出现卡死状态，同时调试器自动断下，我们此时产生异常信息</p>
+<p><img src="https://s2.loli.net/2023/03/28/6VMntHWG8BXda4o.png" srcset="/img/loading.gif" lazyload alt="image-20230328224552141"></p>
+<p>同时我们查看对应地址，可以发现已经成功修改了对应地址处值</p>
+<p><img src="https://s2.loli.net/2023/03/28/QCIPxjdX3pWTkgf.png" srcset="/img/loading.gif" lazyload alt="image-20230328230636322"></p>
+<p>同时我们已经无法切换到对应的虚拟机中了</p>
+<p><img src="https://s2.loli.net/2023/03/28/TosbcmDkzYZhGfR.png" srcset="/img/loading.gif" lazyload alt="image-20230328231149484"></p>
+<p>上述过程说明了一个内核将我们的地址处的内容进行修改，当另一个核执行到此处时发生异常，也同样说明我们在多核下对内核的函数挂钩的难度较大，以及关闭分页保护进行写入是不安全的</p>
+<p><img src="https://s2.loli.net/2023/03/28/VLjCSeYMQ53dh2y.png" srcset="/img/loading.gif" lazyload alt="image-20230328231910234"></p>
 <h2 id="总结">总结</h2>
-<p>此次实验主要通过修改系统中断表，将处理函数设置为我们自己的。之后我们通过程序手动调用中断，系统通过中断表找到我们的程序对应处理函数，将其设置为 Ring 0 权限，进而执行一些内核代码。进而达到提权的目的。</p>
-<blockquote>
-<p>需要注意的是正常系统一般是不能完成上述过程，因为我们将虚拟机设置为了调试模式，因此我们 WinDbg 才可以进行连接上虚拟机，然后进行调试，是操作系统将权限交给了 WinDbg，之后我们才能进行后续的操作。</p>
-</blockquote>
+<p>我们此处开启了多核进行调试观察，我们可以简单的了解到在多核下内核与内核之间是并行关系，CPU通过调度来进行处理多核。我们也可以注意到多核下有许多相同的东西，且是相互独立的，我们修改其中一个内核的中断表而查看另一个的发现并没有变动，但是我们将其写入内存时便可以发现对应部分都被修改了，以此窥见多内核下的复杂性</p>
 
                 
               </div>
@@ -400,8 +368,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Windows 内核实验 ——— 中断提权</div>
-      <div>https://equinox-shame.github.io/2023/03/27/Windows 内核实验 ——— 中断提权/</div>
+      <div>Windows 内核实验 ——— 多核复杂性</div>
+      <div>https://equinox-shame.github.io/2023/03/28/Windows 内核实验 — 多核复杂性/</div>
     </div>
     <div class="license-meta">
       
@@ -413,7 +381,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年3月27日</div>
+          <div>2023年3月28日</div>
         </div>
       
       
@@ -449,8 +417,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/03/08/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20EasyVT%20%E5%A4%8D%E7%8E%B0/" title="西湖论剑 EasyVT 复现">
-                        <span class="hidden-mobile">西湖论剑 EasyVT 复现</span>
+                      <a href="/2023/03/27/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E4%B8%AD%E6%96%AD%E6%8F%90%E6%9D%83/" title="Windows 内核实验 ——— 中断提权">
+                        <span class="hidden-mobile">Windows 内核实验 ——— 中断提权</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
