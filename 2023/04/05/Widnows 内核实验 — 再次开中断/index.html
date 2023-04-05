@@ -16,26 +16,29 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="基本数据类型 : 在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int 				 		 #整型 Bool 			  	    #布尔型 Array 			 	    #数组 BitVec ( ‘a’，8 ) 	 #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示 设未知数的方法 ： 可以使用">
+    <meta name="description" content="前言 还记得我们之前的那个中断提权吗？我们修改了 idtr 表来把我们自己的中断函数进行执行。再此之前我们提到了在中断函数处理时我们无法再中断，但是在内核中存在有如下两个指令，可以让硬件中断变得可以执行或者是禁止执行 12CLI ;禁止中断发生STI ;允许中断发生 需要注意的是，当我们在内核模式下执行的时候应该尽快的恢复中断，如果长时间禁止中断时，我们可能会影响操作系统中其他动作的执行(如鼠标移">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Z3求解约束器">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/Z3%E6%B1%82%E8%A7%A3%E7%BA%A6%E6%9D%9F%E5%99%A8/index.html">
+<meta property="og:title" content="Widnows内核实验 ——— 再次开中断">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/04/05/Widnows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%8D%E6%AC%A1%E5%BC%80%E4%B8%AD%E6%96%AD/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="基本数据类型 : 在Python中使用Z3模块，我们的所求结果一般有以下几种数据类型:  Int 				 		 #整型 Bool 			  	    #布尔型 Array 			 	    #数组 BitVec ( ‘a’，8 ) 	 #char型  其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示 设未知数的方法 ： 可以使用">
+<meta property="og:description" content="前言 还记得我们之前的那个中断提权吗？我们修改了 idtr 表来把我们自己的中断函数进行执行。再此之前我们提到了在中断函数处理时我们无法再中断，但是在内核中存在有如下两个指令，可以让硬件中断变得可以执行或者是禁止执行 12CLI ;禁止中断发生STI ;允许中断发生 需要注意的是，当我们在内核模式下执行的时候应该尽快的恢复中断，如果长时间禁止中断时，我们可能会影响操作系统中其他动作的执行(如鼠标移">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png">
-<meta property="og:image" content="https://static01.imgkr.com/temp/e59577657a2344d5988bf434269492ed.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.703Z">
-<meta property="article:modified_time" content="2022-02-28T14:35:57.857Z">
+<meta property="og:image" content="https://s2.loli.net/2023/04/02/6qn5sPFgaLJBf4w.png">
+<meta property="og:image" content="https://s2.loli.net/2023/04/02/nswoZ729el1Oq3i.png">
+<meta property="og:image" content="https://s2.loli.net/2023/04/02/Uhez7DykEXHuACn.png">
+<meta property="og:image" content="https://s2.loli.net/2023/04/02/Deay6uKq5cvto47.png">
+<meta property="og:image" content="https://s2.loli.net/2023/04/02/fhoACd9iUBVv4y1.png">
+<meta property="article:published_time" content="2023-04-05T15:23:29.711Z">
+<meta property="article:modified_time" content="2023-04-05T15:22:57.779Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/04/02/6qn5sPFgaLJBf4w.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Z3求解约束器 - Autumnal</title>
+  <title>Widnows内核实验 ——— 再次开中断 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -205,7 +208,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Z3求解约束器"></span>
+            <span id="subtitle" data-typed-text="Widnows内核实验 ——— 再次开中断"></span>
           
         </div>
 
@@ -216,8 +219,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          2022年3月14日 下午
+        <time datetime="2023-04-05 23:23" pubdate>
+          2023年4月5日 晚上
         </time>
       </span>
     
@@ -228,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          4.5k 字
         
       </span>
     
@@ -276,51 +279,51 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Z3求解约束器</h1>
+            <h1 style="display: none">Widnows内核实验 ——— 再次开中断</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="基本数据类型">基本数据类型 :</h2>
-<p>在Python中使用Z3模块，我们的所求结果<strong>一般有以下几种数据类型:</strong></p>
+                <h2 id="前言">前言</h2>
+<p>还记得我们之前的那个中断提权吗？我们修改了 idtr 表来把我们自己的中断函数进行执行。再此之前我们提到了在中断函数处理时我们无法再中断，但是在内核中存在有如下两个指令，可以让硬件中断变得可以执行或者是禁止执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ASM">CLI ;禁止中断发生<br>STI ;允许中断发生<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，当我们在内核模式下执行的时候应该尽快的恢复中断，如果长时间禁止中断时，我们可能会影响操作系统中其他动作的执行(如鼠标移动等等)，此时的操作系统便会变得不稳定。</p>
 <blockquote>
-<p>Int 				 		 #整型<br>
-Bool 			  	    #布尔型<br>
-Array 			 	    #数组<br>
-BitVec ( ‘a’，8 ) 	 #char型</p>
+<p>长时间的禁止硬件中断会影响内部时钟混乱</p>
 </blockquote>
-<p>其中BitVec可以是特定大小的数据类型，不一定是8，例如C语言中的int型可以用BitVec(‘a’,32)表示</p>
-<p><strong>设未知数的方法 ：</strong></p>
-<p><strong>可以使用 ‘Int’ , ‘Real’ , ‘BitVec’ 等声明一个整数或实数变量，也可以申明一个变量数组</strong></p>
-<p><strong>例如</strong>：x = Int(‘x’) #这个int不是c/c++中的那个，而仅仅只代表整数</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">y =Real(<span class="hljs-string">&#x27;y&#x27;</span>)  				<span class="hljs-comment">#实数变量(数学中的那个实数)</span><br>z =BitVec(<span class="hljs-string">&#x27;z&#x27;</span>,<span class="hljs-number">8</span>) 			<span class="hljs-comment">#char型</span><br>w =BitVec(<span class="hljs-string">&#x27;w&#x27;</span>,<span class="hljs-number">32</span>) 			<span class="hljs-comment">#int型</span><br>p =Bool(<span class="hljs-string">&#x27;p&#x27;</span>)    			<span class="hljs-comment">#定义布尔型</span><br></code></pre></td></tr></table></figure>
-<p><strong>初始化序列：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><br>flag = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    flag.append(BitVec(<span class="hljs-string">&#x27;%d&#x27;</span> % i, <span class="hljs-number">8</span>))    <span class="hljs-comment">#char型</span><br><span class="hljs-built_in">print</span>(flag)<br> <br><span class="hljs-comment">#结果为:[0, 1, 2, 3, 4]</span><br> <br>flag= [Int(<span class="hljs-string">&#x27;%d&#x27;</span> % i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>)]    <span class="hljs-comment">#初始化为int型</span><br> <br>flag = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    flag.append(BitVec(<span class="hljs-string">&#x27;%d&#x27;</span> % i, <span class="hljs-number">32</span>))    <span class="hljs-comment">#int型</span><br><span class="hljs-built_in">print</span>(flag)<br> <br><span class="hljs-comment">#结果为:[0, 1, 2, 3, 4]</span><br></code></pre></td></tr></table></figure>
-<h2 id="二：基本使用语法">二：基本使用语法:</h2>
-<h3 id="Solver"><strong>Solver()</strong></h3>
-<p>Solver()命令会创建一个通用求解器，创建后我们可以添加我们的约束条件，进行下一步的求解</p>
-<p><strong>add()</strong></p>
-<p>add()命令用来添加约束条件，通常在solver()命令之后，添加的约束条件通常是一个逻辑等式</p>
-<h3 id="check"><strong>check()</strong></h3>
-<p>该函数通常用来判断在添加完约束条件后，来检测解的情况，有解的时候会回显sat，无解的时候会回显unsat</p>
-<h3 id="model"><strong>model()</strong></h3>
-<p>在存在解的时候，该函数会将每个限制条件所对应的解集的交集，进而得出正解。</p>
-<h3 id="常用求解步骤："><strong>常用求解步骤：</strong></h3>
-<p>创建约束求解器</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">solver = Solver()<br></code></pre></td></tr></table></figure>
-<p>添加约束条件（这一步是z3求解的关键）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">solver.add()<br></code></pre></td></tr></table></figure>
-<p>判断解是否存在</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> solver.check() == sat:		<span class="hljs-comment"># sat 表示有解 unsat 表示无解</span><br></code></pre></td></tr></table></figure>
-<p>求解</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span> ( solver.model() )		<span class="hljs-comment">#一般是以 &#x27;约束求解器&#x27;.model() 得到结果，配合 print输出</span><br></code></pre></td></tr></table></figure>
-<h2 id="题目示例">题目示例</h2>
-<p>尝试求解 try 部分内容 ：</p>
-<p>其中的 key_cmp 对应的分别为  <code>S</code>  <code>y</code>  <code>c</code>  <code>l</code>  <code>o</code>  <code>v</code>  <code>e</code>  <code>r</code></p>
-<p><img src="https://static01.imgkr.com/temp/0e846132079442b7b74876e4269a6892.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">from</span> z3 <span class="hljs-keyword">import</span> *<br><br><br><br>key1 = BitVec(<span class="hljs-string">&#x27;key1&#x27;</span>,<span class="hljs-number">32</span>)		<span class="hljs-comment">#之前改了下面的数据不想改回去偷了个懒没写成数组</span><br>key2 = BitVec(<span class="hljs-string">&#x27;key2&#x27;</span>,<span class="hljs-number">32</span>)<br>key3 = BitVec(<span class="hljs-string">&#x27;key3&#x27;</span>,<span class="hljs-number">32</span>)<br>key4 = BitVec(<span class="hljs-string">&#x27;key4&#x27;</span>,<span class="hljs-number">32</span>)<br>key5 = BitVec(<span class="hljs-string">&#x27;key5&#x27;</span>,<span class="hljs-number">32</span>)<br>key6 = BitVec(<span class="hljs-string">&#x27;key6&#x27;</span>,<span class="hljs-number">32</span>)<br>key7 = BitVec(<span class="hljs-string">&#x27;key7&#x27;</span>,<span class="hljs-number">32</span>)<br>key8 = BitVec(<span class="hljs-string">&#x27;key8&#x27;</span>,<span class="hljs-number">32</span>)<br><br><br><br>key = Solver()					<span class="hljs-comment">#创建约束求解器</span><br><br>key.add((key2 * key3 - key6 * <span class="hljs-number">72</span> - key5 * <span class="hljs-number">3</span> - key4 ^ key2 + (key4 &lt;&lt; <span class="hljs-number">2</span>) + key3 * <span class="hljs-number">6</span> - key8 &amp; key7 - <span class="hljs-number">1000</span>) - <span class="hljs-number">14</span>==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;S&#x27;</span>))<br><br><br>key.add(((key6 * <span class="hljs-number">7</span> + key4 * <span class="hljs-number">3</span> + key3 + key7 - (key3 &gt;&gt; <span class="hljs-number">2</span>) - key2 ^ key1 + key8 + (key5 ^ key2) + (key5 | key8)) - <span class="hljs-number">801</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;y&#x27;</span>))<br><br>key.add(((key7 * <span class="hljs-number">5</span> + key3 * <span class="hljs-number">6</span> - key4 * <span class="hljs-number">7</span> + key5 | key6 + key5 * <span class="hljs-number">10</span> + key1 ^ key2 * <span class="hljs-number">3</span> - key8 + key1 + key2) - <span class="hljs-number">924</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;c&#x27;</span>))<br><br>key.add((key2 * <span class="hljs-number">3</span> + key6 * <span class="hljs-number">9</span> + key1 + key3 * <span class="hljs-number">2</span> + key4 * <span class="hljs-number">5</span> - key5 * (key7 ^ key8) + <span class="hljs-number">321</span> - <span class="hljs-number">16</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;l&#x27;</span>))<br><br>key.add(((key6 * <span class="hljs-number">12</span> - key1 ^ key7 - key4 * <span class="hljs-number">23</span> + key5 * <span class="hljs-number">3</span> + key3 * <span class="hljs-number">8</span> + key2 - key8 * <span class="hljs-number">2</span> + key7 * <span class="hljs-number">4</span> + <span class="hljs-number">1324</span>) + <span class="hljs-number">1</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;o&#x27;</span>))<br><br>key.add((key4 * <span class="hljs-number">54</span> - key2 * <span class="hljs-number">3</span> + key3 * <span class="hljs-number">3</span> + key5 * <span class="hljs-number">11</span> - key6 * <span class="hljs-number">2</span> + key1 + key8 * <span class="hljs-number">3</span> - key7 - <span class="hljs-number">6298</span> + <span class="hljs-number">40</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;v&#x27;</span>))<br><br>key.add((key8 - key7 * key4 + key3 * key3 - key5 * <span class="hljs-number">32</span> + key6 * (key1 &gt;&gt; <span class="hljs-number">2</span>) - key2 * key2 - <span class="hljs-number">6689</span> + <span class="hljs-number">41</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;e&#x27;</span>))<br><br>key.add(((key6 - key4 * <span class="hljs-number">41</span> + key7 * <span class="hljs-number">41</span> + key6 ^ (key5 &amp; key7 | key1) - (key8 * <span class="hljs-number">24</span> | key3) + key2 - <span class="hljs-number">589</span>) - <span class="hljs-number">36</span>)==<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;r&#x27;</span>))<br><br><span class="hljs-comment">#约束条件</span><br><br><span class="hljs-keyword">if</span> key.check()==sat:			<span class="hljs-comment">#判断解的情况</span><br>    <span class="hljs-built_in">print</span>(key.model())			<span class="hljs-comment">#输出解</span><br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;WA&quot;</span>)<br><br><br></code></pre></td></tr></table></figure>
-<p>输出为 ：</p>
-<p><img src="https://static01.imgkr.com/temp/e59577657a2344d5988bf434269492ed.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>在此次实验中，我们将允许中断，进行观察对应的现象</p>
+<h2 id="实验过程">实验过程</h2>
+<p>在实验开始之前，我们需要将虚拟机中的<code>ntkrnlpa.exe</code>提取出来，我们可以利用<code>PCHunter</code>来对其进行定位。</p>
+<p><img src="https://s2.loli.net/2023/04/02/6qn5sPFgaLJBf4w.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们找到对应的程序后，将其拖入IDA进行反编译分析</p>
+<p>我们选择<code> _KiFastCallEntry</code>函数进行分析，此函数通过中断门进入 Ring 0，同时将 Ring 3 的 esp、eip、ss、cs、eflags 进行保存</p>
+<p>大致可以得到以下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs ASM">.text:80542520                               _KiFastCallEntry proc near    ; DATA XREF: KiLoadFastSyscallMachineSpecificRegisters(x)+24↑o<br>.text:80542520                                                             ; _KiTrap01+74↓o<br>.text:80542520<br>.text:80542520                               var_B= byte ptr -0Bh<br>.text:80542520                               anonymous_0= dword ptr -8<br>.text:80542520                               anonymous_1= dword ptr -4<br>.text:80542520<br>.text:80542520                               ; FUNCTION CHUNK AT .text:805424ED SIZE 00000026 BYTES<br>.text:80542520                               ; FUNCTION CHUNK AT .text:805427C0 SIZE 00000014 BYTES<br>.text:80542520<br>.text:80542520 B9 23 00 00 00                mov     ecx, 23h ; &#x27;#&#x27;<br>.text:80542525 6A 30                         push    30h ; &#x27;0&#x27;<br>.text:80542527 0F A1                         pop     fs                    ; fs设置为0x30 为0环数据段<br>.text:80542529 8E D9                         mov     ds, ecx               ; ds设置为0x23 为3环数据段<br>.text:8054252B 8E C1                         mov     es, ecx               ; es = 0x23<br>.text:8054252D 64 8B 0D 40 00 00 00          mov     ecx, large fs:40h     ; 进入0环，fs:[0]指向KPCR表 _KPCR.TSS<br>.text:80542534 8B 61 04                      mov     esp, [ecx+4]          ; TSS:esp0 即切换到0环堆栈<br>.text:80542537 6A 23                         push    23h ; &#x27;#&#x27;             ; 3环的 ss 压入<br>.text:80542539 52                            push    edx                   ; 3环esp<br>.text:8054253A 9C                            pushf                         ; 将三环的eflags压入栈<br>.text:8054253A<br>.text:8054253B<br>.text:8054253B                               loc_8054253B:                 ; CODE XREF: _KiFastCallEntry2+23↑j<br>.text:8054253B 6A 02                         push    2<br>.text:8054253D 83 C2 08                      add     edx, 8                ; Add<br>.text:80542540 9D                            popf                          ; 设立新eflags = 0x2 清空0环标志位<br>.text:80542541 80 4C 24 01 02                or      byte ptr [esp+1], 2   ; 设置IF=1，进行屏蔽中断<br>.text:80542546 6A 1B                         push    1Bh<br>.text:80542548 FF 35 04 03 DF FF             push    dword ptr ds:0FFDF0304h ; _KUSER_SHARED_DATA.SystemCallReturn<br>.text:8054254E 6A 00                         push    0<br>.text:80542550 55                            push    ebp<br>.text:80542551 53                            push    ebx<br>.text:80542552 56                            push    esi<br>.text:80542553 57                            push    edi<br>.text:80542554 64 8B 1D 1C 00 00 00          mov     ebx, large fs:1Ch     ; ebx 指向 _KPCR<br>.text:8054255B 6A 3B                         push    3Bh ; &#x27;;&#x27;<br>.text:8054255D 8B B3 24 01 00 00             mov     esi, [ebx+124h]       ; KPCR.KPRCB.CurrentThread 获取当前线程<br>.text:80542563 FF 33                         push    dword ptr [ebx]       ; _KPCR.NtTib.ExceptionList<br>.text:80542565 C7 03 FF FF FF FF             mov     dword ptr [ebx], -1   ; _KPCR.NtTib.ExceptionList=-1<br>.text:8054256B 8B 6E 18                      mov     ebp, [esi+18h]        ; _KPCR._KPRCB.CurrentThread.InitialStack<br>.text:8054256E 6A 01                         push    1                     ; _KTRAP_FRAME.PreviousPreviousMode = 1，表示从3环来<br>.text:80542570 83 EC 48                      sub     esp, 48h              ; esp 指向 _KTRAP_FRAME<br>.text:80542573 81 ED 9C 02 00 00             sub     ebp, 29Ch             ; Integer Subtraction<br>.text:80542579 C6 86 40 01 00 00 01          mov     byte ptr [esi+140h], 1 ; CurrentThread.PreviousMode = 1，表示从3环调用来<br>.text:80542580 3B EC                         cmp     ebp, esp              ; 判断ebp与esp是否都指向_KTRP_FRAME<br>.text:80542582 75 8D                         jnz     short loc_80542511    ; Jump if Not Zero (ZF=0)<br>.text:80542582<br>.text:80542584 83 65 2C 00                   and     dword ptr [ebp+2Ch], 0 ; _KTRAP_FRAME.Dr7 = 0<br>.text:80542588 F6 46 2C FF                   test    byte ptr [esi+2Ch], 0FFh ; Logical Compare<br>.text:8054258C 89 AE 34 01 00 00             mov     [esi+134h], ebp       ; CurrentThread.TrapFrame = ebp，即指向当前 _KTRAP_FRAME<br>.text:80542592 0F 85 38 FE FF FF             jnz     Dr_FastCallDrSave     ; 如果DebugActive == 1（被调试），那么跳转到 Dr_FastCallDrSave<br>.text:80542592                                                             ; Dr_FastCallDrSave 的功能是保存调试寄存器<br>.text:80542592<br>.text:80542598<br>.text:80542598                               loc_80542598:                 ; CODE XREF: Dr_FastCallDrSave+10↑j<br>.text:80542598                                                             ; Dr_FastCallDrSave+7C↑j<br>.text:80542598 8B 5D 60                      mov     ebx, [ebp+60h]<br>.text:8054259B 8B 7D 68                      mov     edi, [ebp+68h]<br>.text:8054259E 89 55 0C                      mov     [ebp+0Ch], edx        ; _KTRAP_FRAME.DbgArgPointer = edx, 保存3环参数指针<br>.text:805425A1 C7 45 08 00 0D DB BA          mov     dword ptr [ebp+8], 0BADB0D00h<br>.text:805425A8 89 5D 00                      mov     [ebp+0], ebx          ; _KTRAP_FRAME.DbgEbp = _KTRAP_FRAME.Ebp<br>.text:805425AB 89 7D 04                      mov     [ebp+4], edi          ; _KTRAP_FRAME.DbgEip = _KTRAP_FRAME.Eip<br>.text:805425AE FB                            sti                           ; Set Interrupt Flag<br></code></pre></td></tr></table></figure>
+<p>我们将之前实验一的中断处理函数修改为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">void</span> __declspec(naked) <span class="hljs-built_in">IdtEntry</span>() &#123; <span class="hljs-comment">// 裸函数，不会产生对应的开辟栈帧过程</span><br>	__asm &#123;<br>		push <span class="hljs-number">0x30</span><br>		pop fs	;仿照 _KiFastCallEntry 修改fs<br>		sti	;开启中断<br>L:<br>		jmp	L<br>		iretd	; 中断返回<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们编译运行，可以发现程序运行但是占用了100%的CPU</p>
+<img src="https://s2.loli.net/2023/04/02/nswoZ729el1Oq3i.png" srcset="/img/loading.gif" lazyload alt="image-20230402125420975.png" style="zoom:67%;" />
+<p>此处但是虚拟机并不同于我们之前设置的循环就直接卡死，可以看到虚拟机可以甚至可以调出任务管理器，我们而也可以通过 WinDbg 对其进行断下，而不是直接的 Busy 状态。同时此处产生了一个问题，我们无法关闭这个测试程序。无论我们是直接关闭或者是通过任务管理器，都是关不掉对应程序的，我们都可以看到在后台会存在着对应的进程。</p>
+<blockquote>
+<p>不会卡死是因为我们开起了中断，在 Ring 0 中允许中断是十分危险的。</p>
+</blockquote>
+<p>为什么会无法对其进行关闭呢？在操作系统中存在有个APC队列的东西，我们可以通过WinDbg观察其结构</p>
+<p><img src="https://s2.loli.net/2023/04/02/Uhez7DykEXHuACn.png" srcset="/img/loading.gif" lazyload alt="image-20230402142426424.png"></p>
+<p>同时需要注意的是线程是不能被“杀掉”、“挂起”、“恢复”的，线程在执行的时候自己占据着CPU，别人不能控制它，所以说线程如果想“死”，一定是自己执行代码把自己杀死，不存在“他杀”的情况。如果我们需要改变一共线程的行为，我们需要给他一个函数，让其进行调用。</p>
+<p>在正常情况下，我们掉用关闭的线程是上述代码从 Ring 0 到 Ring 3 进行返回的时候调用。 对于上述的例子，我们设置了一个循环，将其进行了卡死，使其无法回到 Ring 3，进而造成了伪卡死状态(CPU占用100%，但是其他进程仍然有机会得到指令)。</p>
+<blockquote>
+<p>此时如果关机或者重启可能会造成卡死现象</p>
+</blockquote>
+<p>那么我们有什么方式可以将其进行处理一下？答案是有的，因为我们之前开启了中断，意味着我们可以使用 WinDbg 在 Ring 0 进行中断，我们之前的函数处理的地址为：<code>0x00401040</code>，我们对该地址处的东西进行反汇编，可以看到如下界面</p>
+<p><img src="https://s2.loli.net/2023/04/02/Deay6uKq5cvto47.png" srcset="/img/loading.gif" lazyload alt="image-20230402143818534.png"></p>
+<p>我们通过 WinDbg 将 jmp 处的汇编指令进行修改，将其改为 nop，那么便解除了对应的卡死状态，使其返回 Ring 3 时，可以调用相应的线程结束函数，使其”自我结束“。</p>
+<p><img src="https://s2.loli.net/2023/04/02/fhoACd9iUBVv4y1.png" srcset="/img/loading.gif" lazyload alt="image-20230402144120879.png"></p>
+<blockquote>
+<p>因为 ebfe 为双字，所以我们此时使用 ew 进行修改</p>
+</blockquote>
+<p>此时我们便在任务管理器中看不到其身影了，已经成功的对其进行关闭。</p>
+<h2 id="总结">总结</h2>
+<p>在此次实验中我们在 Ring 0 开中断, 允许线程调度, 制造了一个在 Ring 0 的死循环, 不能被杀死的进程。同时简单的了解了一下进程结束的相关东西以及Ring 3 到 Ring 0 的大致切换过程。</p>
 
                 
               </div>
@@ -339,7 +342,7 @@ BitVec ( ‘a’，8 ) 	 #char型</p>
     
       <span class="category-chain">
         
-  <a href="/categories/Crypto/" class="category-chain-item">Crypto</a>
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
   
   
 
@@ -359,8 +362,8 @@ BitVec ( ‘a’，8 ) 	 #char型</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Z3求解约束器</div>
-      <div>https://equinox-shame.github.io/2022/03/14/Z3求解约束器/</div>
+      <div>Widnows内核实验 ——— 再次开中断</div>
+      <div>https://equinox-shame.github.io/2023/04/05/Widnows 内核实验 — 再次开中断/</div>
     </div>
     <div class="license-meta">
       
@@ -372,7 +375,7 @@ BitVec ( ‘a’，8 ) 	 #char型</p>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月14日</div>
+          <div>2023年4月5日</div>
         </div>
       
       
@@ -404,18 +407,12 @@ BitVec ( ‘a’，8 ) 	 #char型</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/14/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E5%A4%8D%E4%B9%A0%E8%A6%81%E7%82%B9/" title="线性代数复习要点">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">线性代数复习要点</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/%E5%AD%A6%E6%A0%A1%E9%80%89%E4%BF%AE%E8%AF%BE%E6%8A%A2%E8%AF%BE%E8%84%9A%E6%9C%AC%E7%9A%84%E7%AE%80%E6%98%93%E5%88%9B%E5%BB%BA/" title="学校选修课抢课脚本的简易创建">
-                        <span class="hidden-mobile">学校选修课抢课脚本的简易创建</span>
+                      <a href="/2023/03/28/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%A4%9A%E6%A0%B8%E5%A4%8D%E6%9D%82%E6%80%A7/" title="Windows 内核实验 ——— 多核复杂性">
+                        <span class="hidden-mobile">Windows 内核实验 ——— 多核复杂性</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
