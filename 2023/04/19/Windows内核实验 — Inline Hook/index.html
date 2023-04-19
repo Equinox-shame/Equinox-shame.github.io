@@ -16,62 +16,23 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 MEMZ属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是MEMZ会修改MBR主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。 准备工作 我们采用之前搭建好的Win10分析环境下运行MEMZ，并准备相关的分析工具如IDA等。 和分析其他样本一样我们先">
+    <meta name="description" content="Windows内核实验 ——— Inline Hook 前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MEMZ 样本分析">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/10/26/MEMZ%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="Autumnal">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/04/19/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20Inline%20Hook/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言 MEMZ属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是MEMZ会修改MBR主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。 准备工作 我们采用之前搭建好的Win10分析环境下运行MEMZ，并准备相关的分析工具如IDA等。 和分析其他样本一样我们先">
+<meta property="og:description" content="Windows内核实验 ——— Inline Hook 前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/p7bkJHt56NTeaEG.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/a3gF5WeEdCMqJli.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/UDXIfPdV9lxHWmj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/OXdxSMyLbj2mWrE.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/AtFfacCQZzBn3UJ.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/mYOw68JPLdpQvhl.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/HBs8EjWJu9SG36U.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/83mDBLrxSEcW1iR.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/PsZOv4Jzl7nxf2u.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/23/kAJlpGQqwdXuhBD.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/8USsW9dvgQOFI4B.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/fsDC9PaQBVezoSb.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/DYIsyME5THvaVom.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/yJaYtD4hWGZCdIE.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/BfxzZMP1hdg6LoN.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/L78pJUu2swMbBqh.png">
-<meta property="og:image" content="https://pic4.zhimg.com/v2-3c70db094c82da7e3afa9536f26aff8b_r.jpg">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/faNGXKMpW1sDI2w.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/2jFWPkbm4YRHi5e.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/oIfiV9a2UKnS7yv.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/nzYvo1dENRUFIcj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/AcqkD1gvxGpFn9N.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/pwUHTcXi9DgnFeh.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/oOZvUDuekJNcsRr.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/6cheOMISTKHzYrm.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/9t4XLg8V3JES2Br.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/Jy1FfHpQjBGD5d3.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/eKdySQqR18p52jX.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/eRndMcOkhiDL8QE.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/sc3Vu1lDGJHaWRQ.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/Hw2QR3koIvqYjBy.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/YnJPHqBeSgduR48.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/bkJ1ip67lsdZwrP.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/E5qabn6rDGN3h1S.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/eA3KnZsGJpVRDrj.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/ipIDUxQG5eLT2BA.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/26/gIwNAeoscy6u7Hn.png">
-<meta property="article:published_time" content="2022-10-26T15:58:34.549Z">
-<meta property="article:modified_time" content="2023-04-07T14:57:13.282Z">
+<meta property="article:published_time" content="2023-04-19T14:33:51.614Z">
+<meta property="article:modified_time" content="2023-04-19T14:33:33.057Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>MEMZ 样本分析 - Autumnal</title>
+  <title>Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -241,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="MEMZ 样本分析"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -252,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-26 23:58" pubdate>
-          2022年10月26日 晚上
+        <time datetime="2023-04-19 22:33" pubdate>
+          2023年4月19日 晚上
         </time>
       </span>
     
@@ -264,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          26 字
         
       </span>
     
@@ -312,138 +273,13 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">MEMZ 样本分析</h1>
+            <h1 style="display: none"></h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="前言">前言</h2>
-<p><code>MEMZ</code>属于是远古时期的一个样本了，其算是一个基本的恶搞程序，没有采取隐藏或者是免杀技术，适合刚入门的师傅们进行研究，但是<code>MEMZ</code>会修改<code>MBR</code>主引导扇区，以此来破坏电脑的正常启动，当用户重启时便会一直播放彩虹猫的画面，因此也不能完全算是一个恶搞，也带点木马的成分在里面。</p>
-<h2 id="准备工作">准备工作</h2>
-<p>我们采用之前搭建好的<code>Win10</code>分析环境下运行<code>MEMZ</code>，并准备相关的分析工具如<code>IDA</code>等。</p>
-<p>和分析其他样本一样我们先将其上传在线云沙箱观察一下程序的对应信息，如导入导出表等等。获取一些初步的信息。</p>
-<p>此处我们采用<code>微步云沙箱</code>，进行上传分析</p>
-<img src="https://s2.loli.net/2022/10/23/dRO4F1tiWyG83Zl.png" srcset="/img/loading.gif" lazyload alt="1.png" style="zoom: 75%;" />
-<p>可以看到彩虹猫的一些行为特征，修改<code>MBR</code>，安装钩子获取信息等等，我们观察其对应的导入导出表</p>
-<img src="https://s2.loli.net/2022/10/23/p7bkJHt56NTeaEG.png" srcset="/img/loading.gif" lazyload alt="2.png" style="zoom: 75%;" />
-<p>我们观察可以看到程序有创建文件、创建线程、创建对话框、设置鼠标等等相关的一些<code>API</code>函数，我们可以推测出其的一些相关功能特点</p>
-<p><img src="https://s2.loli.net/2022/10/23/a3gF5WeEdCMqJli.png" srcset="/img/loading.gif" lazyload alt="11.png"></p>
-<p>同时在程序中有许许多多的<code>URL</code>，全部是谷歌的相关搜索，合理推测程序会联网打开这些网页</p>
-<img src="https://s2.loli.net/2022/10/23/UDXIfPdV9lxHWmj.png" srcset="/img/loading.gif" lazyload alt="3.png" style="zoom:80%;" />
-<p>沙箱的动态分析下我们可以观测到彩虹猫会自己创建六个线程，然后创建一个<code>txt</code>文件，前面所提到的许多导出函数在这个图中也有相关的体现</p>
-<img src="https://s2.loli.net/2022/10/23/OXdxSMyLbj2mWrE.png" srcset="/img/loading.gif" lazyload alt="4.png" style="zoom:80%;" />
-<h2 id="尝试运行">尝试运行</h2>
-<p>我们通过云沙箱的一定分析后，尝试跑一下对应的恶意程序观察其相关的破坏性</p>
-<p>当我们尝试运行时会收到作者的提示，告诉你这个是一个恶意程序，确保我们不是一不小心点开的，需要我们两次进行确认</p>
-<p><img src="https://s2.loli.net/2022/10/23/AtFfacCQZzBn3UJ.png" srcset="/img/loading.gif" lazyload alt="5.png"></p>
-<p>我们确认后程序会生成一个<code>txt</code>，告诉我们电脑被彩虹猫破坏了</p>
-<p><img src="https://s2.loli.net/2022/10/23/mYOw68JPLdpQvhl.png" srcset="/img/loading.gif" lazyload alt="6.png"></p>
-<p>之后会出现：</p>
-<ul>
-<li>电脑打开一些进程，如<code>画图</code>、<code>记事本</code>、<code>控制面板</code>等</li>
-<li>文字出现反转，显示不正常</li>
-<li>电脑桌面不断设置反色，然后回复正常</li>
-<li>鼠标指针处出现各种报错图标，以及鼠标产生不正常的抖动</li>
-<li>电脑弹出反正的警告以及报错声</li>
-<li>电脑重启后出现彩虹猫</li>
-<li>…</li>
-</ul>
-<p>如：</p>
-<img src="https://s2.loli.net/2022/10/23/HBs8EjWJu9SG36U.png" srcset="/img/loading.gif" lazyload alt="7.png" style="zoom: 50%;" />
-<p>当我们重启时候会产生一个蓝屏错误信息，随后启动便只剩下了一个彩虹猫，以及那奇妙的音乐…</p>
-<img src="https://s2.loli.net/2022/10/23/83mDBLrxSEcW1iR.png" srcset="/img/loading.gif" lazyload alt="8.png" style="zoom:50%;" />
-<img src="https://s2.loli.net/2022/10/23/PsZOv4Jzl7nxf2u.png" srcset="/img/loading.gif" lazyload alt="9.png" style="zoom: 67%;" />
-<h2 id="逆向分析">逆向分析</h2>
-<p>之后就是我们的最重要的部分，尝试逆向分析程序</p>
-<p><img src="https://s2.loli.net/2022/10/23/kAJlpGQqwdXuhBD.png" srcset="/img/loading.gif" lazyload alt="10.png"></p>
-<p>放入<code>PE</code>进行查壳，发现是无壳<code>32位</code>位程序，拖入<code>IDA</code>中进行反编译</p>
-<blockquote>
-<p>需要注意一下，有些<code>PE</code>检测时会运行对应的程序，因为<code>MEMZ</code>存在有保护性确认，因此本地实体机分析时并不会产生太大的问题，但对于某些恶意样本可能会对主机产生不可逆的破坏</p>
-</blockquote>
-<p>拖入<code>IDA</code>反编译后可以发现程序十分的简单，仅有<code>26</code>个函数，同时结构也十分清晰，方便我们的分析。</p>
-<h3 id="启动过程">启动过程</h3>
-<p><img src="https://s2.loli.net/2022/10/25/8USsW9dvgQOFI4B.png" srcset="/img/loading.gif" lazyload alt="12.png"></p>
-<p><img src="https://s2.loli.net/2022/10/25/fsDC9PaQBVezoSb.png" srcset="/img/loading.gif" lazyload alt="13.png"></p>
-<p>通过观察我们可以看出<code>MEMZ</code>在询问我们是否启动后(两次警告过后)，便会创建六个<code>MEMZ</code>进程，带有<code>watchdog</code>的五个进程以及一个带有<code>main</code>的进程</p>
-<p>此时我们就可以发现创建的进程会进入里面的<code>if</code>块，此时我们开始对<code>if</code>块内的一些东西进行分析</p>
-<p><img src="https://s2.loli.net/2022/10/25/DYIsyME5THvaVom.png" srcset="/img/loading.gif" lazyload alt="14.png"></p>
-<p><code>MEMZ</code>在启动创建多个进程后，又会启动相应的线程来不断遍历内存中的相关进程数目</p>
-<p><img src="https://s2.loli.net/2022/10/25/yJaYtD4hWGZCdIE.png" srcset="/img/loading.gif" lazyload alt="15.png"></p>
-<p>当我们手动关闭或者是关机时候，那么对应的进程数目便会减少，进而调用崩溃函数，引发崩溃</p>
-<p><img src="https://s2.loli.net/2022/10/25/BfxzZMP1hdg6LoN.png" srcset="/img/loading.gif" lazyload alt="21.png"></p>
-<p>同时我们可以注意到<code>MEMZ</code>调用了<code>ntdll</code>中的一些无文档的提权函数，通过<code>dll</code>中的函数进行提权以及引发蓝屏异常，并强制用户重启</p>
-<h3 id="修改MBR">修改MBR</h3>
-<p><code>MEMZ</code>将覆写的数据进行提出，然后重新写入，导致了我们的磁盘启动后<code>BIOS</code>无法将权限给<code>MBR</code>进而无法启动<code>OS</code></p>
-<p><img src="https://s2.loli.net/2022/10/25/L78pJUu2swMbBqh.png" srcset="/img/loading.gif" lazyload alt="17.png"></p>
-<p>即覆写逻辑为：</p>
-<p><img src="https://pic4.zhimg.com/v2-3c70db094c82da7e3afa9536f26aff8b_r.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>我们稍后尝试提取出修改的数据</p>
-<h3 id="随机调用">随机调用</h3>
-<p><img src="https://s2.loli.net/2022/10/25/faNGXKMpW1sDI2w.png" srcset="/img/loading.gif" lazyload alt="18.png"></p>
-<p><code>MEMZ</code>创建线程来进行随机打开文件，于<code>off_405130</code>处我们可以看到执行的函数每两个<code>dword</code>一组，每次执行完后，采用地址<code>+2</code>，获取下一个函数的地址</p>
-<p><img src="https://s2.loli.net/2022/10/25/2jFWPkbm4YRHi5e.png" srcset="/img/loading.gif" lazyload alt="22.png"></p>
-<h4 id="随机打开进程">随机打开进程</h4>
-<h4 id="打开网页">打开网页</h4>
-<p><img src="https://s2.loli.net/2022/10/25/oIfiV9a2UKnS7yv.png" srcset="/img/loading.gif" lazyload alt="19.png"></p>
-<img src="https://s2.loli.net/2022/10/25/nzYvo1dENRUFIcj.png" srcset="/img/loading.gif" lazyload alt="20.png" style="zoom: 80%;" />
-<p>通过随机数来进行随机的打开进程，并返回一个随机数</p>
-<h3 id="鼠标抖动">鼠标抖动</h3>
-<p><img src="https://s2.loli.net/2022/10/25/AcqkD1gvxGpFn9N.png" srcset="/img/loading.gif" lazyload alt="23.png"></p>
-<p>通过随机数来改变当前鼠标所在位置，达到鼠标指针抖动效果</p>
-<h3 id="随机输入">随机输入</h3>
-<p><img src="https://s2.loli.net/2022/10/25/pwUHTcXi9DgnFeh.png" srcset="/img/loading.gif" lazyload alt="24.png"></p>
-<p><code>MEMZ</code>通过<code>Hook</code>输入信息并通过随机数产生输入进行发送</p>
-<h3 id="播放声音">播放声音</h3>
-<p><img src="https://s2.loli.net/2022/10/25/oOZvUDuekJNcsRr.png" srcset="/img/loading.gif" lazyload alt="25.png"></p>
-<h3 id="改变桌面">改变桌面</h3>
-<p><img src="https://s2.loli.net/2022/10/25/6cheOMISTKHzYrm.png" srcset="/img/loading.gif" lazyload alt="26.png"></p>
-<h3 id="随机位置弹提示框">随机位置弹提示框</h3>
-<p><img src="https://s2.loli.net/2022/10/25/9t4XLg8V3JES2Br.png" srcset="/img/loading.gif" lazyload alt="27.png"></p>
-<p><img src="https://s2.loli.net/2022/10/25/Jy1FfHpQjBGD5d3.png" srcset="/img/loading.gif" lazyload alt="28.png"></p>
-<p><img src="https://s2.loli.net/2022/10/25/eKdySQqR18p52jX.png" srcset="/img/loading.gif" lazyload alt="29.png"></p>
-<h3 id="文字反转">文字反转</h3>
-<p><img src="https://s2.loli.net/2022/10/25/eRndMcOkhiDL8QE.png" srcset="/img/loading.gif" lazyload alt="30.png"></p>
-<h3 id="小总结">小总结</h3>
-<p>双击打开病毒文件时，首先弹出警告框，点取消直接退出，点确定则创建五个参数<code>/watchdog</code>和一个参数<code>/main</code>的进程。</p>
-<p><code>/watchdog</code>进程检测是否有病毒进程被关闭或者将要关机，有的话弹出20个提示框，然后蓝屏/关机。</p>
-<p><code>/main</code>进程首先修改磁盘<code>MBR</code>，然后用记事本弹出信息，最后循环执行打开程序/播放声音/反色屏幕/放图片/不断缩放屏幕/随意复制屏幕内容等操作并堵塞。</p>
-<h2 id="MBR修改内容提取">MBR修改内容提取</h2>
-<p>我们前面提到了<code>MEMZ</code>会修改<code>MBR</code>内容，那么修改了什么呢？我们尝试提取一下。</p>
-<p>我们可以通过<code>IDA</code>调试拿到数据，我们前文所分析过了，<code>MEMZ</code>会创建带参数的启动，其中带<code>/main</code>参数的可以修改<code>MBR</code>，因此我们在对应位置上打上一个断点，提取就是了</p>
-<blockquote>
-<p>注意此处调试需要带参数</p>
-</blockquote>
-<p>那么问题来了，我们提取到后该怎么分析呢？</p>
-<p>我们可以使用虚拟机<code>Bochs</code>来进行调试</p>
-<blockquote>
-<p><code>Bochs</code>是一个开源的虚拟机，同时<code>Bochs</code>完全是靠软件来模拟整个<code>PC</code>环境，因此它非常的适合开发操作系统</p>
-</blockquote>
-<p>我们提取到了对应的<code>MBR</code>，我们利用<code>Bochs</code>中的创建磁盘可以新建一个启动硬盘</p>
-<p><img src="https://s2.loli.net/2022/10/26/sc3Vu1lDGJHaWRQ.png" srcset="/img/loading.gif" lazyload alt="31.png"></p>
-<p>我们找到<code>Bochs</code>的安装文件夹，以管理员权限进行打开<code>bximage</code></p>
-<p><img src="https://s2.loli.net/2022/10/26/Hw2QR3koIvqYjBy.png" srcset="/img/loading.gif" lazyload alt="32.png"></p>
-<p>按照上图进行设置，磁盘大小以及名字可以自己定义，需要注意的是不要带有任何的中文</p>
-<p><img src="https://s2.loli.net/2022/10/26/YnJPHqBeSgduR48.png" srcset="/img/loading.gif" lazyload alt="33.png"></p>
-<p>之后找到<code>bochsrc-sample</code>进行修改</p>
-<p><img src="https://s2.loli.net/2022/10/26/bkJ1ip67lsdZwrP.png" srcset="/img/loading.gif" lazyload alt="34.png"></p>
-<p><img src="https://s2.loli.net/2022/10/26/E5qabn6rDGN3h1S.png" srcset="/img/loading.gif" lazyload alt="35.png"></p>
-<blockquote>
-<p>此处的<code>abc</code>为一个文件夹，文件夹不要带任何的中文！！！</p>
-</blockquote>
-<p>按照上述过程设置完毕后，将<code>txt</code>文件后缀改为<code>bxrc</code>，之后启动，然后选择<code>continue</code>，加载一次镜像成功后便可以将<code>bxrc</code>文件直接拖入<code>IDA</code>进行调试分析</p>
-<p><img src="https://s2.loli.net/2022/10/26/eA3KnZsGJpVRDrj.png" srcset="/img/loading.gif" lazyload alt="36.png"></p>
-<p>我们反汇编后可以看到其主要是 16 位的汇编和底层机器进行打交道，我们比较难以观察，于是采用动调观察修改后的启动过程</p>
-<p><img src="https://s2.loli.net/2022/10/26/ipIDUxQG5eLT2BA.png" srcset="/img/loading.gif" lazyload alt="37.png"></p>
-<p>我们大致可以得到如下过程图：</p>
-<p><img src="https://s2.loli.net/2022/10/26/gIwNAeoscy6u7Hn.png" srcset="/img/loading.gif" lazyload alt="38.png"></p>
-<p>至此样本分析大致就结束了</p>
-<blockquote>
-<p>不知道为什么在<code>bochs</code>上跑出来的彩虹猫音乐变成了全损😥</p>
-</blockquote>
-<h2 id="总结">总结</h2>
-<p><code>MEMZ</code>的感染特征比较的明显，可以对比<code>MBR</code>数据是否为其修改过后的数据，来判断是否中毒</p>
-<p>同时<code>MEMZ</code>仅存在<code>MBR</code>部分为恶意部分，其他小玩意均为无害，可以拿来图一乐，以及感叹作者能利用 16 位汇编展现动画</p>
-<p>有时间的话想自己写一个相似的小玩意，但苦于学业压力，天天被迫赶作业🙄🙄</p>
+                <h1>Windows内核实验 ——— Inline Hook</h1>
+<h2 id="前言">前言</h2>
 
                 
               </div>
@@ -451,27 +287,6 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
   
   
 </div>
@@ -482,8 +297,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>MEMZ 样本分析</div>
-      <div>https://equinox-shame.github.io/2022/10/26/MEMZ 样本分析/</div>
+      <div></div>
+      <div>https://equinox-shame.github.io/2023/04/19/Windows内核实验 — Inline Hook/</div>
     </div>
     <div class="license-meta">
       
@@ -495,7 +310,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月26日</div>
+          <div>2023年4月19日</div>
         </div>
       
       
@@ -527,18 +342,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/14/GitLab%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0(CVE-2021-22205)/" title="GitLab 远程命令执行漏洞复现(CVE-2021-22205)">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">GitLab 远程命令执行漏洞复现(CVE-2021-22205)</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/04/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%20%E2%80%94%20%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98%20Lab%203-1/" title="第一次恶意代码分析 —— 恶意代码分析实战 Lab 3-1">
-                        <span class="hidden-mobile">第一次恶意代码分析 —— 恶意代码分析实战 Lab 3-1</span>
+                      <a href="/2023/04/07/WannaCry%20%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" title="WannaCry 样本分析">
+                        <span class="hidden-mobile">WannaCry 样本分析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
