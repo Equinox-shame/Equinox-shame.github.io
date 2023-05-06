@@ -16,23 +16,26 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="指针操作数组的一些说明： 1.*(p--)相当于a[i--],先对p进行*运算，再使p自减。 2.*(++p)相当于a[++i],先使p自加，再做*运算。 3.*(--p)相当于a[--i]，先使p自减，再做*运算。  在二维数组中，以a[i]为例，a[i]相当于二维数组第一个元素的地址，可以直接将地址值直接赋给指针变量。 p&#x3D;a[i]此时指针p就可以引用二维数组中的元素了。  二维数组的部分操作">
+    <meta name="description" content="d3Recover 复现 前言 属于是赛后看WP才发现自己忘记将数据恢复在ASCII范围内，导致一直出来的都是奇怪东西…  呜呜，送上门的分都没拿到  解题过程 题目给了两个程序，都是Python打包后的，其中V2版本没有去除掉符号表，V1去除掉了，通过观察V2相关东西，同样的可以找到一个Base64后的字符串，并可以直接进行解密  解密可以拿到But maybe I can help you r">
 <meta property="og:type" content="article">
-<meta property="og:title" content="指针与数组">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:title" content="Autumnal">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="指针操作数组的一些说明： 1.*(p--)相当于a[i--],先对p进行*运算，再使p自减。 2.*(++p)相当于a[++i],先使p自加，再做*运算。 3.*(--p)相当于a[--i]，先使p自减，再做*运算。  在二维数组中，以a[i]为例，a[i]相当于二维数组第一个元素的地址，可以直接将地址值直接赋给指针变量。 p&#x3D;a[i]此时指针p就可以引用二维数组中的元素了。  二维数组的部分操作">
+<meta property="og:description" content="d3Recover 复现 前言 属于是赛后看WP才发现自己忘记将数据恢复在ASCII范围内，导致一直出来的都是奇怪东西…  呜呜，送上门的分都没拿到  解题过程 题目给了两个程序，都是Python打包后的，其中V2版本没有去除掉符号表，V1去除掉了，通过观察V2相关东西，同样的可以找到一个Base64后的字符串，并可以直接进行解密  解密可以拿到But maybe I can help you r">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-14T05:16:18.703Z">
-<meta property="article:modified_time" content="2022-02-28T14:37:18.901Z">
+<meta property="og:image" content="https://s2.loli.net/2023/05/03/6gTiZk91FWcCXRs.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/03/ILAG2xNVP78HDEo.png">
+<meta property="article:published_time" content="2023-05-06T14:56:45.542Z">
+<meta property="article:modified_time" content="2023-05-03T08:29:08.749Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/05/03/6gTiZk91FWcCXRs.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>指针与数组 - Autumnal</title>
+  <title>Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="指针与数组"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -213,8 +216,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          2022年3月14日 下午
+        <time datetime="2023-05-06 22:56" pubdate>
+          2023年5月6日 晚上
         </time>
       </span>
     
@@ -225,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          390 字
+          1.4k 字
         
       </span>
     
@@ -273,26 +276,32 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">指针与数组</h1>
+            <h1 style="display: none"></h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="指针操作数组的一些说明：">指针操作数组的一些说明：</h2>
-<p>1.<code>*(p--)</code>相当于<code>a[i--]</code>,先对p进行*运算，再使p自减。</p>
-<p>2.<code>*(++p)</code>相当于a[++i],先使p自加，再做*运算。</p>
-<p>3.<code>*(--p)</code>相当于<code>a[--i]</code>，先使p自减，再做*运算。</p>
-<hr>
-<p>在二维数组中，以a[i]为例，a[i]相当于二维数组第一个元素的地址，可以直接将地址值直接赋给指针变量。</p>
-<p><code>p=a[i]</code>此时指针p就可以引用二维数组中的元素了。</p>
-<hr>
-<h2 id="二维数组的部分操作：">二维数组的部分操作：</h2>
-<p>1.<code> a+n</code>表示第n行的首地址。</p>
-<p>2.<code>&amp;a[0][0]</code>既可以看做数组<code>0</code>行<code>0</code>列的首地址，同样可以看作是二维数组的首地址，<code>&amp;a[m][n]</code>就是第<code>m</code>行第<code>n</code>列元素的地址。</p>
-<p>3.<code>&amp;a[0]</code>是第<code>0</code>行的首地址，<code>&amp;a[n]</code>就是第<code>n</code>行的首地址。</p>
-<p>4.<code>a[0]+n</code>表示第<code>0</code>行的第<code>n</code>个元素的地址。</p>
-<p>5.<code>*(*(a+n)+m)</code>表示第<code>n</code>行第<code>m</code>列的元素。</p>
-<p>6.<code>*(a[n]+m)</code>表示第<code>n</code>行第<code>m</code>列的元素。</p>
+                <h1>d3Recover 复现</h1>
+<h2 id="前言">前言</h2>
+<p>属于是赛后看WP才发现自己忘记将数据恢复在ASCII范围内，导致一直出来的都是奇怪东西…</p>
+<blockquote>
+<p>呜呜，送上门的分都没拿到</p>
+</blockquote>
+<h2 id="解题过程">解题过程</h2>
+<p>题目给了两个程序，都是Python打包后的，其中V2版本没有去除掉符号表，V1去除掉了，通过观察V2相关东西，同样的可以找到一个Base64后的字符串，并可以直接进行解密</p>
+<p><img src="https://s2.loli.net/2023/05/03/6gTiZk91FWcCXRs.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>解密可以拿到<code>But maybe I can help you recover the source code of d3recover_ver1.0.·</code>，相当于提示我们可以使用<code>BinDiff</code>来恢复符号，我们将V2载入到V1，尝试恢复，可以大致拿到V1的符号表</p>
+<p>随后我们寻找加密函数，我们可以观察到：</p>
+<p><img src="https://s2.loli.net/2023/05/03/ILAG2xNVP78HDEo.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其置信度与V2版本较低，怀疑动了手脚，我们跟进去，进行分析，可以得到以下主要逻辑</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0LL</span>; i &lt;= <span class="hljs-number">31</span>; ++i )&#123;<br>    Item = (_QWORD *)_Pyx_PyInt_From_long(i);<br>    Item = (_QWORD *)_Pyx_PyObject_GetItem(a2, Item);<br>    _Pyx_PyByteArray_Append(v9, v24 ^ <span class="hljs-number">0x23</span>u);<br>&#125;<br><span class="hljs-keyword">for</span> ( j = <span class="hljs-number">0LL</span>; j &lt;= <span class="hljs-number">29</span>; ++j )&#123;<br> 	   Item = (_QWORD *)_Pyx_PyInt_From_long(j);<br>     v16 = (_QWORD *)_Pyx_PyInt_AddObjC(v10, qword_ABC1E8, <span class="hljs-number">2LL</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">0LL</span>);<br>     v17 = (_QWORD *)_Pyx_PyObject_GetItem(v9, v16);<br>     v16 = (_QWORD *)<span class="hljs-built_in">PyNumber_Add</span>(Item, v17);<br>     v17 = (_QWORD *)_Pyx_PyInt_AndObjC(v16, qword_ABC220, <span class="hljs-number">255LL</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">0LL</span>);<br>     v16 = (_QWORD *)_Pyx_PyInt_XorObjC((__int64)v17, qword_ABC218, <span class="hljs-number">0x54</span>LL, <span class="hljs-number">0</span>);<br>     <span class="hljs-built_in">PyObject_SetItem</span>(v9, v10, v16) <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们可以拿到以上的内容，对其进行简单分析可以知道，其进行了以下运算</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">flag = <span class="hljs-string">&quot;XXX&quot;</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>	flag[i] ^= <span class="hljs-number">0x23</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">30</span>):<br>    flag[i] += flag[i+<span class="hljs-number">2</span>]<br>    flag[i] ^= <span class="hljs-number">0x54</span><br>    <br>Base64(flag)<br></code></pre></td></tr></table></figure>
+<p>我们直接拿到字符串中的Base64值：<code>08fOyj+E27O2uYDq0M1y/Ngwldvi2JIIwcbF9AfsAl4=</code></p>
+<p>将其解密后转换为数组进行解密即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> base64<br>s=<span class="hljs-string">&#x27;08fOyj+E27O2uYDq0M1y/Ngwldvi2JIIwcbF9AfsAl4=&#x27;</span><br>s=base64.b64decode(s)<br><br>s=<span class="hljs-built_in">list</span>(s)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">29</span>,-<span class="hljs-number">1</span>,-<span class="hljs-number">1</span>):<br>    s[i]^=<span class="hljs-number">0x54</span><br>    s[i]=(s[i]-s[i+<span class="hljs-number">2</span>])&amp;<span class="hljs-number">0xff</span><br>    <br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>    s[i]^=<span class="hljs-number">0x23</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">bytes</span>(s))<br></code></pre></td></tr></table></figure>
+<p>于是我们可以得到</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">b</span>&#x27;flag&#123;y<span class="hljs-number">0</span>U_RE_Ma<span class="hljs-number">5</span>t<span class="hljs-number">3</span>r_<span class="hljs-number">0</span>f_R<span class="hljs-number">3</span>vocery!&#125;&#x27;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -300,27 +309,6 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/School-Learning/" class="category-chain-item">School Learning</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
   
   
 </div>
@@ -331,8 +319,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>指针与数组</div>
-      <div>https://equinox-shame.github.io/2022/03/14/指针与数组/</div>
+      <div></div>
+      <div>https://equinox-shame.github.io/2023/05/06/d3Recover 复现/</div>
     </div>
     <div class="license-meta">
       
@@ -344,7 +332,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月14日</div>
+          <div>2023年5月6日</div>
         </div>
       
       
@@ -376,9 +364,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/" title="机器数">
+                      <a href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" title="d3sky 复现">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">机器数</span>
+                        <span class="hidden-mobile">d3sky 复现</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -386,8 +374,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">
-                        <span class="hidden-mobile">正则表达式</span>
+                      <a href="/2023/04/25/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20Inline%20Hook/" title="Widnows内核实验 ——— Inline Hook">
+                        <span class="hidden-mobile">Widnows内核实验 ——— Inline Hook</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
