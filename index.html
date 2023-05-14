@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/05/14/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" target="_self">
+          Widnows内核实验 ——— 系统调用
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/14/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" target="_self">
+        <div>
+          前言 在之前的实验过程中都需要我们使用WinDBG来中断内核，在系统中断表中添加int 20，将我们自己构造的内核代码进行运行，而在此处实验中我们将构建一个处于三环的程序，通过系统调用来完成对应的功能。 实验过程 因为在程序中ntdll都会被程序所调用对此我们哦那个给模拟该方式来实现从三环到零环的权限。 我们此处尝试实现两个函数ReadMem、AllocMem。我们同样需要两个程序来构建，第一个用
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-05-14 17:52" pubdate>
+              2023-05-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
           d3sky 复现
         </a>
@@ -680,60 +734,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2023-03-08 23:50" pubdate>
               2023-03-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/03/01/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20BabyRe%20%E5%A4%8D%E7%8E%B0/" target="_self">
-          西湖论剑 BabyRe 复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20BabyRe%20%E5%A4%8D%E7%8E%B0/" target="_self">
-        <div>
-          逆向分析 我们拖入IDA加载后可以很明显的观察到对应的 Main 函数空空如也 对于这种情况我们运行程序可以发现其有一个明显的字符串 Input:，我们通过这个字符串可以定位到相关的代码处，一番查找后我们可以发现有三处加密 通过 initterm 来初始化加密的全局函数  其中调用了一个RC4加密  一个魔改sha1加密  一个Base 8加密 从密文的16位开始比较  通过分析可以发现调用过程为
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-03-01 21:54" pubdate>
-              2023-03-01
             </time>
           </div>
         
