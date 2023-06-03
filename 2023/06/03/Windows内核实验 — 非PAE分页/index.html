@@ -18,7 +18,7 @@
   
     <meta name="description" content="前言 之前我们所进行的都是关于段的，我们通过修改fs段来进行提权，再此之后我们将讨论一下关于Windows的页保护 实验内容 在开始之前我们需要将虚拟机设置为PAE模式  PAE：物理地址扩展  我们原来的启动配置文件boot.ini中将noexecute进行修改为execute  我们进行上述设置后相当于我们将页属性从不可执行设置为了可执行，数据保护是在段上完成，而页不对其进行操作  本次实验虚">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows内核实验 — 非PAE分页">
+<meta property="og:title" content="Windows内核实验 ——— 非PAE分页">
 <meta property="og:url" content="https://equinox-shame.github.io/2023/06/03/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%9D%9EPAE%E5%88%86%E9%A1%B5/index.html">
 <meta property="og:site_name" content="Autumnal">
 <meta property="og:description" content="前言 之前我们所进行的都是关于段的，我们通过修改fs段来进行提权，再此之后我们将讨论一下关于Windows的页保护 实验内容 在开始之前我们需要将虚拟机设置为PAE模式  PAE：物理地址扩展  我们原来的启动配置文件boot.ini中将noexecute进行修改为execute  我们进行上述设置后相当于我们将页属性从不可执行设置为了可执行，数据保护是在段上完成，而页不对其进行操作  本次实验虚">
@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/06/01/PM6zL8IcO1Q4xah.png">
 <meta property="og:image" content="https://s2.loli.net/2023/06/02/nGUpxPLTsSgv9EH.png">
 <meta property="article:published_time" content="2023-06-03T05:51:31.580Z">
-<meta property="article:modified_time" content="2023-06-03T05:50:57.227Z">
+<meta property="article:modified_time" content="2023-06-03T06:11:32.214Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2023/06/01/obS3B5uEL46OKVF.png">
@@ -46,7 +46,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Windows内核实验 — 非PAE分页 - Autumnal</title>
+  <title>Windows内核实验 ——— 非PAE分页 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -216,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Windows内核实验 — 非PAE分页"></span>
+            <span id="subtitle" data-typed-text="Windows内核实验 ——— 非PAE分页"></span>
           
         </div>
 
@@ -287,7 +287,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Windows内核实验 — 非PAE分页</h1>
+            <h1 style="display: none">Windows内核实验 ——— 非PAE分页</h1>
             
             
               <div class="markdown-body">
@@ -300,16 +300,16 @@
 <p>PAE：物理地址扩展</p>
 </blockquote>
 <p>我们原来的启动配置文件<code>boot.ini</code>中将<code>noexecute</code>进行修改为<code>execute</code></p>
-<p><img src="https://s2.loli.net/2023/06/01/obS3B5uEL46OKVF.png" srcset="/img/loading.gif" lazyload alt="image-20230601170105199"></p>
+<p><img src="https://s2.loli.net/2023/06/01/obS3B5uEL46OKVF.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们进行上述设置后相当于我们将页属性从不可执行设置为了可执行，数据保护是在段上完成，而页不对其进行操作</p>
 <blockquote>
 <p>本次实验虚拟机的内存设置已经设置为256MB，方便我们对数据的观察</p>
 </blockquote>
 <p>我们首先需要了解CPU如何获取物理地址，在Windows中会对每个进程开辟一个4G的虚拟内存空间，而CPU直接操作的是物理地址，那么我们如何通过这个虚拟地址来进行获取物理地址？在内核中存在有一个寄存器<code>cr3</code>，其是我们将虚拟地址转换为物理地址的关键</p>
 <p>我们先了解一下段管理与页管理，分页式用于从虚拟地址到物理地址转换的结构，其关系如下图：</p>
-<p><img src="https://s2.loli.net/2023/06/01/ZoWDCIfqOgbcaMB.png" srcset="/img/loading.gif" lazyload alt="image-20230601215308630"></p>
+<p><img src="https://s2.loli.net/2023/06/01/ZoWDCIfqOgbcaMB.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>而对于<code>cr3</code>寄存器其指向了一个页目录表(DPT)，每一个的页目录表又指向一个页表(PTT)，通过页表来映射到对应的物理内存上</p>
-<p><img src="https://s2.loli.net/2023/06/01/Rl1ZrfXCswkKvMq.png" srcset="/img/loading.gif" lazyload alt="image-20230601220638591"></p>
+<p><img src="https://s2.loli.net/2023/06/01/Rl1ZrfXCswkKvMq.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>下面介绍几个Windbg的指令：</p>
 <p><strong>查看物理地址</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">!dx<br></code></pre></td></tr></table></figure>
@@ -326,18 +326,18 @@
 <blockquote>
 <p>运行前别忘了在中断向量表里添加对 int 20h 的处理</p>
 </blockquote>
-<p><img src="https://s2.loli.net/2023/06/01/ByFGvHShwtY3Ii6.png" srcset="/img/loading.gif" lazyload alt="image-20230601230546985"></p>
+<p><img src="https://s2.loli.net/2023/06/01/ByFGvHShwtY3Ii6.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们可以获取到相应的地址信息，接下来我们结合上面所提到的Windbg的相关指令来进行转换我们从cr3获取到singFlag的值位置</p>
 <blockquote>
 <p>cr3 保存着进程的页目录表基址，切换进程cr3会改变</p>
 </blockquote>
 <p>我们先获取一下系统活跃进程的信息：</p>
-<p><img src="https://s2.loli.net/2023/06/01/3tKkFzRvqpbBXns.png" srcset="/img/loading.gif" lazyload alt="image-20230601213355527"></p>
+<p><img src="https://s2.loli.net/2023/06/01/3tKkFzRvqpbBXns.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>因为上述中断提权的程序最后是执行了<code>pause</code>，意味着我们的<code>signFlag</code>仍然驻留在内存中，我们找到我们编写的程序：</p>
-<p><img src="https://s2.loli.net/2023/06/01/BFL5tCgaGiEWnoT.png" srcset="/img/loading.gif" lazyload alt="image-20230601230619836"></p>
+<p><img src="https://s2.loli.net/2023/06/01/BFL5tCgaGiEWnoT.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们可以看到下面有一个<code>DirBase</code>和我们上面的Cr3的值一样</p>
 <p>对于上述的<code>DirBase</code>，其地址的最后12位(二进制下)为其属性值用来标识可读可写等，上图中则为<code>0x3e0</code>，前面的20位为其<code>PDT</code>表地址项，上图中为<code>0x09cd8000</code>，其指向的地址为页目录表的第一个单元：</p>
-<p><img src="https://s2.loli.net/2023/06/01/O1tHLFT3oZDhKYg.png" srcset="/img/loading.gif" lazyload alt="image-20230601230720569"></p>
+<p><img src="https://s2.loli.net/2023/06/01/O1tHLFT3oZDhKYg.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <blockquote>
 <p>需要注意我们后续找地址时需要去除后三位(16进制下)，同时需要在后面添加 0 使其满足32位地址</p>
 </blockquote>
@@ -345,27 +345,27 @@
 <p>以上面<code>0x004197B0</code>为例，我们将其转换为二进制，我们可以利用windbg已有的功能完成</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-title">.formats xxx</span><br></code></pre></td></tr></table></figure>
 <p>xxx为需要转换的数，windbg会为我们转换为各种进制</p>
-<p><img src="https://s2.loli.net/2023/06/01/fxQ49VMqH3WX5uk.png" srcset="/img/loading.gif" lazyload alt="image-20230601221828080"></p>
+<p><img src="https://s2.loli.net/2023/06/01/fxQ49VMqH3WX5uk.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>获取到二进制后我们对其进行按照上述规则分割</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 00000000 01000001 10010111 10110000</span><br>00000000 01   <span class="hljs-comment"># 0x1 PDE 表偏移  -- pdi</span><br>000001 1001   <span class="hljs-comment"># 0x19 PTE 表的偏移 (每个表项占用4字节)  -- pti</span><br>0111 10110000 <span class="hljs-comment"># 0x7b0 页内偏移</span><br></code></pre></td></tr></table></figure>
 <p>我们已经拿到PDE表的第一项地址<code>02fd4867</code>，我们找到对应的PTE表项，计算公式为：<code>Base + offset * 4</code>，在此过程中则为<code>0x02fd4867 + 0x19 * 4</code></p>
 <p>我们查看该地址可以看到其指向的页表PTE位置</p>
-<p><img src="https://s2.loli.net/2023/06/01/SuGqwMHaAtOskCI.png" srcset="/img/loading.gif" lazyload alt="image-20230601232118719"></p>
+<p><img src="https://s2.loli.net/2023/06/01/SuGqwMHaAtOskCI.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>之后我们将其加上对应物理地址的偏移可以得到：<code>0x99aa000 + 0x7b0</code></p>
-<p><img src="https://s2.loli.net/2023/06/01/yshc4FAwoQVLRS7.png" srcset="/img/loading.gif" lazyload alt="image-20230601232220629"></p>
+<p><img src="https://s2.loli.net/2023/06/01/yshc4FAwoQVLRS7.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>可以看到我们成功的找到了内存中我们的<code>signFlag</code>的物理地址</p>
 <p>对于上述我们完成的过程Windbg中其实有一个指令可以帮我们进行转换</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">!vtop PFNOfPDE VA<br></code></pre></td></tr></table></figure>
 <p><code>PFNOfPDE</code>为我们之前的cr3寄存器值也就是<code>DirBase</code>，我们填入该参数时注意要去掉最后三位(16进制下)，<code>VA</code>则为我们之前需要求的<code>signFlag</code>的虚拟地址</p>
-<p><img src="https://s2.loli.net/2023/06/01/5JXczMK7TOwCtRE.png" srcset="/img/loading.gif" lazyload alt="image-20230601233225060"></p>
+<p><img src="https://s2.loli.net/2023/06/01/5JXczMK7TOwCtRE.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>可以看到其每一步的转换过程以及最后得到的物理地址和我们手动求解的地址一样</p>
 <p>了解完上述内容后，我们回到之前提到的<code>!pte</code>指令，其功能为展示对应页表的属性，我们将我们的程序对应的页属性进行展示，如下图：</p>
-<p><img src="https://s2.loli.net/2023/06/01/PM6zL8IcO1Q4xah.png" srcset="/img/loading.gif" lazyload alt="image-20230601235630912"></p>
+<p><img src="https://s2.loli.net/2023/06/01/PM6zL8IcO1Q4xah.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们可以看到下面的其PDE表(页目录表)位置以及PTE表(页表)位置，其是如何计算的？</p>
 <p>在内存中页表的基址为<code>0xC0000000</code>，当我们获取到一个页地址时，我们将其右移12位可以拿到<code>pdi</code>值，我们再左移2位则可以获取到<code>pti</code>值，获取到对应的值后我们加上基质可以得到对应的<code>PTE</code>的地址</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">addr</span> of PTE = ((addr &gt;&gt; <span class="hljs-number">12</span>) &lt;&lt; <span class="hljs-number">2</span>) + <span class="hljs-number">0</span>xC<span class="hljs-number">0000000</span><br></code></pre></td></tr></table></figure>
 <p>addr 为我们页的地址，我们也可以直接使用 Windbg 带的计算功能进行计算</p>
-<p><img src="https://s2.loli.net/2023/06/02/nGUpxPLTsSgv9EH.png" srcset="/img/loading.gif" lazyload alt="image-20230602000322763"></p>
+<p><img src="https://s2.loli.net/2023/06/02/nGUpxPLTsSgv9EH.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>可以看到计算的结果和上面<code>!pte</code>计算出的<code>PTE</code>地址一样</p>
 <h2 id="总结">总结</h2>
 <p>操控一个进程的内存，我们首先需要访问其 cr3，切换到其虚拟内存中去找到我们需要操作的PTE位置，我们修改其低12位即可</p>
@@ -407,7 +407,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Windows内核实验 — 非PAE分页</div>
+      <div>Windows内核实验 ——— 非PAE分页</div>
       <div>https://equinox-shame.github.io/2023/06/03/Windows内核实验 — 非PAE分页/</div>
     </div>
     <div class="license-meta">
