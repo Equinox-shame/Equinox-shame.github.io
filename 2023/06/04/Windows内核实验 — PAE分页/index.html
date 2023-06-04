@@ -16,25 +16,34 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="定义 连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值 原码 定义 一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为-127 ~ 127，即最大数是01111111，最小数为11111111   其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数  原码表示（举例） C语言中可以理">
+    <meta name="description" content="前言 上个实验中我们通过将PAE进行关闭之后学习通过CR3来找到真实物理地址的方式，而在此次实验中将恢复为原来的noexecute，来再次完成原先我们的操作  实验过程 与上次实验一样，我们先执行我们之前运行的一个获取cr3以及signFlag地址的程序  此处不再贴代码了，找代码可以往回翻一下非PAE分页处的代码 同样需要注意修改 int 20H 的中断   运行成功后与之前类似，我们查找当前运">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器数">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/index.html">
+<meta property="og:title" content="Windows内核实验 ——— PAE分页">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/06/04/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20PAE%E5%88%86%E9%A1%B5/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="定义 连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值 原码 定义 一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为-127 ~ 127，即最大数是01111111，最小数为11111111   其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数  原码表示（举例） C语言中可以理">
+<meta property="og:description" content="前言 上个实验中我们通过将PAE进行关闭之后学习通过CR3来找到真实物理地址的方式，而在此次实验中将恢复为原来的noexecute，来再次完成原先我们的操作  实验过程 与上次实验一样，我们先执行我们之前运行的一个获取cr3以及signFlag地址的程序  此处不再贴代码了，找代码可以往回翻一下非PAE分页处的代码 同样需要注意修改 int 20H 的中断   运行成功后与之前类似，我们查找当前运">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.703Z">
-<meta property="article:modified_time" content="2022-02-28T14:36:12.365Z">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/gTM9vs5BqcH13e6.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/yMVdKn3mBaHqU1Y.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/lRdeH8XyD7LiVJ6.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/YTim9OLVEtzdrX1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/ToiUFuKB57pQb94.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/8FrJh2jgbVv3wBy.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/NetWrswlP3qXKpn.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/FwxRzoD3lMSTVa1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/RfB7qDjzI2nJMw6.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/ifxXrWD8U61uBAo.png">
+<meta property="article:published_time" content="2023-06-04T13:26:55.914Z">
+<meta property="article:modified_time" content="2023-06-04T13:26:22.164Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/04/gTM9vs5BqcH13e6.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>机器数 - Autumnal</title>
+  <title>Windows内核实验 ——— PAE分页 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="机器数"></span>
+            <span id="subtitle" data-typed-text="Windows内核实验 ——— PAE分页"></span>
           
         </div>
 
@@ -215,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          2022年3月14日 下午
+        <time datetime="2023-06-04 21:26" pubdate>
+          2023年6月4日 晚上
         </time>
       </span>
     
@@ -227,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          611 字
+          1.1k 字
         
       </span>
     
@@ -275,44 +284,53 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">机器数</h1>
+            <h1 style="display: none">Windows内核实验 ——— PAE分页</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="定义">定义</h2>
-<p>连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值</p>
-<h2 id="原码">原码</h2>
-<h3 id="定义-2">定义</h3>
-<p>一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为<code>-127 ~ 127</code>，即最大数是<code>01111111</code>，最小数为<code>11111111</code></p>
-<p><img src="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+                <h2 id="前言">前言</h2>
+<p>上个实验中我们通过将PAE进行关闭之后学习通过CR3来找到真实物理地址的方式，而在此次实验中将恢复为原来的<code>noexecute</code>，来再次完成原先我们的操作</p>
+<p><img src="https://s2.loli.net/2023/06/04/gTM9vs5BqcH13e6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="实验过程">实验过程</h2>
+<p>与上次实验一样，我们先执行我们之前运行的一个获取<code>cr3</code>以及<code>signFlag</code>地址的程序</p>
 <blockquote>
-<p>其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数</p>
+<p>此处不再贴代码了，找代码可以往回翻一下非PAE分页处的代码</p>
+<p>同样需要注意修改 int 20H 的中断</p>
 </blockquote>
-<h3 id="原码表示（举例）">原码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">11001110</span><br></code></pre></td></tr></table></figure>
-<h2 id="反码">反码</h2>
-<h3 id="定义-3">定义</h3>
-<p>正数的反码与原码相同，负数从第二位开始按位取反（二进制下）</p>
-<h3 id="特殊">特殊</h3>
-<p>同时任意一个数的反码的反码即是原码本身</p>
-<p>零的反码表示有两种：</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">11111111</span><br></code></pre></td></tr></table></figure>
-<h3 id="反码表示（举例）">反码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>）</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110001</span><br></code></pre></td></tr></table></figure>
-<h2 id="补码">补码</h2>
-<h3 id="定义-4">定义</h3>
-<p>正数补码与原码相同，负数补码是对该数除符号位以外的各位取反，最末位加一。</p>
-<h3 id="特殊-2">特殊</h3>
-<p>任意数的补码的补码即原码本身，所以已知一个数的补码，求原码的操作其实就是对该补码再求补码。</p>
-<p>零的补码唯一</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">00000000</span><br></code></pre></td></tr></table></figure>
-<h3 id="补码表示（举例）">补码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>），同时对其第八位二进制数加一，第八位二进制数如果为 1 则进位处理</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110010</span><br></code></pre></td></tr></table></figure>
-<h2 id=""></h2>
+<p><img src="https://s2.loli.net/2023/06/04/yMVdKn3mBaHqU1Y.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>运行成功后与之前类似，我们查找当前运行的程序的信息</p>
+<p><img src="https://s2.loli.net/2023/06/04/lRdeH8XyD7LiVJ6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>将<code>signFlag</code>拆分为二进制，与之前不同的是我们此处分割需要采用2+9+9+12</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 0x004197B0</span><br><span class="hljs-comment"># 00000000 01000001 10010111 101100000</span><br>00          	<span class="hljs-comment"># 0x00		pdpti</span><br>000000 010		<span class="hljs-comment"># 0x02  	pdi</span><br>00001 1001		<span class="hljs-comment"># 0x19		pti</span><br>0111 10110000	<span class="hljs-comment"># 0x7B0 	offset</span><br></code></pre></td></tr></table></figure>
+<p>采用上述分割方式是因为在PAE模式下引入了一个PDPT的模块，其被称为页目录指针表，在这个表中，每个表项被称为PDPTE，也就是页目录指针表项，保存页目录的基址</p>
+<p><img src="https://s2.loli.net/2023/06/04/YTim9OLVEtzdrX1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>而在非PAE模式下采用的是三段式分页，三段式分页中的<code>PDE</code>以及<code>PTE</code>都是<code>4 字节</code>，无论是PDT还是PTT都有着1024个表项</p>
+<p>但在非PAE分页中，引入了PDPT表，其只有四个表项，PDT以及PTT有 512 个表项。PDPTE、PDE、PTE的大小是<code>8 字节</code>，PDPT表一共占用 32 字节，PDT、PTT表仍占用 4KB 的物理页</p>
+<p>接下来我们继续以相似的方式来获取<code>signFlag</code>的真实物理地址</p>
+<p><strong>查找cr3指向的PDPT表项</strong></p>
+<p><img src="https://s2.loli.net/2023/06/04/ToiUFuKB57pQb94.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>查找指向的PDT表项</strong></p>
+<p><img src="https://s2.loli.net/2023/06/04/8FrJh2jgbVv3wBy.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>查找指向的PTT表项</strong></p>
+<p><img src="https://s2.loli.net/2023/06/04/NetWrswlP3qXKpn.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>查找指向的物理内存</strong></p>
+<p><img src="https://s2.loli.net/2023/06/04/FwxRzoD3lMSTVa1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到我们同样的成功找到了<code>signFlag</code>对应的物理地址</p>
+<p>同时我们观察其指向的PTT表项的最高位出现了一个 8 (二进制下最高位置一)，其代表着关闭了栈执行的权限，即开启了数据执行保护</p>
+<p>和之前一样我们同样可以使用<code>!vtop</code>指令来获取对应物理地址</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">!vtop 2140300 4197b0<br></code></pre></td></tr></table></figure>
+<p>PAE模式下在虚拟内存中PTE映射的位置在<code>0xC0000000</code>，PDE在虚拟内存中映射在<code>0xC0300000</code></p>
+<p><img src="https://s2.loli.net/2023/06/04/RfB7qDjzI2nJMw6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>而在非PAE模式中PTE映射的位置在<code>0xC0000000</code>，PDE在虚拟内存中映射在<code>0xC0600000</code></p>
+<p><img src="https://s2.loli.net/2023/06/04/ifxXrWD8U61uBAo.png" srcset="/img/loading.gif" lazyload alt="image-20230604211029686"></p>
+<p>因为其在PAE模式下PTE以及PDE由原来的4字节扩展到了8字节，进而对齐的内存相当于大了一倍</p>
+<p>那么我们原来的PTE的计算公式可以更新为：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0xC0000000</span> + ((addr &gt;&gt; <span class="hljs-number">12</span>) &lt;&lt; <span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+<p>PDE的计算公式：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0xC0600000</span> + ((addr &gt;&gt; <span class="hljs-number">21</span>) &lt;&lt; <span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>我们在两种模式下找到了PTE的位置，以及PDE的位置，为我们了解并操控页提供了相应的帮助</p>
 
                 
               </div>
@@ -331,7 +349,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/School-Learning/" class="category-chain-item">School Learning</a>
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
   
   
 
@@ -351,8 +369,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>机器数</div>
-      <div>https://equinox-shame.github.io/2022/03/14/机器数/</div>
+      <div>Windows内核实验 ——— PAE分页</div>
+      <div>https://equinox-shame.github.io/2023/06/04/Windows内核实验 — PAE分页/</div>
     </div>
     <div class="license-meta">
       
@@ -364,7 +382,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月14日</div>
+          <div>2023年6月4日</div>
         </div>
       
       
@@ -396,18 +414,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" title="指针与数组">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">指针与数组</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%A0%88%E6%BA%A2%E5%87%BA/" title="栈溢出">
-                        <span class="hidden-mobile">栈溢出</span>
+                      <a href="/2023/06/03/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%9D%9EPAE%E5%88%86%E9%A1%B5/" title="Windows内核实验 ——— 非PAE分页">
+                        <span class="hidden-mobile">Windows内核实验 ——— 非PAE分页</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
