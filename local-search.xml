@@ -1163,25 +1163,6 @@
   
   
   <entry>
-    <title>机器数</title>
-    <link href="/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/"/>
-    <url>/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/</url>
-    
-    <content type="html"><![CDATA[<h2 id="定义">定义</h2><p>连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值</p><h2 id="原码">原码</h2><h3 id="定义-2">定义</h3><p>一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为<code>-127 ~ 127</code>，即最大数是<code>01111111</code>，最小数为<code>11111111</code></p><p><img src="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png" alt=""></p><blockquote><p>其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数</p></blockquote><h3 id="原码表示（举例）">原码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">11001110</span><br></code></pre></td></tr></table></figure><h2 id="反码">反码</h2><h3 id="定义-3">定义</h3><p>正数的反码与原码相同，负数从第二位开始按位取反（二进制下）</p><h3 id="特殊">特殊</h3><p>同时任意一个数的反码的反码即是原码本身</p><p>零的反码表示有两种：</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">11111111</span><br></code></pre></td></tr></table></figure><h3 id="反码表示（举例）">反码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>）</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110001</span><br></code></pre></td></tr></table></figure><h2 id="补码">补码</h2><h3 id="定义-4">定义</h3><p>正数补码与原码相同，负数补码是对该数除符号位以外的各位取反，最末位加一。</p><h3 id="特殊-2">特殊</h3><p>任意数的补码的补码即原码本身，所以已知一个数的补码，求原码的操作其实就是对该补码再求补码。</p><p>零的补码唯一</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">00000000</span><br></code></pre></td></tr></table></figure><h3 id="补码表示（举例）">补码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>），同时对其第八位二进制数加一，第八位二进制数如果为 1 则进位处理</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110010</span><br></code></pre></td></tr></table></figure><h2 id=""></h2>]]></content>
-    
-    
-    <categories>
-      
-      <category>School Learning</category>
-      
-    </categories>
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>栈溢出</title>
     <link href="/2022/03/14/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     <url>/2022/03/14/%E6%A0%88%E6%BA%A2%E5%87%BA/</url>
@@ -1192,6 +1173,25 @@
     <categories>
       
       <category>Pwn</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>机器数</title>
+    <link href="/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/"/>
+    <url>/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="定义">定义</h2><p>连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值</p><h2 id="原码">原码</h2><h3 id="定义-2">定义</h3><p>一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为<code>-127 ~ 127</code>，即最大数是<code>01111111</code>，最小数为<code>11111111</code></p><p><img src="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png" alt=""></p><blockquote><p>其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数</p></blockquote><h3 id="原码表示（举例）">原码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">11001110</span><br></code></pre></td></tr></table></figure><h2 id="反码">反码</h2><h3 id="定义-3">定义</h3><p>正数的反码与原码相同，负数从第二位开始按位取反（二进制下）</p><h3 id="特殊">特殊</h3><p>同时任意一个数的反码的反码即是原码本身</p><p>零的反码表示有两种：</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">11111111</span><br></code></pre></td></tr></table></figure><h3 id="反码表示（举例）">反码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>）</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110001</span><br></code></pre></td></tr></table></figure><h2 id="补码">补码</h2><h3 id="定义-4">定义</h3><p>正数补码与原码相同，负数补码是对该数除符号位以外的各位取反，最末位加一。</p><h3 id="特殊-2">特殊</h3><p>任意数的补码的补码即原码本身，所以已知一个数的补码，求原码的操作其实就是对该补码再求补码。</p><p>零的补码唯一</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">00000000</span><br></code></pre></td></tr></table></figure><h3 id="补码表示（举例）">补码表示（举例）</h3><p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>），同时对其第八位二进制数加一，第八位二进制数如果为 1 则进位处理</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110010</span><br></code></pre></td></tr></table></figure><h2 id=""></h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>School Learning</category>
       
     </categories>
     
