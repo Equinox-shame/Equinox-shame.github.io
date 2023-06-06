@@ -18,14 +18,14 @@
   
     <meta name="description" content="前言 之前的实验让我们学习到了如何调用内核的API，我们可以通过创建一个稳定的零环到三环之前的切换环境，而在此次实验中我们将把从三环到零环的_KiFastCallEntry进行Hook，通过该操作来达到在三环到零环之前切换前执行相应的代码 实验过程 我们还是利用上次的代码逻辑，不同的是在本次实验中我们需要使用两个exe来完成对应的Hook 第一个exe将对应_KiFastCallEntry的地址空">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Widnows内核实验 ——— Inline Hook">
+<meta property="og:title" content="Windows内核实验 ——— Inline Hook">
 <meta property="og:url" content="https://equinox-shame.github.io/2023/04/25/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20Inline%20Hook/index.html">
 <meta property="og:site_name" content="Autumnal">
 <meta property="og:description" content="前言 之前的实验让我们学习到了如何调用内核的API，我们可以通过创建一个稳定的零环到三环之前的切换环境，而在此次实验中我们将把从三环到零环的_KiFastCallEntry进行Hook，通过该操作来达到在三环到零环之前切换前执行相应的代码 实验过程 我们还是利用上次的代码逻辑，不同的是在本次实验中我们需要使用两个exe来完成对应的Hook 第一个exe将对应_KiFastCallEntry的地址空">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2023/04/25/wGWqna9S3JhPlkf.png">
 <meta property="article:published_time" content="2023-04-25T15:34:43.994Z">
-<meta property="article:modified_time" content="2023-04-25T15:34:25.216Z">
+<meta property="article:modified_time" content="2023-06-06T14:38:24.734Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2023/04/25/wGWqna9S3JhPlkf.png">
@@ -34,7 +34,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Widnows内核实验 ——— Inline Hook - Autumnal</title>
+  <title>Windows内核实验 ——— Inline Hook - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +204,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Widnows内核实验 ——— Inline Hook"></span>
+            <span id="subtitle" data-typed-text="Windows内核实验 ——— Inline Hook"></span>
           
         </div>
 
@@ -275,7 +275,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Widnows内核实验 ——— Inline Hook</h1>
+            <h1 style="display: none">Windows内核实验 ——— Inline Hook</h1>
             
             
               <div class="markdown-body">
@@ -332,7 +332,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Widnows内核实验 ——— Inline Hook</div>
+      <div>Windows内核实验 ——— Inline Hook</div>
       <div>https://equinox-shame.github.io/2023/04/25/Windows内核实验 — Inline Hook/</div>
     </div>
     <div class="license-meta">
@@ -387,8 +387,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/20/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20API%E8%B0%83%E7%94%A8/" title="Widnows内核实验 ——— API调用">
-                        <span class="hidden-mobile">Widnows内核实验 ——— API调用</span>
+                      <a href="/2023/04/20/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20API%E8%B0%83%E7%94%A8/" title="Windows内核实验 ——— API调用">
+                        <span class="hidden-mobile">Windows内核实验 ——— API调用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
