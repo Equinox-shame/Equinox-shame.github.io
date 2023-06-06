@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/06/06/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" target="_self">
+          Windows内核实验 ——— 进程切换
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/06/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" target="_self">
+        <div>
+          前言 前面我们已经了解到了CR3是控制进程的一个核心资源，相当于访问内存的一把钥匙，理论上我们可以通过其访问任何进程的内存，此次实验中我们将编写代码将一个notepad中的内存信息进行修改 实验过程 我们首先创建一个notepad程序，在里面随便写入点内容，通过CE来找到其字符串对应的地址空间  我们找到对应地址空间后我们通过使用notepad的CR3寄存器来获取对应的地址空间，我们使用Windb
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-06 22:36" pubdate>
+              2023-06-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/06/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%9B%B6%E5%9C%B0%E5%9D%80%E8%AF%BB%E5%86%99/" target="_self">
           Windows内核实验 ——— 零地址读写
         </a>
@@ -695,60 +749,6 @@
       <span class="category-chain">
         
   <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/04/05/Widnows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%8D%E6%AC%A1%E5%BC%80%E4%B8%AD%E6%96%AD/" target="_self">
-          Widnows内核实验 ——— 再次开中断
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/04/05/Widnows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%8D%E6%AC%A1%E5%BC%80%E4%B8%AD%E6%96%AD/" target="_self">
-        <div>
-          前言 还记得我们之前的那个中断提权吗？我们修改了 idtr 表来把我们自己的中断函数进行执行。再此之前我们提到了在中断函数处理时我们无法再中断，但是在内核中存在有如下两个指令，可以让硬件中断变得可以执行或者是禁止执行 12CLI ;禁止中断发生STI ;允许中断发生 需要注意的是，当我们在内核模式下执行的时候应该尽快的恢复中断，如果长时间禁止中断时，我们可能会影响操作系统中其他动作的执行(如鼠标移
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-04-05 23:23" pubdate>
-              2023-04-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
   
   
 
