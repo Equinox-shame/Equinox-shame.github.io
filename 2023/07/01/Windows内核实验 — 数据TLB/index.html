@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 回到我们之前提到的三级内存映射关系，对于我们之前查询地址的操作可以通过判断TLB中是否有对应的缓存来进行读取，当存在有对应数据时我们便从TLB进行直接获取，若不存在则是通过访问cr3进而访问对应的PDE、PTE信息，内存访问的大致流程为：   TLB直接记录了虚拟内存到物理内存的访问关系，对于TLB我们无法直接通过汇编语句来进行获取  实验过程 在此次实验中需要注意：  代码顺序执行，即不产">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows内核实验 ——— 数据TLB">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/07/01/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E6%95%B0%E6%8D%AETLB/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 回到我们之前提到的三级内存映射关系，对于我们之前查询地址的操作可以通过判断TLB中是否有对应的缓存来进行读取，当存在有对应数据时我们便从TLB进行直接获取，若不存在则是通过访问cr3进而访问对应的PDE、PTE信息，内存访问的大致流程为：   TLB直接记录了虚拟内存到物理内存的访问关系，对于TLB我们无法直接通过汇编语句来进行获取  实验过程 在此次实验中需要注意：  代码顺序执行，即不产">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/13/5KysWzOg8lZ31Ad.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/19/43Qulxfh6BOLbcN.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/19/Sn92yb8pfKMAdsx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/ZIiYy2DMz98e6X4.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/vMiosQU8GlEH5F4.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/xJh4UqP3ScTuKXe.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/hGjrawi15f4bWSq.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/YskT3hBiv4LKZgQ.png">
+<meta property="article:published_time" content="2023-07-01T07:36:51.570Z">
+<meta property="article:modified_time" content="2023-07-01T07:36:08.267Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/13/5KysWzOg8lZ31Ad.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Windows内核实验 ——— 数据TLB - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Windows内核实验 ——— 数据TLB"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-01 15:36" pubdate>
+          2023年7月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Windows内核实验 ——— 数据TLB</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>回到我们之前提到的三级内存映射关系，对于我们之前查询地址的操作可以通过判断TLB中是否有对应的缓存来进行读取，当存在有对应数据时我们便从TLB进行直接获取，若不存在则是通过访问cr3进而访问对应的PDE、PTE信息，内存访问的大致流程为：</p>
+<img src="https://s2.loli.net/2023/06/13/5KysWzOg8lZ31Ad.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<blockquote>
+<p>TLB直接记录了虚拟内存到物理内存的访问关系，对于TLB我们无法直接通过汇编语句来进行获取</p>
+</blockquote>
+<h2 id="实验过程">实验过程</h2>
+<p>在此次实验中需要注意：</p>
+<ul>
+<li>代码顺序执行，即不产生页面异常</li>
+<li>确保测试虚拟地址已经存放到TLB中，即需要有最近的内存访问</li>
+<li>刷新TLB实际上是使TLB无效，不访问内存</li>
+</ul>
+<h3 id="验证TLB的存在">验证TLB的存在</h3>
+<p>我们首先编写一串代码来进行验证TLB，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Windows.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> PTE(addr) ((DWORD *)(((addr &gt;&gt; 12) &lt;&lt; 3) + 0xC0000000))</span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> section(<span class="hljs-meta-string">&quot;data_seg&quot;</span>, read, write)</span><br>__declspec(allocate(<span class="hljs-string">&quot;data_seg&quot;</span>)) DWORD page1[<span class="hljs-number">1024</span>]; <span class="hljs-comment">// addr 0x0041b000</span><br>__declspec(allocate(<span class="hljs-string">&quot;data_seg&quot;</span>)) DWORD page2[<span class="hljs-number">1024</span>]; <span class="hljs-comment">// addr 0x0041c000</span><br><br>DWORD g_oldPTE[<span class="hljs-number">2</span>];<br>DWORD g_out;<br><br><span class="hljs-keyword">void</span> __declspec(naked) IdtEntry()<br>&#123;<br>	__asm &#123;<br>		mov eax, ds: [<span class="hljs-number">0x0041c000</span>] ; 通过访问，确保TLB中存在有该项目<br>	&#125;<br>	<span class="hljs-comment">// 保存page2的页表项</span><br>	g_oldPTE[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>];<br>	g_oldPTE[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// 将page2映射改为page1</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">1</span>];<br>	g_out = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 正常情况下应该为1，但是因为TLB的存在，我们没有通过cr3进行访问内存，结果为2</span><br>	<span class="hljs-comment">// 还原page2的页表项</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = g_oldPTE[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = g_oldPTE[<span class="hljs-number">1</span>];<br>	__asm<br>	&#123;<br>		iretd		<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">crash</span><span class="hljs-params">()</span> </span>&#123;<br>	page1[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// 将两个页表项挂上物理页</span><br>	page2[<span class="hljs-number">0</span>] = <span class="hljs-number">2</span>;<br>	__asm &#123;<br>		<span class="hljs-keyword">int</span> <span class="hljs-number">0x20</span><br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-keyword">if</span> ((DWORD)IdtEntry != <span class="hljs-number">0x401040</span>) &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;IdtEntry : %p\n&quot;</span>, IdtEntry);<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	crash();<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;g_out = %d\n&quot;</span>, g_out);<br>	system(<span class="hljs-string">&quot;pause&quot;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>执行结果如下：</p>
+<p><img src="https://s2.loli.net/2023/06/19/43Qulxfh6BOLbcN.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>上述代码中我们将<code>page2</code>的页面先进行了一次读取，在此次读取时操作系统将对应物理地址保存到了<code>TLB</code>中，即使后续我们修改了对应的内存映射，我们所访问的仍然是通过<code>TLB</code>进行的，进而导致访问结果仍然为 2</p>
+<p>如果我们加入刷新<code>TLB</code>时便会通过<code>cr3</code>来获取对应的物理地址信息，我们修改代码中的<code>IdtEntry</code>如下：</p>
+<blockquote>
+<p>我们通过<code>TLB</code>机制来进行刷新：当对cr3进行赋值时便会刷新 <code>TLB</code></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">void</span> __declspec(naked) IdtEntry()<br>&#123;<br>	__asm &#123;<br>		mov eax, ds: [<span class="hljs-number">0x0041c000</span>] ; 通过访问，确保TLB中存在有该项目<br>	&#125;<br>	<span class="hljs-comment">// 保存page2的页表项</span><br>	g_oldPTE[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>];<br>	g_oldPTE[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>];<br><br>	<span class="hljs-comment">// 将page2映射改为page1</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">1</span>];<br><br>	<span class="hljs-comment">// TLB刷新</span><br>	__asm &#123;<br>		mov eax, cr3<br>		mov cr3, eax<br>	&#125;<br><br>	g_out = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 正常情况下应该为1，但是因为TLB的存在，我们没有通过cr3进行访问内存，结果为2</span><br><br>	<span class="hljs-comment">// 还原page2的页表项</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = g_oldPTE[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = g_oldPTE[<span class="hljs-number">1</span>];<br>	__asm<br>	&#123;<br>		iretd		<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>修改后程序执行结果如下：</p>
+<p><img src="https://s2.loli.net/2023/06/19/Sn92yb8pfKMAdsx.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>至此我们成功的验证了TLB的存在</p>
+<blockquote>
+<p>从上面我们大致可以看出，当我们对页进行了修改时，对其内容进行读写。如果对应数据出现在了TLB中，那么便会从TLB中优先获取值，当刷新TLB后便会从内存中进行读取，也就是我们修改后的页上开始读</p>
+</blockquote>
+<h3 id="TLB-G属性">TLB G属性</h3>
+<p>对于操作系统的高 2G 映射基本不变，如果<code>Cr3</code>改了，那么TLB便会刷新，重建 2G 以上很浪费，所以相对的 PTE 中有一个G标志位，如果<code>G位</code>为 1 刷新 TLB 时将不会刷新 PTE 的<code>G位</code>为 1 的页，当 TLB 满了，根据统计信息将不常用的地址废弃，最近最常用的保留。</p>
+<p>一般来说三环程序来说没有<code>G属性</code>，我们可以手动添加一个<code>int 3</code>在代码中，使其中断到我们的Windbg中，</p>
+<p><img src="https://s2.loli.net/2023/07/01/ZIiYy2DMz98e6X4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以明显的看到我们的页属性中没有对应的 G位属性</p>
+<p>我们观察GDTR的页属性可以看到 G位属性的存在</p>
+<p><img src="https://s2.loli.net/2023/07/01/vMiosQU8GlEH5F4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>印证我们之前提到的高 2G 内存，每次重建会比较消耗时间，所以在系统内其会设置G位属性，通过查询Windbg的帮助手册我们可以看到</p>
+<p><img src="https://s2.loli.net/2023/07/01/xJh4UqP3ScTuKXe.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其对应位为<code>0x100</code>，所以我们在修改PTE时可以进行或上<code>0x100</code>，来达到添加 G位属性的目的</p>
+<p>我们先不设置 G位属性来进行测试，我们将<code>IdtEntry</code>设置如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">void</span> __declspec(naked) IdtEntry()<br>&#123;<br>	<span class="hljs-comment">// 保存page2的页表项</span><br>	g_oldPTE[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>];<br>	g_oldPTE[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// 将page2映射改为page1</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// TLB刷新</span><br>	__asm &#123;<br>		mov eax, cr3<br>		mov cr3, eax<br>	&#125;<br>	__asm &#123;<br>		mov eax, ds: [<span class="hljs-number">0x0041c000</span>] ; 通过访问，确保TLB中存在有该项目<br>	&#125;<br>	g_out_1 = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 此时记录的值为 1</span><br>	<span class="hljs-comment">// 还原page2的页表项</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = g_oldPTE[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = g_oldPTE[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// TLB刷新</span><br>	__asm &#123;<br>		mov eax, cr3<br>		mov cr3, eax<br>	&#125;<br>	g_out_2 = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 此时记录的值为 2</span><br>	__asm<br>	&#123;<br>		iretd		<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到输出为：</p>
+<p><img src="https://s2.loli.net/2023/07/01/hGjrawi15f4bWSq.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们第一次刷新<code>TLB</code>后读取到的数据为我们修改后的<code>page1</code>的内容，再次修改<code>page2</code>的<code>PTE</code>后读取的是我们恢复的，证明对应<code>TLB</code>信息随<code>cr3</code>的更新而清空了，如果我们设置对应的G属性位后呢？代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">void</span> __declspec(naked) IdtEntry()<br>&#123;<br>	<span class="hljs-comment">// 保存page2的页表项</span><br>	g_oldPTE[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>];<br>	g_oldPTE[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// 将page2映射改为page1</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">0</span>] | <span class="hljs-number">0x100</span>; <span class="hljs-comment">// 添加G位，防止在cr3更新时刷新TLB</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = PTE(<span class="hljs-number">0x0041b000</span>)[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// TLB刷新</span><br>	__asm &#123;<br>		mov eax, cr3<br>		mov cr3, eax<br>	&#125;<br>	__asm &#123;<br>		mov eax, ds: [<span class="hljs-number">0x0041c000</span>] ; 通过访问，确保TLB中存在有该项目<br>	&#125;<br>	g_out_1 = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 此时记录的值为 1</span><br>	<span class="hljs-comment">// 还原page2的页表项</span><br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">0</span>] = g_oldPTE[<span class="hljs-number">0</span>];<br>	PTE(<span class="hljs-number">0x0041c000</span>)[<span class="hljs-number">1</span>] = g_oldPTE[<span class="hljs-number">1</span>];<br>	<span class="hljs-comment">// TLB刷新</span><br>	__asm &#123;<br>		mov eax, cr3<br>		mov cr3, eax<br>	&#125;<br>	g_out_2 = page2[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 此时记录的值为 2</span><br>	__asm<br>	&#123;<br>		iretd		<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到输出如下：</p>
+<p><img src="https://s2.loli.net/2023/07/01/YskT3hBiv4LKZgQ.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到TLB所保存的数据并没有清除，而是得到了对应的保存</p>
+<p>但是TLB中的数据是一直存在的吗？显然不是，我们可以通过以下汇编指令来强制对含有G位属性的页的TLB来进行刷新</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">__asm&#123;<br>	invlpg ds:[xxx] ; xxx 为对应地址<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们将原来的第二次TLB刷新更新为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">__asm&#123;<br>	invlpg ds:[0x0041b000]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以成功的看到对应<code>g_out_2</code>的输出又回到了 2</p>
+<h2 id="总结">总结</h2>
+<p>上述的应用我们可以应用到内核的Hook，我们可以将需要Hook的地址修改其PTE加入一个可写选项，需要注意的是我们需要对其TLB进行强制刷新，因为其处于内核状态下是肯定有G位属性的，如果简单的采用cr3的刷新方式来进行刷新TLB时可能会产生异常</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Windows内核实验 ——— 数据TLB</div>
+      <div>https://equinox-shame.github.io/2023/07/01/Windows内核实验 — 数据TLB/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/11/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%85%E5%AD%98%E5%BB%B6%E8%BF%9F%E5%88%86%E9%85%8D/" title="Windows内核实验 ——— 内存延迟分配">
+                        <span class="hidden-mobile">Windows内核实验 ——— 内存延迟分配</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
