@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/07/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%A1%B5%E9%9D%A2%E5%BC%82%E5%B8%B8/" target="_self">
+          Windows内核实验 ——— 页面异常
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%A1%B5%E9%9D%A2%E5%BC%82%E5%B8%B8/" target="_self">
+        <div>
+          前言 本次实验我们将简单的构造一个页面异常的处理函数，利用之前的Hook技术将相应代码写入GDT中，为我们进程调用提供处理函数以及相关全局变量，通过实验中的一些现象来进行了解页面异常 实验过程 我们首先需要做的是构造一个写入代码到GDT中的程序，以及将我们的Hook代码进行写入目的地址处 我们尝试在地址：805454A8处进行写入我们的代码，将用来处理中断服务的函数写入到GDT中 12345p =
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-07-05 18:48" pubdate>
+              2023-07-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/07/01/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E6%95%B0%E6%8D%AETLB/" target="_self">
           Windows内核实验 ——— 数据TLB
         </a>
@@ -710,65 +764,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
-          d3sky 复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
-        <div>
-          程序分析 初步分析 我们拿到程序后先进行查壳，可以发现是无壳32位程序，直接使用IDA打开  TLS 在程序跑起来之前会执行该TLS内的东西，我们可以看到有一个反调试，同时对一串字符串进行RC4解密 123456789unsigned int sub_401050()&#123;  size_t v0; // eax  if ( !IsDebuggerPresent() )    aY[5] =
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-05-06 22:56" pubdate>
-              2023-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

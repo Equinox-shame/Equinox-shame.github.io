@@ -16,25 +16,25 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="定义 连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值 原码 定义 一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为-127 ~ 127，即最大数是01111111，最小数为11111111   其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数  原码表示（举例） C语言中可以理">
+    <meta name="description" content="前言 本次实验我们将简单的构造一个页面异常的处理函数，利用之前的Hook技术将相应代码写入GDT中，为我们进程调用提供处理函数以及相关全局变量，通过实验中的一些现象来进行了解页面异常 实验过程 我们首先需要做的是构造一个写入代码到GDT中的程序，以及将我们的Hook代码进行写入目的地址处 我们尝试在地址：805454A8处进行写入我们的代码，将用来处理中断服务的函数写入到GDT中 12345p &#x3D;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器数">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/%E6%9C%BA%E5%99%A8%E6%95%B0/index.html">
+<meta property="og:title" content="Windows内核实验 ——— 页面异常">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/07/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%A1%B5%E9%9D%A2%E5%BC%82%E5%B8%B8/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="定义 连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值 原码 定义 一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为-127 ~ 127，即最大数是01111111，最小数为11111111   其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数  原码表示（举例） C语言中可以理">
+<meta property="og:description" content="前言 本次实验我们将简单的构造一个页面异常的处理函数，利用之前的Hook技术将相应代码写入GDT中，为我们进程调用提供处理函数以及相关全局变量，通过实验中的一些现象来进行了解页面异常 实验过程 我们首先需要做的是构造一个写入代码到GDT中的程序，以及将我们的Hook代码进行写入目的地址处 我们尝试在地址：805454A8处进行写入我们的代码，将用来处理中断服务的函数写入到GDT中 12345p &#x3D;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.703Z">
-<meta property="article:modified_time" content="2022-02-28T14:36:12.365Z">
+<meta property="og:image" content="https://s2.loli.net/2023/07/05/3ceiXADVO64NByF.png">
+<meta property="article:published_time" content="2023-07-05T10:48:41.593Z">
+<meta property="article:modified_time" content="2023-07-05T09:59:57.230Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/07/05/3ceiXADVO64NByF.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>机器数 - Autumnal</title>
+  <title>Windows内核实验 ——— 页面异常 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +204,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="机器数"></span>
+            <span id="subtitle" data-typed-text="Windows内核实验 ——— 页面异常"></span>
           
         </div>
 
@@ -215,8 +215,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          2022年3月14日 下午
+        <time datetime="2023-07-05 18:48" pubdate>
+          2023年7月5日 晚上
         </time>
       </span>
     
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          611 字
+          2.7k 字
         
       </span>
     
@@ -275,44 +275,31 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">机器数</h1>
+            <h1 style="display: none">Windows内核实验 ——— 页面异常</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="定义">定义</h2>
-<p>连同数字和符号在一起的二进制数称为机器数，由机器数表示的实际值称为真值</p>
-<h2 id="原码">原码</h2>
-<h3 id="定义-2">定义</h3>
-<p>一般一个字节是八个二进制位，对于机器数则有第一个二进制位是符号位，从第二个开始到最后一个二进制位则是表示数据的大小，即最大表示范围为<code>-127 ~ 127</code>，即最大数是<code>01111111</code>，最小数为<code>11111111</code></p>
-<p><img src="https://static01.imgkr.com/temp/347e10cae73d44d1a36d96394bb5b5c3.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<blockquote>
-<p>其中第一个符号位是 1 则代表该数是一个负数，0 则是一个正数</p>
-</blockquote>
-<h3 id="原码表示（举例）">原码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">11001110</span><br></code></pre></td></tr></table></figure>
-<h2 id="反码">反码</h2>
-<h3 id="定义-3">定义</h3>
-<p>正数的反码与原码相同，负数从第二位开始按位取反（二进制下）</p>
-<h3 id="特殊">特殊</h3>
-<p>同时任意一个数的反码的反码即是原码本身</p>
-<p>零的反码表示有两种：</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">11111111</span><br></code></pre></td></tr></table></figure>
-<h3 id="反码表示（举例）">反码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>）</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110001</span><br></code></pre></td></tr></table></figure>
-<h2 id="补码">补码</h2>
-<h3 id="定义-4">定义</h3>
-<p>正数补码与原码相同，负数补码是对该数除符号位以外的各位取反，最末位加一。</p>
-<h3 id="特殊-2">特殊</h3>
-<p>任意数的补码的补码即原码本身，所以已知一个数的补码，求原码的操作其实就是对该补码再求补码。</p>
-<p>零的补码唯一</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+0]</span> = <span class="hljs-number">00000000</span><br><span class="hljs-string">[-0]</span> = <span class="hljs-number">00000000</span><br></code></pre></td></tr></table></figure>
-<h3 id="补码表示（举例）">补码表示（举例）</h3>
-<p>C语言中可以理解为一个八位二进制数的后七位进行位运算中的取反（<code>~</code>），同时对其第八位二进制数加一，第八位二进制数如果为 1 则进位处理</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+78]</span> = <span class="hljs-number">01001110</span><br><span class="hljs-string">[-78]</span> = <span class="hljs-number">10110010</span><br></code></pre></td></tr></table></figure>
-<h2 id=""></h2>
+                <h2 id="前言">前言</h2>
+<p>本次实验我们将简单的构造一个页面异常的处理函数，利用之前的Hook技术将相应代码写入<code>GDT</code>中，为我们进程调用提供处理函数以及相关全局变量，通过实验中的一些现象来进行了解页面异常</p>
+<h2 id="实验过程">实验过程</h2>
+<p>我们首先需要做的是构造一个写入代码到<code>GDT</code>中的程序，以及将我们的<code>Hook</code>代码进行写入目的地址处</p>
+<p>我们尝试在地址：<code>805454A8</code>处进行写入我们的代码，将用来处理中断服务的函数写入到<code>GDT</code>中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">p = (<span class="hljs-keyword">char</span>*)<span class="hljs-number">0x8003f120</span>; <span class="hljs-comment">// gdt 中内存</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">128</span>; i++) &#123;<br>	*p = ((<span class="hljs-keyword">char</span>*)GlobalFunc)[i];<br>	p++;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在对应处理过程中，我们保存程序产生页异常时候的<code>eip</code>、<code>esp</code>、<code>cr2</code>信息，将其同样保存在<code>GDT</code>中，为我们程序后续读取做准备</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> K_ESP 0x8003f3f4</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> K_ESP_4 0x8003f3f0</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Addr_CR3 0x8003f3ec</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Addr_CR2 0x8003f3e8</span><br><br><span class="hljs-keyword">void</span> __declspec(naked) GlobalFunc() &#123;<br>	__asm &#123;<br>		push eax<br>		mov eax, cr3<br>		cmp eax, ds : [Addr_CR3]<br>		jne _end<br><br>		; 对于页面异常会压入一个 error code<br>		; 之后顺序压入 eip cs eflags esp ss<br>		; eip 指向的是触发异常的指令地址<br>		; cs 指向的是触发异常的指令所在的段<br>		; esp 指向的是触发异常时的 esp<br>		; cr2 指向的是触发异常的地址<br><br>		mov eax, ds : [esp + <span class="hljs-number">4</span>] ; 获取压入的 eip<br>		mov ds : [K_ESP] , eax<br>		mov eax, ds : [esp + <span class="hljs-number">8</span>] ; 获取压入的 cs<br>		mov ds : [K_ESP_4] , eax<br>		mov eax, cr2 ; 获取cr2<br>		mov ds : [Addr_CR2] , eax<br>	_end :<br>		pop eax<br>		mov word ptr[esp + <span class="hljs-number">2</span>], <span class="hljs-number">0</span>  ； 源_KiTrap0E中开始代码<br>		push <span class="hljs-number">0x805454af</span>	; 目标跳转地址<br>		ret<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>而在<code>Hook</code>部分我们构造一个<code>push ret</code>的结构来实现跳转，将原代码从<code>_KiTrap0E</code>中进行直接返回，到我们的目的地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">0x0:    push    0x8003f120<br>0x5:    ret<br></code></pre></td></tr></table></figure>
+<p>此处跳转目标为我们构建的<code>Hook</code>函数具体内容，同时我们为了能够在内核进行修改需要关闭写保护，写入后开启保护，避免触发崩溃而导致蓝屏</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs asm">// hook part <br>__asm &#123;<br>	mov eax, 0xffffffff<br>	mov ds : [Addr_CR3] , eax; 全局变量Cr3初始化为 0xffffffff<br><br>	; 关闭写保护<br>	mov eax, cr0<br>	and eax, ~0x10000<br>	mov cr0, eax<br><br>	; Hook main<br>	mov eax, 0x03f12068<br>	mov ds : [0x805454A8] , eax<br>	mov ax, 0xC380<br>	mov ds : [0x805454AC] , ax<br><br>	xor eax, eax<br>	mov ds : [Addr_CR2] , eax<br>	mov ds : [K_ESP] , eax<br>	mov ds : [K_ESP_4] , eax<br><br>	; 开启写保护<br>	mov eax, cr0<br>	or eax, 0x10000<br>	mov cr0, eax<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>至此我们的<code>Hook</code>程序已经完成对应的工作，接下来需要实现的是对<code>GDT</code>中保存的信息进行读取，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Windows.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> K_ESP 0x8003f3f4</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> K_ESP_4 0x8003f3f0</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Addr_CR3 0x8003f3ec</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Addr_CR2 0x8003f3e8</span><br><br>DWORD g_esp;<br>DWORD g_esp_4;<br>DWORD g_cr2;<br><br><span class="hljs-keyword">void</span> __declspec(naked) IdtEntry() &#123;<br>	__asm &#123;<br>		mov eax, cr3<br>		mov ds:[Addr_CR3], eax<br><br>		mov eax, ds:[K_ESP]<br>		mov g_esp, eax<br><br>		mov eax, ds:[K_ESP_4]<br>		mov g_esp_4, eax<br><br>		mov eax, ds:[Addr_CR2]<br>		mov g_cr2, eax<br><br>		<span class="hljs-keyword">xor</span> eax, eax<br>		mov ds:[K_ESP_4],eax<br><br>		iretd<br>	&#125;<br>&#125;<br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> code_seg(<span class="hljs-meta-string">&quot;.mycode&quot;</span>) __declspec(allocate(<span class="hljs-meta-string">&quot;.mycode&quot;</span>)) void Crash();</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> code_seg(<span class="hljs-meta-string">&quot;.mycode&quot;</span>) __declspec(allocate(<span class="hljs-meta-string">&quot;.mycode&quot;</span>)) void main();</span><br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Crash</span><span class="hljs-params">()</span> </span>&#123;<br>	__asm &#123;<br>		<span class="hljs-keyword">int</span> <span class="hljs-number">0x20</span><br>	&#125;<br>&#125;<br><br><span class="hljs-comment">// eq 8003f500 0040ee00`00081040</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-keyword">if</span> ((DWORD)IdtEntry != <span class="hljs-number">0x00401040</span>) &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;IdtEntry : %p\n&quot;</span>, IdtEntry);<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>		Crash();<br>		<span class="hljs-keyword">if</span> (g_esp_4) &#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;eip: %p, errorNo: %p, cr2: %p \n&quot;</span>, g_esp_4, g_esp, g_cr2);<br>		&#125;<br>		Sleep(<span class="hljs-number">1000</span>);<br>	&#125;<br>		<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们直接取<code>GDT</code>中数据即可，同时我们构建一个新的节，来保存我们的<code>Crash</code>以及<code>main</code>函数，让其处于页边界上，便于我们进行保护以及管理</p>
+<p>成功运行后我们可以看到其已经捕获了对应页面异常信息，同时将其进行输出</p>
+<p><img src="https://s2.loli.net/2023/07/05/3ceiXADVO64NByF.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>此时我们成功的获取到了对应页异常信息目标的地址，异常号，以及发生异常的代码已经成功的实现了对页异常的Hook</p>
+<h2 id="总结">总结</h2>
+<p>利用之前所使用的<code>inlineHook</code>的方式，我们将对应地址的写保护进行关闭，在这之后替换为我们自己的<code>push ret</code>结构跳转到我们的执行函数中，之后获取到相应的堆栈信息，将其保存在<code>GDT</code>中，随后打印，完成此次实验。</p>
 
                 
               </div>
@@ -331,7 +318,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/School-Learning/" class="category-chain-item">School Learning</a>
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
   
   
 
@@ -351,8 +338,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>机器数</div>
-      <div>https://equinox-shame.github.io/2022/03/14/机器数/</div>
+      <div>Windows内核实验 ——— 页面异常</div>
+      <div>https://equinox-shame.github.io/2023/07/05/Windows内核实验 — 页面异常/</div>
     </div>
     <div class="license-meta">
       
@@ -364,7 +351,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月14日</div>
+          <div>2023年7月5日</div>
         </div>
       
       
@@ -396,18 +383,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" title="指针与数组">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">指针与数组</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/%E6%A0%88%E6%BA%A2%E5%87%BA/" title="栈溢出">
-                        <span class="hidden-mobile">栈溢出</span>
+                      <a href="/2023/07/01/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E6%95%B0%E6%8D%AETLB/" title="Windows内核实验 ——— 数据TLB">
+                        <span class="hidden-mobile">Windows内核实验 ——— 数据TLB</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
