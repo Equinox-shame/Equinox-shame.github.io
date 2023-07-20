@@ -1,0 +1,1267 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 本文章主要整理Frida的一些用法，方便后续回顾时知道如何使用，本文中的例子基于Windows环境进行相应编写对应代码并进行测试，未对其他环境进行测试。同时因为个人水平以及知识有限，难免过程中会出现理解上的一些问题，进而解释错误等，还请师傅们指正。  其他学习链接： Frida Tutorial for Reverse Engineers 4 of 10: Getting Your hand">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Frida Learning">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/07/21/Frida%20%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 本文章主要整理Frida的一些用法，方便后续回顾时知道如何使用，本文中的例子基于Windows环境进行相应编写对应代码并进行测试，未对其他环境进行测试。同时因为个人水平以及知识有限，难免过程中会出现理解上的一些问题，进而解释错误等，还请师傅们指正。  其他学习链接： Frida Tutorial for Reverse Engineers 4 of 10: Getting Your hand">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/Pz6uJTkvU4RDMos.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/pS1V2xkbTlW7jhi.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/zW4Znl6UCbtfjxR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/IsqVyQ6lNXW3COd.png">
+<meta property="article:published_time" content="2023-07-20T16:10:40.745Z">
+<meta property="article:modified_time" content="2023-07-20T16:11:45.909Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/07/20/Pz6uJTkvU4RDMos.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Frida Learning - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Frida Learning"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-21 00:10" pubdate>
+          2023年7月21日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Frida Learning</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>本文章主要整理<code>Frida</code>的一些用法，方便后续回顾时知道如何使用，本文中的例子基于<code>Windows</code>环境进行相应编写对应代码并进行测试，未对其他环境进行测试。同时因为个人水平以及知识有限，难免过程中会出现理解上的一些问题，进而解释错误等，还请师傅们指正。</p>
+<blockquote>
+<p>其他学习链接：</p>
+<p><a target="_blank" rel="noopener" href="https://youtu.be/ZdvSYc8VJG0">Frida Tutorial for Reverse Engineers 4 of 10: Getting Your hands Dirty with Frida’s Python Binding</a></p>
+<p><a target="_blank" rel="noopener" href="https://frida.re/docs/home/">Welcome | Frida • A world-class dynamic instrumentation toolkit</a></p>
+</blockquote>
+<h2 id="相关应用">相关应用</h2>
+<h3 id="加载一个程序">加载一个程序</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">frida.attach(<span class="hljs-string">&quot;XXX&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>获取程序列表可以在控制台中使用<code>frida-ps</code>，<code>attach</code>上对应程序后其会返回一个<code>session</code>，后续对于程序的Hook之类的操作均是通过<code>session</code>来进行完成</p>
+<h3 id="消息处理">消息处理</h3>
+<p>假如我们想对一个程序进行注入，那么需要准备的便是对于Hook的地址，我们构建一个简单的程序为例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;Number: %d\n&quot;</span>, n);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> * argv[])</span></span><br><span class="hljs-function"></span>&#123;<br> 	<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;<br> 	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;f() is at %p\n&quot;</span>, f);<br>	 <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br> 	&#123;<br> 		f (i++);<br> 		sleep (<span class="hljs-number">1</span>);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>将其编译并运行，我们可以拿到<code>f函数</code>的地址信息以及看到程序一直打印数字</p>
+<p><img src="https://s2.loli.net/2023/07/20/Pz6uJTkvU4RDMos.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="获取参数">获取参数</h4>
+<p>我们利用之前获取到的<code>session</code>，来创建一个<code>Hook</code>脚本</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py">session.script(<br>	<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">	xxx</span><br><span class="hljs-string">	&quot;&quot;&quot;</span><br>)<br></code></pre></td></tr></table></figure>
+<p>其中的xxx为我们所编写的 js</p>
+<p>利用上述我们可以构建一个完整脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;hello.exe&quot;</span>)<br>script = session.create_script(<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Interceptor.attach(ptr(&quot;%s&quot;), &#123;</span><br><span class="hljs-string">    onEnter: function(args) &#123;</span><br><span class="hljs-string">        send(args[0].toInt32());</span><br><span class="hljs-string">    &#125;</span><br><span class="hljs-string">&#125;);</span><br><span class="hljs-string">&quot;&quot;&quot;</span> % <span class="hljs-built_in">int</span>(sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>))<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_message</span>(<span class="hljs-params">message,data</span>):</span>  <span class="hljs-comment"># 消息处理</span><br>    <span class="hljs-built_in">print</span>(message)<br><br>script.on(<span class="hljs-string">&#x27;message&#x27;</span>,on_message)  <span class="hljs-comment"># 接收消息类型，后面为消息处理的回调函数</span><br>script.load() <span class="hljs-comment"># 加载脚本</span><br>sys.stdin.read() <br></code></pre></td></tr></table></figure>
+<p>上述<code>Interceptor.attach</code>代表我们需要附加上的地址信息，<code>onEnter</code>表示当到达对应地址后进行的处理</p>
+<p>同时我们使用<code>send</code>进行发送消息，而接收利用<code>script.on</code>来进行，当收到消息后丢入<code>on_message</code>进行处理</p>
+<p>相似的我们还有<code>recv</code>来处理消息，下面使用一个简单的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;hello.exe&quot;</span>)<br>script = session.create_script(<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Interceptor.attach(ptr(&quot;%s&quot;), &#123;</span><br><span class="hljs-string">    onEnter: function(args) &#123;</span><br><span class="hljs-string">        send(args[0].toString());</span><br><span class="hljs-string">        var op = recv(&#x27;input&#x27;, function(value) &#123;</span><br><span class="hljs-string">            args[0] = ptr(value.payload);</span><br><span class="hljs-string">        &#125;);</span><br><span class="hljs-string">    &#125;</span><br><span class="hljs-string">&#125;);</span><br><span class="hljs-string">&quot;&quot;&quot;</span> % <span class="hljs-built_in">int</span>(sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>))<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_message</span>(<span class="hljs-params">message, data</span>):</span><br>    <span class="hljs-built_in">print</span>(message)<br>    val = <span class="hljs-built_in">int</span>(message[<span class="hljs-string">&#x27;payload&#x27;</span>], <span class="hljs-number">16</span>)<br>    script.post(&#123;<span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;input&#x27;</span>, <span class="hljs-string">&#x27;payload&#x27;</span>: <span class="hljs-built_in">str</span>(val * <span class="hljs-number">2</span>)&#125;)<br>    <br>script.on(<span class="hljs-string">&#x27;message&#x27;</span>, on_message)<br>script.load()<br>sys.stdin.read()<br><br></code></pre></td></tr></table></figure>
+<p>上述中当我们进入到对应地址时会将参数信息进行发送到<code>on_message</code>进行处理，我们获取到字典中<code>payload</code>的值后将其使用<code>post</code>方式对其进行传入到我们的脚本中，对于<code>recv</code>存在有两个参数，第一个是消息类型，第二个是消息回调函数，可以看到其将原有的值乘以二后填入到原来的地方进行输出</p>
+<blockquote>
+<p>recv() 函数本身是一个异步方式(并不会产生阻塞信息)</p>
+</blockquote>
+<p>如果我们加入一个阻塞函数<code>op.wait()</code>，那么会出现如果JS没有收到Python发送的消息就一直等待接收</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">script = session.create_script(<span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Interceptor.attach(ptr(&quot;%s&quot;), &#123;</span><br><span class="hljs-string">    onEnter: function(args) &#123;</span><br><span class="hljs-string">        send(args[0].toString());</span><br><span class="hljs-string">        var op = recv(&#x27;input&#x27;, function(value) &#123;</span><br><span class="hljs-string">            args[0] = ptr(value.payload);</span><br><span class="hljs-string">        &#125;);</span><br><span class="hljs-string">        op.wait()；</span><br><span class="hljs-string">    &#125;</span><br><span class="hljs-string">&#125;);</span><br><span class="hljs-string">&quot;&quot;&quot;</span> % <span class="hljs-built_in">int</span>(sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>))<br></code></pre></td></tr></table></figure>
+<h4 id="调用程序函数">调用程序函数</h4>
+<p>调用程序时我们需要创建一个<code>NativeFunction()</code>，其构建参数为：<code>new NativeFunction(address, returnType, argTypes[, abi])</code></p>
+<p><code>address</code>指明了对应的<code>Hook</code>函数的地址信息，<code>returnType</code>为返回值类型，<code>argTypes</code>为对应的传入参数，<code>abi</code>为可选参数</p>
+<p><strong>Supported Types</strong></p>
+<ul>
+<li>void</li>
+<li>pointer</li>
+<li>int</li>
+<li>uint</li>
+<li>long</li>
+<li>ulong</li>
+<li>char</li>
+<li>uchar</li>
+<li>float</li>
+<li>double</li>
+<li>int8</li>
+<li>uint8</li>
+<li>int16</li>
+<li>uint16</li>
+<li>int32</li>
+<li>uint32</li>
+<li>int64</li>
+<li>uint64</li>
+<li>bool</li>
+</ul>
+<p><strong>Supported ABIs</strong></p>
+<ul>
+<li>
+<p>default</p>
+</li>
+<li>
+<p>Windows 32-bit:</p>
+<ul>
+<li>sysv</li>
+<li>stdcall</li>
+<li>thiscall</li>
+<li>fastcall</li>
+<li>mscdecl</li>
+</ul>
+</li>
+<li>
+<p>Windows 64-bit:</p>
+<ul>
+<li>win64</li>
+</ul>
+</li>
+<li>
+<p>UNIX x86:</p>
+<ul>
+<li>sysv</li>
+<li>unix64</li>
+</ul>
+</li>
+<li>
+<p>UNIX ARM:</p>
+<ul>
+<li>sysv</li>
+<li>vfp</li>
+</ul>
+</li>
+</ul>
+<p>我们将原来的程序进行些修改</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span>* x)</span> </span>&#123;<br>	(*x) += n;<br>	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;Number: %d %d\n&quot;</span>, n,*x);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> * argv[])</span> </span>&#123;<br>	<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>,x = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;f() is at %p\n&quot;</span>, f);<br>	<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>		f (i++,&amp;x);<br>		sleep (<span class="hljs-number">1</span>);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>构建调用函数的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;hello.exe&quot;</span>)<br>script = session.create_script(<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    	var f = new NativeFunction(ptr(%d), &#x27;void&#x27;, [&#x27;int&#x27;, &#x27;pointer&#x27;]);</span><br><span class="hljs-string">    	f(1, ptr(0x62fe18));</span><br><span class="hljs-string">    	f(1, ptr(0x62fe18));                                               </span><br><span class="hljs-string">	&quot;&quot;&quot;</span> <br>    % <span class="hljs-built_in">int</span>(sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>))<br><br>script.load()<br>sys.stdin.read()<br></code></pre></td></tr></table></figure>
+<p>可以看到对应地址处的函数成功的被我们进行了调用，程序中间出现了几次打印 1，后面的<code>x</code>增加值为 1</p>
+<p><img src="https://s2.loli.net/2023/07/20/pS1V2xkbTlW7jhi.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="字符串注入">字符串注入</h3>
+<p>我们将原来的代码进行一些修改，让其原本打印数字修改为打印对应的字符串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span> <span class="hljs-params">(<span class="hljs-keyword">char</span>* n)</span></span>&#123;<br>	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;String: %s\n&quot;</span>, n);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> * argv[])</span> </span>&#123;<br>	<span class="hljs-keyword">char</span>* <span class="hljs-built_in">array</span> = <span class="hljs-string">&quot;HelloWorld&quot;</span>;<br>	<span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;f() is at %p\n&quot;</span>, f);<br>	<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>		f (<span class="hljs-built_in">array</span>);<br>		sleep (<span class="hljs-number">1</span>);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们想要修改对应的字符串将其进行打印，我们构建的对应脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;hello.exe&quot;</span>)<br>script = session.create_script(<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        var array = Memory.allocUtf8String(&quot;WOW,You are so good!&quot;);</span><br><span class="hljs-string">        var f = new NativeFunction(ptr(%d), &#x27;void&#x27;, [&#x27;pointer&#x27;]);</span><br><span class="hljs-string">        f(array);                                                                                             </span><br><span class="hljs-string">    &quot;&quot;&quot;</span> <br>    % <span class="hljs-built_in">int</span>(sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>))<br><br>script.load()<br>sys.stdin.read()<br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/07/20/zW4Znl6UCbtfjxR.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>使用类似的方法，比如<code>Memory.alloc()</code>和<code>Memory.protect()</code>很容就能操作目标进程的内存，可以创建<code>Python</code>的<code>ctypes</code>和其他内存结构比如<code>structs</code>，然后以字节数组的方式传递给目标函数。</p>
+<h2 id="JS部分API">JS部分API</h2>
+<h3 id="Module-findExportByName-——-获取导出函数信息">Module.findExportByName —— 获取导出函数信息</h3>
+<p>调用<code>Windows API</code>其参数有两个<code>Module.findExportByName(moduleName|null, exportName);</code></p>
+<p>第一个参数指明对应的模块名称，第二个则是相应的导出函数名信息，其返回值对应导出函数的绝对地址值，在寻找对应的导出函数时会花费较大时间来进行寻找</p>
+<p>我们以<code>notpad.exe</code>来进行处理<code>MessageBoxW()</code>，我们首先可以使用<code>frida-trace</code>来构建一个基本的<code>Hook</code>框架</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">frida-trace -f C:<span class="hljs-symbol">\w</span>indows<span class="hljs-symbol">\s</span>ystem32<span class="hljs-symbol">\n</span>otepad.exe -i MessageBoxW -X user32.dll<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>-f 指定对应程序</p>
+<p>-i 指定对应的函数名称</p>
+<p>-X 指定对应模块</p>
+</blockquote>
+<p>之后我们可以在对应运行上述指令的位置处找到一个<code>__handlers__</code>的文件夹，里面便是我们对应的<code>JS</code>基本<code>Hook</code>框架信息，我们可以简单的将其中的一些信息进行修改来达到一个<code>Hook</code>。对应的启动命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">frida -n [正在运行文件名] -l [js脚本路径]<br>比如我要用当前目录的a.js脚本 去hook一个正在执行的文件b<br>frida -n b -l &quot;./a.js&quot;<br></code></pre></td></tr></table></figure>
+<p>但是我们此次是通过<code>Module.findExportByName</code>来找到对应<code>API</code>的地址，我们可以构建如下脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;notepad.exe&quot;</span>)<br>script = session.create_script(<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        var baseFunc = Module.findExportByName(&quot;user32.dll&quot;, &quot;MessageBoxW&quot;);</span><br><span class="hljs-string">        Interceptor.attach(baseFunc, &#123;</span><br><span class="hljs-string">            onEnter: function(args, state) &#123;</span><br><span class="hljs-string">                console.log(&quot;MessageBoxW called&quot;);</span><br><span class="hljs-string">                console.log(&quot;lpText: &quot; + args[1].readUtf16String());</span><br><span class="hljs-string">                console.log(&quot;lpCaption: &quot; + args[2].readUtf16String());</span><br><span class="hljs-string">            &#125;</span><br><span class="hljs-string">        &#125;);                                                                                     </span><br><span class="hljs-string">    &quot;&quot;&quot;</span> <br>)<br><br>script.load()<br>sys.stdin.read()<br></code></pre></td></tr></table></figure>
+<p>当我们触发对应的函数调用时其便会在控制台打印对应的窗体信息</p>
+<p><img src="https://s2.loli.net/2023/07/20/IsqVyQ6lNXW3COd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="hexdump-——-将对应数据按一定格式输出">hexdump —— 将对应数据按一定格式输出</h3>
+<p>我们同样的以<code>notepad</code>为例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> frida<br><span class="hljs-keyword">import</span> sys<br><br>session = frida.attach(<span class="hljs-string">&quot;notepad.exe&quot;</span>)<br>script = session.create_script(<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        var baseFunc = Module.findExportByName(&quot;user32.dll&quot;, &quot;MessageBoxW&quot;);</span><br><span class="hljs-string">        var buf = Memory.alloc(256);</span><br><span class="hljs-string">        buf = Memory.readByteArray(baseFunc, 256);</span><br><span class="hljs-string">        console.log(hexdump(buf, &#123;</span><br><span class="hljs-string">            offset: 0,</span><br><span class="hljs-string">            length: 256,</span><br><span class="hljs-string">            header: true,</span><br><span class="hljs-string">            ansi: false</span><br><span class="hljs-string">        &#125;));                                                                                    </span><br><span class="hljs-string">    &quot;&quot;&quot;</span> <br>)<br><br>script.load()<br>sys.stdin.read()<br></code></pre></td></tr></table></figure>
+<p>我们可以拿到如下输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs hex">           0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF<br>00000000  48 83 ec 38 45 33 db 44 39 1d 92 7b 03 00 74 2e  H..8E3.D9..&#123;..t.<br>00000010  65 48 8b 04 25 30 00 00 00 4c 8b 50 48 33 c0 f0  eH..%0...L.PH3..<br>00000020  4c 0f b1 15 78 86 03 00 4c 8b 15 79 86 03 00 41  L...x...L..y...A<br>00000030  8d 43 01 4c 0f 44 d0 4c 89 15 6a 86 03 00 83 4c  .C.L.D.L..j....L<br>00000040  24 28 ff 66 44 89 5c 24 20 e8 d2 fd ff ff 48 83  $(.fD.\$ .....H.<br>00000050  c4 38 c3 cc cc cc cc cc cc cc cc cc cc cc cc cc  .8..............<br>00000060  40 55 53 56 57 41 54 41 55 41 56 41 57 48 8d 6c  @USVWATAUAVAWH.l<br>00000070  24 f8 48 81 ec 08 01 00 00 65 48 8b 04 25 30 00  $.H......eH..%0.<br>00000080  00 00 45 33 ed 48 8b 79 10 48 8b f1 45 8b fd 4c  ..E3.H.y.H..E..L<br>00000090  89 6d b8 4c 89 6d c0 4c 39 68 78 75 19 41 8d 4d  .m.L.m.L9hxu.A.M<br>000000a0  0e 48 ff 15 f0 78 01 00 0f 1f 44 00 00 48 85 c0  .H...x....D..H..<br>000000b0  0f 84 8d 08 00 00 44 8b 66 28 41 8b dc c1 eb 07  ......D.f(A.....<br>000000c0  81 e3 00 10 00 00 48 f7 46 20 00 00 ff ff 75 68  ......H.F ....uh<br>000000d0  48 85 ff 74 4e 48 8b 0d f4 77 03 00 ba 08 00 00  H..tNH...w......<br>000000e0  00 41 b8 00 02 00 00 48 ff 15 ea 71 01 00 0f 1f  .A.....H...q....<br>000000f0  44 00 00 48 89 45 b8 48 85 c0 74 27 0f b7 56 20  D..H.E.H..t&#x27;..V<br></code></pre></td></tr></table></figure>
+<h3 id="setTimeout-——-延迟函数调用">setTimeout —— 延迟函数调用</h3>
+<p><code>setTimeout(fn, delay)</code>，在延迟<code>delay</code>毫秒之后，调用 fn，这个调用会返回一个ID，这个ID可以传递给<code>clearTimeout</code>用来进行调用取消</p>
+<h3 id="clearTimeout-——-取消延迟函数调用">clearTimeout —— 取消延迟函数调用</h3>
+<p><code>clearTimeout(id)</code>，取消通过<code>setTimeout</code>发起的延迟调用</p>
+<h3 id="setInterval-——-设置间隔时间调用函数">setInterval —— 设置间隔时间调用函数</h3>
+<p><code>setInterval(fn, delay)</code>，每隔<code>delay</code>毫秒调用一次 fn，返回一个ID，这个ID可以传给<code>clearInterval</code>进行调用取消</p>
+<h3 id="clearInterval-——-取消间隔时间调用函数">clearInterval —— 取消间隔时间调用函数</h3>
+<p><code>clearInterval(id)</code>，取消通过<code>setInterval</code>发起的调用</p>
+<h3 id="Memory-readPointer-——-数据读取">Memory.readPointer —— 数据读取</h3>
+<p><code>Memory.readPointer(address)</code>其中 address 为对应读地址信息</p>
+<h3 id="Memory-writePointer-——-内存写入">Memory.writePointer —— 内存写入</h3>
+<p><code>Memory.writePointer(address, ptr)</code>其中 address 为对应写地址信息，ptr 为对应写内容，如我需要写入123，则相应构造为<code>ptr(&quot;123&quot;)</code></p>
+<h3 id="Interceptor-attach-——-函数调用拦截">Interceptor.attach —— 函数调用拦截</h3>
+<p><code>Interceptor.attach(target, callbacks)</code>: 在target指定的位置进行函数调用拦截，target 是一个<code>NativePointer</code>参数，用来指定你想要拦截的函数的地址，有一点需要注意，在32位 ARM 机型上，ARM函数地址末位一定是 0 ( 2字节对齐 )，Thumb函数地址末位一定 1 ( 单字节对齐 )，如果使用的函数地址是用 Frida API 获取的话，那么API内部会自动处理这个细节 ( 比如：<code>Module.findExportByName()</code>)。</p>
+<p>其中callbacks参数是一个对象，大致结构如下：</p>
+<ul>
+<li>
+<p>onEnter: function(args): 被拦截函数调用之前回调，其中原始函数的参数使用args数组 ( NativePointer 对象数组 ) 来表示，可以在这里修改函数的调用参数。</p>
+</li>
+<li>
+<p>onLeave: function(retval): 被拦截函数调用之后回调，其中 retval 表示原始函数的返回值，retval 是从 NativePointer 继承来的，是对原始返回值的一个封装，可以使用 <code>retval.replace(1337)</code> 调用来修改返回值的内容。需要注意的一点是，retval 对象只在 onLeave 函数作用域范围 内有效，因此如果你要保存这个对象以备后续使用的话，一定要使用深拷贝来保存对象，比如：<code>ptr(retval.toString())</code>。</p>
+</li>
+</ul>
+<p>拦截器的attach调用返回一个监听对象，后续取消拦截的时候，可以作为 <code>Interceptor.detach()</code> 的参数使用。</p>
+<p>还有一个比较方便的地方，那就是在回调函数里面，包含了一个隐藏的 this 的线程 tls 对象，方便在回调函数中存储变量，比如可以在 onEnter 中保存值，然后在 onLeave 中使用</p>
+<p>this 对象还包含了一些额外的比较有用的属性：</p>
+<ul>
+<li>
+<p>returnAddress: 返回 NativePointer 类型的 address 对象</p>
+</li>
+<li>
+<p>context: 包含 pc，sp，以及相关寄存器比如 eax, ebx等，可以在回调函数中直接修改</p>
+</li>
+<li>
+<p>errno: （UNIX）当前线程的错误值</p>
+</li>
+<li>
+<p>lastError: (Windows) 当前线程的错误值</p>
+</li>
+<li>
+<p>threadId: 操作系统线程Id depth: 函数调用层次深度</p>
+</li>
+</ul>
+<h2 id="Python部分API">Python部分API</h2>
+<h4 id="消息监控">消息监控</h4>
+<p>使用<code>script.on('message', on_message)</code>来监控任何来自目标进程的消息，消息监控可以来自<code>script</code>和<code>session</code>两个方面。比如，如果你想要监控目标进程的退出，可以使用下面这个语句<code>session.on('detached', my_function)</code></p>
+<h2 id="API参考">API参考</h2>
+<p>此部分主要搬运与官方的API文档，不对以下API做过多的举例分析</p>
+<h3 id="Process">Process</h3>
+<p><code>Process.arch</code>: CPU架构信息，取值范围：ia32、x64、arm、arm64</p>
+<p><code>Process.platform</code>: 平台信息，取值范围：windows、darwin、linux、qnx</p>
+<p><code>Process.pageSize</code>: 虚拟内存页面大小，主要用来辅助增加脚本可移植性</p>
+<p><code>Process.pointerSize</code>: 指针占用的内存大小，主要用来辅助增加脚本可移植性</p>
+<p><code>Process.codeSigningPolicy</code>: 取值范围是 optional 或者 required，后者表示Frida会尽力避免修改内存中的代码，并且不会执行未签名的代码。默认值是 optional，除非是在 Gadget 模式下通过配置文件来使用 required，通过这个属性可以确定 Interceptor API 是否有限制，确定代码修改或者执行未签名代码是否安全。</p>
+<blockquote>
+<p>这个目前没有实验清楚，可以参考原文</p>
+</blockquote>
+<p><code>Process.isDebuggerAttached()</code>: 确定当前是否有调试器附加</p>
+<p><code>Process.getCurrentThreadId()</code>: 获取当前线程ID</p>
+<p><code>Process.enumerateThreads(callbacks)</code>: 枚举所有线程，每次枚举到一个线程就执行回调类callbacks：</p>
+<ul>
+<li>
+<p>onMatch: function(thread): 当枚举到一个线程的时候，就调用这个函数，其中thread参数包含 ：</p>
+<ul>
+<li>
+<ol>
+<li>id，线程ID</li>
+<li>state，线程状态，取之范围是 running, stopped, waiting, uninterruptible, halted</li>
+<li>context, 包含 pc, sp，分别代表 EIP/RIP/PC 和 ESP/RSP/SP，分别对应于 ia32/x64/arm平台，其他的寄存器也都有，比如 eax, rax, r0, x0 等。</li>
+<li>函数可以直接返回 stop 来停止枚举。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>onComplete: function(): 当所有的线程枚举都完成的时候调用。</p>
+</li>
+</ul>
+<p><code>Process.enumerateThreadSync()</code>: enumerateThreads()的同步版本，返回线程对象数组</p>
+<p><code>Process.findModuleByAddress(address)</code>, <code>Process.getModuleByAddress(address)</code>, <code>Process.findModuleByName(name)</code>, <code>Process.getModuleByName(name)</code>: 根据地址或者名称来查找模块，如果找不到这样的模块，find开头的函数返回 null，get开头的函数会抛出异常。</p>
+<p><code>Process.enumerateModules(callbacks)</code>: 枚举已经加载的模块，枚举到模块之后调用回调对象：</p>
+<ul>
+<li>onMatch: function(module): 枚举到一个模块的时候调用，module对象包含如下字段：
+<ul>
+<li>
+<ol>
+<li>name, 模块名</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>base, 基地址</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>size，模块大小</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>path，模块路径</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>函数可以返回 stop 来停止枚举 。</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>onComplete: function(): 当所有的模块枚举完成的时候调用。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>Process.enumerateModulesSync():</code> <code>enumerateModules(</code>) 函数的同步版本，返回模块对象数组</p>
+<p><code>Process.findRangeByAddress(address)</code>, <code>Process.getRangeByAddress(address)</code>: 返回一个内存块对象，如果在这个address找不到内存块对象，那么 <code>findRangeByAddress()</code> 返回 null 而 <code>getRangeByAddress</code> 则抛出异常。</p>
+<p><code>Process.numerateRanges(protection | specifier, callbacks)</code>: 枚举指定 protection 类型的内存块，以指定形式的字符串给出：rwx，而 rw 表示最少是可读可写，也可以用分类符，里面包含 protection 这个Key，取值就是前面提到的rwx，还有一个 coalesce 这个Key，表示是否要把位置相邻并且属性相同的内存块合并给出结果，枚举过程中回调 callbacks 对象：</p>
+<ul>
+<li>
+<p>onMatch: function(range): 每次枚举到一个内存块都回调回来，其中Range对象包含如下属性：</p>
+<ol>
+<li>
+<p>base：基地址 26</p>
+</li>
+<li>
+<p>size：内存块大小</p>
+</li>
+<li>
+<p>protection：保护属性</p>
+</li>
+<li>
+<p>file：（如果有的话）内存映射文件：<br>
+4.1 path，文件路径<br>
+4.2 offset，文件内偏移</p>
+</li>
+<li>
+<p>如果要停止枚举过程，直接返回 stop 即可</p>
+</li>
+</ol>
+</li>
+<li>
+<p>onComplete: function(): 所有内存块枚举完成之后会回调</p>
+</li>
+</ul>
+<p><code>Process.enumerateRangesSync(protection | specifier)</code>: enumerateRanges()函数的同步版本，返回内存块数组</p>
+<p><code>Process.enumerateMallocRanges(callbacks)</code>: 用于枚举在系统堆上申请的内存块</p>
+<p><code>Process.enumerateMallocRangesSync(protection)</code>: <code>Process.enumerateMallocRanges()</code> 的同步版本</p>
+<p><code>Process.setExceptionHandler(callback)</code>: 在进程内安装一个异常处理函数（Native Exception），回调函数会在目标进程本身的异常处理函数之前调用，回调函数只有一个参数 details，包含以下几个属性：</p>
+<ul>
+<li>
+<p>type，取值为下列之一：</p>
+<ul>
+<li>
+<ol>
+<li>abort</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>access-violation</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>guard-page</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>illegal-instruction</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>stack-overflow</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>arithmetic</li>
+</ol>
+</li>
+<li>
+<ol start="7">
+<li>breakpoint</li>
+</ol>
+</li>
+<li>
+<ol start="8">
+<li>single-step</li>
+</ol>
+</li>
+<li>
+<ol start="9">
+<li>system</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>address，异常发生的地址，NativePointer</p>
+</li>
+<li>
+<p>memory，如果这个对象不为空，则会包含下面这些属性：</p>
+<ul>
+<li>
+<ol>
+<li>operation: 引发一场的操作类型，取值范围是 read, write 或者 execute</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>address: 操作发生异常的地址，NativePointer</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>context，包含 pc 和 sp 的 NativePointer，分别代表指令指针和堆栈指针</p>
+</li>
+<li>
+<p>nativeContext，基于操作系统定义的异常上下文信息的 NativePointer，在 context 里面的信息不够用的时候，可以考虑用这个指针，但是一般不建议使用</p>
+<blockquote>
+<p>估计是考虑到可移植性或者稳定性</p>
+</blockquote>
+</li>
+<li>
+<p>捕获到异常之后，怎么使用就看你自己了，比如可以把异常信息写到日志里面，然后发送个信息给主控端，然后同步等待主控端的响应之后 处理，或者直接修改异常信息里面包含的寄存器的值，尝试恢复掉异常，继续执行。如果你处理了异常信息，那么这个异常回调里面你要返回 true，Frida会把异常交给进程异常处理函数处理，如果到最后都没人去处理这个异常，就直接结束目标进程。</p>
+</li>
+</ul>
+<h3 id="Module">Module</h3>
+<p><code>Module.emuerateImports(name, callbacks)</code>: 枚举模块 name 的导入表，枚举到一个导入项的时候回调callbacks, callbacks包含下面2个回调：</p>
+<ul>
+<li>
+<p>onMatch: function(imp): 枚举到一个导入项到时候会被调用，imp包含如下的字段：</p>
+<ul>
+<li>
+<ol>
+<li>type，导入项的类型， 取值范围是 function或者variable</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>name，导入项的名称</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>module，模块名称</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>address，导入项的绝对地址</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>以上所有的属性字段，只有 name 字段是一定会有，剩余的其他字段不能保证都有，底层会尽量保证每个字段都能给出数据，但是不 能保证一定能拿到数据，onMatch 函数可以返回字符串 stop 表示要停止枚举。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>onComplete: function(): 当所有的导入表项都枚举完成的时候会回调</p>
+</li>
+</ul>
+<p><code>Module.eumerateImportsSync(name)</code>: enumerateImports()的同步版本</p>
+<p><code>Module.emuerateExports(name, callbacks)</code>: 枚举指定模块 name 的导出表项，结果用 callbacks 进行回调：</p>
+<ul>
+<li>onMatch: function(exp): 其中 exp 代表枚举到的一个导出项，包含如下几个字段：
+<ul>
+<li>
+<ol>
+<li>type，导出项类型，取值范围是 function或者variable</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>name，导出项名称</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>address，导出项的绝对地址，NativePointer</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>函数返回 stop 的时候表示停止枚举过程</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>onComplete: function(): 枚举完成回调</li>
+</ul>
+<p><code>Module.enumerateExportsSync()</code>: <code>Module.enumerateExports()</code>的同步版本</p>
+<p><code>Module.enumerateSymbols(name, callbacks)</code>: 枚举指定模块中包含的符号，枚举结果通过回调进行通知：</p>
+<ul>
+<li>
+<p>onMatch: function(sym): 其中 sym 包含下面几个字段： isGlobal，布尔值，表示符号是否全局可见 type，符号的类型，取值是下面其中一种：</p>
+<ul>
+<li>
+<ol>
+<li>unknown</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>undefined</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>absolute</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>section</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>prebound-undefined</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>indirect</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>section，如果这个字段不为空的话，那这个字段包含下面几个属性:</p>
+<ul>
+<li>
+<ol>
+<li>id，小节序号，段名，节名</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>protection，保护属性类型， rwx 这样的属性</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>name，符号名称</p>
+</li>
+<li>
+<p>address，符号的绝对地址，NativePointer 这个函数返回 stop 的时候，表示要结束枚举过程</p>
+</li>
+</ul>
+<p><code>Module.enumerateSymbolsSync(name)</code>: <code>Module.enumerateSymbols()</code> 的同步版本</p>
+<p><code>Module.enumerateRanges(name, protection, callbacks)</code>: 功能基本等同于 Process.enumerateRanges()，只不过多了一个模块名限定了枚 举的范围</p>
+<p><code>Module.enumerateRangesSync(name, protection)</code>: Module.enumerateRanges() 的同步版本</p>
+<p><code>Module.findBaseAddress(name)</code>: 获取指定模块的基地址</p>
+<p><code>Module.findExportByName(module | null, exp)</code>: 返回模块 module 内的导出项的绝对地址，如果模块名不确定，第一个参数传入 null，这种情 况下会增大查找开销，尽量不要使用。</p>
+<h3 id="Memory">Memory</h3>
+<p><code>Memory.scan(address, size, pattern, callbacks)</code>: 在 address 开始的地址，size 大小的内存范围内以 pattern 这个模式进行匹配查找，查找到一个内存块就回调callbacks，各个参数详细如下：</p>
+<ul>
+<li>pattern 比如使用<code>13 37 ?? ff</code>来匹配 0x13开头，然后跟着0x37，然后是任意字节内容，接着是0xff这样的内存块</li>
+<li>callbacks 是扫描函数回调对象：
+<ul>
+<li>
+<ol>
+<li>onMatch: function(address, size): 扫描到一个内存块，起始地址是address，大小size的内存块，返回 stop 表示停止扫描</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>onError: function(reason): 扫描内存的时候出现内存访问异常的时候回调</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>onComplete: function(): 内存扫描完毕的时候调用</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>Memory.scanSync(address, size, pattern)</code>: 内存扫描 scan() 的同步版本</p>
+<p><code>Memory.alloc(size)</code>: 在目标进程中的堆上申请size大小的内存，并且会按照<code>Process.pageSize</code>对齐，返回一个<code>NativePointer</code>，并且申请的内存 如果在JavaScript里面没有对这个内存的使用的时候会自动释放的。也就是说，如果你不想要这个内存被释放，你需要自己保存一份对这个内存块的引用。</p>
+<p><code>Memory.copy(dust, src, n)</code>: 就像是memcpy</p>
+<p><code>Memory.dup(address, size)</code>: 等价于 Memory.alloc()和Memory.copy()的组合。</p>
+<p><code>Memory.protect(address, size, protection)</code>: 更新address开始，size大小的内存块的保护属性，protection 的取值参考 <code>Process.enumerateRanges()</code>，比如：<code>Memory.protect(ptr(&quot;0x123&quot;, 4096, 'rw-')); </code></p>
+<p><code>Memory.patchCode(address, size, apply)</code>: apply是一个回调函数，这个函数是用来在 address 开始的地址和 size 大小的地方开始Patch的时 候调用，回调参数是一个<code>NativePointer</code>的可写指针，需要在 apply 回调函数里面要完成 patch 代码的写入，注意，这个可写的指针地址不一定和上 面的address是同一个地址，因为在有的系统上是不允许直接写入代码段的，需要先写入到一个临时的地方，然后在影射到响应代码段上</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Frida Learning</div>
+      <div>https://equinox-shame.github.io/2023/07/21/Frida 学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/19/HWS-2023/" title="2023 HWS WP">
+                        <span class="hidden-mobile">2023 HWS WP</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
