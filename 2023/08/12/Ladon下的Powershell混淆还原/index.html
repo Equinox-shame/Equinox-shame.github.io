@@ -1,0 +1,778 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 Ladon为大型内网渗透工具，可PowerShell模块化、可CS插件化、可内存加载，无文件扫描。含端口扫描、服务识别、网络资产探测、密码审计、高危漏洞检测、漏洞利用、密码读取以及一键GetShell，支持批量A段&#x2F;B段&#x2F;C段以及跨网段扫描，支持URL、主机、域名列表扫描等。 此次我们着重于对PowerShell的混淆进行简单的分析，其对应混淆的方式是将Powershell脚本通过只包含特殊">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ladon下的Powershell混淆还原">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/08/12/Ladon%E4%B8%8B%E7%9A%84Powershell%E6%B7%B7%E6%B7%86%E8%BF%98%E5%8E%9F/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 Ladon为大型内网渗透工具，可PowerShell模块化、可CS插件化、可内存加载，无文件扫描。含端口扫描、服务识别、网络资产探测、密码审计、高危漏洞检测、漏洞利用、密码读取以及一键GetShell，支持批量A段&#x2F;B段&#x2F;C段以及跨网段扫描，支持URL、主机、域名列表扫描等。 此次我们着重于对PowerShell的混淆进行简单的分析，其对应混淆的方式是将Powershell脚本通过只包含特殊">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/08/12/DefpbU1832dnt7x.png">
+<meta property="article:published_time" content="2023-08-12T13:28:58.585Z">
+<meta property="article:modified_time" content="2023-08-12T13:30:09.947Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/08/12/DefpbU1832dnt7x.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Ladon下的Powershell混淆还原 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Ladon下的Powershell混淆还原"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-12 21:28" pubdate>
+          2023年8月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Ladon下的Powershell混淆还原</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>Ladon为大型内网渗透工具，可PowerShell模块化、可CS插件化、可内存加载，无文件扫描。含端口扫描、服务识别、网络资产探测、密码审计、高危漏洞检测、漏洞利用、密码读取以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描等。</p>
+<p>此次我们着重于对PowerShell的混淆进行简单的分析，其对应混淆的方式是将Powershell脚本通过只包含特殊符号来进行，如下图：</p>
+<p><img src="https://s2.loli.net/2023/08/12/DefpbU1832dnt7x.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="还原混淆">还原混淆</h2>
+<p>我们此处以2023 *CTF中的ez_code为例</p>
+<p>我们可以看到其对应的代码由符号组成(代码太长了此处就不贴完了)</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">(<span class="hljs-string">&#x27;(&#x27;</span>  | % &#123; <span class="hljs-variable">$</span>&#123;-``&#125; = + <span class="hljs-variable">$</span>() &#125; &#123; <span class="hljs-variable">$</span>&#123;]&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; &#125; &#123; <span class="hljs-variable">$</span>&#123;!;*&#125; = ++  <span class="hljs-variable">$</span>&#123;-``&#125; &#125; &#123; <span class="hljs-variable">$</span>&#123;*<span class="hljs-selector-tag">@</span> &#125; = (  <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; &#123; <span class="hljs-variable">$</span>&#123;=<span class="hljs-variable">$</span>``&#125; = (  <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; &#123; <span class="hljs-variable">$</span>&#123; ]&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; &#123; <span class="hljs-variable">$</span>&#123;!&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; &#123; <span class="hljs-variable">$</span>&#123;<span class="hljs-comment">#.&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;(&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;)``&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;``*%&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;) &#125; &#123; $&#123;$%&#125; = &quot;[&quot; + &quot;$(@&#123;  &#125;)&quot;[$&#123;(&#125;  ] + &quot;$(@&#123;  &#125;)&quot;[  &quot;$&#123;!;*&#125;$&#123;``*%&#125;&quot;  ] + &quot;$(@&#123;  &#125;  )  &quot;[  &quot;$&#123;*@ &#125;$&#123;]&#125;&quot;  ] + &quot;$?&quot;[$&#123;!;*&#125;  ] + &quot;]&quot; &#125; &#123; $&#123;-``&#125; = &quot;&quot;.(&quot;$(  @&#123;&#125;  )  &quot;[  &quot;$&#123;!;*&#125;$&#123; ]&#125;&quot;  ] + &quot;$(@&#123;&#125;)  &quot;[  &quot;$&#123;!;*&#125;$&#123;#.&#125;&quot;] + &quot;$(  @&#123;  &#125;  )&quot;[$&#123;]&#125;] + &quot;$(@&#123;&#125;  )&quot;[$&#123; ]&#125;] + &quot;$?  &quot;[  $&#123;!;*&#125;] + &quot;$(  @&#123;&#125;)&quot;[$&#123;=$``&#125;  ]) &#125; &#123; $&#123;-``&#125; = &quot;$(@&#123;  &#125;  )&quot;[  &quot;$&#123;!;*&#125;&quot; + &quot;$&#123; ]&#125;&quot;] + &quot;$(@&#123;  &#125;)  &quot;[$&#123; ]&#125;  ] + &quot;$&#123;-``&#125;&quot;[&quot;$&#123;*@ &#125;&quot; + &quot;$&#123;(&#125;&quot;  ] &#125;  )  ; $&#123;@*&#125; = &quot;$&#123;$%&#125;$&#123;``*%&#125;$&#123;``*%&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;(&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;``*%&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123; ]&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123; ]&#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;#.&#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;``*%&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;!;*&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;#.&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;]&#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123;#.&#125;$&#123;!;*&#125;+$&#123;$%&#125;$&#123;=$``&#125;$&#123;*@ &#125;+$&#123;$%&#125;$&#123; ]&#125;$&#123;)``&#125;+$&#123;$%&#125;$&#123;!;*&#125;$&#123;*@ &#125;$&#123;]&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;#.&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;!&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123; ]&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;=$``&#125;+$&#123;$%&#125;$&#123;!&#125;$&#123;*@  ....</span><br></code></pre></td></tr></table></figure>
+<p>看上去让人挺无从下手的不是吗？我们首先找到分号以及大括号来将其进行简单的划分，我们将分号前的作为第一部分，分号后的作为第二部分</p>
+<h3 id="第一部分">第一部分</h3>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clojure">(<span class="hljs-name">&#x27;</span>(<span class="hljs-name">&#x27;</span>  | % &#123; $&#123;-``&#125; = + $() &#125; &#123; $&#123;]&#125; = $&#123;-``&#125; &#125; &#123; $&#123;!;*&#125; = ++  $&#123;-``&#125; &#125; &#123; $&#123;*@ &#125; = (  $&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;=$``&#125; = (  $&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123; ]&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;!&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;#.&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;(&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;)``&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; &#123; $&#123;``*%&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;) &#125; &#123; $&#123;$%&#125; = <span class="hljs-string">&quot;[&quot;</span> + <span class="hljs-string">&quot;$(@&#123;  &#125;)&quot;</span>[$&#123;(&#125;  ] + <span class="hljs-string">&quot;$(@&#123;  &#125;)&quot;</span>[  <span class="hljs-string">&quot;$&#123;!;*&#125;$&#123;``*%&#125;&quot;</span>  ] + <span class="hljs-string">&quot;$(@&#123;  &#125;  )  &quot;</span>[  <span class="hljs-string">&quot;$&#123;*@ &#125;$&#123;]&#125;&quot;</span>  ] + <span class="hljs-string">&quot;$?&quot;</span>[$&#123;!;*&#125;  ] + <span class="hljs-string">&quot;]&quot;</span> &#125; &#123; $&#123;-``&#125; = <span class="hljs-string">&quot;&quot;</span>.(<span class="hljs-string">&quot;$(  @&#123;&#125;  )  &quot;</span>[  <span class="hljs-string">&quot;$&#123;!;*&#125;$&#123; ]&#125;&quot;</span>  ] + <span class="hljs-string">&quot;$(@&#123;&#125;)  &quot;</span>[  <span class="hljs-string">&quot;$&#123;!;*&#125;$&#123;#.&#125;&quot;</span>] + <span class="hljs-string">&quot;$(  @&#123;  &#125;  )&quot;</span>[$&#123;]&#125;] + <span class="hljs-string">&quot;$(@&#123;&#125;  )&quot;</span>[$&#123; ]&#125;] + <span class="hljs-string">&quot;$?  &quot;</span>[  $&#123;!;*&#125;] + <span class="hljs-string">&quot;$(  @&#123;&#125;)&quot;</span>[$&#123;=$``&#125;  ]) &#125; &#123; $&#123;-``&#125; = <span class="hljs-string">&quot;$(@&#123;  &#125;  )&quot;</span>[  <span class="hljs-string">&quot;$&#123;!;*&#125;&quot;</span> + <span class="hljs-string">&quot;$&#123; ]&#125;&quot;</span>] + <span class="hljs-string">&quot;$(@&#123;  &#125;)  &quot;</span>[$&#123; ]&#125;  ] + <span class="hljs-string">&quot;$&#123;-``&#125;&quot;</span>[<span class="hljs-string">&quot;$&#123;*@ &#125;&quot;</span> + <span class="hljs-string">&quot;$&#123;(&#125;&quot;</span>  ] &#125;  )  <span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<p>在powershell中我们可以使用<code>$&#123;变量名&#125;</code>的方式来定义任意变量，我们先看上面部分，<code>$()</code>为空子表达式等价于<code>$null</code>当我们在前面加上一个<code>+</code>时会将其转换为数值 0，所以上述中的混淆中第一个大括号<code>&#123; $&#123;-``&#125; = + $() &#125;</code>为定义了<code>$&#123;-``&#125;</code>变量值为 0</p>
+<p>利用上述规则我们可以将部分变量进行表达出来，其实还一个最简单的方式获取对应变量代表的值，我们可以使用<code>echo</code>来打印对应变量的值</p>
+<blockquote>
+<p>在输出时我们同样以大括号拆开后来辨别对应变量名，之后将其进行输出即可快速得到对应的值</p>
+</blockquote>
+<p>在翻译过程我们可以注意到有<code>@&#123;&#125;</code>的出现，其代表着一个空的哈希表，当我们将其放在子表达式<code>$()</code>中，并转换为字符串即<code>&quot;$(@&#123;&#125;)&quot;</code>时，我们便可以得到字符串<code>System.Collections.Hashtable</code>此时我们可以按照下述索引进行替换</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">00</span> <span class="hljs-number">01</span> <span class="hljs-number">02</span> <span class="hljs-number">03</span> <span class="hljs-number">04</span> <span class="hljs-number">05</span> <span class="hljs-number">06</span> <span class="hljs-number">07</span> <span class="hljs-number">08</span> <span class="hljs-number">09</span> <span class="hljs-number">10</span> <span class="hljs-number">11</span> <span class="hljs-number">12</span> <span class="hljs-number">13</span> <span class="hljs-number">14</span> <span class="hljs-number">15</span> <span class="hljs-number">16</span> <span class="hljs-number">17</span> <span class="hljs-number">18</span> <span class="hljs-number">19</span> <span class="hljs-number">20</span> <span class="hljs-number">21</span> <span class="hljs-number">22</span> <span class="hljs-number">23</span> <br><span class="hljs-attribute">S</span>  y  s  t  e  m  .  C  o  l  l  e  c  t  i  o  n  s  .  H  a  s  h  t <span class="hljs-number">24</span> <span class="hljs-number">25</span> <span class="hljs-number">26</span> <span class="hljs-number">27</span> <br><span class="hljs-attribute">a</span>  b  l  e<br></code></pre></td></tr></table></figure>
+<p>同样的在翻译工程中我们还会遇到<code>$?</code>，其一个自动变量指示的是我们上一条语句的执行情况，如果执行成功为<code>True</code>反之为<code>False</code>，我们同样可以利用索引来取对应字符</p>
+<p>翻译出来后我们可以发现有<code>&quot;&quot;.inSert</code>字样，<code>Insert()</code>为<code>System.String</code>中的一个方法名，原型如下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">string Insert(int startIndex, string value)<br></code></pre></td></tr></table></figure>
+<p>我们使用<code>&lt;Object&gt;.Method name</code>可以得到上述一个方法对象</p>
+<p>对于<code>&quot;&quot;.inSert</code>我们同样可以创建一个索引表如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">00</span> <span class="hljs-number">01</span> <span class="hljs-number">02</span> <span class="hljs-number">03</span> <span class="hljs-number">04</span> <span class="hljs-number">05</span> <span class="hljs-number">06</span> <span class="hljs-number">07</span> <span class="hljs-number">08</span> <span class="hljs-number">09</span> <span class="hljs-number">10</span> <span class="hljs-number">11</span> <span class="hljs-number">12</span> <span class="hljs-number">13</span> <span class="hljs-number">14</span> <span class="hljs-number">15</span> <span class="hljs-number">16</span> <span class="hljs-number">17</span> <span class="hljs-number">18</span> <span class="hljs-number">19</span> <span class="hljs-number">20</span> <span class="hljs-number">21</span> <span class="hljs-number">22</span> <span class="hljs-number">23</span> <span class="hljs-number">24</span> <span class="hljs-number">25</span> <span class="hljs-number">26</span> <span class="hljs-number">27</span> <span class="hljs-number">28</span> <span class="hljs-number">29</span> <span class="hljs-number">30</span> <span class="hljs-number">31</span> <span class="hljs-number">32</span> <span class="hljs-number">33</span> <span class="hljs-number">34</span> <span class="hljs-number">35</span> <span class="hljs-number">36</span> <span class="hljs-number">37</span> <span class="hljs-number">38</span><br><span class="hljs-attribute">s</span>  t  r  i  n  g     I  n  s  e  r  t  (  i  n  t     s  t  a  r  t  I  n  d  e  x  ,     s  t  r  i  n  g     v  a <span class="hljs-number">39</span> <span class="hljs-number">40</span> <span class="hljs-number">41</span> <span class="hljs-number">42</span> <br><span class="hljs-attribute">l</span>  u  e  )<br></code></pre></td></tr></table></figure>
+<p>经过上述转换后我们可以得到对应的变量名与其值为：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs powershell">&#123; <span class="hljs-variable">$</span>&#123;-``&#125; = + <span class="hljs-variable">$</span>() &#125; <span class="hljs-comment"># 0</span><br>&#123; <span class="hljs-variable">$</span>&#123;]&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; &#125; <span class="hljs-comment"># 0</span><br>&#123; <span class="hljs-variable">$</span>&#123;!;*&#125; = ++  <span class="hljs-variable">$</span>&#123;-``&#125; &#125; <span class="hljs-comment"># 1</span><br>&#123; <span class="hljs-variable">$</span>&#123;*<span class="hljs-selector-tag">@</span> &#125; = (  <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 2</span><br>&#123; <span class="hljs-variable">$</span>&#123;=<span class="hljs-variable">$</span>``&#125; = (  <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 3</span><br>&#123; <span class="hljs-variable">$</span>&#123; ]&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 4</span><br>&#123; <span class="hljs-variable">$</span>&#123;!&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 5</span><br>&#123; <span class="hljs-variable">$</span>&#123;<span class="hljs-comment">#.&#125; = ($&#123;-``&#125; = $&#123;-``&#125; + $&#123;!;*&#125;  ) &#125; # 6</span><br>&#123; <span class="hljs-variable">$</span>&#123;(&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 7</span><br>&#123; <span class="hljs-variable">$</span>&#123;)``&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;  ) &#125; <span class="hljs-comment"># 8</span><br>&#123; <span class="hljs-variable">$</span>&#123;``*%&#125; = (<span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-variable">$</span>&#123;-``&#125; + <span class="hljs-variable">$</span>&#123;!;*&#125;) &#125; <span class="hljs-comment"># 9</span><br>&#123; <span class="hljs-variable">$</span>&#123;<span class="hljs-variable">$</span>%&#125; = <span class="hljs-string">&quot;[&quot;</span> + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;  &#125;)&quot;</span>[<span class="hljs-number">7</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;  &#125;)&quot;</span>[<span class="hljs-number">19</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;  &#125;)&quot;</span>[<span class="hljs-number">24</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>?&quot;</span>[<span class="hljs-number">1</span>] + <span class="hljs-string">&quot;]&quot;</span> &#125; <span class="hljs-comment"># CHar</span><br>&#123; <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-string">&quot;&quot;</span>.(<span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;&#125; )&quot;</span>[<span class="hljs-number">14</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;&#125;)  &quot;</span>[<span class="hljs-number">16</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(  @&#123;  &#125;  )&quot;</span>[<span class="hljs-number">0</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;&#125;)&quot;</span>[<span class="hljs-number">4</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>?&quot;</span>[<span class="hljs-number">1</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(  @&#123;&#125;)&quot;</span>[<span class="hljs-number">3</span>]) &#125; <span class="hljs-comment"># &quot;&quot;.inSert</span><br>&#123; <span class="hljs-variable">$</span>&#123;-``&#125; = <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;  &#125;  )&quot;</span>[<span class="hljs-number">14</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;  &#125;)  &quot;</span>[<span class="hljs-number">4</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>&#123;-``&#125;&quot;</span>[<span class="hljs-number">27</span>] &#125; <span class="hljs-comment"># iex</span><br></code></pre></td></tr></table></figure>
+<h3 id="第二部分">第二部分</h3>
+<p>之后我们将其进行批量替换，用对应数字或者字符串来替换第二部分中的变量。在这之后我们可以大致得到一串由<code>[CHar]xx+[CHar]xx</code>组成的串</p>
+<blockquote>
+<p>xx为某些数字，由我们之前的字符串替换得到</p>
+</blockquote>
+<h3 id="解密">解密</h3>
+<p>我们此时可以将其直接替换掉<code>[CHar]</code>以及<code>+</code>可以直接将其丢进<code>Cyberchef</code>中进行转换，之后我们便可以得到对应的源代码程序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> ctypes <span class="hljs-keyword">import</span> c_uint32<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">chiper</span>():</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self</span>):</span><br>        self.d = <span class="hljs-number">0x87654321</span><br>        k0 = <span class="hljs-number">0x67452301</span><br>        k1 = <span class="hljs-number">0xefcdab89</span><br>        k2 = <span class="hljs-number">0x98badcfe</span><br>        k3 = <span class="hljs-number">0x10325476</span><br>        self.k = [k0, k1, k2, k3]<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">e</span>(<span class="hljs-params">self, n, v</span>):</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">MX</span>(<span class="hljs-params">z, y, total, key, p, e</span>):</span><br>            temp1 = (z.value &gt;&gt; <span class="hljs-number">6</span> ^ y.value &lt;&lt; <span class="hljs-number">4</span>) + (y.value &gt;&gt; <span class="hljs-number">2</span> ^ z.value &lt;&lt; <span class="hljs-number">5</span>)<br>            temp2 = (total.value ^ y.value) + (key[(p &amp; <span class="hljs-number">3</span>) ^ e.value] ^ z.value)<br>            <span class="hljs-keyword">return</span> c_uint32(temp1 ^ temp2)<br>        key = self.k<br>        delta = self.d<br>        rounds = <span class="hljs-number">6</span> + <span class="hljs-number">52</span>//n<br>        total = c_uint32(<span class="hljs-number">0</span>)<br>        z = c_uint32(v[n-<span class="hljs-number">1</span>])<br>        e = c_uint32(<span class="hljs-number">0</span>)<br><br>        <span class="hljs-keyword">while</span> rounds &gt; <span class="hljs-number">0</span>:<br>            total.value += delta<br>            e.value = (total.value &gt;&gt; <span class="hljs-number">2</span>) &amp; <span class="hljs-number">3</span><br>            <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n-<span class="hljs-number">1</span>):<br>                y = c_uint32(v[p+<span class="hljs-number">1</span>])<br>                v[p] = c_uint32(v[p] + MX(z, y, total, key, p, e).value).value<br>                z.value = v[p]<br>            y = c_uint32(v[<span class="hljs-number">0</span>])<br>            v[n-<span class="hljs-number">1</span>] = c_uint32(v[n-<span class="hljs-number">1</span>] + MX(z, y, total,<br>                              key, n-<span class="hljs-number">1</span>, e).value).value<br>            z.value = v[n-<span class="hljs-number">1</span>]<br>            rounds -= <span class="hljs-number">1</span><br>        <span class="hljs-keyword">return</span> v<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bytes2ints</span>(<span class="hljs-params">self,cs:<span class="hljs-built_in">bytes</span></span>)-&gt;<span class="hljs-built_in">list</span>:</span><br>        new_length=<span class="hljs-built_in">len</span>(cs)+(<span class="hljs-number">8</span>-<span class="hljs-built_in">len</span>(cs)%<span class="hljs-number">8</span>)%<span class="hljs-number">8</span><br>        barray=cs.ljust(new_length,<span class="hljs-string">b&#x27;\x00&#x27;</span>)<br>        i=<span class="hljs-number">0</span><br>        v=[]<br>        <span class="hljs-keyword">while</span> i &lt; new_length:<br>            v0 = <span class="hljs-built_in">int</span>.from_bytes(barray[i:i+<span class="hljs-number">4</span>], <span class="hljs-string">&#x27;little&#x27;</span>)<br>            v1 = <span class="hljs-built_in">int</span>.from_bytes(barray[i+<span class="hljs-number">4</span>:i+<span class="hljs-number">8</span>], <span class="hljs-string">&#x27;little&#x27;</span>)<br>            v.append(v0)<br>            v.append(v1)<br>            i += <span class="hljs-number">8</span><br>        <span class="hljs-keyword">return</span> v<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check</span>(<span class="hljs-params">instr:<span class="hljs-built_in">str</span>,checklist:<span class="hljs-built_in">list</span></span>)-&gt;<span class="hljs-built_in">int</span>:</span><br>    length=<span class="hljs-built_in">len</span>(instr)<br>    <span class="hljs-keyword">if</span> length%<span class="hljs-number">8</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Incorrect format.&quot;</span>)<br>        exit(<span class="hljs-number">1</span>)<br>    c=chiper()<br>    v = c.bytes2ints(instr.encode())<br>    output=<span class="hljs-built_in">list</span>(c.e(<span class="hljs-built_in">len</span>(v),v))<br>    i=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span>(i&lt;<span class="hljs-built_in">len</span>(checklist)):<br>        <span class="hljs-keyword">if</span> i&lt;<span class="hljs-built_in">len</span>(output) <span class="hljs-keyword">and</span> output[i]==checklist[i]:<br>            i+=<span class="hljs-number">1</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">if</span> i==<span class="hljs-built_in">len</span>(checklist):<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>    <br><br><span class="hljs-keyword">if</span> __name__==<span class="hljs-string">&quot;__main__&quot;</span>:<br>    ans=[<span class="hljs-number">1374278842</span>, <span class="hljs-number">2136006540</span>, <span class="hljs-number">4191056815</span>, <span class="hljs-number">3248881376</span>]<br>    <span class="hljs-comment"># generateRes()</span><br>    flag=<span class="hljs-built_in">input</span>(<span class="hljs-string">&#x27;Please input flag:&#x27;</span>)<br>    res=check(flag,ans)<br>    <span class="hljs-keyword">if</span> res:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Congratulations, you&#x27;ve got the flag!&quot;</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Flag is *ctf&#123;your_input&#125;!&quot;</span>)<br>        exit(<span class="hljs-number">0</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Nope,try again!&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>不难看出是一个XXTEA，我们写出对应解密脚本将其进行解密即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> ctypes <span class="hljs-keyword">import</span> *<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">MX</span>(<span class="hljs-params">z, y, total, key, p, e</span>):</span><br>    temp1 = (z.value &gt;&gt; <span class="hljs-number">6</span> ^ y.value &lt;&lt; <span class="hljs-number">4</span>) + \<br>            (y.value &gt;&gt; <span class="hljs-number">2</span> ^ z.value &lt;&lt; <span class="hljs-number">5</span>)<br>    temp2 = (total.value ^ y.value) + \<br>            (key[(p &amp; <span class="hljs-number">3</span>) ^ e.value] ^ z.value)<br>    <span class="hljs-keyword">return</span> c_uint32(temp1 ^ temp2)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">encrypt</span>(<span class="hljs-params">n, v, key</span>):</span><br>    delta = <span class="hljs-number">0x87654321</span><br>    rounds = <span class="hljs-number">6</span> + <span class="hljs-number">52</span> // n<br><br>    total = c_uint32(<span class="hljs-number">0</span>)<br>    z = c_uint32(v[n - <span class="hljs-number">1</span>])<br>    e = c_uint32(<span class="hljs-number">0</span>)<br><br>    <span class="hljs-keyword">while</span> rounds &gt; <span class="hljs-number">0</span>:<br>        total.value += delta<br>        e.value = (total.value &gt;&gt; <span class="hljs-number">2</span>) &amp; <span class="hljs-number">3</span><br>        <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n - <span class="hljs-number">1</span>):<br>            y = c_uint32(v[p + <span class="hljs-number">1</span>])<br>            v[p] = c_uint32(v[p] + MX(z, y, total, key, p, e).value).value<br>            z.value = v[p]<br>        y = c_uint32(v[<span class="hljs-number">0</span>])<br>        v[n - <span class="hljs-number">1</span>] = c_uint32(v[n - <span class="hljs-number">1</span>] + MX(z, y, total, key, n - <span class="hljs-number">1</span>, e).value).value<br>        z.value = v[n - <span class="hljs-number">1</span>]<br>        rounds -= <span class="hljs-number">1</span><br><br>    <span class="hljs-keyword">return</span> v<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">decrypt</span>(<span class="hljs-params">n, v, key</span>):</span><br>    delta = <span class="hljs-number">0x87654321</span><br>    rounds = <span class="hljs-number">6</span> + <span class="hljs-number">52</span> // n<br><br>    total = c_uint32(rounds * delta)<br>    y = c_uint32(v[<span class="hljs-number">0</span>])<br>    e = c_uint32(<span class="hljs-number">0</span>)<br><br>    <span class="hljs-keyword">while</span> rounds &gt; <span class="hljs-number">0</span>:<br>        e.value = (total.value &gt;&gt; <span class="hljs-number">2</span>) &amp; <span class="hljs-number">3</span><br>        <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>):<br>            z = c_uint32(v[p - <span class="hljs-number">1</span>])<br>            v[p] = c_uint32((v[p] - MX(z, y, total, key, p, e).value)).value<br>            y.value = v[p]<br>        z = c_uint32(v[n - <span class="hljs-number">1</span>])<br>        v[<span class="hljs-number">0</span>] = c_uint32(v[<span class="hljs-number">0</span>] - MX(z, y, total, key, <span class="hljs-number">0</span>, e).value).value<br>        y.value = v[<span class="hljs-number">0</span>]<br>        total.value -= delta<br>        rounds -= <span class="hljs-number">1</span><br><br>    <span class="hljs-keyword">return</span> v<br><br><br><span class="hljs-comment">#  test</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-comment"># 该算法中每次可加密不只 64bit 的数据，并且加密的轮数由加密数据长度决定</span><br>    v = [<span class="hljs-number">1374278842</span>, <span class="hljs-number">2136006540</span>, <span class="hljs-number">4191056815</span>, <span class="hljs-number">3248881376</span>]<br>    k = [<span class="hljs-number">0x67452301</span>, <span class="hljs-number">0xefcdab89</span>, <span class="hljs-number">0x98badcfe</span>, <span class="hljs-number">0x10325476</span>]<br>    n = <span class="hljs-number">4</span><br><br>    res = decrypt(n, v, k)<br>    flag = <span class="hljs-string">b&#x27;&#x27;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> res:<br>        flag += i.to_bytes(<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;little&#x27;</span>)<br>    <span class="hljs-built_in">print</span>(flag)  <span class="hljs-comment"># yOUar3g0oD@tPw5H</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Ladon下的Powershell混淆还原</div>
+      <div>https://equinox-shame.github.io/2023/08/12/Ladon下的Powershell混淆还原/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/21/Frida%20%E5%AD%A6%E4%B9%A0/" title="Frida Learning">
+                        <span class="hidden-mobile">Frida Learning</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
