@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 在许久之前通常unity常用Mono虚拟机来进行打包，但是因为其打包方式极其容易被逆向因此市面上邮寄基本上使用il2cpp来进行打包操作。 对于il2cpp是将游戏C#代码转换为C++代码然后在编译为各平台Native代码  虽然游戏逻辑以Native代码进行运行，但是其仍然需要实现C#的一些语言特性，于是il2cpp将所有的C#中的类名、方法名、属性名、字符串等地址信息进行记录在globa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IL2CPP 逆向">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/08/16/IL2CPP%20%E9%80%86%E5%90%91/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 在许久之前通常unity常用Mono虚拟机来进行打包，但是因为其打包方式极其容易被逆向因此市面上邮寄基本上使用il2cpp来进行打包操作。 对于il2cpp是将游戏C#代码转换为C++代码然后在编译为各平台Native代码  虽然游戏逻辑以Native代码进行运行，但是其仍然需要实现C#的一些语言特性，于是il2cpp将所有的C#中的类名、方法名、属性名、字符串等地址信息进行记录在globa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210512143724139.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210512144433111.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210512185320917.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://ppppz.net/2023/07/20/IL2CPP/untitled-drawing-3.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/7qaE3dRugZtcDGr.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/bNa4qvCpBFJ1n7K.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/2hvkczjfTwUpE4o.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/XqJyfPTmW693CEx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/wQE5bLOSynPBCzD.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/yZK1St2vj8Ep9An.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/NS7tbGWDecHEQjd.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/UZBrVfLIh5iPGkc.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/946JQWOSNtuspqC.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/a9TzOqiCoySXEmb.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/ep736IzNS1MEo4b.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/mnGvPULAEW8izx3.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/g8cn5PrLNzZRWA9.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/wHxeGaQ85MkOci3.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/16/OV8UdZuSKfn5Bvi.png">
+<meta property="article:published_time" content="2023-08-15T22:54:54.776Z">
+<meta property="article:modified_time" content="2023-08-15T22:54:19.249Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210512143724139.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>IL2CPP 逆向 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="IL2CPP 逆向"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-16 06:54" pubdate>
+          2023年8月16日 早上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">IL2CPP 逆向</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>在许久之前通常unity常用Mono虚拟机来进行打包，但是因为其打包方式极其容易被逆向因此市面上邮寄基本上使用il2cpp来进行打包操作。</p>
+<p>对于il2cpp是将游戏C#代码转换为C++代码然后在编译为各平台Native代码</p>
+<p><img src="https://img-blog.csdnimg.cn/20210512143724139.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>虽然游戏逻辑以Native代码进行运行，但是其仍然需要实现C#的一些语言特性，于是il2cpp将所有的C#中的类名、方法名、属性名、字符串等地址信息进行记录在<code>global-metadata.dat</code>文件中。在il2cpp启动时便会从此文件来进行读取需要的类名、方法名、属性名、字符串等信息。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210512144433111.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>如今互联网上对于il2cpp逆向的教程也是比较多的，但基本上都指向了一个<code>il2cppDumper</code></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/Perfare/Il2CppDumper">Perfare/Il2CppDumper: Unity il2cpp reverse engineer (github.com)</a></p>
+</blockquote>
+<p>通过其将游戏中的<code>libil2cpp.so</code>(或是<code>UnityPlayer.dll</code>)以及<code>global-metadata.dat</code>进行提取后使用上述项目进行dump处理。事实上因为这个项目过于的出名，许多游戏厂商也对此采取了对应的对抗措施(如对上面两个文件进行加密等)。</p>
+<h2 id="前置知识">前置知识</h2>
+<p>通常来说<code>global-metadata.dat</code>的魔术字应为<code>AF 1B B1 FA</code>，我们通过<code>010</code>可以发现其明显的被修改过，则我们需要找到对应解密<code>global-metadata.dat</code>的方法来进行dump处理</p>
+<h3 id="运行-Dump-解密">运行 &amp;&amp; Dump 解密</h3>
+<p>根据大A师傅的文章，我们一般有两种思路，一种是运行起来后获取dump解密结果，另一种是分析对应的加密算法，以下提供大A师傅的Frida脚本</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">frida_Memory</span>(<span class="hljs-params">pattern</span>)</span><br><span class="hljs-function"></span>&#123;<br>Java.perform(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>)</span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;头部标识:&quot;</span> + pattern);<br>    <span class="hljs-keyword">var</span> addrArray = Process.enumerateRanges(<span class="hljs-string">&quot;r--&quot;</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; addrArray.length; i++)<br>    &#123;<br>        <span class="hljs-keyword">var</span> addr = addrArray[i];<br>        Memory.scan(addr.base, addr.size, pattern,<br>        &#123;<br>            <span class="hljs-attr">onMatch</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">address, size</span>)</span><br><span class="hljs-function">            </span>&#123;<br>                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;搜索到 &#x27;</span> + pattern + <span class="hljs-string">&quot; 地址是:&quot;</span> + address.toString());<br>                <span class="hljs-built_in">console</span>.log(hexdump(address,<br>                    &#123;<br>                        <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>,<br>                        <span class="hljs-attr">length</span>: <span class="hljs-number">64</span>,<br>                        <span class="hljs-attr">header</span>: <span class="hljs-literal">true</span>,<br>                        <span class="hljs-attr">ansi</span>: <span class="hljs-literal">true</span><br>                    &#125;<br>                    ));<br>                <span class="hljs-comment">//0x108，0x10C如果不行，换0x100，0x104</span><br>                <span class="hljs-keyword">var</span> DefinitionsOffset = <span class="hljs-built_in">parseInt</span>(address, <span class="hljs-number">16</span>) + <span class="hljs-number">0x108</span>;<br>                <span class="hljs-keyword">var</span> DefinitionsOffset_size = Memory.readInt(ptr(DefinitionsOffset));<br><br>                <span class="hljs-keyword">var</span> DefinitionsCount = <span class="hljs-built_in">parseInt</span>(address, <span class="hljs-number">16</span>) + <span class="hljs-number">0x10C</span>;<br>                <span class="hljs-keyword">var</span> DefinitionsCount_size = Memory.readInt(ptr(DefinitionsCount));<br><br>                <span class="hljs-comment">//根据两个偏移得出global-metadata大小</span><br>                <span class="hljs-keyword">var</span> global_metadata_size = DefinitionsOffset_size + DefinitionsCount_size<br>                    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;大小：&quot;</span>, global_metadata_size);<br>                <span class="hljs-keyword">var</span> file = <span class="hljs-keyword">new</span> File(<span class="hljs-string">&quot;/data/data/&quot;</span> + get_self_process_name() + <span class="hljs-string">&quot;/global-metadata.dat&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>);<br>                file.write(Memory.readByteArray(address, global_metadata_size));<br>                file.flush();<br>                file.close();<br>                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;导出完毕...&#x27;</span>);<br>            &#125;,<br>            <span class="hljs-attr">onComplete</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>)</span><br><span class="hljs-function">            </span>&#123;<br>                <span class="hljs-comment">//console.log(&quot;搜索完毕&quot;)</span><br>            &#125;<br>        &#125;<br>        );<br>    &#125;<br>&#125;<br>);<br>&#125;<br>setImmediate(frida_Memory(<span class="hljs-string">&quot;AF 1B B1 FA&quot;</span>)); <span class="hljs-comment">//global-metadata.dat头部特征</span><br></code></pre></td></tr></table></figure>
+<p>大概流程就是通过魔术来定位到文件在内存中的起始地址，然后通过解析文件头来计算出文件的大小，最后进行dump。该脚本的适用条件是<code>global-metadata.dat</code>在解密后必须要有正常的魔术即<code>AF 1B B1 FA</code>否则定位，同时文件头信息要正确否则无法计算文件大小。</p>
+<h3 id="global-metadata-dat-加载流程">global-metadata.dat 加载流程</h3>
+<p>其加载的调用链如下：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elixir">il2cpp_init<br>  -&gt; il2cpp::vm::Runtime::Init<br>    -&gt; il2cpp::vm::MetadataCache::Initialize<br>      -&gt; il2cpp::vm::MetadataLoader::LoadMetadataFile<br></code></pre></td></tr></table></figure>
+<p>而在我们逆向中，这些都是不带符号的，然而我们可以对着源码来找到相对应的函数（不同版本的源码有一些差别）</p>
+<p>il2cpp_init (located in il2cpp-api.cpp, comments elided):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">il2cpp_init</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* domain_name)</span></span><br><span class="hljs-function"></span>&#123;<br>    setlocale(LC_ALL, <span class="hljs-string">&quot;&quot;</span>);<br>    <span class="hljs-keyword">return</span> Runtime::Init(domain_name, <span class="hljs-string">&quot;v4.0.30319&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>il2cpp::vm::Runtime::Init (located in vm/Runtime.cpp):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">Runtime::Init</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* filename, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *runtime_version)</span></span><br><span class="hljs-function"></span>&#123;<br>    SanityChecks();<br> <br>    os::Initialize();<br>    os::Locale::Initialize();<br>    MetadataAllocInitialize();<br> <br>    s_FrameworkVersion = framework_version_for(runtime_version);<br> <br>    os::Image::Initialize();<br>    os::Thread::Init();<br>    il2cpp::utils::RegisterRuntimeInitializeAndCleanup::ExecuteInitializations();<br> <br>    <span class="hljs-keyword">if</span> (!MetadataCache::Initialize())<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    Assembly::Initialize();<br>    gc::GarbageCollector::Initialize();<br> <br>    Thread::Initialize();<br>    Reflection::Initialize();<br> <br>    register_allocator(il2cpp::utils::Memory::Malloc);<br> <br>    <span class="hljs-built_in">memset</span>(&amp;il2cpp_defaults, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(Il2CppDefaults));<br> <br>    <span class="hljs-keyword">const</span> Il2CppAssembly* assembly = Assembly::Load(<span class="hljs-string">&quot;mscorlib.dll&quot;</span>);<br> <br>    il2cpp_defaults.corlib = Assembly::GetImage(assembly);<br>    DEFAULTS_INIT(object_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Object&quot;</span>);<br>    DEFAULTS_INIT(void_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Void&quot;</span>);<br>    DEFAULTS_INIT_TYPE(boolean_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Boolean&quot;</span>, <span class="hljs-keyword">bool</span>);<br>    DEFAULTS_INIT_TYPE(byte_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Byte&quot;</span>, <span class="hljs-keyword">uint8_t</span>);<br>    DEFAULTS_INIT_TYPE(sbyte_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;SByte&quot;</span>, <span class="hljs-keyword">int8_t</span>);<br>    DEFAULTS_INIT_TYPE(int16_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Int16&quot;</span>, <span class="hljs-keyword">int16_t</span>);<br>    DEFAULTS_INIT_TYPE(uint16_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;UInt16&quot;</span>, <span class="hljs-keyword">uint16_t</span>);<br>    DEFAULTS_INIT_TYPE(int32_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Int32&quot;</span>, <span class="hljs-keyword">int32_t</span>);<br>    DEFAULTS_INIT_TYPE(uint32_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;UInt32&quot;</span>, <span class="hljs-keyword">uint32_t</span>);<br>    DEFAULTS_INIT(uint_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;UIntPtr&quot;</span>);<br>    DEFAULTS_INIT_TYPE(int_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;IntPtr&quot;</span>, <span class="hljs-keyword">intptr_t</span>);<br>    DEFAULTS_INIT_TYPE(int64_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Int64&quot;</span>, <span class="hljs-keyword">int64_t</span>);<br>    DEFAULTS_INIT_TYPE(uint64_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;UInt64&quot;</span>, <span class="hljs-keyword">uint64_t</span>);<br>    DEFAULTS_INIT_TYPE(single_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Single&quot;</span>, <span class="hljs-keyword">float</span>);<br>    DEFAULTS_INIT_TYPE(double_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Double&quot;</span>, <span class="hljs-keyword">double</span>);<br>    DEFAULTS_INIT_TYPE(char_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;Char&quot;</span>, Il2CppChar);<br>    DEFAULTS_INIT(string_class, <span class="hljs-string">&quot;System&quot;</span>, <span class="hljs-string">&quot;String&quot;</span>);<br>    <span class="hljs-comment">// ...</span><br></code></pre></td></tr></table></figure>
+<p>il2cpp::vm::MetadataCache::Initialize (located in vm/MetadataCache.cpp, comments elided):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">bool</span> il2cpp::vm::MetadataCache::Initialize()<br>&#123;<br>    s_GlobalMetadata = vm::MetadataLoader::LoadMetadataFile(<span class="hljs-string">&quot;global-metadata.dat&quot;</span>);<br>    <span class="hljs-keyword">if</span> (!s_GlobalMetadata)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br> <br>    s_GlobalMetadataHeader = (<span class="hljs-keyword">const</span> Il2CppGlobalMetadataHeader*)s_GlobalMetadata;<br>    IL2CPP_ASSERT(s_GlobalMetadataHeader-&gt;sanity == <span class="hljs-number">0xFAB11BAF</span>);<br>    IL2CPP_ASSERT(s_GlobalMetadataHeader-&gt;version == <span class="hljs-number">24</span>);<br> <br>    s_TypeInfoTable = (Il2CppClass**)IL2CPP_CALLOC(s_Il2CppMetadataRegistration-&gt;typesCount, <span class="hljs-keyword">sizeof</span>(Il2CppClass*));<br>    s_TypeInfoDefinitionTable = (Il2CppClass**)IL2CPP_CALLOC(s_GlobalMetadataHeader-&gt;typeDefinitionsCount / <span class="hljs-keyword">sizeof</span>(Il2CppTypeDefinition), <span class="hljs-keyword">sizeof</span>(Il2CppClass*));<br>    s_MethodInfoDefinitionTable = (<span class="hljs-keyword">const</span> MethodInfo**)IL2CPP_CALLOC(s_GlobalMetadataHeader-&gt;methodsCount / <span class="hljs-keyword">sizeof</span>(Il2CppMethodDefinition), <span class="hljs-keyword">sizeof</span>(MethodInfo*));<br>    s_GenericMethodTable = (<span class="hljs-keyword">const</span> Il2CppGenericMethod**)IL2CPP_CALLOC(s_Il2CppMetadataRegistration-&gt;methodSpecsCount, <span class="hljs-keyword">sizeof</span>(Il2CppGenericMethod*));<br>    s_ImagesCount = s_GlobalMetadataHeader-&gt;imagesCount / <span class="hljs-keyword">sizeof</span>(Il2CppImageDefinition);<br>    s_ImagesTable = (Il2CppImage*)IL2CPP_CALLOC(s_ImagesCount, <span class="hljs-keyword">sizeof</span>(Il2CppImage));<br>    s_AssembliesCount = s_GlobalMetadataHeader-&gt;assembliesCount / <span class="hljs-keyword">sizeof</span>(Il2CppAssemblyDefinition);<br>    s_AssembliesTable = (Il2CppAssembly*)IL2CPP_CALLOC(s_AssembliesCount, <span class="hljs-keyword">sizeof</span>(Il2CppAssembly));<br>    <span class="hljs-comment">// ...</span><br></code></pre></td></tr></table></figure>
+<p>il2cpp::vm::MetadataLoader::LoadMetadataFile (located in vm/MetadataLoader.cpp):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">void</span>* il2cpp::vm::MetadataLoader::LoadMetadataFile(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* fileName)<br>&#123;<br>    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> resourcesDirectory = utils::PathUtils::Combine(utils::Runtime::GetDataDir(), utils::StringView&lt;<span class="hljs-keyword">char</span>&gt;(<span class="hljs-string">&quot;Metadata&quot;</span>));<br> <br>    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> resourceFilePath = utils::PathUtils::Combine(resourcesDirectory, utils::StringView&lt;<span class="hljs-keyword">char</span>&gt;(fileName, <span class="hljs-built_in">strlen</span>(fileName)));<br> <br>    <span class="hljs-keyword">int</span> error = <span class="hljs-number">0</span>;<br>    os::FileHandle* handle = os::File::Open(resourceFilePath, kFileModeOpen, kFileAccessRead, kFileShareRead, kFileOptionsNone, &amp;error);<br>    <span class="hljs-keyword">if</span> (error != <span class="hljs-number">0</span>)<br>    &#123;<br>        utils::Logging::Write(<span class="hljs-string">&quot;ERROR: Could not open %s&quot;</span>, resourceFilePath.c_str());<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br> <br>    <span class="hljs-keyword">void</span>* fileBuffer = utils::MemoryMappedFile::Map(handle);<br> <br>    os::File::Close(handle, &amp;error);<br>    <span class="hljs-keyword">if</span> (error != <span class="hljs-number">0</span>)<br>    &#123;<br>        utils::MemoryMappedFile::Unmap(fileBuffer);<br>        fileBuffer = <span class="hljs-literal">NULL</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br> <br>    <span class="hljs-keyword">return</span> fileBuffer;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上述的完整代码我们可以在Unity的安装目录的Editor中找到il2cpp的源码：vm目录</p>
+<p><img src="https://img-blog.csdnimg.cn/20210512185320917.png?x-oss-process=/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbnhpbmZh,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>在里面的<code>GlobalMetadata.cpp</code>中，就可以看到加载<code>global-metadata.dat</code>文件的逻辑。</p>
+<blockquote>
+<p>如果开发者对<code>global-metadata.dat</code>文件做了加密，那么在<code>GlobalMetadata.cpp</code>中加载<code>global-metadata.dat</code>前需要实现对应的解密逻辑。</p>
+</blockquote>
+<p>相应的我们有了这些源码，我们只需要在 IDA 中对照他们识别出相对应的函数，而关键是后两个函数，分别是</p>
+<p>il2cpp::vm::MetadataLoader::LoadMetadataFile 该函数将 metadata 的文件名文件映射入内存</p>
+<p>il2cpp::vm::MetadataCache::Initialize 该函数将映射文件的指针存储在全局变量中，然后开始从这变量读取数据结构</p>
+<p>而我们解混淆或是解密代码一般都在这两个函数里，只需要样本代码与源码对比差别即可。</p>
+<p>以一个IDA中的例子进行说明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">char</span> il2cpp::vm::MetadataCache::Initialize()<br>&#123;<br>  v0 = sub_180261550(<span class="hljs-string">&quot;global-metadata.dat&quot;</span>);<br>  *&amp;xmmword_182B7C2D8 = v0;<br>  <span class="hljs-keyword">if</span> ( v0 )<br>  &#123;<br>    *(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>) = v0;<br>    qword_182B7B948 = j_j__calloc_base(*(qword_182B7C2C0 + <span class="hljs-number">48</span>), <span class="hljs-number">8</span>i64);<br>    qword_182B7B950 = j_j__calloc_base(*(*(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>) + <span class="hljs-number">164</span>i64) / <span class="hljs-number">0x5C</span>ui64, <span class="hljs-number">8</span>i64);<br>    qword_182B7B958 = j_j__calloc_base(*(*(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>) + <span class="hljs-number">52</span>i64) &gt;&gt; <span class="hljs-number">5</span>, <span class="hljs-number">8</span>i64);<br>    qword_182B7B968 = j_j__calloc_base(*(qword_182B7C2C0 + <span class="hljs-number">64</span>), <span class="hljs-number">8</span>i64);<br>    dword_182B7B970 = *(*(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>) + <span class="hljs-number">172</span>i64) / <span class="hljs-number">0x28</span>ui64;<br>    qword_182B7B978 = j_j__calloc_base(dword_182B7B970, <span class="hljs-number">80</span>i64);<br>    dword_182B7B980 = *(*(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>) + <span class="hljs-number">180</span>i64) / <span class="hljs-number">0x44</span>ui64;<br>    qword_182B7B988 = j_j__calloc_base(dword_182B7B980, <span class="hljs-number">96</span>i64);<br>    v1 = *(&amp;xmmword_182B7C2D8 + <span class="hljs-number">1</span>);<br>    ...<br></code></pre></td></tr></table></figure>
+<p>我们通过对比源码可以发现<code>sub_180261550</code>就是 <code>il2cpp::vm::MetadataLoader::LoadMetadataFromFile</code></p>
+<p>与此同时我们需要注意的是这个 v0 指针，因为解混淆或是解密都会调用到这个指针(一般是在加载前解密，而不是在加载后解密，这样会导致未解密的数据残余在内存中影响性能)，通常来说应用程序在访问 <code>metadata</code> 前执行解密，或是在 <code>il2cpp::vm::MetadataLoader::LoadMetadataFromFile</code>之前或之中。</p>
+<h3 id="il2cpp-init">il2cpp_init</h3>
+<p>那么以上套路是针对我们能在<code>il2cpp</code>里找到<code>il2cpp_init</code>的函数，但是如果没有，我们就要继续往上找<code>UnityPlayer.dll</code>或者<code>libunity.so</code>，而这个我们没有办法用源码对照，那么我们需要创建创建一个 Unity 项目生成 PDB，来进行获取函数符号以及相关信息。</p>
+<p>通常我们找不到对应<code>il2cpp_init</code>时存在以下几种可能性</p>
+<ul>
+<li>导出名称经过模糊处理/加密</li>
+<li>Unity 调用其他导出来执行初始化</li>
+<li>init 函数的 RVA(相对虚拟地址)在Unity中硬编码</li>
+<li>Unity 调用从应用程序中检索得到的导出函数地址</li>
+<li>当操作系统加载文件来提供函数地址时，应用程序在其加载挂钩中调用Unity上的导出函数</li>
+</ul>
+<p>相对于此我们更加关系其对应的调用链，在为混淆下有下图：</p>
+<p><img src="https://ppppz.net/2023/07/20/IL2CPP/untitled-drawing-3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>UnityMainImpl 有很多函数调用，不过我们可以通过字符串来寻找</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c">  winutils::DisplayErrorMessagesAndQuit(<span class="hljs-string">&quot;Data folder not found&quot;</span>);<br>&#125;<br>DetectIL2CPPVersion();<br>v78.m_data = <span class="hljs-number">0</span>i64;<br>v78.m_size = <span class="hljs-number">0</span>i64;<br>v78.m_label.identifier = <span class="hljs-number">68</span>;<br>v78.m_internal[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>core::StringStorageDefault&lt;<span class="hljs-keyword">char</span>&gt;::assign(&amp;v78, <span class="hljs-string">&quot;GameAssembly.dll&quot;</span>, <span class="hljs-number">0x10</span>ui64);<br>v27 = !LoadIl2Cpp(&amp;v78);<br><span class="hljs-keyword">if</span> ( v78.m_data &amp;&amp; v78.m_capacity &gt; <span class="hljs-number">0</span> )<br>  <span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(v78.m_data, v78.m_label)</span></span>;<br><span class="hljs-keyword">if</span> ( v27 )<br>  winutils::DisplayErrorMessagesAndQuit(<span class="hljs-string">&quot;Failed to load il2cpp&quot;</span>);<br>v78.m_data = <span class="hljs-number">0</span>i64;<br>v78.m_size = <span class="hljs-number">0</span>i64;<br>v78.m_label.identifier = <span class="hljs-number">68</span>;<br>v78.m_internal[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>core::StringStorageDefault&lt;<span class="hljs-keyword">char</span>&gt;::assign(&amp;v78, <span class="hljs-string">&quot;il2cpp_data&quot;</span>, <span class="hljs-number">0xB</span>ui64);<br></code></pre></td></tr></table></figure>
+<p>LoadIl2Cpp 也同样可以字符串快速寻找</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c">v2 = <span class="hljs-number">1</span>;<br> il2cpp_init = LookupSymbol(v1, <span class="hljs-string">&quot;il2cpp_init&quot;</span>, kSymbolRequired);<br> <span class="hljs-keyword">if</span> ( !il2cpp_init )<br> &#123;<br>   v2 = <span class="hljs-number">0</span>;<br>   printf_console(<span class="hljs-string">&quot;il2cpp: function il2cpp_init not found\n&quot;</span>);<br> &#125;<br> il2cpp_init_utf16 = LookupSymbol(gIl2CppModule, <span class="hljs-string">&quot;il2cpp_init_utf16&quot;</span>, kSymbolRequired);<br> <span class="hljs-keyword">if</span> ( !il2cpp_init_utf16 )<br> &#123;<br>   v2 = <span class="hljs-number">0</span>;<br>   printf_console(<span class="hljs-string">&quot;il2cpp: function il2cpp_init_utf16 not found\n&quot;</span>);<br> &#125;<br> il2cpp_shutdown = LookupSymbol(gIl2CppModule, <span class="hljs-string">&quot;il2cpp_shutdown&quot;</span>, kSymbolRequired);<br> <span class="hljs-keyword">if</span> ( !il2cpp_shutdown )<br> &#123;<br>   v2 = <span class="hljs-number">0</span>;<br>   printf_console(<span class="hljs-string">&quot;il2cpp: function il2cpp_shutdown not found\n&quot;</span>);<br> &#125;<br></code></pre></td></tr></table></figure>
+<p>InitializeIl2CppFromMain</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">char</span> __fastcall <span class="hljs-title">InitializeIl2CppFromMain</span><span class="hljs-params">(<span class="hljs-keyword">const</span> core::basic_string&lt;<span class="hljs-keyword">char</span>,core::StringStorageDefault&lt;<span class="hljs-keyword">char</span>&gt; &gt; *monoConfigPath, <span class="hljs-keyword">const</span> core::basic_string&lt;<span class="hljs-keyword">char</span>,core::StringStorageDefault&lt;<span class="hljs-keyword">char</span>&gt; &gt; *dataPath, <span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv)</span></span><br><span class="hljs-function"></span>&#123;<br>  v4 = argv;<br>  v5 = argc;<br>  v6 = dataPath;<br>  v7 = monoConfigPath;<br>  RegisterAllInternalCalls();<br>  il2cpp_runtime_unhandled_exception_policy_set(IL2CPP_UNHANDLED_POLICY_LEGACY);<br>  il2cpp_set_commandline_arguments(v5, v4, <span class="hljs-number">0</span>i64);<br>  v8 = v7-&gt;m_data;<br>  <span class="hljs-keyword">if</span> ( !v7-&gt;m_data )<br>    v8 = &amp;v7-&gt;<span class="hljs-number">8</span>;<br>  il2cpp_set_config_dir(v8);<br>  v9 = v6-&gt;m_data;<br>  <span class="hljs-keyword">if</span> ( !v6-&gt;m_data )<br>    v9 = &amp;v6-&gt;<span class="hljs-number">8</span>;<br>  il2cpp_set_data_dir(v9);<br>  v10 = GetMonoDebuggerAgentOptions(&amp;result, <span class="hljs-number">0</span>);<br>  v11 = v10-&gt;m_data;<br>  <span class="hljs-keyword">if</span> ( !v10-&gt;m_data )<br>    v11 = &amp;v10-&gt;<span class="hljs-number">8</span>;<br>  il2cpp_debugger_set_agent_options(v11);<br>  <span class="hljs-keyword">if</span> ( result.m_data &amp;&amp; result.m_capacity )<br>    <span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(result.m_data, result.m_label)</span></span>;<br>  il2cpp_init(<span class="hljs-string">&quot;IL2CPP Root Domain&quot;</span>);<br>  il2cpp_set_config(<span class="hljs-string">&quot;unused_application_configuration&quot;</span>);<br>  profiling::ScriptingProfiler::Initialize();<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>然而有相当不同的变化在不同的版本中，他们的共同特点是对 il2cpp_init 的调用和 IL2CPP Root Domain 与 unused_application_configuration，所以通过这些我们也同样快速找到</p>
+<h2 id="例子">例子</h2>
+<p>我们以2018年的N1CTF-BabyUnity3d为例来简单的了解一下其逆向流程，我们还是一样的提取出来<code>libil2cpp.so</code>以及<code>global-metadata.dat</code>使用上述项目进行处理，但是其提醒我们出错了，可能是文件没找到或者是加密了</p>
+<blockquote>
+<p>此题比较基础只对<code>global-metadata.dat</code>进行了加密处理，方便我们的学习理解</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2023/08/16/7qaE3dRugZtcDGr.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们打开<code>010</code>来观察对应文件魔术字</p>
+<p><img src="https://s2.loli.net/2023/08/16/bNa4qvCpBFJ1n7K.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以很明显的发现其被加密处置了，我们采用上述提到的<code>Frida</code>脚本，然而对于这题起不到作用，脚本执行后没有找到起始地址，即使解密后，内存中也没有<code>AF 1B B1 FA</code>存在。所以这种通用的dump方式应该是不行了，只能找到<code>global-metadata.dat</code>的加载函数，待其解密完成后再进行dump，所以我们需要对<code>global-metadata.dat</code>的加载流程进行分析。</p>
+<p>我们先尝试进行寻找<code>il2cpp_init</code></p>
+<p><img src="https://s2.loli.net/2023/08/16/2hvkczjfTwUpE4o.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>则<code>sub_4C4770</code>为<code>il2cpp::vm::Runtime::Init</code>，我们进入该函数后一个个查找对比源码可以发现<code>sub_4B5564</code>为<code>il2cpp::vm::MetadataCache::Initialize</code></p>
+<p><img src="https://s2.loli.net/2023/08/16/XqJyfPTmW693CEx.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>那么看该函数可以很明显发现，<code>global-metadata.dat</code>字符串变成了其他字符串，但程序运行<code>sub_4B5518</code>会自动解密回去。同样的对应着源码<code>sub_513060</code>就是<code>il2cpp::vm::MetadataLoader::LoadMetadataFile</code>，其返回值为一个指针</p>
+<p>随后还是比对源码，我们需要找到对应修改过的地方，可以发现对应的<code>else</code>块被修改过</p>
+<p><img src="https://s2.loli.net/2023/08/16/wQE5bLOSynPBCzD.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们进入该函数便可以获取到对应<code>global-metadata.dat</code>加密的逻辑</p>
+<p><img src="https://s2.loli.net/2023/08/16/yZK1St2vj8Ep9An.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们写出对应的解密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> struct<br>f = <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;global-metadata.dat&#x27;</span>, <span class="hljs-string">&#x27;rb&#x27;</span>)<br>a = <span class="hljs-string">&quot;&quot;</span><br>a = f.read()<br>key = [<span class="hljs-number">0xF83DA249</span>, <span class="hljs-number">0x15D12772</span>, <span class="hljs-number">0x40C50697</span>, <span class="hljs-number">0x984E2B6B</span>, <span class="hljs-number">0x14EC5FF8</span>, <span class="hljs-number">0xB2E24927</span>,<br>       <span class="hljs-number">0x3B8F77AE</span>, <span class="hljs-number">0x472474CD</span>, <span class="hljs-number">0x5B0CE524</span>, <span class="hljs-number">0xA17E1A31</span>, <span class="hljs-number">0x6C60852C</span>, <span class="hljs-number">0xD86AD267</span>, <span class="hljs-number">0x832612B7</span>, <span class="hljs-number">0x1CA03645</span>, <span class="hljs-number">0x5515ABC8</span>,<br>       <span class="hljs-number">0xC5FEFF52</span>, <span class="hljs-number">0xFFFFAC00</span>, <span class="hljs-number">0x0FE95CB6</span>, <span class="hljs-number">0x79CF43DD</span>, <span class="hljs-number">0xAA48A3FB</span>, <span class="hljs-number">0xE1D71788</span>, <span class="hljs-number">0x97663D3A</span>, <span class="hljs-number">0xF5CFFEA7</span>, <span class="hljs-number">0xEE617632</span>,<br>       <span class="hljs-number">0x4B11A7EE</span>, <span class="hljs-number">0x040EF0B5</span>, <span class="hljs-number">0x0606FC00</span>, <span class="hljs-number">0xC1530FAE</span>, <span class="hljs-number">0x7A827441</span>, <span class="hljs-number">0xFCE91D44</span>, <span class="hljs-number">0x8C4CC1B1</span>, <span class="hljs-number">0x7294C28D</span>, <span class="hljs-number">0x8D976162</span>,<br>       <span class="hljs-number">0x8315435A</span>, <span class="hljs-number">0x3917A408</span>, <span class="hljs-number">0xAF7F1327</span>, <span class="hljs-number">0xD4BFAED7</span>, <span class="hljs-number">0x80D0ABFC</span>, <span class="hljs-number">0x63923DC3</span>, <span class="hljs-number">0xB0E6B35A</span>, <span class="hljs-number">0xB815088F</span>, <span class="hljs-number">0x9BACF123</span>,<br>       <span class="hljs-number">0xE32411C3</span>, <span class="hljs-number">0xA026100B</span>, <span class="hljs-number">0xBCF2FF58</span>, <span class="hljs-number">0x641C5CFC</span>, <span class="hljs-number">0xC4A2D7DC</span>, <span class="hljs-number">0x99E05DCA</span>, <span class="hljs-number">0x9DC699F7</span>, <span class="hljs-number">0xB76A8621</span>, <span class="hljs-number">0x8E40E03C</span>,<br>       <span class="hljs-number">0x28F3C2D4</span>, <span class="hljs-number">0x40F91223</span>, <span class="hljs-number">0x67A952E0</span>, <span class="hljs-number">0x505F3621</span>, <span class="hljs-number">0xBAF13D33</span>, <span class="hljs-number">0xA75B61CC</span>, <span class="hljs-number">0xAB6AEF54</span>, <span class="hljs-number">0xC4DFB60D</span>, <span class="hljs-number">0xD29D873A</span>,<br>       <span class="hljs-number">0x57A77146</span>, <span class="hljs-number">0x393F86B8</span>, <span class="hljs-number">0x2A734A54</span>, <span class="hljs-number">0x31A56AF6</span>, <span class="hljs-number">0x0C5D9160</span>, <span class="hljs-number">0xAF83A19A</span>, <span class="hljs-number">0x7FC9B41F</span>, <span class="hljs-number">0xD079EF47</span>, <span class="hljs-number">0xE3295281</span>,<br>       <span class="hljs-number">0x5602E3E5</span>, <span class="hljs-number">0xAB915E69</span>, <span class="hljs-number">0x225A1992</span>, <span class="hljs-number">0xA387F6B2</span>, <span class="hljs-number">0x7E981613</span>, <span class="hljs-number">0xFC6CF59A</span>, <span class="hljs-number">0xD34A7378</span>, <span class="hljs-number">0xB608B7D6</span>, <span class="hljs-number">0xA9EB93D9</span>,<br>       <span class="hljs-number">0x26DDB218</span>, <span class="hljs-number">0x65F33F5F</span>, <span class="hljs-number">0xF9314442</span>, <span class="hljs-number">0x5D5C0599</span>, <span class="hljs-number">0xEA72E774</span>, <span class="hljs-number">0x1605A502</span>, <span class="hljs-number">0xEC6CBC9F</span>, <span class="hljs-number">0x7F8A1BD1</span>, <span class="hljs-number">0x4DD8CF07</span>,<br>       <span class="hljs-number">0x2E6D79E0</span>, <span class="hljs-number">0x6990418F</span>, <span class="hljs-number">0xCF77BAD9</span>, <span class="hljs-number">0xD4FE0147</span>, <span class="hljs-number">0xFEF4A3E8</span>, <span class="hljs-number">0x85C45BDE</span>, <span class="hljs-number">0xB58F8E67</span>, <span class="hljs-number">0xA63EB8D7</span>, <span class="hljs-number">0xC69BD19B</span>,<br>       <span class="hljs-number">0xDA442DCA</span>, <span class="hljs-number">0x3C0C1743</span>, <span class="hljs-number">0xE6F39D49</span>, <span class="hljs-number">0x33568804</span>, <span class="hljs-number">0x85EB6320</span>, <span class="hljs-number">0xDA223445</span>, <span class="hljs-number">0x36C4A941</span>, <span class="hljs-number">0xA9185589</span>, <span class="hljs-number">0x71B22D67</span>,<br>       <span class="hljs-number">0xF59A2647</span>, <span class="hljs-number">0x3C8B583E</span>, <span class="hljs-number">0xD7717DED</span>, <span class="hljs-number">0xDF05699C</span>, <span class="hljs-number">0x4378367D</span>, <span class="hljs-number">0x1C459339</span>, <span class="hljs-number">0x85133B7F</span>, <span class="hljs-number">0x49800CE2</span>, <span class="hljs-number">0x3666CA0D</span>,<br>       <span class="hljs-number">0xAF7AB504</span>, <span class="hljs-number">0x4FF5B8F1</span>, <span class="hljs-number">0xC23772E3</span>, <span class="hljs-number">0x3544F31E</span>, <span class="hljs-number">0x0F673A57</span>, <span class="hljs-number">0xF40600E1</span>, <span class="hljs-number">0x7E967417</span>, <span class="hljs-number">0x15A26203</span>, <span class="hljs-number">0x5F2E34CE</span>,<br>       <span class="hljs-number">0x70C7921A</span>, <span class="hljs-number">0xD1C190DF</span>, <span class="hljs-number">0x5BB5DA6B</span>, <span class="hljs-number">0x60979C75</span>, <span class="hljs-number">0x4EA758A4</span>, <span class="hljs-number">0x078FE359</span>, <span class="hljs-number">0x1664639C</span>, <span class="hljs-number">0xAE14E73B</span>, <span class="hljs-number">0x2070FF03</span>]<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;decrypt.dat&#x27;</span>, <span class="hljs-string">&#x27;wb&#x27;</span>) <span class="hljs-keyword">as</span> fp:<br>    n = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> n &lt; <span class="hljs-built_in">len</span>(a):<br>        num = struct.unpack(<span class="hljs-string">&quot;&lt;I&quot;</span>, a[n:n + <span class="hljs-number">4</span>])[<span class="hljs-number">0</span>]<br>        num = num ^ key[(n + n // <span class="hljs-number">0x84</span>) % <span class="hljs-number">0x84</span>]<br>        d = struct.pack(<span class="hljs-string">&#x27;I&#x27;</span>, num)<br>        fp.write(d)<br>        n = n + <span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>
+<p>修改完后我们可以发现其魔术字仍然有问题，但是可以明显发现是人为修改后的，我们将其修复为<code>AF 1B B1 FA</code>，修复后我们再运行<code>il2cppDump</code>之后便可以拿到对应的函数信息</p>
+<p><img src="https://s2.loli.net/2023/08/16/NS7tbGWDecHEQjd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p><strong>dump.cs</strong></p>
+<p>这个文件会把 C# 的 dll 代码的类、方法、字段列出来</p>
+<p><strong>IL2cpp.h</strong></p>
+<p>生成的 cpp 头文件，从头文件里可以看到相关的数据结构</p>
+<p><strong>script.json</strong></p>
+<p>以 json 格式显示类的方法信息</p>
+<p><strong>stringliteral.json</strong></p>
+<p>以 json 的格式显示所有字符串信息</p>
+<p><strong>DummyDll</strong></p>
+<p>进入该目录，可以看到很多dll，其中就有 Assembly-CSharp.dll 和我们刚刚的 dump.cs 内容是一致的</p>
+</blockquote>
+<p>我们使用.Net反编译工具对<code>DummyDll</code>中的<code>Assembly-CSharp.dll</code>进行反编译，我们可以清晰的看到其导入的函数</p>
+<blockquote>
+<p>其实直接看dump.cs也可以，但是个人感觉有点混乱(虽然两个差不多)</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2023/08/16/UZBrVfLIh5iPGkc.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>不难看出其使用了一个AES来进行<code>Check</code>我们的<code>Flag</code>，我们使用项目提供的python脚本来将<code>libil2cpp.so</code>中的符号进行还原，我们使用<code>Alt+F7</code>或者点击<code>Script</code>执行脚本</p>
+<p><img src="https://s2.loli.net/2023/08/16/946JQWOSNtuspqC.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>此处根据自己IDA使用的Python版本进行选择</p>
+</blockquote>
+<p>之后会要求我们选择一个<code>json</code>以及<code>h</code>文件，我们选择<code>Dump</code>出来的<code>script.json</code>以及<code>il2cpp.h</code>即可</p>
+<p><img src="https://s2.loli.net/2023/08/16/a9TzOqiCoySXEmb.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://s2.loli.net/2023/08/16/ep736IzNS1MEo4b.png" srcset="/img/loading.gif" lazyload alt="image-20230816064231325"></p>
+<p>之后等待一会便可以恢复出对应的符号信息，我们搜索对应<code>CheckFlag</code>函数</p>
+<p><img src="https://s2.loli.net/2023/08/16/mnGvPULAEW8izx3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以看到是<code>Check_TypeInfo</code>对其进行赋值，我们通过交叉引用可以找到对应的赋值点</p>
+<p><img src="https://s2.loli.net/2023/08/16/g8cn5PrLNzZRWA9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://s2.loli.net/2023/08/16/wHxeGaQ85MkOci3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对应加密后的<code>Base64</code>则通过<code>StringLiteral_2814</code>进行寻找</p>
+<p><img src="https://s2.loli.net/2023/08/16/OV8UdZuSKfn5Bvi.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>之后便可以写出对应的解密脚本，成功拿到 Flag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Cipher <span class="hljs-keyword">import</span> AES<br><span class="hljs-keyword">from</span> Crypto.Util.Padding <span class="hljs-keyword">import</span> unpad<br><span class="hljs-keyword">import</span> base64<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">aes_decrypt</span>(<span class="hljs-params">ciphertext, key</span>):</span><br>    cipher = AES.new(key, AES.MODE_CBC, <span class="hljs-string">b&#x27;58f3a445939aeb79&#x27;</span>)<br>    ciphertext = base64.b64decode(ciphertext)<br>    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)<br>    <span class="hljs-keyword">return</span> plaintext.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br><br><br>key = <span class="hljs-string">b&#x27;91c775fa0f6a1cba&#x27;</span>  <br>ciphertext = <span class="hljs-string">&#x27;w0ZyUZAHhn16/MRWie63lK+PuVpZObu/NpQ/E/ucplc=&#x27;</span> <br><br>decrypted_text = aes_decrypt(ciphertext, key)<br><span class="hljs-built_in">print</span>(decrypted_text)<br><span class="hljs-comment"># N1CTF&#123;h4ppy_W1TH_1l2cpp&#125;</span><br></code></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://katyscode.wordpress.com/2021/02/23/il2cpp-finding-obfuscated-global-metadata/">IL2CPP Tutorial: Finding loaders for obfuscated global-metadata.dat files | Katy’s Code (wordpress.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://katyscode.wordpress.com/2020/12/27/il2cpp-part-2/">IL2CPP Reverse Engineering Part 2: Structural Overview &amp; Finding the Metadata | Katy’s Code (wordpress.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://ppppz.net/2023/07/20/IL2CPP/">IL2CPP - P.Z’s Blog (ppppz.net)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/linxinfa/article/details/116572369">【游戏开发进阶】教你使用IL2CppDumper从Unity il2cpp的二进制文件中获取类型、方法、字段等（反编译）_林新发的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2216959">Il2cpp逆向:global-metadata解密-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>IL2CPP 逆向</div>
+      <div>https://equinox-shame.github.io/2023/08/16/IL2CPP 逆向/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/12/Ladon%E4%B8%8B%E7%9A%84Powershell%E6%B7%B7%E6%B7%86%E8%BF%98%E5%8E%9F/" title="Ladon下的Powershell混淆还原">
+                        <span class="hidden-mobile">Ladon下的Powershell混淆还原</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
