@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/06/07/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8/" target="_self">
+          栈溢出的简单利用
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/07/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8/" target="_self">
+        <div>
+          前言 最近学校的一些课程简单提到了一些栈溢出的相关危害，并提供一个实验让我们尝试利用缓冲区溢出来打开notepad.exe，并可以尝试在多个操作系统上达到通用性。 实验内容  此次实验采用VS完成，实验开始前记得关闭VS的各项安全保护机制  基础实验 此次实验我们的溢出点为以下代码： 123456void overflow()&#123;	char  buf[10];	memcpy(buf, sh
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-07 15:27" pubdate>
+              2023-06-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Malicious-Code-Analysis/" class="category-chain-item">Malicious Code Analysis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/06/06/Widnows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" target="_self">
           Windows内核实验 ——— 进程切换
         </a>
@@ -695,60 +749,6 @@
       <span class="category-chain">
         
   <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/04/07/WannaCry%20%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" target="_self">
-          WannaCry 样本分析
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/04/07/WannaCry%20%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" target="_self">
-        <div>
-          综述 WannaCry是于2017年5月12日爆发的，勒索病毒WannaCry借助高危漏洞“永恒之蓝”（EternalBlue）在世界范围内爆发，并迅速在公网上进行传播，造成了极大的危害。正如其名勒索病毒会对文件进行加密，需要受害者进行支付比特币进行解密。 外部分析 导入导出表 我们先从外部入手，观察其对应的导入导出表，我们可以观察到导入了文件创建、文件读取、获取路径等文件操作，以及创建了互斥体，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-04-07 22:57" pubdate>
-              2023-04-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
   
   
 
