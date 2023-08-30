@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="General 因为缺乏可以霍霍的Android手机外加模拟器抽风，所以几个安卓没写，与此同时缺少MAC来完成IOS的有关逆向~~(什么大FW)~~ RightBack 题目为Python3.9下的一个 pyc 文件，其中加入了大量垃圾指令导致我们无法直接拿到对应的 py 代码  可以看到我们花指令由JUMP_FORWARD进行构成，通过查询对应的opcde编码，我们可以整理出来其花加入的格式为：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WMCTF2023 - 部分RE">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/08/30/WMCTF2023/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="General 因为缺乏可以霍霍的Android手机外加模拟器抽风，所以几个安卓没写，与此同时缺少MAC来完成IOS的有关逆向~~(什么大FW)~~ RightBack 题目为Python3.9下的一个 pyc 文件，其中加入了大量垃圾指令导致我们无法直接拿到对应的 py 代码  可以看到我们花指令由JUMP_FORWARD进行构成，通过查询对应的opcde编码，我们可以整理出来其花加入的格式为：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/8eOkLYRHaVnczQ1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/LQshGYVx5FHWfCr.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/AGHPXxLdmSnl62v.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/LrBH8o2uDc1Gblp.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/Hkx3fjcYuKpNOwP.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/aq1Pw79BIExjVQd.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/nLTVWBRt1zSCp3x.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/30/MGauVfReIjtdi76.png">
+<meta property="article:published_time" content="2023-08-30T15:54:13.080Z">
+<meta property="article:modified_time" content="2023-08-30T15:52:15.392Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/08/30/8eOkLYRHaVnczQ1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>WMCTF2023 - 部分RE - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="WMCTF2023 - 部分RE"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-30 23:54" pubdate>
+          2023年8月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">WMCTF2023 - 部分RE</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="General">General</h2>
+<p>因为缺乏可以霍霍的Android手机外加模拟器抽风，所以几个安卓没写，与此同时缺少MAC来完成IOS的有关逆向~~(什么大FW)~~</p>
+<h2 id="RightBack">RightBack</h2>
+<p>题目为Python3.9下的一个 pyc 文件，其中加入了大量垃圾指令导致我们无法直接拿到对应的 py 代码</p>
+<p><img src="https://s2.loli.net/2023/08/30/8eOkLYRHaVnczQ1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到我们花指令由<code>JUMP_FORWARD</code>进行构成，通过查询对应的<code>opcde</code>编码，我们可以整理出来其花加入的格式为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">JUMP_FORWARD  <span class="hljs-number">0</span>       6E 	<span class="hljs-number">0</span><br>JUMP_FORWARD  <span class="hljs-number">4</span>       6E 	<span class="hljs-number">4</span><br><span class="hljs-number">4</span> 个无意义字节          <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span>   <br>JUMP_FORWARD  <span class="hljs-number">2</span>       6E 	<span class="hljs-number">2</span><br>两个无意义字节           <span class="hljs-number">5</span> <span class="hljs-number">6</span>   <br>org<br></code></pre></td></tr></table></figure>
+<p>按照上述的格式进行去除对应的花指令后我们可以成功的进行反编译，但是拿到的对应程序我们似乎无法正常进行解密，还原回来的Python文件存在一定的问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> struct<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">T</span>(<span class="hljs-params">num, <span class="hljs-built_in">round</span></span>):</span><br>    numArr = <span class="hljs-built_in">bytearray</span>(struct.pack(<span class="hljs-string">&#x27;&lt;I&#x27;</span>, num))<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>        numArr[i] = Sbox[numArr[i]]<br>    <span class="hljs-keyword">return</span> struct.unpack(<span class="hljs-string">&#x27;&lt;I&#x27;</span>, numArr)[<span class="hljs-number">0</span>] ^ Rcon[<span class="hljs-built_in">round</span>]<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">p1</span>(<span class="hljs-params">s, key</span>):</span><br>    j = <span class="hljs-number">0</span><br>    k = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">256</span>):<br>        s.append(i)<br>        k.append(key[i % <span class="hljs-built_in">len</span>(key)])<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">256</span>):<br>        j = (j + s[i] + <span class="hljs-built_in">ord</span>(k[i])) % <span class="hljs-number">256</span><br>        s[i] = s[j]<br>        s[j] = s[i]<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">p2</span>(<span class="hljs-params">key</span>):</span><br>    w = [<br>        <span class="hljs-number">0</span>] * <span class="hljs-number">44</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>        w[i] = struct.unpack(<span class="hljs-string">&#x27;&lt;I&#x27;</span>, key[i * <span class="hljs-number">4</span>:i * <span class="hljs-number">4</span> + <span class="hljs-number">4</span>])[<span class="hljs-number">0</span>]<br>    cnt = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>, <span class="hljs-number">44</span>, <span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">if</span> i % <span class="hljs-number">4</span> == <span class="hljs-number">0</span>:<br>            w[i] = w[i - <span class="hljs-number">4</span>] ^ T(w[i - <span class="hljs-number">1</span>], cnt)<br>            cnt += <span class="hljs-number">1</span><br>            <span class="hljs-keyword">continue</span><br>        w[i] = w[i - <span class="hljs-number">4</span>] ^ w[i - <span class="hljs-number">1</span>]<br>    <span class="hljs-keyword">return</span> w<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">p3</span>(<span class="hljs-params">s, p</span>):</span><br>    i = j = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> z <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(p)):<br>        i = (i + <span class="hljs-number">1</span>) % <span class="hljs-number">256</span><br>        j = (j + s[i]) % <span class="hljs-number">256</span><br>        s[i] = s[j]<br>        s[j] = s[i]<br>        p[z] ^= s[(s[i] + s[j]) % <span class="hljs-number">256</span>]<br>    <span class="hljs-keyword">return</span> p<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F1</span>(<span class="hljs-params">part1, part2</span>):</span><br>    <span class="hljs-keyword">global</span> REG<br>    REG = &#123;<br>        <span class="hljs-string">&#x27;EAX&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;EBX&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;ECX&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;EDX&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;R8&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;CNT&#x27;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&#x27;EIP&#x27;</span>: <span class="hljs-number">0</span> &#125;<br>    REG[<span class="hljs-string">&#x27;EAX&#x27;</span>] = part1<br>    REG[<span class="hljs-string">&#x27;EBX&#x27;</span>] = part2<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F2</span>(<span class="hljs-params">v1, v2, v3</span>):</span><br>    <span class="hljs-keyword">if</span> v1 == <span class="hljs-number">1</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = extendKey[REG[reg_table[<span class="hljs-built_in">str</span>(v3)]]]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">2</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v3)]]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">3</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = v3<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">4</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F3</span>(<span class="hljs-params">v1, v2, v3</span>):</span><br>    <span class="hljs-keyword">if</span> v1 == <span class="hljs-number">1</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] + extendKey[REG[reg_table[<span class="hljs-built_in">str</span>(v3)]]] &amp; <span class="hljs-number">0xFFFFFFFFL</span><br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">2</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] + REG[reg_table[<span class="hljs-built_in">str</span>(v3)]] &amp; <span class="hljs-number">0xFFFFFFFFL</span><br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">3</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] + v3 &amp; <span class="hljs-number">0xFFFFFFFFL</span><br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">4</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F4</span>(<span class="hljs-params">v1, v2</span>):</span><br>    REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] ^= REG[reg_table[<span class="hljs-built_in">str</span>(v2)]]<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">3</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F5</span>(<span class="hljs-params">v1, v2</span>):</span><br>    REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] &amp;= v2<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">3</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F6</span>(<span class="hljs-params">v1, v2, v3</span>):</span><br>    <span class="hljs-keyword">if</span> v1 == <span class="hljs-number">1</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] -= extendKey[v3]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">2</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] -= REG[reg_table[<span class="hljs-built_in">str</span>(v3)]]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">3</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] -= v3<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">4</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F7</span>(<span class="hljs-params">v1, v2</span>):</span><br>    REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] |= REG[reg_table[<span class="hljs-built_in">str</span>(v2)]]<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">3</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F8</span>(<span class="hljs-params">v1, v2</span>):</span><br>    REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] &gt;&gt; REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] &amp; <span class="hljs-number">0xFFFFFFFFL</span><br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">3</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">F9</span>(<span class="hljs-params">v1, v2</span>):</span><br>    REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] = REG[reg_table[<span class="hljs-built_in">str</span>(v1)]] &lt;&lt; REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] &amp; <span class="hljs-number">0xFFFFFFFFL</span><br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">3</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FA</span>(<span class="hljs-params">v1, v2, v3</span>):</span><br>    <span class="hljs-keyword">if</span> v1 == <span class="hljs-number">1</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] *= extendKey[v3]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">2</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] *= REG[reg_table[<span class="hljs-built_in">str</span>(v3)]]<br>    <span class="hljs-keyword">elif</span> v1 == <span class="hljs-number">3</span>:<br>        REG[reg_table[<span class="hljs-built_in">str</span>(v2)]] *= v3<br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">4</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FB</span>():</span><br>    REG[<span class="hljs-string">&#x27;R8&#x27;</span>] = REG[<span class="hljs-string">&#x27;CNT&#x27;</span>] == <span class="hljs-number">21</span><br>    REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">1</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">WC</span>():</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> REG[<span class="hljs-string">&#x27;R8&#x27;</span>]:<br>        REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] = <span class="hljs-number">16</span><br>    <span class="hljs-keyword">else</span>:<br>        REG[<span class="hljs-string">&#x27;EIP&#x27;</span>] += <span class="hljs-number">1</span><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">VM</span>(<span class="hljs-params">part1, part2</span>):</span><br>    F1(part1, part2)<br>    EIP = REG[<span class="hljs-string">&#x27;EIP&#x27;</span>]<br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">80</span>:<br>        F2(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>], opcode[EIP + <span class="hljs-number">3</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">29</span>:<br>        F3(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>], opcode[EIP + <span class="hljs-number">3</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">113</span>:<br>        F4(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">114</span>:<br>        F5(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">150</span>:<br>        F6(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>], opcode[EIP + <span class="hljs-number">3</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">87</span>:<br>        F7(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">116</span>:<br>        F8(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">41</span>:<br>        F9(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">220</span>:<br>        FA(opcode[EIP + <span class="hljs-number">1</span>], opcode[EIP + <span class="hljs-number">2</span>], opcode[EIP + <span class="hljs-number">3</span>])<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">7</span>:<br>        FB()<br>        <span class="hljs-keyword">continue</span><br>    <span class="hljs-keyword">if</span> opcode[EIP] == <span class="hljs-number">153</span>:<br>        WC()<br>        <span class="hljs-keyword">continue</span><br>    <br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Have</span>():</span><br>    Hello = <span class="hljs-string">&#x27;                                                                                                                                                                                                                                                \n||   / |  / /                                                                     \n||  /  | / /  ___     //  ___      ___      _   __      ___       __  ___  ___    \n|| / /||/ / //___) ) // //   ) ) //   ) ) // ) )  ) ) //___) )     / /   //   ) ) \n||/ / |  / //       // //       //   / / // / /  / / //           / /   //   / /  \n|  /  | / ((____   // ((____   ((___/ / // / /  / / ((____       / /   ((___/ /   \n                                                                                            \n                                                                                            \n||   / |  / / /|    //| |     //   ) ) /__  ___/ //   / / ___      ___      ___      ___    \n||  /  | / / //|   // | |    //          / /    //___   //   ) ) //   ) ) //   ) ) //   ) ) \n|| / /||/ / // |  //  | |   //          / /    / ___     ___/ / //   / /   ___/ /   __ / /  \n||/ / |  / //  | //   | |  //          / /    //       / ____/ //   / /  / ____/       ) )  \n|  /  | / //   |//    | | ((____/ /   / /    //       / /____ ((___/ /  / /____  ((___/ /     \n    &#x27;</span><br>    <span class="hljs-built_in">print</span>(Hello)<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">input</span>(<span class="hljs-string">&#x27;RightBack: &#x27;</span>).encode()<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Fun</span>(<span class="hljs-params">right</span>):</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(right) != <span class="hljs-number">64</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;XD&#x27;</span>)<br>        exit()<br>    back = <span class="hljs-string">b&#x27;&#x27;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(right), <span class="hljs-number">8</span>):<br>        part1 = struct.unpack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, right[i + <span class="hljs-number">0</span>:i + <span class="hljs-number">4</span>])[<span class="hljs-number">0</span>]<br>        part2 = struct.unpack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, right[i + <span class="hljs-number">4</span>:i + <span class="hljs-number">8</span>])[<span class="hljs-number">0</span>]<br>        <span class="hljs-keyword">if</span> i != <span class="hljs-number">0</span>:<br>            part1 ^= struct.unpack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, back[i - <span class="hljs-number">8</span>:i - <span class="hljs-number">4</span>])[<span class="hljs-number">0</span>]<br>            part2 ^= struct.unpack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, back[i - <span class="hljs-number">4</span>:i])[<span class="hljs-number">0</span>]<br>        VM(part1, part2)<br>        back += struct.pack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, REG[<span class="hljs-string">&#x27;EAX&#x27;</span>])<br>        back += struct.pack(<span class="hljs-string">&#x27;&gt;I&#x27;</span>, REG[<span class="hljs-string">&#x27;EBX&#x27;</span>])<br>    <span class="hljs-keyword">return</span> back<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    REG = &#123; &#125;<br>    EIP = <span class="hljs-number">0</span><br>    reg_table = &#123;<br>        <span class="hljs-string">&#x27;1&#x27;</span>: <span class="hljs-string">&#x27;EAX&#x27;</span>,<br>        <span class="hljs-string">&#x27;2&#x27;</span>: <span class="hljs-string">&#x27;EBX&#x27;</span>,<br>        <span class="hljs-string">&#x27;3&#x27;</span>: <span class="hljs-string">&#x27;ECX&#x27;</span>,<br>        <span class="hljs-string">&#x27;4&#x27;</span>: <span class="hljs-string">&#x27;EDX&#x27;</span>,<br>        <span class="hljs-string">&#x27;5&#x27;</span>: <span class="hljs-string">&#x27;R8&#x27;</span>,<br>        <span class="hljs-string">&#x27;6&#x27;</span>: <span class="hljs-string">&#x27;CNT&#x27;</span>,<br>        <span class="hljs-string">&#x27;7&#x27;</span>: <span class="hljs-string">&#x27;EIP&#x27;</span> &#125;<br>    Sbox = [<br>        <span class="hljs-number">82</span>,<span class="hljs-number">9</span>,<span class="hljs-number">106</span>,<span class="hljs-number">213</span>,<span class="hljs-number">48</span>,<span class="hljs-number">54</span>,<span class="hljs-number">165</span>,<span class="hljs-number">56</span>,<span class="hljs-number">191</span>,<span class="hljs-number">64</span>,<span class="hljs-number">163</span>,<span class="hljs-number">158</span>,<span class="hljs-number">129</span>,<span class="hljs-number">243</span>,<span class="hljs-number">215</span>,<span class="hljs-number">251</span>,<span class="hljs-number">124</span>,<span class="hljs-number">227</span>,<span class="hljs-number">57</span>,<span class="hljs-number">130</span>,<span class="hljs-number">155</span>,<br>        <span class="hljs-number">47</span>,<span class="hljs-number">255</span>,<span class="hljs-number">135</span>,<span class="hljs-number">52</span>,<span class="hljs-number">142</span>,<span class="hljs-number">67</span>,<span class="hljs-number">68</span>,<span class="hljs-number">196</span>,<span class="hljs-number">222</span>,<span class="hljs-number">233</span>,<span class="hljs-number">203</span>,<span class="hljs-number">84</span>,<span class="hljs-number">123</span>,<span class="hljs-number">148</span>,<span class="hljs-number">50</span>,<span class="hljs-number">166</span>,<span class="hljs-number">194</span>,<span class="hljs-number">35</span>,<span class="hljs-number">61</span>,<span class="hljs-number">238</span>,<span class="hljs-number">76</span>,<br>        <span class="hljs-number">149</span>,<span class="hljs-number">11</span>,<span class="hljs-number">66</span>,<span class="hljs-number">250</span>,<span class="hljs-number">195</span>,<span class="hljs-number">78</span>,<span class="hljs-number">8</span>,<span class="hljs-number">46</span>,<span class="hljs-number">161</span>,<span class="hljs-number">102</span>,<span class="hljs-number">40</span>,<span class="hljs-number">217</span>,<span class="hljs-number">36</span>,<span class="hljs-number">178</span>,<span class="hljs-number">118</span>,<span class="hljs-number">91</span>,<span class="hljs-number">162</span>,<span class="hljs-number">73</span>,<span class="hljs-number">109</span>,<span class="hljs-number">139</span>,<span class="hljs-number">209</span>,<span class="hljs-number">37</span>,<br>        <span class="hljs-number">114</span>,<span class="hljs-number">248</span>,<span class="hljs-number">246</span>,<span class="hljs-number">100</span>,<span class="hljs-number">134</span>,<span class="hljs-number">104</span>,<span class="hljs-number">152</span>,<span class="hljs-number">22</span>,<span class="hljs-number">212</span>,<span class="hljs-number">164</span>,<span class="hljs-number">92</span>,<span class="hljs-number">204</span>,<span class="hljs-number">93</span>,<span class="hljs-number">101</span>,<span class="hljs-number">182</span>,<span class="hljs-number">146</span>,<span class="hljs-number">108</span>,<span class="hljs-number">112</span>,<span class="hljs-number">72</span>,<span class="hljs-number">80</span>,<span class="hljs-number">253</span>,<br>        <span class="hljs-number">237</span>,<span class="hljs-number">185</span>,<span class="hljs-number">218</span>,<span class="hljs-number">94</span>,<span class="hljs-number">21</span>,<span class="hljs-number">70</span>,<span class="hljs-number">87</span>,<span class="hljs-number">167</span>,<span class="hljs-number">141</span>,<span class="hljs-number">157</span>,<span class="hljs-number">132</span>,<span class="hljs-number">144</span>,<span class="hljs-number">216</span>,<span class="hljs-number">171</span>,<span class="hljs-number">0</span>,<span class="hljs-number">140</span>,<span class="hljs-number">188</span>,<span class="hljs-number">211</span>,<span class="hljs-number">10</span>,<span class="hljs-number">247</span>,<span class="hljs-number">228</span>,<span class="hljs-number">88</span>,<br>        <span class="hljs-number">5</span>,<span class="hljs-number">184</span>,<span class="hljs-number">179</span>,<span class="hljs-number">69</span>,<span class="hljs-number">6</span>,<span class="hljs-number">208</span>,<span class="hljs-number">44</span>,<span class="hljs-number">30</span>,<span class="hljs-number">143</span>,<span class="hljs-number">202</span>,<span class="hljs-number">63</span>,<span class="hljs-number">15</span>,<span class="hljs-number">2</span>,<span class="hljs-number">193</span>,<span class="hljs-number">175</span>,<span class="hljs-number">189</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1</span>,<span class="hljs-number">19</span>,<span class="hljs-number">138</span>,<span class="hljs-number">107</span>,<span class="hljs-number">58</span>,<span class="hljs-number">145</span>,<span class="hljs-number">17</span>,<span class="hljs-number">65</span>,<br>        <span class="hljs-number">79</span>,<span class="hljs-number">103</span>,<span class="hljs-number">220</span>,<span class="hljs-number">234</span>,<span class="hljs-number">151</span>,<span class="hljs-number">242</span>,<span class="hljs-number">207</span>,<span class="hljs-number">206</span>,<span class="hljs-number">240</span>,<span class="hljs-number">180</span>,<span class="hljs-number">230</span>,<span class="hljs-number">115</span>,<span class="hljs-number">150</span>,<span class="hljs-number">172</span>,<span class="hljs-number">116</span>,<span class="hljs-number">34</span>,<span class="hljs-number">231</span>,<span class="hljs-number">173</span>,<span class="hljs-number">53</span>,<span class="hljs-number">133</span>,<span class="hljs-number">226</span>,<span class="hljs-number">249</span>,<br>        <span class="hljs-number">55</span>,<span class="hljs-number">28</span>,<span class="hljs-number">117</span>,<span class="hljs-number">223</span>,<span class="hljs-number">110</span>,<span class="hljs-number">71</span>,<span class="hljs-number">241</span>,<span class="hljs-number">26</span>,<span class="hljs-number">113</span>,<span class="hljs-number">29</span>,<span class="hljs-number">41</span>,<span class="hljs-number">197</span>,<span class="hljs-number">137</span>,<span class="hljs-number">111</span>,<span class="hljs-number">183</span>,<span class="hljs-number">98</span>,<span class="hljs-number">14</span>,<span class="hljs-number">170</span>,<span class="hljs-number">24</span>,<span class="hljs-number">190</span>,<span class="hljs-number">27</span>,<span class="hljs-number">252</span>,<span class="hljs-number">86</span>,<span class="hljs-number">62</span>,<br>        <span class="hljs-number">75</span>,<span class="hljs-number">198</span>,<span class="hljs-number">210</span>,<span class="hljs-number">121</span>,<span class="hljs-number">32</span>,<span class="hljs-number">154</span>,<span class="hljs-number">219</span>,<span class="hljs-number">192</span>,<span class="hljs-number">254</span>,<span class="hljs-number">120</span>,<span class="hljs-number">205</span>,<span class="hljs-number">90</span>,<span class="hljs-number">244</span>,<span class="hljs-number">31</span>,<span class="hljs-number">221</span>,<span class="hljs-number">168</span>,<span class="hljs-number">51</span>,<span class="hljs-number">136</span>,<span class="hljs-number">7</span>,<span class="hljs-number">199</span>,<span class="hljs-number">49</span>,<span class="hljs-number">177</span>,<br>        <span class="hljs-number">18</span>,<span class="hljs-number">16</span>,<span class="hljs-number">89</span>,<span class="hljs-number">39</span>,<span class="hljs-number">128</span>,<span class="hljs-number">96</span>,<span class="hljs-number">81</span>,<span class="hljs-number">127</span>,<span class="hljs-number">169</span>,<span class="hljs-number">25</span>,<span class="hljs-number">181</span>,<span class="hljs-number">74</span>,<span class="hljs-number">13</span>,<span class="hljs-number">45</span>,<span class="hljs-number">229</span>,<span class="hljs-number">122</span>,<span class="hljs-number">159</span>,<span class="hljs-number">147</span>,<span class="hljs-number">201</span>,<span class="hljs-number">156</span>,<span class="hljs-number">239</span>,<span class="hljs-number">160</span>,<br>        <span class="hljs-number">224</span>,<span class="hljs-number">59</span>,<span class="hljs-number">77</span>,<span class="hljs-number">174</span>,<span class="hljs-number">42</span>,<span class="hljs-number">245</span>,<span class="hljs-number">176</span>,<span class="hljs-number">200</span>,<span class="hljs-number">235</span>,<span class="hljs-number">187</span>,<span class="hljs-number">60</span>,<span class="hljs-number">131</span>,<span class="hljs-number">83</span>,<span class="hljs-number">153</span>,<span class="hljs-number">97</span>,<span class="hljs-number">23</span>,<span class="hljs-number">43</span>,<span class="hljs-number">4</span>,<span class="hljs-number">126</span>,<span class="hljs-number">186</span>,<span class="hljs-number">119</span>,<span class="hljs-number">214</span>,<br>        <span class="hljs-number">38</span>,<span class="hljs-number">225</span>,<span class="hljs-number">105</span>,<span class="hljs-number">20</span>,<span class="hljs-number">99</span>,<span class="hljs-number">85</span>,<span class="hljs-number">33</span>,<span class="hljs-number">12</span>,<span class="hljs-number">125</span>]<br>    Rcon = [<span class="hljs-number">16777216</span>,<span class="hljs-number">33554432</span>,<span class="hljs-number">67108864</span>,<span class="hljs-number">134217728</span>,<span class="hljs-number">268435456</span>,<span class="hljs-number">536870912</span>,<span class="hljs-number">1073741824</span>,<span class="hljs-number">0x80000000L</span>,<span class="hljs-number">452984832</span>,<span class="hljs-number">905969664</span>]<br>    s = []<br>    key = <span class="hljs-string">&#x27;CalmDownBelieveU&#x27;</span><br>    p1(s, key)<br>    key = [<br>        <span class="hljs-number">61</span>,<br>        <span class="hljs-number">15</span>,<br>        <span class="hljs-number">58</span>,<br>        <span class="hljs-number">65</span>,<br>        <span class="hljs-number">177</span>,<br>        <span class="hljs-number">180</span>,<br>        <span class="hljs-number">182</span>,<br>        <span class="hljs-number">248</span>,<br>        <span class="hljs-number">192</span>,<br>        <span class="hljs-number">143</span>,<br>        <span class="hljs-number">37</span>,<br>        <span class="hljs-number">238</span>,<br>        <span class="hljs-number">50</span>,<br>        <span class="hljs-number">29</span>,<br>        <span class="hljs-number">215</span>,<br>        <span class="hljs-number">190</span>]<br>    key = <span class="hljs-built_in">bytes</span>(p3(s, key))<br>    extendKey = p2(<span class="hljs-built_in">bytes</span>(key))<br>    opcode = [<br>        <span class="hljs-number">69</span>,<br>        <span class="hljs-number">136</span>,<br>        <span class="hljs-number">121</span>,<br>        <span class="hljs-number">24</span>,<br>        <span class="hljs-number">179</span>,<br>        <span class="hljs-number">67</span>,<br>        <span class="hljs-number">209</span>,<br>        <span class="hljs-number">20</span>,<br>        <span class="hljs-number">27</span>,<br>        <span class="hljs-number">169</span>,<br>        <span class="hljs-number">205</span>,<br>        <span class="hljs-number">146</span>,<br>        <span class="hljs-number">212</span>,<br>        <span class="hljs-number">160</span>,<br>        <span class="hljs-number">124</span>,<br>        <span class="hljs-number">49</span>,<br>        <span class="hljs-number">20</span>,<br>        <span class="hljs-number">155</span>,<br>        <span class="hljs-number">157</span>,<br>        <span class="hljs-number">253</span>,<br>        <span class="hljs-number">52</span>,<br>        <span class="hljs-number">71</span>,<br>        <span class="hljs-number">174</span>,<br>        <span class="hljs-number">164</span>,<br>        <span class="hljs-number">134</span>,<br>        <span class="hljs-number">60</span>,<br>        <span class="hljs-number">184</span>,<br>        <span class="hljs-number">203</span>,<br>        <span class="hljs-number">131</span>,<br>        <span class="hljs-number">210</span>,<br>        <span class="hljs-number">57</span>,<br>        <span class="hljs-number">151</span>,<br>        <span class="hljs-number">77</span>,<br>        <span class="hljs-number">241</span>,<br>        <span class="hljs-number">61</span>,<br>        <span class="hljs-number">6</span>,<br>        <span class="hljs-number">13</span>,<br>        <span class="hljs-number">52</span>,<br>        <span class="hljs-number">235</span>,<br>        <span class="hljs-number">37</span>,<br>        <span class="hljs-number">100</span>,<br>        <span class="hljs-number">178</span>,<br>        <span class="hljs-number">8</span>,<br>        <span class="hljs-number">238</span>,<br>        <span class="hljs-number">205</span>,<br>        <span class="hljs-number">27</span>,<br>        <span class="hljs-number">194</span>,<br>        <span class="hljs-number">159</span>,<br>        <span class="hljs-number">230</span>,<br>        <span class="hljs-number">165</span>,<br>        <span class="hljs-number">211</span>,<br>        <span class="hljs-number">221</span>,<br>        <span class="hljs-number">100</span>,<br>        <span class="hljs-number">217</span>,<br>        <span class="hljs-number">111</span>,<br>        <span class="hljs-number">202</span>,<br>        <span class="hljs-number">185</span>,<br>        <span class="hljs-number">207</span>,<br>        <span class="hljs-number">226</span>,<br>        <span class="hljs-number">50</span>,<br>        <span class="hljs-number">88</span>,<br>        <span class="hljs-number">4</span>,<br>        <span class="hljs-number">58</span>,<br>        <span class="hljs-number">73</span>,<br>        <span class="hljs-number">10</span>,<br>        <span class="hljs-number">92</span>,<br>        <span class="hljs-number">24</span>,<br>        <span class="hljs-number">230</span>,<br>        <span class="hljs-number">246</span>,<br>        <span class="hljs-number">245</span>,<br>        <span class="hljs-number">21</span>,<br>        <span class="hljs-number">110</span>,<br>        <span class="hljs-number">182</span>,<br>        <span class="hljs-number">151</span>,<br>        <span class="hljs-number">85</span>,<br>        <span class="hljs-number">28</span>,<br>        <span class="hljs-number">181</span>,<br>        <span class="hljs-number">191</span>,<br>        <span class="hljs-number">185</span>,<br>        <span class="hljs-number">236</span>,<br>        <span class="hljs-number">92</span>,<br>        <span class="hljs-number">98</span>,<br>        <span class="hljs-number">222</span>,<br>        <span class="hljs-number">85</span>,<br>        <span class="hljs-number">228</span>,<br>        <span class="hljs-number">14</span>,<br>        <span class="hljs-number">235</span>,<br>        <span class="hljs-number">93</span>,<br>        <span class="hljs-number">77</span>,<br>        <span class="hljs-number">161</span>,<br>        <span class="hljs-number">61</span>,<br>        <span class="hljs-number">140</span>,<br>        <span class="hljs-number">222</span>,<br>        <span class="hljs-number">74</span>,<br>        <span class="hljs-number">124</span>,<br>        <span class="hljs-number">13</span>,<br>        <span class="hljs-number">211</span>,<br>        <span class="hljs-number">75</span>,<br>        <span class="hljs-number">134</span>,<br>        <span class="hljs-number">235</span>,<br>        <span class="hljs-number">164</span>,<br>        <span class="hljs-number">228</span>,<br>        <span class="hljs-number">235</span>,<br>        <span class="hljs-number">16</span>,<br>        <span class="hljs-number">29</span>,<br>        <span class="hljs-number">41</span>,<br>        <span class="hljs-number">49</span>,<br>        <span class="hljs-number">105</span>,<br>        <span class="hljs-number">188</span>,<br>        <span class="hljs-number">51</span>,<br>        <span class="hljs-number">232</span>,<br>        <span class="hljs-number">65</span>,<br>        <span class="hljs-number">209</span>,<br>        <span class="hljs-number">165</span>,<br>        <span class="hljs-number">35</span>,<br>        <span class="hljs-number">182</span>,<br>        <span class="hljs-number">248</span>,<br>        <span class="hljs-number">245</span>,<br>        <span class="hljs-number">69</span>,<br>        <span class="hljs-number">18</span>,<br>        <span class="hljs-number">152</span>,<br>        <span class="hljs-number">71</span>,<br>        <span class="hljs-number">223</span>,<br>        <span class="hljs-number">85</span>,<br>        <span class="hljs-number">114</span>]<br>    opcode = p3(s, opcode)<br>    right = Have()<br>    back = Fun(right)<br>    data1 = [<br>        <span class="hljs-number">228</span>,<br>        <span class="hljs-number">244</span>,<br>        <span class="hljs-number">207</span>,<br>        <span class="hljs-number">251</span>,<br>        <span class="hljs-number">194</span>,<br>        <span class="hljs-number">124</span>,<br>        <span class="hljs-number">252</span>,<br>        <span class="hljs-number">61</span>,<br>        <span class="hljs-number">198</span>,<br>        <span class="hljs-number">145</span>,<br>        <span class="hljs-number">97</span>,<br>        <span class="hljs-number">98</span>,<br>        <span class="hljs-number">89</span>,<br>        <span class="hljs-number">25</span>,<br>        <span class="hljs-number">92</span>,<br>        <span class="hljs-number">208</span>,<br>        <span class="hljs-number">155</span>,<br>        <span class="hljs-number">38</span>,<br>        <span class="hljs-number">34</span>,<br>        <span class="hljs-number">225</span>,<br>        <span class="hljs-number">98</span>,<br>        <span class="hljs-number">206</span>,<br>        <span class="hljs-number">234</span>,<br>        <span class="hljs-number">245</span>,<br>        <span class="hljs-number">223</span>,<br>        <span class="hljs-number">54</span>,<br>        <span class="hljs-number">214</span>,<br>        <span class="hljs-number">137</span>,<br>        <span class="hljs-number">35</span>,<br>        <span class="hljs-number">86</span>,<br>        <span class="hljs-number">180</span>,<br>        <span class="hljs-number">66</span>,<br>        <span class="hljs-number">223</span>,<br>        <span class="hljs-number">234</span>,<br>        <span class="hljs-number">90</span>,<br>        <span class="hljs-number">136</span>,<br>        <span class="hljs-number">5</span>,<br>        <span class="hljs-number">189</span>,<br>        <span class="hljs-number">166</span>,<br>        <span class="hljs-number">117</span>,<br>        <span class="hljs-number">111</span>,<br>        <span class="hljs-number">222</span>,<br>        <span class="hljs-number">39</span>,<br>        <span class="hljs-number">156</span>,<br>        <span class="hljs-number">163</span>,<br>        <span class="hljs-number">173</span>,<br>        <span class="hljs-number">36</span>,<br>        <span class="hljs-number">174</span>,<br>        <span class="hljs-number">47</span>,<br>        <span class="hljs-number">144</span>,<br>        <span class="hljs-number">15</span>,<br>        <span class="hljs-number">160</span>,<br>        <span class="hljs-number">45</span>,<br>        <span class="hljs-number">239</span>,<br>        <span class="hljs-number">211</span>,<br>        <span class="hljs-number">11</span>,<br>        <span class="hljs-number">190</span>,<br>        <span class="hljs-number">181</span>,<br>        <span class="hljs-number">24</span>,<br>        <span class="hljs-number">164</span>,<br>        <span class="hljs-number">234</span>,<br>        <span class="hljs-number">114</span>,<br>        <span class="hljs-number">174</span>,<br>        <span class="hljs-number">27</span>]<br>    data1 = <span class="hljs-built_in">bytes</span>(p3(s, data1))<br>    data2 = [<br>        <span class="hljs-number">165</span>,<br>        <span class="hljs-number">83</span>,<br>        <span class="hljs-number">203</span>,<br>        <span class="hljs-number">51</span>,<br>        <span class="hljs-number">99</span>,<br>        <span class="hljs-number">164</span>,<br>        <span class="hljs-number">30</span>,<br>        <span class="hljs-number">91</span>,<br>        <span class="hljs-number">230</span>,<br>        <span class="hljs-number">64</span>,<br>        <span class="hljs-number">181</span>,<br>        <span class="hljs-number">55</span>,<br>        <span class="hljs-number">190</span>,<br>        <span class="hljs-number">47</span>,<br>        <span class="hljs-number">125</span>,<br>        <span class="hljs-number">240</span>,<br>        <span class="hljs-number">186</span>,<br>        <span class="hljs-number">173</span>,<br>        <span class="hljs-number">116</span>,<br>        <span class="hljs-number">47</span>,<br>        <span class="hljs-number">89</span>,<br>        <span class="hljs-number">64</span>,<br>        <span class="hljs-number">68</span>,<br>        <span class="hljs-number">215</span>,<br>        <span class="hljs-number">124</span>,<br>        <span class="hljs-number">138</span>,<br>        <span class="hljs-number">34</span>,<br>        <span class="hljs-number">175</span>,<br>        <span class="hljs-number">60</span>,<br>        <span class="hljs-number">136</span>,<br>        <span class="hljs-number">77</span>,<br>        <span class="hljs-number">216</span>,<br>        <span class="hljs-number">250</span>,<br>        <span class="hljs-number">127</span>,<br>        <span class="hljs-number">14</span>,<br>        <span class="hljs-number">14</span>,<br>        <span class="hljs-number">66</span>,<br>        <span class="hljs-number">168</span>,<br>        <span class="hljs-number">198</span>,<br>        <span class="hljs-number">247</span>,<br>        <span class="hljs-number">252</span>,<br>        <span class="hljs-number">189</span>,<br>        <span class="hljs-number">243</span>,<br>        <span class="hljs-number">239</span>,<br>        <span class="hljs-number">25</span>,<br>        <span class="hljs-number">63</span>,<br>        <span class="hljs-number">143</span>,<br>        <span class="hljs-number">7</span>,<br>        <span class="hljs-number">177</span>,<br>        <span class="hljs-number">13</span>,<br>        <span class="hljs-number">99</span>,<br>        <span class="hljs-number">226</span>,<br>        <span class="hljs-number">100</span>,<br>        <span class="hljs-number">6</span>,<br>        <span class="hljs-number">207</span>,<br>        <span class="hljs-number">77</span>,<br>        <span class="hljs-number">46</span>,<br>        <span class="hljs-number">136</span>,<br>        <span class="hljs-number">251</span>,<br>        <span class="hljs-number">123</span>,<br>        <span class="hljs-number">225</span>,<br>        <span class="hljs-number">27</span>,<br>        <span class="hljs-number">76</span>,<br>        <span class="hljs-number">183</span>]<br>    data2 = <span class="hljs-built_in">bytes</span>(p3(s, data2))<br>    data3 = [<br>        <span class="hljs-number">95</span>,<br>        <span class="hljs-number">219</span>,<br>        <span class="hljs-number">46</span>,<br>        <span class="hljs-number">178</span>,<br>        <span class="hljs-number">111</span>,<br>        <span class="hljs-number">141</span>,<br>        <span class="hljs-number">17</span>,<br>        <span class="hljs-number">168</span>,<br>        <span class="hljs-number">254</span>,<br>        <span class="hljs-number">60</span>,<br>        <span class="hljs-number">68</span>,<br>        <span class="hljs-number">59</span>,<br>        <span class="hljs-number">41</span>,<br>        <span class="hljs-number">183</span>,<br>        <span class="hljs-number">182</span>,<br>        <span class="hljs-number">118</span>,<br>        <span class="hljs-number">3</span>,<br>        <span class="hljs-number">47</span>,<br>        <span class="hljs-number">150</span>,<br>        <span class="hljs-number">240</span>,<br>        <span class="hljs-number">140</span>,<br>        <span class="hljs-number">159</span>,<br>        <span class="hljs-number">110</span>,<br>        <span class="hljs-number">238</span>]<br>    data3 = <span class="hljs-built_in">bytes</span>(p3(s, data3))<br>    <span class="hljs-keyword">if</span> back == data2:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bytes</span>(data1).decode())<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bytes</span>(data3).decode())<br></code></pre></td></tr></table></figure>
+<p>可以明显的发现对应的数据似乎缺少了一部分，我们简单修改后拿到的<code>opcode</code>与题目中的不符，此时采用了个笨办法，手动<code>hook</code>原来的pyc中的字节码，将其进行修改输出对应变量的值</p>
+<p><img src="https://s2.loli.net/2023/08/30/LQshGYVx5FHWfCr.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>将其进行一个魔改调用前面已有的<code>print</code>来对我们想要的变量值进行输出，可以成功的拿到对应的数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">key = [<span class="hljs-number">1835819331</span>, <span class="hljs-number">1853321028</span>, <span class="hljs-number">1768711490</span>, <span class="hljs-number">1432712805</span>, <span class="hljs-number">2177920767</span>, <span class="hljs-number">4020699579</span>, <span class="hljs-number">2261476601</span>, <span class="hljs-number">3551400604</span>, <span class="hljs-number">711874531</span>, <span class="hljs-number">3318306392</span>, <span class="hljs-number">1124217505</span>, <span class="hljs-number">2427199549</span>, <span class="hljs-number">3099853672</span>, <span class="hljs-number">2098025776</span>, <span class="hljs-number">1041196945</span>, <span class="hljs-number">2929936300</span>, <span class="hljs-number">246748610</span>, <span class="hljs-number">1941455090</span>, <span class="hljs-number">1303848803</span>, <span class="hljs-number">3809763535</span>, <span class="hljs-number">1395557789</span>, <span class="hljs-number">546751855</span>, <span class="hljs-number">1830937100</span>, <span class="hljs-number">2385871555</span>, <span class="hljs-number">2516030638</span>, <span class="hljs-number">3043054017</span>, <span class="hljs-number">3628118989</span>, <span class="hljs-number">1450520846</span>, <span class="hljs-number">1825094265</span>, <span class="hljs-number">3651791800</span>, <span class="hljs-number">32069749</span>, <span class="hljs-number">1469868411</span>, <span class="hljs-number">919887482</span>, <span class="hljs-number">4017993154</span>, <span class="hljs-number">4002737591</span>, <span class="hljs-number">3104343244</span>, <span class="hljs-number">4134211933</span>, <span class="hljs-number">420914335</span>, <span class="hljs-number">4152510760</span>, <span class="hljs-number">1317719524</span>, <span class="hljs-number">1990496755</span>, <span class="hljs-number">1873950060</span>, <span class="hljs-number">2553314372</span>, <span class="hljs-number">3602559392</span>]<br><br>opcode = [<span class="hljs-number">80</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">29</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">80</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">29</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">29</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>, <span class="hljs-number">113</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">114</span>, <span class="hljs-number">2</span>, <span class="hljs-number">31</span>, <span class="hljs-number">41</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">80</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">32</span>, <span class="hljs-number">150</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">116</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">87</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>, <span class="hljs-number">220</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">80</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">29</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">113</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">114</span>, <span class="hljs-number">4</span>, <span class="hljs-number">31</span>, <span class="hljs-number">41</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">80</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">32</span>, <span class="hljs-number">150</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">116</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">87</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">80</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">220</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">29</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">80</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">29</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">153</span>, <span class="hljs-number">255</span>]<br><br>check = [<span class="hljs-number">70971958</span>, <span class="hljs-number">1454480124</span>, <span class="hljs-number">4145947100</span>, <span class="hljs-number">3683618452</span>, <span class="hljs-number">1295312797</span>, <span class="hljs-number">2622622830</span>, <span class="hljs-number">4227519997</span>, <span class="hljs-number">855210028</span>, <span class="hljs-number">3149806017</span>, <span class="hljs-number">3649402294</span>, <span class="hljs-number">687393912</span>, <span class="hljs-number">2766439826</span>, <span class="hljs-number">247296709</span>, <span class="hljs-number">2944897322</span>, <span class="hljs-number">2347888534</span>, <span class="hljs-number">375443730</span>]<br></code></pre></td></tr></table></figure>
+<p>之后我们简单的整理一下对应虚拟机的逻辑可以得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs asm">REG[&#x27;EAX&#x27;] = part1<br>REG[&#x27;EBX&#x27;] = part2<br>REG[ECX] = 0<br>REG[EAX] = REG[EAX] + extendKey[REG[ECX]] &amp; 0xFFFFFFFF<br>REG[ECX] = 1<br>REG[EBX] = REG[EBX] + extendKey[REG[ECX]] &amp; 0xFFFFFFFF<br>--------------------------------------------<br>REG[CNT] = REG[CNT] + 1 &amp; 0xFFFFFFFF       开始循环<br>REG[EAX] ^= REG[EBX]<br>REG[ECX] = REG[EAX]<br>REG[R8] = REG[EBX]<br>REG[EBX] &amp;= 31<br>REG[EAX] = REG[EAX] &lt;&lt; REG[EBX] &amp; 0xFFFFFFFF<br>REG[EDX] = 32<br>REG[EDX] -= REG[EBX]<br>REG[ECX] = REG[ECX] &gt;&gt; REG[EDX] &amp; 0xFFFFFFFF<br>REG[EAX] |= REG[ECX]<br>REG[EBX] = REG[CNT]<br>REG[EBX] *= 2<br>REG[ECX] = extendKey[REG[EBX]]<br>REG[EAX] = REG[EAX] + REG[ECX] &amp; 0xFFFFFFFF<br>REG[EBX] = REG[R8]<br>REG[EBX] ^= REG[EAX]<br>REG[ECX] = REG[EBX]<br>REG[EDX] = REG[EAX]<br>REG[EDX] &amp;= 31<br>REG[EBX] = REG[EBX] &lt;&lt; REG[EDX] &amp; 0xFFFFFFFF<br>REG[R8] = 32<br>REG[R8] -= REG[EDX]<br>REG[ECX] = REG[ECX] &gt;&gt; REG[R8] &amp; 0xFFFFFFFF<br>REG[EBX] |= REG[ECX]<br>REG[ECX] = REG[CNT]<br>REG[ECX] *= 2<br>REG[ECX] = REG[ECX] + 1 &amp; 0xFFFFFFFF<br>REG[EDX] = extendKey[REG[ECX]]<br>REG[EBX] = REG[EBX] + REG[EDX] &amp; 0xFFFFFFFF<br>REGREG[R8] = REG[CNT] == 21 			判断循环是否结束<br></code></pre></td></tr></table></figure>
+<p>当<code>R8</code>为真时跳出对应的循环，我们此时可以写出对应解密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> z3 <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><br>x = [BitVec(<span class="hljs-string">&quot;x[%d]&quot;</span>%i,<span class="hljs-number">33</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">16</span>)]<br>S = Solver()<br><br>key = [<span class="hljs-number">1835819331</span>, <span class="hljs-number">1853321028</span>, <span class="hljs-number">1768711490</span>, <span class="hljs-number">1432712805</span>, <span class="hljs-number">2177920767</span>, <span class="hljs-number">4020699579</span>, <span class="hljs-number">2261476601</span>, <span class="hljs-number">3551400604</span>, <span class="hljs-number">711874531</span>, <span class="hljs-number">3318306392</span>, <span class="hljs-number">1124217505</span>, <span class="hljs-number">2427199549</span>, <span class="hljs-number">3099853672</span>, <span class="hljs-number">2098025776</span>, <span class="hljs-number">1041196945</span>, <span class="hljs-number">2929936300</span>, <span class="hljs-number">246748610</span>, <span class="hljs-number">1941455090</span>, <span class="hljs-number">1303848803</span>, <span class="hljs-number">3809763535</span>, <span class="hljs-number">1395557789</span>, <span class="hljs-number">546751855</span>, <span class="hljs-number">1830937100</span>, <span class="hljs-number">2385871555</span>, <span class="hljs-number">2516030638</span>, <span class="hljs-number">3043054017</span>, <span class="hljs-number">3628118989</span>, <span class="hljs-number">1450520846</span>, <span class="hljs-number">1825094265</span>, <span class="hljs-number">3651791800</span>, <span class="hljs-number">32069749</span>, <span class="hljs-number">1469868411</span>, <span class="hljs-number">919887482</span>, <span class="hljs-number">4017993154</span>, <span class="hljs-number">4002737591</span>, <span class="hljs-number">3104343244</span>, <span class="hljs-number">4134211933</span>, <span class="hljs-number">420914335</span>, <span class="hljs-number">4152510760</span>, <span class="hljs-number">1317719524</span>, <span class="hljs-number">1990496755</span>, <span class="hljs-number">1873950060</span>, <span class="hljs-number">2553314372</span>, <span class="hljs-number">3602559392</span>]<br><br>check = [<span class="hljs-number">70971958</span>, <span class="hljs-number">1454480124</span>, <span class="hljs-number">4145947100</span>, <span class="hljs-number">3683618452</span>, <span class="hljs-number">1295312797</span>, <span class="hljs-number">2622622830</span>, <span class="hljs-number">4227519997</span>, <span class="hljs-number">855210028</span>, <span class="hljs-number">3149806017</span>, <span class="hljs-number">3649402294</span>, <span class="hljs-number">687393912</span>, <span class="hljs-number">2766439826</span>, <span class="hljs-number">247296709</span>, <span class="hljs-number">2944897322</span>, <span class="hljs-number">2347888534</span>, <span class="hljs-number">375443730</span>]<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">enc</span>(<span class="hljs-params">cin1,cin2,key</span>):</span><br>    cnt = <span class="hljs-number">0</span> <br>    eax = cin1 <br>    ebx = cin2<br>    ecx = <span class="hljs-number">0</span> <br>    <br>    eax+=key[ecx]<br>    eax&amp;=<span class="hljs-number">0xffffffff</span><br>    ecx = <span class="hljs-number">1</span><br>    ebx+=key[ecx]<br>    ebx&amp;=<span class="hljs-number">0xffffffff</span><br><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>):<br>        cnt+=<span class="hljs-number">1</span><br>        eax^=ebx<br>        ecx = eax<br>        r8 = ebx<br>        ebx &amp;= <span class="hljs-number">31</span><br>        eax&lt;&lt;=ebx<br>        eax&amp;=<span class="hljs-number">0xffffffff</span><br>        edx = <span class="hljs-number">32</span> - ebx<br>        ecx&gt;&gt;=edx<br>        eax |=ecx<br>        eax+=key[cnt*<span class="hljs-number">2</span>]<br>        eax&amp;=<span class="hljs-number">0xffffffff</span><br>        ebx = r8<br>        ebx^=eax<br>        ecx = ebx<br>        edx = eax<br>        edx &amp;=<span class="hljs-number">31</span><br>        ebx&lt;&lt;=edx<br>        r8 = <span class="hljs-number">32</span>-edx<br>        ecx&gt;&gt;=r8<br>        ebx|=ecx<br>        ebx+=key[<span class="hljs-number">2</span>*cnt+<span class="hljs-number">1</span>]<br>        ebx&amp;=<span class="hljs-number">0xffffffff</span><br>        <span class="hljs-keyword">if</span>(cnt==<span class="hljs-number">21</span>):<br>            <span class="hljs-keyword">break</span><br><br>    <span class="hljs-keyword">return</span> eax,ebx<br><br>res = [<span class="hljs-number">0</span>]*<span class="hljs-number">16</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>    <span class="hljs-keyword">if</span> i &gt; <span class="hljs-number">0</span>:<br>        x[<span class="hljs-number">2</span>*i] ^= check[<span class="hljs-number">2</span>*i-<span class="hljs-number">2</span>]<br>        x[<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>] ^= check[<span class="hljs-number">2</span>*i-<span class="hljs-number">1</span>]<br>    res[<span class="hljs-number">2</span>*i], res[<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>] = enc(x[<span class="hljs-number">2</span>*i],x[<span class="hljs-number">2</span>*i + <span class="hljs-number">1</span>], key)<br>    S.add(res[<span class="hljs-number">2</span>*i]==check[<span class="hljs-number">2</span>*i], res[<span class="hljs-number">2</span>*i + <span class="hljs-number">1</span>] == check[<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>] )<br><br>flag =<span class="hljs-string">b&#x27;&#x27;</span><br>res = S.check()<br>ans = S.model()<br><span class="hljs-keyword">if</span> res == sat:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[+] Found!&quot;</span>)<br>    <span class="hljs-built_in">print</span>(ans)<br><br>x = [<span class="hljs-number">0</span>]*<span class="hljs-number">16</span><br>x[<span class="hljs-number">4</span>] = <span class="hljs-number">1730238768</span><br>x[<span class="hljs-number">13</span>] = <span class="hljs-number">829583920</span><br>x[<span class="hljs-number">10</span>] = <span class="hljs-number">1667974770</span><br>x[<span class="hljs-number">15</span>] = <span class="hljs-number">1461789053</span><br>x[<span class="hljs-number">9</span>] = <span class="hljs-number">1752449633</span><br>x[<span class="hljs-number">14</span>] = <span class="hljs-number">1914787663</span><br>x[<span class="hljs-number">8</span>] = <span class="hljs-number">559049063</span><br>x[<span class="hljs-number">2</span>] = <span class="hljs-number">811877750</span><br>x[<span class="hljs-number">7</span>] = <span class="hljs-number">812462881</span><br>x[<span class="hljs-number">0</span>] = <span class="hljs-number">1464681300</span><br>x[<span class="hljs-number">12</span>] = <span class="hljs-number">1633905485</span><br>x[<span class="hljs-number">11</span>] = <span class="hljs-number">1869431345</span><br>x[<span class="hljs-number">6</span>] = <span class="hljs-number">1098343795</span><br>x[<span class="hljs-number">1</span>] = <span class="hljs-number">1182484272</span><br>x[<span class="hljs-number">5</span>] = <span class="hljs-number">1967223397</span><br>x[<span class="hljs-number">3</span>] = <span class="hljs-number">862873966</span>   <br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">16</span>):<br>    flag +=long_to_bytes(x[i])<br><br><span class="hljs-built_in">print</span>(flag)<br><br><span class="hljs-comment"># b&#x27;WMCTF&#123;G00dEv3ning!Y0uAreAwes0m3!!RightBackFromB1ackM1rr0r!WOW!!&#125;&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="gohunt">gohunt</h2>
+<p>题目为GO语言逆向，简单的运行后我们可以知道其将我们的输入转换为二维码图片，采用了<code>go-qrcode</code>的开源项目来进行生成</p>
+<p>我们丢入IDA进行调试分析，可以看到的是<code>main</code>函数比较大，我们采用调试进行分析</p>
+<p>最先可以看到的便是一个<code>Base64</code>，但是对其进行了换表</p>
+<p><img src="https://s2.loli.net/2023/08/30/AGHPXxLdmSnl62v.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以轻易的拿到对应的码表为<code>NkQxHyXmiZTReo05ngu7dlv1BpE2SfLwM@qr6IUjb4AaP9+z3cDVOCKhJYFWs8tG</code></p>
+<p>将对应字符串进行解密可以得到<code>please input flag</code>的字样</p>
+<p>随后同样的操作我们可以看到对应采用了一个<code>XXTEA</code>来对输入进行加密，先将其转换为<code>DWORD</code>方便后续的计算过程</p>
+<p><img src="https://s2.loli.net/2023/08/30/LrBH8o2uDc1Gblp.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>实现<code>XXTEA</code>部分：</p>
+<p><img src="https://s2.loli.net/2023/08/30/Hkx3fjcYuKpNOwP.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>随后又进行了循环异或，并将其转换为大数</p>
+<p><img src="https://s2.loli.net/2023/08/30/aq1Pw79BIExjVQd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>随后的操作看上去就有点迷了，但是经过调试我们可以发现这个地方在对我们转换为大数后的值除以<code>58</code></p>
+<p><img src="https://s2.loli.net/2023/08/30/nLTVWBRt1zSCp3x.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>之后将对应转换后的数据进行取相应下标处的值</p>
+<p><img src="https://s2.loli.net/2023/08/30/MGauVfReIjtdi76.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>至此我们便可以推测出来其过程为<code>Base58</code>的转换过程，同时可以注意到对应的码表也进行了相应的修改，修改为了<code>nY7TwcE41bzWvMQZXa8fyeprJoBdmhsu9DqVgxRPtFLKN65UH2CikG3SAj</code></p>
+<p>之后的过程便是对应其调用相关的组件来进行生成二维码</p>
+<p>至此我们可以分析到程序逻辑为输入<code>flag</code>后将其进行<code>XXTEA</code>加密，随后将其进行异或处理，再转换为大数后进行<code>Base58</code>的操作，我们扫描题目中给的二维码可以拿到加密后的数据为：<code>YMQHsYFQu7kkTqu3Xmt1ruYUDLU8uaMoPpsfjqYF4TQMMKtw5KF7cpWrkWpk3</code></p>
+<p>写出对应解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> base58<br><span class="hljs-keyword">import</span> xxtea<br> <br>flag = base58.b58decode(<span class="hljs-string">&#x27;YMQHsYFQu7kkTqu3Xmt1ruYUDLU8uaMoPpsfjqYF4TQMMKtw5KF7cpWrkWpk3&#x27;</span>, alphabet=<span class="hljs-string">b&#x27;nY7TwcE41bzWvMQZXa8fyeprJoBdmhsu9DqVgxRPtFLKN65UH2CikG3SAj&#x27;</span>)<br>flag = <span class="hljs-built_in">bytearray</span>(flag)<br><br>xor_key = <span class="hljs-string">b&#x27;NPWrpd1CEJH2QcJ3&#x27;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(flag)):<br>    flag[i] ^= xor_key[i % <span class="hljs-built_in">len</span>(xor_key)]<br>xxtea_key = <span class="hljs-string">b&#x27;FMT2ZCEHS6pcfD2R&#x27;</span><br>flag = xxtea.decrypt(flag, xxtea_key, padding=<span class="hljs-literal">False</span>)<br><span class="hljs-built_in">print</span>(flag)<br><span class="hljs-comment"># wmctf&#123;YHNEBJx1WG0cKtZk8e2PNbxJa45WQF09&#125;</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>WMCTF2023 - 部分RE</div>
+      <div>https://equinox-shame.github.io/2023/08/30/WMCTF2023/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/30/CS106L%20Learning/" title="CS106L Learning">
+                        <span class="hidden-mobile">CS106L Learning</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
