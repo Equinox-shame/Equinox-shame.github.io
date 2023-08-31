@@ -230,60 +230,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/" target="_self">
-          d3Recover 复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/" target="_self">
-        <div>
-          前言 属于是赛后看WP才发现自己忘记将数据恢复在ASCII范围内，导致一直出来的都是奇怪东西…  呜呜，送上门的分都没拿到  解题过程 题目给了两个程序，都是Python打包后的，其中V2版本没有去除掉符号表，V1去除掉了，通过观察V2相关东西，同样的可以找到一个Base64后的字符串，并可以直接进行解密  解密可以拿到But maybe I can help you recover the so
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-05-06 22:56" pubdate>
-              2023-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/2023/04/25/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20Inline%20Hook/" target="_self">
           Windows内核实验 ——— Inline Hook
         </a>
@@ -764,6 +710,60 @@
     </article>
   </div>
 
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/02/01/HGAME2023%20RE%20KunMusic/" target="_self">
+          HGAME CTF 2023 RE——KunMusic
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/01/HGAME2023%20RE%20KunMusic/" target="_self">
+        <div>
+          一些废话 看到网上相关与此题的题解挺少的，打算自己写一个解题过程，同时也可以在此题中学习到资源提取解密的方法，希望对新生能够有帮助？ 解题过程 我们拿到题目可以看到压缩包里一共有 3 个文件，一个json、一个exe、一个dll 我们先从能直观看到的json开始看  我们可以注意到关键的NET，因此合理判断此题是一个NET应用程序的逆向题目，对此我们可以准备ILSPY、dnSPY工具，需要注意的一
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-02-01 00:55" pubdate>
+              2023-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
 
 
   <nav aria-label="navigation">
@@ -883,7 +883,37 @@
       }
       var text = subtitle.getAttribute('data-typed-text');
       
-        typing(text);
+        jQuery.ajax({
+          type: 'GET',
+          url: 'https://v1.hitokoto.cn/',
+          headers: {},
+          dataType: 'json',
+          success: function(result) {
+            var apiText;
+            if (result) {
+              var keys = 'hitokoto'.split(',');
+              if (result instanceof Array) {
+                result = result[0];
+              }
+              for (const k of keys) {
+                var value = result[k];
+                if (typeof value === 'string') {
+                  apiText = value;
+                  break;
+                } else if (value instanceof Object) {
+                  result = value;
+                }
+              }
+            }
+            apiText ? typing(apiText) : typing(text);
+          },
+          error: function(xhr, status, error) {
+            if (error) {
+              console.error('Failed to request https://v1.hitokoto.cn/:', error);
+            }
+            typing(text);
+          }
+        })
       
     })(window, document);
   </script>

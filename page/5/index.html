@@ -230,60 +230,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" target="_self">
-          C++ 核心编程
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" target="_self">
-        <div>
-          堆空间开辟地址 ——— new 开辟空间 我们利用new可以在堆区开辟空间，堆区由程序员进行管控，可以手动进行管理数据存放内存的释放与否，若不写释放过程，则堆区数据会在程序结束时由OS自动释放 开辟空间形式： 1new int(10) // 在堆上开辟了一个 int 类型的数据，new 返回的是对应数据类型的一个指针，括号内为其对应的值 如果我们想要访问该堆空间的数据我们可以创建一个对应数据类型的
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-11 17:37" pubdate>
-              2022-09-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/2022/09/05/XSS%20%E6%94%BB%E5%87%BB/" target="_self">
           XSS 攻击
         </a>
@@ -764,6 +710,60 @@
     </article>
   </div>
 
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/07/22/UNCTF%20-%202019%20EasyVm/" target="_self">
+          UNCTF - 2019 EasyVm
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/22/UNCTF%20-%202019%20EasyVm/" target="_self">
+        <div>
+          整体而言是一个比较好分析的一个VM题目，对得起其easy的名字？ 拖入IDA进行反编译，可以清楚的发现对应的结构特点  我们跟进到创建栈空间的函数可发现其对应的操作函数集合  我们可以发现里面的运算，可以进行简单的标注一下。 我们在这个函数的集合中可以发现第一个run_vm中存在有switch - case结构，因此可以推断出来这个函数就是在执行对应的操作指令判断，来进行执行后面的函数 进行简单的
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-07-22 17:46" pubdate>
+              2022-07-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
 
 
   <nav aria-label="navigation">
@@ -883,7 +883,37 @@
       }
       var text = subtitle.getAttribute('data-typed-text');
       
-        typing(text);
+        jQuery.ajax({
+          type: 'GET',
+          url: 'https://v1.hitokoto.cn/',
+          headers: {},
+          dataType: 'json',
+          success: function(result) {
+            var apiText;
+            if (result) {
+              var keys = 'hitokoto'.split(',');
+              if (result instanceof Array) {
+                result = result[0];
+              }
+              for (const k of keys) {
+                var value = result[k];
+                if (typeof value === 'string') {
+                  apiText = value;
+                  break;
+                } else if (value instanceof Object) {
+                  result = value;
+                }
+              }
+            }
+            apiText ? typing(apiText) : typing(text);
+          },
+          error: function(xhr, status, error) {
+            if (error) {
+              console.error('Failed to request https://v1.hitokoto.cn/:', error);
+            }
+            typing(text);
+          }
+        })
       
     })(window, document);
   </script>

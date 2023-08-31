@@ -230,60 +230,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/02/01/HGAME2023%20RE%20KunMusic/" target="_self">
-          HGAME CTF 2023 RE——KunMusic
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/01/HGAME2023%20RE%20KunMusic/" target="_self">
-        <div>
-          一些废话 看到网上相关与此题的题解挺少的，打算自己写一个解题过程，同时也可以在此题中学习到资源提取解密的方法，希望对新生能够有帮助？ 解题过程 我们拿到题目可以看到压缩包里一共有 3 个文件，一个json、一个exe、一个dll 我们先从能直观看到的json开始看  我们可以注意到关键的NET，因此合理判断此题是一个NET应用程序的逆向题目，对此我们可以准备ILSPY、dnSPY工具，需要注意的一
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-02-01 00:55" pubdate>
-              2023-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/2023/01/26/Tensorflow/" target="_self">
           Tensorflow入门到入土(轻量版)
         </a>
@@ -764,6 +710,60 @@
     </article>
   </div>
 
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" target="_self">
+          C++ 核心编程
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/11/C++%20%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" target="_self">
+        <div>
+          堆空间开辟地址 ——— new 开辟空间 我们利用new可以在堆区开辟空间，堆区由程序员进行管控，可以手动进行管理数据存放内存的释放与否，若不写释放过程，则堆区数据会在程序结束时由OS自动释放 开辟空间形式： 1new int(10) // 在堆上开辟了一个 int 类型的数据，new 返回的是对应数据类型的一个指针，括号内为其对应的值 如果我们想要访问该堆空间的数据我们可以创建一个对应数据类型的
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-11 17:37" pubdate>
+              2022-09-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
 
 
   <nav aria-label="navigation">
@@ -883,7 +883,37 @@
       }
       var text = subtitle.getAttribute('data-typed-text');
       
-        typing(text);
+        jQuery.ajax({
+          type: 'GET',
+          url: 'https://v1.hitokoto.cn/',
+          headers: {},
+          dataType: 'json',
+          success: function(result) {
+            var apiText;
+            if (result) {
+              var keys = 'hitokoto'.split(',');
+              if (result instanceof Array) {
+                result = result[0];
+              }
+              for (const k of keys) {
+                var value = result[k];
+                if (typeof value === 'string') {
+                  apiText = value;
+                  break;
+                } else if (value instanceof Object) {
+                  result = value;
+                }
+              }
+            }
+            apiText ? typing(apiText) : typing(text);
+          },
+          error: function(xhr, status, error) {
+            if (error) {
+              console.error('Failed to request https://v1.hitokoto.cn/:', error);
+            }
+            typing(text);
+          }
+        })
       
     })(window, document);
   </script>
