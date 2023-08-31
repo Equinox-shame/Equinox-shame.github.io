@@ -16,44 +16,26 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Crack  by  混入21的蒟蒻  暴力破解 运行安装包，安装对应的软件，拖入PE进行查壳分析，发现有一个 UPX 壳，直接利用 UPX.exe脱壳  脱去壳后拉入IDA分析 寻找对应的Register可以发现如下字符串 ：  寻找对应的The Code you&#39;ve entered invalid!之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：   之后跳转">
+    <meta name="description" content="前言 随着CTF的发展，Python逆向题目在出题人手下越来越不走常规路，常常搞一些魔改或是加密，对于打包完后的结果我们并不一定每次都可以成功的对其进行解包。我们常见的 exe 或是 elf 的 DUMP 目的是提取对应的字节码，而Python打包后的东西与前两者不太一样，对此我们考虑使用 Python 内置的虚拟机来进行完成我们的DUMP。 要想完成相关代码的提取我们首先需要知道要提取什么，在此">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RARPasswordRecovery 逆向分析">
-<meta property="og:url" content="https://equinox-shame.github.io/2022/03/14/RARPasswordRecovery%20%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="Python 打包后 DUMP 的那些事">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/08/31/Python%20%E6%89%93%E5%8C%85%E5%90%8E%E7%9A%84Dump/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="Crack  by  混入21的蒟蒻  暴力破解 运行安装包，安装对应的软件，拖入PE进行查壳分析，发现有一个 UPX 壳，直接利用 UPX.exe脱壳  脱去壳后拉入IDA分析 寻找对应的Register可以发现如下字符串 ：  寻找对应的The Code you&#39;ve entered invalid!之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：   之后跳转">
+<meta property="og:description" content="前言 随着CTF的发展，Python逆向题目在出题人手下越来越不走常规路，常常搞一些魔改或是加密，对于打包完后的结果我们并不一定每次都可以成功的对其进行解包。我们常见的 exe 或是 elf 的 DUMP 目的是提取对应的字节码，而Python打包后的东西与前两者不太一样，对此我们考虑使用 Python 内置的虚拟机来进行完成我们的DUMP。 要想完成相关代码的提取我们首先需要知道要提取什么，在此">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/78b9fa1a17f66358.png">
-<meta property="og:image" content="https://static01.imgkr.com/temp/8a9bc7575c154ed4b7d36096d063131d.png">
-<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/c035d0e6f8572a68.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/df848f56ed92542f.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/7f09bb11d3a1e51e.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/4udi5.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/3a63b21f8f5bbb79.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/c3500131c19c76fe.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/187c71a1437aa093.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/3e23d6f8e59918a9.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/775ef29a79e0b9d2.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/a2575782c23cdc67.png">
-<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/e8cfc242d1760495.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/hc1uh0.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/hgrz7t.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/i6x5y5.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/isfzou.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/k5xfdv.png">
-<meta property="og:image" content="https://obohe.com/i/2021/11/21/k5xids.png">
-<meta property="article:published_time" content="2022-03-14T05:16:18.687Z">
-<meta property="article:modified_time" content="2022-02-28T14:34:36.117Z">
+<meta property="og:image" content="https://s2.loli.net/2023/08/31/BTSiow3PFEWgZfq.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/31/f7q3eSdu4tEjwJ6.png">
+<meta property="article:published_time" content="2023-08-31T13:23:56.819Z">
+<meta property="article:modified_time" content="2023-08-31T13:22:24.860Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/08/31/BTSiow3PFEWgZfq.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>RARPasswordRecovery 逆向分析 - Autumnal</title>
+  <title>Python 打包后 DUMP 的那些事 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -223,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="RARPasswordRecovery 逆向分析"></span>
+            <span id="subtitle" data-typed-text="Python 打包后 DUMP 的那些事"></span>
           
         </div>
 
@@ -234,8 +216,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-14 13:16" pubdate>
-          2022年3月14日 下午
+        <time datetime="2023-08-31 21:23" pubdate>
+          2023年8月31日 晚上
         </time>
       </span>
     
@@ -246,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k 字
+          3.2k 字
         
       </span>
     
@@ -294,98 +276,76 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">RARPasswordRecovery 逆向分析</h1>
+            <h1 style="display: none">Python 打包后 DUMP 的那些事</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Crack-by-混入21的蒟蒻">Crack  by  混入21的蒟蒻</h2>
-<hr>
-<h2 id="暴力破解">暴力破解</h2>
-<p>运行安装包，安装对应的软件，拖入<code>PE</code>进行查壳分析，发现有一个 <code>UPX</code> 壳，直接利用 <code>UPX.exe</code>脱壳</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/5e747896d3964ab7.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>脱去壳后拉入<code>IDA</code>分析</p>
-<p>寻找对应的<code>Register</code>可以发现如下字符串 ：</p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/78b9fa1a17f66358.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>寻找对应的<code>The Code you've entered invalid!</code>之后我们利用对应的交叉引用进行查找有关函数而对程序进行分析，可以找到如下函数 ：</p>
-<p><img src="https://static01.imgkr.com/temp/8a9bc7575c154ed4b7d36096d063131d.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><img src="https://s3.bmp.ovh/imgs/2021/11/c035d0e6f8572a68.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后跳转到图形界面进行分析 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/df848f56ed92542f.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>结合动态调试可以发现这 3 个函数会对程序获取到的密钥进行判断，如果为<code>True</code>则直接跳转到下面的<code>The Code you've entered invalid!</code>此时我们的注册环节就失败了，如果需要跳转到注册成功的界面那么我们需要在每一次的判断中都是<code>False</code>这样我们才能跳转到提示注册成功。</p>
-<p>那么暴力破解这个就变得十分简单了，我们只需要更改对应的<code>jz/jnz</code>这两个跳转使其互换，那么就可以达到我们的目的了。</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/7f09bb11d3a1e51e.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后我们将补丁打上就完成了对应的注册暴力破解。</p>
-<hr>
-<h2 id="注册机">注册机</h2>
-<h3 id="注册条件判断">注册条件判断</h3>
-<p><img src="https://obohe.com/i/2021/11/21/4udi5.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>在之前暴力破解时我们找到了对应的提示框显示的位置，可以明显的看到有一个<code>if</code>对 4 个表达式进行判断，如果要完成注册机的编写我们则需要让 4 个等式都成立即可，而这个也会是我们编写注册机的关键之处。</p>
-<hr>
-<h4 id="第一个条件">第一个条件</h4>
-<p>我们简单的动态调试一下发现只要第一个判断条件是对输入的数据长度进行判断，如果长度为 0 那么函数就会直接跳转到下面的<code>The Code you've entered invalid!</code>处，也就是意味着在第一个判断处我们仅需要保证输入的长度是大于<code>0</code>的就可以实现跳转到第二个条件中。</p>
-<hr>
-<h4 id="第二个条件">第二个条件</h4>
-<p>通过上图的汇编可以明显地发现有一个<code>test</code>函数，我们需要做的是让<code>test</code>函数的值为 1，也就是<code>eax</code>的值不为空，那么关键就是<code>call</code>里面的函数<code>_wcsstr</code>。我们点击进入该函数，进行分析。</p>
-<img src="https://i.bmp.ovh/imgs/2021/11/3a63b21f8f5bbb79.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
-<p>通过图形化的界面我们可以看到程序的大致流程，我们通过输入进行测试，观察具体执行过程。</p>
-<p>我们随意输入一串数字<code>123456789</code>进行测试，在流程中我们会在寄存器经常看到<code>DA</code> ：</p>
-<p>​                                                                               <img src="https://i.bmp.ovh/imgs/2021/11/c3500131c19c76fe.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>经过一轮下来的动调发现，程序会一直在如下区间内一直循环 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/187c71a1437aa093.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>如果你常常看寄存器里的值你会发现在寄存器里你输入的值会一个个被<code>pop</code>掉（一直往下寻址），此时我们也通过浏览器查询<code>_wcsstr</code>函数作用企图获得一些灵感，在百度百科中介绍该函数是一个寻找的字符的一个函数 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/3e23d6f8e59918a9.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>这或许就解释了在<code>EDI</code>寄存器中为什么我们的输入会一值向下寻址，可能就是在寻找寄存器中出现的<code>DA</code> ？我们更改一下我们的测试密钥更改成<code>DADADADADA</code>，再次对其进行测试。同样的我们在寄存器里会发现当读入我们的一个数据后出现了<code>AOOSOFT-RAR-RECOVERY</code>，感觉是不是有一点熟悉？</p>
-<p>是不是少了一个<code>D</code>，不然就是程序的名字，我们继续按<code>F8</code>测试会发现在寄存器<code>ECX</code>中<code>AOSSOFT-RAR-RECOVERY</code>会变成<code>OSSOFT-RAR-RECOVERY</code>但是继续调试过一个循环会发现又变成成了<code>AOSSOFT-RAR-RECOVERY</code>，但是读入<code>A</code>时又成了<code>OSSOFT-RAR-RECOVERY</code>，我们比那会很疑惑这个密钥是不是与程序的名字<code>DAOSSOFT-RAR-RECOVERY</code>有关系，我们再次改变密钥为<code>DAdsaddasd4152</code>，动调还是会发现<code>ECX</code>中<code>AOSSOFT-RAR-RECOVERY</code>会变成<code>OSSOFT-RAR-RECOVERY</code>但是继续调试读入的数据是<code>d</code>时<code>OSSOFT-RAR-RECOVERY</code>就变回了<code>DA</code>,因此我们确定了输入与密钥的部分关系——密钥开头<code>DAOSSOFT-RAR-RECOVERY</code>。</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/775ef29a79e0b9d2.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>至此我们就已经通过了两个条件了。</p>
-<hr>
-<h4 id="第三个条件">第三个条件</h4>
-<p>通过第二个条件时我们可以在寄存器里发现我们的输入会被存储于<code>EAX</code>寄存器中  ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/a2575782c23cdc67.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>同样的我们回到汇编层去分析程序 ：</p>
-<p><img src="https://i.bmp.ovh/imgs/2021/11/e8cfc242d1760495.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>可以较为明显的看到，函数在第三个条件判断中运行了一次减法和一次右移的操作，我们要想通过，那么就需要保证在第二次测试的输入<code>DAOSSOFT-RAR-RECOVERY</code>保证后面有值进行运算减法和一次右移过后的值不为 0 就可以通过了，例如在<code>DAOSSOFT-RAR-RECOVERY</code>后添加一部分数字或者一部分字母，便可以通过第三个条件。</p>
-<hr>
-<h4 id="第四个条件">第四个条件</h4>
-<p><img src="https://obohe.com/i/2021/11/21/hc1uh0.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>进入第四个条件时，通过汇编可以看到<code>ECX</code>的值等于<code>EBX</code>，同时将<code>ECX</code>入栈，下面有一个<code>Call</code>指令，调用了一个函数，而下面就是<code>test al al</code>，如果我们将鼠标放到<code>al</code>上，你会发现<code>al</code>的值为 0 ，那么意味着如果要进入到<code>if</code>语句内部那么<code>al</code>的只会在<code>call</code>的函数中发生改变，此时我们分析的重点便落到了<code>call sub_417CE0 </code>中。</p>
-<p>进入该函数，我们转换成<code>C的伪代码</code>形式，进行判断该函数的作用。</p>
-<img src="https://obohe.com/i/2021/11/21/hgrz7t.png" srcset="/img/loading.gif" lazyload  />
-<p>进入后发现函数里面会有一大堆东西，其中大部分是去掉了函数名称，但是我们仍然可以在其中找到一些东西，<code>wcshr</code>和<code>__InterlockedDecrement</code>两个函数名，经过百度我们可以了解到其相关信息。</p>
+                <h2 id="前言">前言</h2>
+<p>随着CTF的发展，Python逆向题目在出题人手下越来越不走常规路，常常搞一些魔改或是加密，对于打包完后的结果我们并不一定每次都可以成功的对其进行解包。我们常见的 exe 或是 elf 的 DUMP 目的是提取对应的字节码，而Python打包后的东西与前两者不太一样，对此我们考虑使用 Python 内置的虚拟机来进行完成我们的DUMP。</p>
+<p>要想完成相关代码的提取我们首先需要知道要提取什么，在此过程我们主要的目标是<code>f_code</code></p>
+<h2 id="主要工作">主要工作</h2>
+<h3 id="帧对象">帧对象</h3>
+<p>帧对象是 Python 中用于表示函数调用栈帧的数据结构。</p>
+<p>每当一个函数被调用时，Python 会为该函数创建一个帧对象。帧对象包含了函数调用过程中的所有上下文信息，如局部变量、全局变量、调用者的信息以及代码对象等。</p>
+<p>帧对象在函数调用期间会被分配到栈上，从而形成一个函数调用栈。</p>
+<p>帧对象（frame objects）具有以下一些属性：</p>
+<p><code>f_back</code>：指向调用当前函数的帧对象的引用。</p>
+<p><code>f_code</code>：当前帧对象所执行的代码对象。</p>
+<p><code>f_globals</code>：全局命名空间的字典。</p>
+<p><code>f_locals</code>：局部命名空间的字典。</p>
+<p><code>f_lineno</code>：当前正在执行的行号。</p>
+<p><code>f_code</code>（code object）：代码对象是 Python 中用于表示编译后的字节码的数据结构。</p>
+<p>当 Python 解释器解析并编译源代码时，它会生成代码对象。代码对象包含了编译后的字节码以及与源代码相关的其他元数据，如变量名、行号、常量等。</p>
+<p>代码对象（code objects）具有以下一些属性：</p>
+<p><code>co_argcount</code>：普通参数的数量。</p>
+<p><code>co_code</code>：包含编译后字节码的字符串。</p>
+<p><code>co_consts</code>：常量元组，包含了代码对象中所有的常量。</p>
+<p><code>co_filename</code>：源代码文件的名称。</p>
+<p><code>co_firstlineno</code>：源代码中第一个行号。</p>
+<p><code>co_flags</code>：解释器内部使用的标志。</p>
+<p><code>co_lnotab</code>：编码字节码偏移量到源代码行号的映射。</p>
+<p><code>co_name</code>：代码对象的名称。</p>
+<p><code>co_names</code>：包含了代码对象中所有变量名的元组。</p>
+<p><code>co_varnames</code>：包含了局部变量名的元组。</p>
+<h3 id="代码抽取">代码抽取</h3>
+<p>所以对于我们来说当我们能拿到<code>f_code</code>时我们便可以写出对应的代码逻辑，那么重点便落到了我们如何进行拿到相应的代码，目前有两种方式来进行获取：</p>
+<ol>
+<li>调试对应虚拟机，从中找核心函数</li>
+<li>调用内置的Python虚拟机</li>
+</ol>
+<p>一般来说我们并不想弄的那么复杂，我们采用第二种方式进行实现</p>
+<p>一般我们打包的Python程序中会带有虚拟机，我们是如何知道的呢？此处采用一个简单打包文件进行运行，使用Process Hacker观察对应程序</p>
+<p>我们可以看到其创建了一个进程，通过分析<code>PyInstaller</code>源码可以知道我们打包的程序会将真正的<code>PYC</code>文件进行释放(通过<code>CreateProcess</code>)，之后再运行，我们查看对应子进程所加载的动态链接库：</p>
+<p><img src="https://s2.loli.net/2023/08/31/BTSiow3PFEWgZfq.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以看到其加载了Python 3.10的一个dll文件，这个其实就是我们<code>PyInstaller</code>打包进去的虚拟机，其便是我们执行相关的代码所需要的文件，我们可以看到其中存在许多导出函数</p>
+<p><img src="https://s2.loli.net/2023/08/31/f7q3eSdu4tEjwJ6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这些函数便是我们之后想要利用的代码，通过调用其中的代码来进行调用对应的代码。</p>
+<p>那么我们如何进行调用对应导出空间的函数呢？我们可以使用dll进行注入，这样我们就可以使用对应空间的代码，我们采用以下项目的代码来进行生成我们需要的dll文件</p>
 <blockquote>
-<p><strong>wcshr</strong></p>
-<p><img src="https://obohe.com/i/2021/11/21/i6x5y5.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><strong>__InterlockedDecrement</strong></p>
-<p>百度后发现其类似于一种线程锁的东西？防止删除自己，因此我们便不用花费大量时间纠结于下面&gt;的一堆<code>if</code>判断语句中。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Stanislav-Povolotsky/PyInjector">Stanislav-Povolotsky/PyInjector: PyInjector - Inject python-code into any python process or spawn interactive python-shell inside the target process. (github.com)</a></p>
 </blockquote>
-<p>通过分析<code>wcshr</code>函数内部有一个<code>Stra</code>和一个<code>0x2Du</code>，通过十六进制我们可以看到<code>0x2Du</code>的值为<code>-</code>，那么那条语句的作用便是在<code>Stra</code>中寻找<code>-</code> 。</p>
-<p><strong>前面是不是还有一些函数，它们的作用会是什么呢 ?</strong></p>
-<p>同样的在动态调试下我们通过单步步入和步出的组合进行观察和判断，并检测<code>Stra</code>的值，当我们动态调试过<code>Stra</code>处时将鼠标放在上面，你会发现<code>Stra</code>的函数值便是我们输入的值，但在经过后面两个函数过后你便会发现<code>Stra</code>变成固定开头后内容了。</p>
-<p>之后便是我们的判断语句<code>if</code>，在判断条件中我们明显的可以看到判断的条件是<code>Stra</code>的长度要大于 3 ，之后再其中寻找<code>-</code>的位置返回给<code>v2</code>，如果寻找到了则会进行<code>v1 = v2 - Stra</code>，我们在动调下不难发现<code>v1</code>的长度便是固定开头后内容的长度减去<code>Stra</code>中带有<code>-</code>后边部分的长度。</p>
-<p>在这个判断中我们需要做的就是让<code>v1</code>的值不为<code>-1</code>和<code>0</code>即可，之后的大多数函数都是不用进行过多的分析。</p>
-<hr>
-<h3 id="注册程序编写">注册程序编写</h3>
-<p>经过上面的分析过后我们便可以成功的进行注册，程序会弹出来恭喜注册成功的提示 ：</p>
-<p>​                                                                 <img src="https://obohe.com/i/2021/11/21/isfzou.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><strong>那么我们注册机应该怎么写呢？</strong></p>
-<p>我们再次简单的整理一下上述密钥的判断过程，可以得知密钥是以<code>DAOSSOFT-RAR-RECOVERY</code>为开头的，之后的输入都要满足之前的条件，要存在有<code>-</code>，使我们的最后一个条件成立——即<code>v1</code>不为<code>-1</code>和<code>0</code>即可。</p>
-<p>分析过后我们便可以开始完成我们的编写，脚本如下。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;time.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function">string <span class="hljs-title">rand_str</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> len)</span></span><br><span class="hljs-function"></span>&#123;	<br>    <span class="hljs-comment">/*初始化*/</span><br>    string str;                 <span class="hljs-comment">/*声明用来保存随机字符串的str*/</span><br>    <span class="hljs-keyword">char</span> c;                     <span class="hljs-comment">/*声明字符c，用来保存随机生成的字符*/</span><br>    <span class="hljs-keyword">int</span> idx;                    <span class="hljs-comment">/*用来循环的变量*/</span><br>    <span class="hljs-comment">/*循环向字符串中添加随机生成的字符*/</span><br>    <span class="hljs-keyword">for</span>(idx = <span class="hljs-number">0</span>;idx &lt; len;idx ++)<br>    &#123;<br>        <span class="hljs-comment">/*rand()%26是取余，余数为0~25加上&#x27;a&#x27;,就是字母a~z,详见asc码表*/</span><br>        c = <span class="hljs-string">&#x27;a&#x27;</span> + <span class="hljs-built_in">rand</span>()%<span class="hljs-number">26</span>;<br>        str.<span class="hljs-built_in">push_back</span>(c);       <span class="hljs-comment">/*push_back()是string类尾插函数。这里插入随机字符c*/</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> str;                 <span class="hljs-comment">/*返回生成的随机字符串*/</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	string str1,str2;<br>	str1=<span class="hljs-built_in">rand_str</span>(<span class="hljs-number">3</span>);<br>	str2=<span class="hljs-built_in">rand_str</span>(<span class="hljs-number">3</span>);<br>	cout&lt;&lt;<span class="hljs-string">&quot;您的密钥为：&quot;</span>&lt;&lt;<span class="hljs-string">&quot;DAOSSOFT-RAR-RECOVERY&quot;</span>&lt;&lt;str1&lt;&lt;<span class="hljs-string">&quot;-&quot;</span>&lt;&lt;str2&lt;&lt;endl; <br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>至此我们便完成了所有的破解工作。</p>
-<hr>
-<h2 id="魔改">魔改</h2>
-<p>那么对于这个程序我们是否可以魔改呢？</p>
-<p>答案是肯定的。我们分析出来了程序的注册流程，我们便可以对其注册部分进行魔改，也可以对其输入输出的文本框进行修改。</p>
-<h3 id="改变密钥">改变密钥</h3>
-<p>我们根据上面的密钥分析我们可以得到对应的注册密钥是以<code>DAOSSOFT-RAR-RECOVERY</code>为开头的，那我们也可以更改对应的值，使其成为我们独有的加密。</p>
-<p>我们找到<code>DAOSSOFT-RAR-RECOVERY</code>对应所在的位置，进行更改 ：</p>
-<p><img src="https://obohe.com/i/2021/11/21/k5xfdv.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后进行测试 ：</p>
-<p><img src="https://obohe.com/i/2021/11/21/k5xids.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>发现同样可以注册成功，完成我们的密钥魔改。</p>
-<h3 id="标题修改">标题修改</h3>
-<p>我们同样的定位对应的数据位置，对其进行更改便可以达到与修改密钥一样的方式完成对应的修改过程，此处就不贴上对应的图了。</p>
+<p>其创建了一个线程，当我们将生成的<code>dll</code>注入到对应的打包程序中后，其会执行对应目录下的<code>code.py</code>代码中的内容，对此我们可以在该文件中写入我们想要获取的信息，便可以从中拿到对应的代码</p>
+<p>当我们注入<code>dll</code>后，便是编写相关的<code>code.py</code>文件来达到我们提取代码的目的，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> marshal<br>i = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> frame <span class="hljs-keyword">in</span> sys._current_frames().values():<br>    code = frame.f_code<br>    <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;dumped_&quot;</span> + <span class="hljs-built_in">str</span>(i) + <span class="hljs-string">&quot;.marshal&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>).write(marshal.dumps(code)) <span class="hljs-comment"># Loop all the threads running in the process</span><br>    i+=<span class="hljs-number">1</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Dump finished!&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>我们通过遍历当前的<code>frames</code>将其中的<code>f_code</code>进行提取并转换为<code>marshal</code>，但是<code>marshal</code>与我们通常的<code>pyc</code>不太一样，我们还需要将其进行转换操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> marshal<br><span class="hljs-keyword">import</span> importlib<br><br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;dumped_0.marshal&#x27;</span>, <span class="hljs-string">&#x27;rb&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>    code = marshal.load(f)<br><br>pyc_data = importlib._bootstrap_external._code_to_timestamp_pyc(code) <span class="hljs-comment"># 将 marshal 转换为 pyc</span><br><span class="hljs-comment"># print(pyc_data)</span><br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;file.pyc&#x27;</span>, <span class="hljs-string">&#x27;wb&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>    f.write(pyc_data)<br></code></pre></td></tr></table></figure>
+<p>之后我们便可以拿到对应的<code>pyc</code>文件，之后就可以丢进<code>uncompyle6</code>或是<code>pycdc</code>中对<code>pyc</code>进行反编译</p>
+<h3 id="一些问题">一些问题</h3>
+<p>上述代码中我们采用的是<code>_current_frames()</code>来获取当前的<code>frame</code>，意味着我们如果中间采用一个加密是在其他的文件中的，那么我们可能只能够提取出对应文件中的加密信息，而调用者的相关代码则无法进行提取，但是我们可以使用<code>_getframe</code>来获取对应的调用，但是其功能也比较有限，需要我们手动输入对应的层来进行<code>dump</code>相应的信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">code = marshal.dumps(sys._getframe(<span class="hljs-number">1</span>).f_code) <span class="hljs-comment"># 获取调用该函数的信息</span><br>code = importlib._bootstrap_external._code_to_timestamp_pyc(marshal.loads(code))<br>f = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;dumps-Test.pyc&quot;</span>,<span class="hljs-string">&quot;wb&quot;</span>)<br>f.write(code)<br>f.close()<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>函数原型为：<code>sys._getframe([depth])</code> depth为对应的调用深度，当前函数深度为 0，调用该函数则深度为 1，并以此类推</p>
+</blockquote>
+<p>与此同时我们也可能会遇到多个<code>marshal</code>文件，当我们<code>dump</code>某些包含代码库的打包程序时便会产生上述情况，此时因为<code>marshal</code>文件过多，我们比较难以定位到相应的核心代码，因此该方法也不一定十分的有效</p>
+<h2 id="总结">总结</h2>
+<p>整体来说上述方法有一定的可行性，但是对于一些大型的软件逆向可能仍然存在有一些不足之处，其主要的核心依然是获取<code>CPython</code>中的相关函数来为我们创建一个线程进而来获取对应的代码信息，进而达到我们的目的</p>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/3.7/library/inspect.html#types-and-members">inspect — Inspect live objects — Python 3.7.17 documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.quora.com/What-is-a-code-object-in-Python">What is a code object in Python? - Quora</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39609993/article/details/104764095">Python3 获取调用栈信息 sys._getframe_118路司机的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.nowcoder.net/n/0f9019df0ec24d85b0664a3d7d27a4ec?from=nowcoder_improve">Python 函数自定义属性 —— 牛客博客 (nowcoder.net)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lamehd/article/details/102475115">Python函数属性、__code__属性的解释、PyCodeObject_lamehd的博客-CSDN博客</a></p>
 
                 
               </div>
@@ -404,7 +364,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
   
   
 
@@ -424,8 +384,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>RARPasswordRecovery 逆向分析</div>
-      <div>https://equinox-shame.github.io/2022/03/14/RARPasswordRecovery 逆向分析/</div>
+      <div>Python 打包后 DUMP 的那些事</div>
+      <div>https://equinox-shame.github.io/2023/08/31/Python 打包后的Dump/</div>
     </div>
     <div class="license-meta">
       
@@ -437,7 +397,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月14日</div>
+          <div>2023年8月31日</div>
         </div>
       
       
@@ -469,18 +429,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/14/PWN%E7%9A%84%E5%9F%BA%E6%9C%ACROP%E9%93%BE%E6%9E%84%E9%80%A0/" title="PWN的基本ROP链构造">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">PWN的基本ROP链构造</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/14/Re%E6%A8%A1%E5%9D%97/" title="Re模块">
-                        <span class="hidden-mobile">Re模块</span>
+                      <a href="/2023/08/30/WMCTF2023/" title="WMCTF2023 - 部分RE">
+                        <span class="hidden-mobile">WMCTF2023 - 部分RE</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
