@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/07/07/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20ShadowWalker/" target="_self">
+          Windows内核实验 ——— ShadowWalker
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/07/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20ShadowWalker/" target="_self">
+        <div>
+          前言 ShadowWalker是一种隐藏内存的技术，利用 TLB 缓存线性地址到物理地址映射的特性，当CRC线程校验检查某段代码是，它使用的线性地址会缓存到 TLB 的数据页表缓存中(Data-TLB)中，而当 EIP 运行到此段代码时，又会将代码的线性地址缓存到 TLB 的指令页表缓存(Instruction-TLB)中。ShadowWalker技术核心就在于修改指令页表缓存中的物理地址，让 C
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-07-07 23:42" pubdate>
+              2023-07-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/07/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%A1%B5%E9%9D%A2%E5%BC%82%E5%B8%B8/" target="_self">
           Windows内核实验 ——— 页面异常
         </a>
@@ -710,65 +764,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/05/14/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" target="_self">
-          Windows内核实验 ——— 系统调用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/14/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" target="_self">
-        <div>
-          前言 在之前的实验过程中都需要我们使用WinDBG来中断内核，在系统中断表中添加int 20，将我们自己构造的内核代码进行运行，而在此处实验中我们将构建一个处于三环的程序，通过系统调用来完成对应的功能。 实验过程 因为在程序中ntdll都会被程序所调用对此我们哦那个给模拟该方式来实现从三环到零环的权限。 我们此处尝试实现两个函数ReadMem、AllocMem。我们同样需要两个程序来构建，第一个用
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-05-14 17:52" pubdate>
-              2023-05-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

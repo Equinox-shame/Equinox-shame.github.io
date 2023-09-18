@@ -17,8 +17,8 @@
   <meta name="keywords" content="">
   
     <meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="https://equinox-shame.github.io/archives/2023/01/index.html">
+<meta property="og:title" content="Autumnal">
+<meta property="og:url" content="https://equinox-shame.github.io/page/11/index.html">
 <meta property="og:site_name" content="Autumnal">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="梓曰">
@@ -28,7 +28,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>归档 - Autumnal</title>
+  <title>Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -99,7 +99,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 60vh;">
+<div class="header-inner" style="height: 100vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -192,13 +192,17 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="归档"></span>
+            <span id="subtitle" data-typed-text="总要留个写字的地方..."></span>
           
         </div>
 
         
       </div>
 
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
       
     </div>
   </div>
@@ -212,36 +216,75 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          >
+          style="margin-top: 0">
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="list-group">
-  <p class="h4">共计 101 篇文章</p>
-  <hr>
-  
-  
+
+  <div class="row mx-auto index-card">
     
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/03/14/CSAPP/" target="_self">
+          CSAPP 学习笔记 [ 持续更新中 ]
+        </a>
+      </h1>
+
       
-      <p class="h5">2023</p>
-    
-    <a href="/2023/01/26/Tensorflow/" class="list-group-item list-group-item-action">
-      <time>01-26</time>
-      <div class="list-group-item-title">Tensorflow入门到入土(轻量版)</div>
-    </a>
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/14/CSAPP/" target="_self">
+        <div>
+          CSAPP 逻辑运算  布尔运算支持&amp;对|的分配律：$a&amp;(b|c)=(a&amp;b)|(a&amp;c)$，同时也支持|对&amp;的分配律：$a|(b&amp;c)=(a|b)&amp;(a|c)$  通过xor我们也可以实现两个数的交换，但是并没有性能上的提升  相似的我们可以通过这个方式来实现数组的存储逆转，长度为偶数时函数会得到正确结果，以1234为例程序运行后的结果是
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-03-14 13:16" pubdate>
+              2022-03-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
   
     
-    <a href="/2023/01/05/ANSI%E8%BD%AC%E4%B9%89%E7%A0%81/" class="list-group-item list-group-item-action">
-      <time>01-05</time>
-      <div class="list-group-item-title">ANSI转义码</div>
-    </a>
+      <span class="category-chain">
+        
+  <a href="/categories/Labs/" class="category-chain-item">Labs</a>
   
-</div>
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
 
 
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/10/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="page-number current">11</span>
+    </span>
+  </nav>
 
 
 
@@ -354,7 +397,37 @@
       }
       var text = subtitle.getAttribute('data-typed-text');
       
-        typing(text);
+        jQuery.ajax({
+          type: 'GET',
+          url: 'https://v1.hitokoto.cn/',
+          headers: {},
+          dataType: 'json',
+          success: function(result) {
+            var apiText;
+            if (result) {
+              var keys = 'hitokoto'.split(',');
+              if (result instanceof Array) {
+                result = result[0];
+              }
+              for (const k of keys) {
+                var value = result[k];
+                if (typeof value === 'string') {
+                  apiText = value;
+                  break;
+                } else if (value instanceof Object) {
+                  result = value;
+                }
+              }
+            }
+            apiText ? typing(apiText) : typing(text);
+          },
+          error: function(xhr, status, error) {
+            if (error) {
+              console.error('Failed to request https://v1.hitokoto.cn/:', error);
+            }
+            typing(text);
+          }
+        })
       
     })(window, document);
   </script>

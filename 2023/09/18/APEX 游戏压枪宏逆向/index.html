@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 从某位同学手里拿到了这个压枪的辅助，问我能不能也写一个，作为游戏安全基本没什么了解的摆烂二进制手来说确实有点难度。但是出于好奇的心理，采用逆向的方式进行了点简单的分析，观察程序的相关执行逻辑。 开工 此次拿到的程序主要包含以下文件：  我们可以看到其包含一个文件夹、一个jar包、一个图标以及Opencv的动态链接库和相关的鼠标宏lua脚本 点开文件夹可以发现有许多图片，可以猜测到对应的是通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APEX 游戏压枪宏逆向">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/09/18/APEX%20%E6%B8%B8%E6%88%8F%E5%8E%8B%E6%9E%AA%E5%AE%8F%E9%80%86%E5%90%91/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 从某位同学手里拿到了这个压枪的辅助，问我能不能也写一个，作为游戏安全基本没什么了解的摆烂二进制手来说确实有点难度。但是出于好奇的心理，采用逆向的方式进行了点简单的分析，观察程序的相关执行逻辑。 开工 此次拿到的程序主要包含以下文件：  我们可以看到其包含一个文件夹、一个jar包、一个图标以及Opencv的动态链接库和相关的鼠标宏lua脚本 点开文件夹可以发现有许多图片，可以猜测到对应的是通过">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/a8Pb2IwsZ1rCjXq.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/B48WV1QDzir6pSs.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/pqBHgJ2yvOKC7xY.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/HY1vPZXUflmF6dy.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/KVi5a2l9pIeB746.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/ZqRXTUeM5g3DaJ9.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/7fleAKM4YQJP5Lb.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/n5p7xNTFDcfqEeJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/NZ6zBULkiX5Ph48.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/8CY2qdfWOZ7TzGB.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/HI4tNVXka1hloJO.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/18/ivHqORbJthxgAez.png">
+<meta property="article:published_time" content="2023-09-18T09:36:01.976Z">
+<meta property="article:modified_time" content="2023-09-18T09:32:57.263Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/09/18/a8Pb2IwsZ1rCjXq.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>APEX 游戏压枪宏逆向 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="APEX 游戏压枪宏逆向"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-18 17:36" pubdate>
+          2023年9月18日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">APEX 游戏压枪宏逆向</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>从某位同学手里拿到了这个压枪的辅助，问我能不能也写一个，作为游戏安全基本没什么了解的摆烂二进制手来说确实有点难度。但是出于好奇的心理，采用逆向的方式进行了点简单的分析，观察程序的相关执行逻辑。</p>
+<h2 id="开工">开工</h2>
+<p>此次拿到的程序主要包含以下文件：</p>
+<p><img src="https://s2.loli.net/2023/09/18/a8Pb2IwsZ1rCjXq.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以看到其包含一个文件夹、一个<code>jar</code>包、一个图标以及<code>Opencv</code>的动态链接库和相关的鼠标宏lua脚本</p>
+<p>点开文件夹可以发现有许多图片，可以猜测到对应的是通过<code>Opencv</code>提供的图片识别对电脑屏幕进行截屏，之后判断所持枪械，来进行不同程度的进行压枪处理</p>
+<h3 id="jar">jar</h3>
+<p>先简单的观察一下<code>jar</code>包，将其拖入反编译器中，可以十分清晰的看到其代码，没有带有混淆</p>
+<p><img src="https://s2.loli.net/2023/09/18/B48WV1QDzir6pSs.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>简单的观察一下可以发现其创建了一个函数类用来将屏幕数据进行绘制</p>
+<p><img src="https://s2.loli.net/2023/09/18/pqBHgJ2yvOKC7xY.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>同时下面便是对应的图片匹配，来判断不同的枪械</p>
+<p>与此同时作者也”贴心“的留下了自己的联系方式，以及相关视频展示</p>
+<p><img src="https://s2.loli.net/2023/09/18/HY1vPZXUflmF6dy.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="简单溯源">简单溯源</h3>
+<p>对于上述信息我们看看能不能溯源，比较遗憾的是访问对应视频链接的时候对应的视频已经被作者撤销了</p>
+<p><img src="https://s2.loli.net/2023/09/18/KVi5a2l9pIeB746.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>查询对应QQ可以发现是个等级低的小号，基本上查相关信息没头绪了，但是幸运的是其还留下了一个淘宝店</p>
+<p><img src="https://s2.loli.net/2023/09/18/ZqRXTUeM5g3DaJ9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>访问一下留下的淘宝店链接</p>
+<p><img src="https://s2.loli.net/2023/09/18/7fleAKM4YQJP5Lb.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>看了一下淘宝店铺，发现是等级低的新店</p>
+<p><img src="https://s2.loli.net/2023/09/18/n5p7xNTFDcfqEeJ.png" srcset="/img/loading.gif" lazyload alt="image-20230918124547485"></p>
+<p>基本上到这看上去就没什么信息了，关注点还是回到原来的程序中去吧…</p>
+<h3 id="lua">lua</h3>
+<p>在jar包中我们可以看到其还释放了<code>lua</code>文件，与此同时原来程序也自带有一个<code>lua</code>，可以猜测到压枪的核心便是这些<code>lua</code>文件了</p>
+<p><img src="https://s2.loli.net/2023/09/18/NZ6zBULkiX5Ph48.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们首先拿外置的<code>Script.lua</code>与<code>导入驱动Script.lua</code>进行分析，先观察导入驱动这项</p>
+<p><img src="https://s2.loli.net/2023/09/18/8CY2qdfWOZ7TzGB.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到其导入了一些变量，后面使用<code>dofile</code>来执行对应<code>Script.lua</code>文件</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-built_in">dofile</span>(<span class="hljs-string">&quot;C:/Users/Public/Downloads/Script.lua&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>观察对应的<code>Script.lua</code>文件，我们大致可以判断其进行了混淆，通过一串加密将对应代码进行解密出来后通过<code>load</code>来进行执行</p>
+<p><img src="https://s2.loli.net/2023/09/18/HI4tNVXka1hloJO.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们简单的格式化一下代码，大致可以得到以下内容</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> a=<span class="hljs-built_in">load</span>(<br>    (<br>        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(b,c)</span></span><br>            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bxor</span><span class="hljs-params">(d,e)</span></span><br>                <span class="hljs-keyword">local</span> f=&#123;&#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>&#125;,&#123;<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;&#125;<br>                <span class="hljs-keyword">local</span> g=<span class="hljs-number">1</span><br>                <span class="hljs-keyword">local</span> h=<span class="hljs-number">0</span><br>                <span class="hljs-keyword">while</span> d&gt;<span class="hljs-number">0</span> <span class="hljs-keyword">or</span> e&gt;<span class="hljs-number">0</span> <span class="hljs-keyword">do</span> <br>                    h=h+f[d%<span class="hljs-number">2</span>+<span class="hljs-number">1</span>][e%<span class="hljs-number">2</span>+<span class="hljs-number">1</span>]*g<br>                    d=<span class="hljs-built_in">math</span>.<span class="hljs-built_in">floor</span>(d/<span class="hljs-number">2</span>)<br>                    e=<span class="hljs-built_in">math</span>.<span class="hljs-built_in">floor</span>(e/<span class="hljs-number">2</span>)<br>                    g=g*<span class="hljs-number">2</span> <span class="hljs-keyword">end</span><br>                    <span class="hljs-keyword">return</span> h<br>                <span class="hljs-keyword">end</span><br>                <span class="hljs-keyword">local</span> i=<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(b)</span></span><br>                    <span class="hljs-keyword">local</span> j=&#123;&#125;<br>                    <span class="hljs-keyword">local</span> k=<span class="hljs-number">1</span><br>                    <span class="hljs-keyword">local</span> l=b[k]<br>                    <span class="hljs-keyword">while</span> l&gt;=<span class="hljs-number">0</span> <span class="hljs-keyword">do</span> <br>                        j[k]=b[l+<span class="hljs-number">1</span>]k=k+<span class="hljs-number">1</span><br>                        l=b[k]<br>                    <span class="hljs-keyword">end</span><br>                        <span class="hljs-keyword">return</span> j <br>                    <span class="hljs-keyword">end</span><br>                    <span class="hljs-keyword">local</span> m=<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(b,c)</span></span><br>                        <span class="hljs-keyword">if</span>#c&lt;=<span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <br>                            <span class="hljs-keyword">return</span>&#123;&#125;<br>                        <span class="hljs-keyword">end</span><br>                        <span class="hljs-keyword">local</span> k=<span class="hljs-number">1</span><br>                        <span class="hljs-keyword">local</span> n=<span class="hljs-number">1</span><br>                        <span class="hljs-keyword">for</span> k=<span class="hljs-number">1</span>,#b <span class="hljs-keyword">do</span> <br>                            b[k]=bxor(b[k],<span class="hljs-built_in">string</span>.<span class="hljs-built_in">byte</span>(c,n))n=n+<span class="hljs-number">1</span><br>                            <span class="hljs-keyword">if</span> n&gt;#c <span class="hljs-keyword">then</span> <br>                                n=<span class="hljs-number">1</span> <br>                            <span class="hljs-keyword">end</span> <br>                        <span class="hljs-keyword">end</span><br>                            <span class="hljs-keyword">return</span> b <br>                        <span class="hljs-keyword">end</span><br>                        <span class="hljs-keyword">local</span> o=<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(b)</span></span><br>                            <span class="hljs-keyword">local</span> j=<span class="hljs-string">&quot;&quot;</span><br>                            <span class="hljs-keyword">for</span> k=<span class="hljs-number">1</span>,#b <span class="hljs-keyword">do</span> <br>                                j=j..<span class="hljs-built_in">string</span>.<span class="hljs-built_in">char</span>(b[k])<br>                            <span class="hljs-keyword">end</span><br>                            <span class="hljs-keyword">return</span> j <br>                        <span class="hljs-keyword">end</span><br>                            <span class="hljs-keyword">return</span> o(m(i(b),c))<br>                        <span class="hljs-keyword">end</span><br>    )(<br>    	...相关数据..., key<br>     )<br>)<br></code></pre></td></tr></table></figure>
+<p>可以看到的是代码就本质逻辑上就是一个异或处理，因为对应<code>load</code>是需要加载代码的，所以我们我们简单的修改一下，把<code>load</code>替换为<code>print</code>便可以拿到对应数据</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mathing</span><span class="hljs-params">(sj)</span></span><br>    <span class="hljs-keyword">local</span> sj1 = <span class="hljs-string">&quot;&quot;</span><br>    <span class="hljs-keyword">for</span> i =<span class="hljs-number">1</span>,#sj <br>    <span class="hljs-keyword">do</span> <br>        sj1 = sj1 .. <span class="hljs-built_in">string</span>.<span class="hljs-built_in">char</span>(sj[i])<br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-keyword">return</span> sj1 <span class="hljs-keyword">end</span><br><br>method=&#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>&#125;<br>info = <span class="hljs-string">&quot;APEX顶点鼠标宏&quot;</span><br><br>offset_pattern1= offset_pattern2<br><br>a1 = <span class="hljs-number">1</span><br><br>text_bbdate = <span class="hljs-string">&quot;2023-08-12&quot;</span><br><br>offset_pattern = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p>对后面的内容进行解密时发现代码需要用到一个<code>key</code>值，有以下关系</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">key=mathing(OnEvent) <br></code></pre></td></tr></table></figure>
+<p>我们将<code>key</code>进行测试输出，可以得到一串“问候语”</p>
+<p><img src="https://s2.loli.net/2023/09/18/ivHqORbJthxgAez.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>属于是无能狂怒 :）</p>
+</blockquote>
+<p>之后以同样的方式对后续代码进行解密，我们可以拿到相关数据如下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">if</span> (l080or2k == <span class="hljs-number">1</span>) <span class="hljs-keyword">then</span><br><br>        location = &#123;&#123;<span class="hljs-number">243</span>/<span class="hljs-number">1920</span>,<span class="hljs-number">658</span>/<span class="hljs-number">1080</span>&#125;,&#123;<span class="hljs-number">220</span>/<span class="hljs-number">1920</span>,<span class="hljs-number">740</span>/<span class="hljs-number">1080</span>&#125;,&#123;<span class="hljs-number">219</span>/<span class="hljs-number">1920</span>,<span class="hljs-number">805</span>/<span class="hljs-number">1080</span>&#125;,&#123;<span class="hljs-number">216</span>/<span class="hljs-number">1920</span>,<span class="hljs-number">885</span>/<span class="hljs-number">1080</span>&#125;&#125;<br><br><span class="hljs-keyword">elseif</span>(l080or2k == <span class="hljs-number">2</span>)<span class="hljs-keyword">then</span><br><br>        location = &#123;&#123;<span class="hljs-number">325</span>/<span class="hljs-number">2560</span>,<span class="hljs-number">883</span>/<span class="hljs-number">1440</span>&#125;,&#123;<span class="hljs-number">325</span>/<span class="hljs-number">2560</span>,<span class="hljs-number">982</span>/<span class="hljs-number">1440</span>&#125;,&#123;<span class="hljs-number">325</span>/<span class="hljs-number">2560</span>,<span class="hljs-number">1082</span>/<span class="hljs-number">1440</span>&#125;,&#123;<span class="hljs-number">325</span>/<span class="hljs-number">2560</span>,<span class="hljs-number">1182</span>/<span class="hljs-number">1440</span>&#125;&#125;<br><br><span class="hljs-keyword">end</span><br><br><br>GunCombination1_1 = &#123;<span class="hljs-string">&quot;R99&quot;</span>,<span class="hljs-string">&quot;R301&quot;</span>,<span class="hljs-string">&quot;ZHZ&quot;</span>,<span class="hljs-string">&quot;DN&quot;</span>,<span class="hljs-string">&quot;ZZ&quot;</span>,<span class="hljs-string">&quot;PX&quot;</span>,<span class="hljs-string">&quot;LSLF&quot;</span>,<span class="hljs-string">&quot;HMLK_DD&quot;</span>,<span class="hljs-string">&quot;P20&quot;</span>,<span class="hljs-string">&quot;M600&quot;</span>,<span class="hljs-string">&quot;Lstar&quot;</span>,<span class="hljs-string">&quot;XBS&quot;</span>,<span class="hljs-string">&quot;RE45&quot;</span>,<span class="hljs-string">&quot;R301DD&quot;</span>,<span class="hljs-string">&quot;PXDD&quot;</span>,<span class="hljs-string">&quot;HWK&quot;</span>,<span class="hljs-string">&quot;G7&quot;</span>,<span class="hljs-string">&quot;CN&quot;</span>,<span class="hljs-string">&quot;BZ&quot;</span>,<span class="hljs-string">&quot;CAR&quot;</span>,<span class="hljs-string">&quot;FCNS&quot;</span>,<span class="hljs-string">&quot;LSQZD&quot;</span>,<span class="hljs-string">&quot;HMLKLF&quot;</span>&#125;<br><br>GunCombination1_2 =&#123;<span class="hljs-string">&quot;Y_R99&quot;</span>,<span class="hljs-string">&quot;Y_R301&quot;</span>,<span class="hljs-string">&quot;Y_ZHZ&quot;</span>,<span class="hljs-string">&quot;Y_DN&quot;</span>,<span class="hljs-string">&quot;Y_ZZ&quot;</span>,<span class="hljs-string">&quot;Y_PX&quot;</span>,<span class="hljs-string">&quot;Y_LSLF&quot;</span>,<span class="hljs-string">&quot;Y_LSQZD&quot;</span>,<span class="hljs-string">&quot;Y_P20&quot;</span>,<span class="hljs-string">&quot;Y_M600&quot;</span>,<span class="hljs-string">&quot;Y_Lstar&quot;</span>,<span class="hljs-string">&quot;Y_XBS&quot;</span>,<span class="hljs-string">&quot;Y_RE45&quot;</span>&#125;<br><br><br>squatKey = <span class="hljs-string">&quot;l&quot;</span>                  <span class="hljs-comment">--下蹲按键</span><br><br><br>BZ_offset_trim_list = &#123;<br><br>        &#123;<span class="hljs-number">1</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">2</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">3</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">4</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">5</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">6</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">7</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">8</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">9</span> ,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">10</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">11</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">12</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">13</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">14</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">15</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">16</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">17</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">18</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">19</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">20</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">21</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">22</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">23</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">24</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">25</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">26</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">27</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">28</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">29</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">30</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">31</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">32</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">33</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">34</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">35</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">36</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">37</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">38</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,                                       &#123;<span class="hljs-number">39</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;,<br>        &#123;<span class="hljs-number">40</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;<br>&#125;<br>BZ_offset_trim_ratio = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">1</span>&#125;<br>BZ_offset_trim_amend = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;<br><br>...<br>后面太多了就不放了<br></code></pre></td></tr></table></figure>
+<p>后续几个释放的<code>lua</code>文件就只有一行，整理集合如下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- main.lua</span><br>qx1_1 = GunCombination1_1[<span class="hljs-number">18</span>]   <span class="hljs-comment">-- 记录当前枪编号</span><br><br><span class="hljs-comment">-- turbo_state.lua</span><br>turbo_state = <span class="hljs-number">1</span> 	<span class="hljs-comment">-- 判断是否加了涡轮 1 为添加 0 为未添加</span><br><br><span class="hljs-comment">-- thermite.lua</span><br>BZ_LRJ = <span class="hljs-number">0</span>  <span class="hljs-comment">-- 0 为暴走 1 为 暴走 + 铝热剂</span><br></code></pre></td></tr></table></figure>
+<p>结合之前已有的代码，猜测<code>Script.lua</code>这些解密出来的数据应该是对应调整弹道的参数</p>
+<h2 id="一些问题">一些问题</h2>
+<p>查询了一下罗技相关鼠标上<code>lua</code>宏相关的<code>API</code>接口，发现上述代码中没有调用相关的<code>API</code>同时对应的函数都没有，网上关于其驱动编程的文档似乎都不是很全，找了一个<code>Github</code>上的相关项目，里面的接口也没有被使用，确实有点奇怪这个是怎么实现的，可能是相关特性？</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/kiccer/logitech-macro-frame">kiccer/logitech-macro-frame: 罗技宏框架 - 提炼自 kiccer/Soldier76 项目 (github.com)</a></p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>大致来说所给的就是使用<code>opencv</code>提供的<code>AI</code>识别来辨别枪支种类，进而通过写入不同的参数到<code>lua</code>文件中去，之后使用鼠标宏来完成相关的工作，有些奇怪的是对应宏的调用逻辑是什么不是很清楚，但是可以猜测其数据应该是逆向拿到的<code>Script.lua</code>中的。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>APEX 游戏压枪宏逆向</div>
+      <div>https://equinox-shame.github.io/2023/09/18/APEX 游戏压枪宏逆向/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/06/Rust%20%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/" title="Rust 语言之旅">
+                        <span class="hidden-mobile">Rust 语言之旅</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
