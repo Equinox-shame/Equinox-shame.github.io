@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2022/07/03/ACTF%20dropper%20%E5%A4%8D%E7%8E%B0/" target="_self">
+          ACTF dropper 复现
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/03/ACTF%20dropper%20%E5%A4%8D%E7%8E%B0/" target="_self">
+        <div>
+          拿到程序拖入PE中可以发现是一个UPX壳的 64 位程序，我们如果直接upx -d进行脱壳可以发现程序无法运行，因此我们运行x64dbg开始尝试手动脱壳。  脱壳完后的程序在修复一下IAT，之后拖入IDA中,依次进入    可以看出来程序创建了一个线程，在运行些什么东西，我们运行原来的程序，打开任务管理器进行查看  可以看到多出来一个进程，而且在跑一个可执行的程序，我们对此需要想办法将其dump出
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-07-03 17:29" pubdate>
+              2022-07-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2022/07/01/%E5%A4%A7%E6%95%B0%E9%99%A4%E6%B3%95/" target="_self">
           大数除法
         </a>
@@ -695,60 +749,6 @@
       <span class="category-chain">
         
   <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/04/07/Win32%20%E7%BC%96%E7%A8%8B/" target="_self">
-          Win 32 编程
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/04/07/Win32%20%E7%BC%96%E7%A8%8B/" target="_self">
-        <div>
-          程序分类 控制台应用程序(DOS 程序) 本质上是一个DOS程序，本身没有窗口，通过Windows DOS窗口执行 窗口程序 拥有自己的窗口，可以与用户交互 库程序 存放代码数据的程序，执行文件可以从中取出代码执行和获取数据  静态库程序：扩展名lib，在编译链接程序时，将代码放入到执行文件中，无法执行 ( 没有入口函数 ) 动态库程序：扩展名dll，执行文件时从中获取代码，不能独立运行，需要依附
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-04-07 00:14" pubdate>
-              2022-04-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
   
   
 
