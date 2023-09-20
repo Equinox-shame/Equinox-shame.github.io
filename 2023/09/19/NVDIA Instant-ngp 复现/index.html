@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/09/19/XwOytBf28diD4Nb.png">
 <meta property="og:image" content="https://s2.loli.net/2023/09/19/BzD29pmaXKyg3jV.png">
 <meta property="article:published_time" content="2023-09-19T13:01:27.296Z">
-<meta property="article:modified_time" content="2023-09-19T12:57:51.052Z">
+<meta property="article:modified_time" content="2023-09-20T14:11:10.185Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2023/09/18/AUTV9oYxd1eQ8w2.png">
@@ -304,14 +304,14 @@
 <h4 id="频率编码">频率编码</h4>
 <p>在原始的过程中其使用的是类似<code>cos</code>、<code>sin</code>的三角函数进行线性变换将低频转换为高频，以此将三维转换到高维中便于机器的学习</p>
 <h4 id="参数编码">参数编码</h4>
-<p>参数编码则是除了权重以及偏置职位，增加了一种辅助类型的数据结果，如网格或者是数。此方式可能会消耗更多的内存，但是在此方式可以快速的进行训练，其在更新数据时只更新对应有影响的点位</p>
+<p>参数编码则是除了权重以及偏置职位，增加了一种辅助类型的数据结果，如网格或者是数字。此方式可能会消耗更多的内存，但是在此方式可以快速的进行训练，其在更新数据时只更新对应有影响的点位</p>
 <h4 id="稀疏参数编码">稀疏参数编码</h4>
 <p>在上面的密集型参数编码中使用了更多的存储，对于密集型参数编码存在两种浪费：</p>
 <ol>
 <li>在定义的空间中的空白部分是无意义的，但是会占用对应空间</li>
 <li>密集型网格可能会对线性差值进行过度的平滑</li>
 </ol>
-<p>而系数参数编码则主要解决上述问题</p>
+<p>而稀疏参数编码则主要解决上述问题</p>
 <p><strong>多分辨率哈希编码</strong></p>
 <p>此编码变为<code>ngp</code>的一个核心内容</p>
 <p><img src="https://s2.loli.net/2023/09/18/pXGCAkwuifUMQyg.png" srcset="/img/loading.gif" lazyload alt=""></p>
