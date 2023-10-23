@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/10/23/6VNQ4ipwIA2ujtW.png">
 <meta property="og:image" content="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png">
 <meta property="article:published_time" content="2023-10-23T13:22:37.348Z">
-<meta property="article:modified_time" content="2023-10-23T13:22:31.883Z">
+<meta property="article:modified_time" content="2023-10-23T13:49:13.086Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png">
@@ -307,12 +307,12 @@
 <h2 id="Excel-4-0-Marco">Excel 4.0 Marco</h2>
 <p>宏最初适用于对重复性任务进行自动化以及用户自定义函数进行编程，在Excel的早期版本中，这些程序是用宏语言编写的，其语句具有公式语法，并驻留在专用宏工作表的单元格中（在 Windows 中以文件扩展名<code>.xml</code>存储）。XLM是Excel到Excel 4.0的默认宏语言。</p>
 <p>我们可以在Excel的信任中心中打开对应的Excel 4.0 宏（其默认受到限制，以保护用户）。</p>
-<img src="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
 <p>比如我们插入一个宏，在下面的<code>Sheet</code>栏<code>右键-&gt;插入</code>，可以看到有我们的<code>Macro 4.0</code>，插入后我们可以看到多了一个<code>Sheet</code>命名为宏，我们可以对其进行修改来掩饰对宏的特点，或是直接隐藏<code>Sheet</code>，做到“无痕”</p>
 <p><img src="https://s2.loli.net/2023/10/22/SMyjC2euFYNZXf9.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>我们可以在单元格输入以下内容，可能会提示公式错误，但是不管就是</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xml">=EXEC(&quot;calc.exe&quot;)<br>=HALT()<br></code></pre></td></tr></table></figure>
-<img src="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml">=EXEC(&quot;calc.exe&quot;)<br>=HALT()<br><br></code></pre></td></tr></table></figure>
+<div align="center"><img src="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" /></div>
 <h3 id="自动加载代码">自动加载代码</h3>
 <p>现在主流的自动加载的方式分别是<code>Auto_Open</code>和<code>Auto_Close</code></p>
 <ul>
@@ -327,9 +327,9 @@
 <p>我们可以将对应的表另存为<code>xlsm</code>格式，之后打开便会自动执行上面代码，如果我们设置了安全性，可以看到会出现安全警告信息，提示宏被禁用，如果我们启用宏便会执行对应代码。</p>
 <p><img src="https://s2.loli.net/2023/10/22/EmjHPXU3p5wxneG.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>对于这种宏代码我们无法通过<code>Alt+F11</code>来进行查看对应的源代码</p>
-<img src="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
 <p>但是我们可以将源文件的后缀修改为<code>.zip</code>打开，在对应的<code>macrosheets</code>中的<code>xml</code>文件里可以看到对应的宏代码</p>
-<img src="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" /></div>
 <p><img src="https://s2.loli.net/2023/10/23/JEGzik3cBQF8Dxl.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>但是这种查看方式，只适用于<code>xlsm</code>格式的文件，如果是<code>xlsb</code>的文件，就没办法看了。可以看到里面都是<code>bin</code>文件，查看不了里面的具体内容。</p>
 <p><img src="https://s2.loli.net/2023/10/23/hiwSsJEyGFUpu9P.png" srcset="/img/loading.gif" lazyload alt=""></p>
@@ -356,11 +356,11 @@
 </blockquote>
 <h2 id="样本">样本</h2>
 <p>此样本为Excel Macro4.0的<code>xlsb</code>版本，这意味着其是有一个加密的<code>bin</code>文件我们无法直接获取源宏代码来对其进行分析处理，其默认的表一为一个提示信息，要我们打开宏</p>
-<img src="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></div>
 <p>显然是个明眼人都知道不要打开宏，不然就完蛋了，当我们尝试使用<code>Alt+F11</code>来查看对应的宏代码的时候发现其没有宏代码</p>
 <p><img src="https://s2.loli.net/2023/10/23/TsE3RA71SfyM58O.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>当我们查看隐藏的Sheet表单时可以其内部藏有两个，我们将其取消，可以发现里面少了几列</p>
-<img src="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
 <p>当我们想要移动对应列将其展开时，会提示有数据保护，我们无法查看对应的内容信息，接下来我们重点便是获取对应的宏代码文件</p>
 <h3 id="宏获取">宏获取</h3>
 <h4 id="方法一">方法一</h4>
@@ -371,7 +371,7 @@
 <p>我们将其另存为<code>xlsm</code>格式，从而绕过受保护的工作表，这也会让 xml 文件从<code>.bin</code>转转换为<code>.xml</code>，我们找到里面的 xml 文件后，找到<code>sheetProtection</code>将其删除后替换源文件中的 xml，之后重新修改后缀为<code>xlsm</code>即可绕过</p>
 <p><img src="https://s2.loli.net/2023/10/23/JOcQDSnvplEosG2.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>之后调整列，看到的是空白内容，但是当我们修改对应字体颜色为黑色时便可以看到对应插入的宏代码</p>
-<img src="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" /></div>
 <p>查看单元格名称时也可以看到对应的<code>Auto_Open</code>特征</p>
 <p><img src="https://s2.loli.net/2023/10/23/WroLyOZeuUnt3KD.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="方法二">方法二</h4>
@@ -388,7 +388,7 @@
 <h3 id="宏分析">宏分析</h3>
 <p>大致上我们可以看到其通过网络连接进行下载了多个文件，但是通过抓取对应流量包发现请求相应信息的相应状态码均为<code>404</code>，与此同时其下载的文件和时间戳有点关系，不知道是不是因为时间有点久了所以对应服务器找不到相应的文件下载。</p>
 <p>在此之后也没有了什么值得分析了东西了…</p>
-<img src="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
+<div align="center"><img src="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" /></div>
 <h2 id="参考资料">参考资料</h2>
 <p>[What is Excel 4.0 Macro? - Stack Overflow](<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The">https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The</a> purpose of MS Excel 4.0 Macro sheets,is most extensively used by malicious parties (hackers).)</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Cody_Ren/article/details/103886098">office 复合文档数据结构解析“初探”_ole dll 分析 52pojie-CSDN博客</a></p>
