@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。 而本文将对宏样本有关内容内容进行简单的学习分析。  本次样本Hash：615a6f806f2f8db67536c5d8636787ceda9d0de0bae38f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Macro 4.0 样本分析">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。 而本文将对宏样本有关内容内容进行简单的学习分析。  本次样本Hash：615a6f806f2f8db67536c5d8636787ceda9d0de0bae38f">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/SMyjC2euFYNZXf9.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/v2SOga79EL3MfP8.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/f1UxkV7bLHPjYWw.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/22/EmjHPXU3p5wxneG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/JEGzik3cBQF8Dxl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/hiwSsJEyGFUpu9P.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/5SrYQ2pZVwskEhM.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/TsE3RA71SfyM58O.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/JOcQDSnvplEosG2.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/WroLyOZeuUnt3KD.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/6VNQ4ipwIA2ujtW.png">
+<meta property="og:image" content="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png">
+<meta property="article:published_time" content="2023-10-23T13:22:37.348Z">
+<meta property="article:modified_time" content="2023-10-23T13:22:31.883Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Macro 4.0 样本分析 - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Macro 4.0 样本分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-23 21:22" pubdate>
+          2023年10月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Macro 4.0 样本分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。</p>
+<p>而本文将对宏样本有关内容内容进行简单的学习分析。</p>
+<blockquote>
+<p>本次样本Hash：<strong>615a6f806f2f8db67536c5d8636787ceda9d0de0bae38fabdddc5d4b62b10dc9</strong></p>
+</blockquote>
+<h2 id="Excel-4-0-Marco">Excel 4.0 Marco</h2>
+<p>宏最初适用于对重复性任务进行自动化以及用户自定义函数进行编程，在Excel的早期版本中，这些程序是用宏语言编写的，其语句具有公式语法，并驻留在专用宏工作表的单元格中（在 Windows 中以文件扩展名<code>.xml</code>存储）。XLM是Excel到Excel 4.0的默认宏语言。</p>
+<p>我们可以在Excel的信任中心中打开对应的Excel 4.0 宏（其默认受到限制，以保护用户）。</p>
+<img src="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>比如我们插入一个宏，在下面的<code>Sheet</code>栏<code>右键-&gt;插入</code>，可以看到有我们的<code>Macro 4.0</code>，插入后我们可以看到多了一个<code>Sheet</code>命名为宏，我们可以对其进行修改来掩饰对宏的特点，或是直接隐藏<code>Sheet</code>，做到“无痕”</p>
+<p><img src="https://s2.loli.net/2023/10/22/SMyjC2euFYNZXf9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以在单元格输入以下内容，可能会提示公式错误，但是不管就是</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xml">=EXEC(&quot;calc.exe&quot;)<br>=HALT()<br></code></pre></td></tr></table></figure>
+<img src="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<h3 id="自动加载代码">自动加载代码</h3>
+<p>现在主流的自动加载的方式分别是<code>Auto_Open</code>和<code>Auto_Close</code></p>
+<ul>
+<li><code>Auto_Open</code>会在用户打开文档的时候自动运行</li>
+<li><code>Auto_Close</code>会在用户关闭文档的时候自动运行</li>
+</ul>
+<p>上述两种方式自动运行都需要用户允许执行宏代码。</p>
+<p>将单元格名称改为<code>Auto_Open</code>，就实现了宏的自动加载。</p>
+<p><img src="https://s2.loli.net/2023/10/22/v2SOga79EL3MfP8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对于宏通常分为两种格式：<code>xlsm</code>（启动宏的工作簿）、<code>xlsb</code>（二进制工作簿）</p>
+<p><img src="https://s2.loli.net/2023/10/22/f1UxkV7bLHPjYWw.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们可以将对应的表另存为<code>xlsm</code>格式，之后打开便会自动执行上面代码，如果我们设置了安全性，可以看到会出现安全警告信息，提示宏被禁用，如果我们启用宏便会执行对应代码。</p>
+<p><img src="https://s2.loli.net/2023/10/22/EmjHPXU3p5wxneG.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对于这种宏代码我们无法通过<code>Alt+F11</code>来进行查看对应的源代码</p>
+<img src="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>但是我们可以将源文件的后缀修改为<code>.zip</code>打开，在对应的<code>macrosheets</code>中的<code>xml</code>文件里可以看到对应的宏代码</p>
+<img src="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
+<p><img src="https://s2.loli.net/2023/10/23/JEGzik3cBQF8Dxl.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>但是这种查看方式，只适用于<code>xlsm</code>格式的文件，如果是<code>xlsb</code>的文件，就没办法看了。可以看到里面都是<code>bin</code>文件，查看不了里面的具体内容。</p>
+<p><img src="https://s2.loli.net/2023/10/23/hiwSsJEyGFUpu9P.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对于<code>xlsm</code>来说，里面的内容都是基于XML的，可以直接打开进行阅读，而<code>xlsb</code>的文件内容则是二进制文件，是没办法直接阅读的。</p>
+<h2 id="分析工具-——-oletools">分析工具 —— oletools</h2>
+<p><code>oletools</code>可以帮助我们快速的对ole文件进行分析，并对宏代码进行查看</p>
+<blockquote>
+<p>Office 文档（如：.doc、.ppt、.xls等）很多是复合文档（OLE文件），所有文件数据都是存储在一个或多个流中。</p>
+<p>每个流都有一个相似的数据结构，用于存储元数据数据结构。这些元数据有用户和系统的信息、文件属性、格式信息、文本内容、媒体内容。宏代码信息也是以这种方式存储在复合文档中的。</p>
+</blockquote>
+<h3 id="下载方式">下载方式</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install oletools<br></code></pre></td></tr></table></figure>
+<h3 id="食用方式">食用方式</h3>
+<p>分析恶意样本文件：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">oleid：分析OLE文件以检测通常在恶意文件中发现的特定特征。<br>olevba：从<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档（OLE和OpenXML）中提取和分析VBA Macro源代码。<br>MacroRaptor：检测恶意的VBA宏<br>msodde：检测并从<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档，RTF和CSV中提取DDE / DDEAUTO链接<br>pyxswf：检测，提取和分析可能嵌入在<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档（例如Word，Excel）和RTF等文件中的Flash对象（SWF），这对于恶意软件分析特别有用。<br>oleobj：从OLE文件中提取嵌入式对象。<br>rtfobj：从RTF文件中提取嵌入式对象。<br></code></pre></td></tr></table></figure>
+<p>分析ole文件结构的工具：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">olebrowse：一个简单的GUI，可浏览OLE文件（例如<span class="hljs-keyword">MS</span> <span class="hljs-title">Word</span>，Excel，Powerpoint文档），以查看和提取单个数据流。<br>olemeta：从OLE文件中提取所有标准属性（元数据）。<br>oletimes：提取所有流和存储的创建和修改时间戳。<br>oledir：显示OLE文件的所有目录条目，包括空闲和孤立的条目。<br>olemap：显示OLE文件中所有扇区的映射。<br></code></pre></td></tr></table></figure>
+<h3 id="一些问题">一些问题</h3>
+<p>我们使用<code>oleid</code>来对之前所测试的宏文件进行查看时，其无法被识别</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">oleid xxx.xlsm # 查看文件是否含有宏代码<br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/10/23/5SrYQ2pZVwskEhM.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>不知道什么原因，尝试写了一个<code>ALERT()</code>好像也没识别出来，此处使用的为<code>Office 365</code>，在对应项目下也看到许多差不多的<code>issue</code>，可能是项目不完善？</p>
+</blockquote>
+<h2 id="样本">样本</h2>
+<p>此样本为Excel Macro4.0的<code>xlsb</code>版本，这意味着其是有一个加密的<code>bin</code>文件我们无法直接获取源宏代码来对其进行分析处理，其默认的表一为一个提示信息，要我们打开宏</p>
+<img src="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>显然是个明眼人都知道不要打开宏，不然就完蛋了，当我们尝试使用<code>Alt+F11</code>来查看对应的宏代码的时候发现其没有宏代码</p>
+<p><img src="https://s2.loli.net/2023/10/23/TsE3RA71SfyM58O.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>当我们查看隐藏的Sheet表单时可以其内部藏有两个，我们将其取消，可以发现里面少了几列</p>
+<img src="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>当我们想要移动对应列将其展开时，会提示有数据保护，我们无法查看对应的内容信息，接下来我们重点便是获取对应的宏代码文件</p>
+<h3 id="宏获取">宏获取</h3>
+<h4 id="方法一">方法一</h4>
+<p>我们参考以下文章，可以大概了解到ole分析工具不起作用了，因为找不到任何ole对象</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://malware.news/t/xlsb-analyzing-a-microsoft-excel-binary-spreadsheet/46442">XLSB: Analyzing a Microsoft Excel Binary Spreadsheet - Malware Analysis - Malware Analysis, News and Indicators</a></p>
+</blockquote>
+<p>我们将其另存为<code>xlsm</code>格式，从而绕过受保护的工作表，这也会让 xml 文件从<code>.bin</code>转转换为<code>.xml</code>，我们找到里面的 xml 文件后，找到<code>sheetProtection</code>将其删除后替换源文件中的 xml，之后重新修改后缀为<code>xlsm</code>即可绕过</p>
+<p><img src="https://s2.loli.net/2023/10/23/JOcQDSnvplEosG2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>之后调整列，看到的是空白内容，但是当我们修改对应字体颜色为黑色时便可以看到对应插入的宏代码</p>
+<img src="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<p>查看单元格名称时也可以看到对应的<code>Auto_Open</code>特征</p>
+<p><img src="https://s2.loli.net/2023/10/23/WroLyOZeuUnt3KD.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="方法二">方法二</h4>
+<p>使用工具Cerbero Suite</p>
+<blockquote>
+<p>这里没下破解版本，就不展示了，这个可以直接看到对应插入的宏代码，而不需要我们进行绕过处理</p>
+</blockquote>
+<h4 id="方法三">方法三</h4>
+<p>使用<code>XLMMacroDeobfuscator</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install XLMMacroDeobfuscator --force<br></code></pre></td></tr></table></figure>
+<p>之后我们使用以下命令即可提取对应的宏代码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">xlmdeobfuscator --file xxx.xlsm<br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/10/23/6VNQ4ipwIA2ujtW.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="宏分析">宏分析</h3>
+<p>大致上我们可以看到其通过网络连接进行下载了多个文件，但是通过抓取对应流量包发现请求相应信息的相应状态码均为<code>404</code>，与此同时其下载的文件和时间戳有点关系，不知道是不是因为时间有点久了所以对应服务器找不到相应的文件下载。</p>
+<p>在此之后也没有了什么值得分析了东西了…</p>
+<img src="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
+<h2 id="参考资料">参考资料</h2>
+<p>[What is Excel 4.0 Macro? - Stack Overflow](<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The">https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The</a> purpose of MS Excel 4.0 Macro sheets,is most extensively used by malicious parties (hackers).)</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Cody_Ren/article/details/103886098">office 复合文档数据结构解析“初探”_ole dll 分析 52pojie-CSDN博客</a></p>
+<p>[Macro 4.0总结 - b1ackie’blog (<a target="_blank" rel="noopener" href="http://b1ack1e.github.io">b1ack1e.github.io</a>)](<a target="_blank" rel="noopener" href="https://b1ack1e.github.io/2021/12/13/Macro">https://b1ack1e.github.io/2021/12/13/Macro</a> 4.0总结/)</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60574457/article/details/119279798">信息安全 | 利用oletools-python分析恶意文档样本_海绵行动的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://malware.news/t/xlsb-analyzing-a-microsoft-excel-binary-spreadsheet/46442">XLSB: Analyzing a Microsoft Excel Binary Spreadsheet - Malware Analysis - Malware Analysis, News and Indicators</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Macro 4.0 样本分析</div>
+      <div>https://equinox-shame.github.io/2023/10/23/Macro 4.0 样本分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/11/Yara%20%E8%A7%84%E5%88%99/" title="Yara 规则">
+                        <span class="hidden-mobile">Yara 规则</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
