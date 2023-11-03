@@ -16,43 +16,31 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。 而本文将对宏样本有关内容内容进行简单的学习分析。  本次样本Hash：615a6f806f2f8db67536c5d8636787ceda9d0de0bae38f">
+    <meta name="description" content="前言 偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改羊了个羊的时光，本来想试着同样的使用Proxifier来更方便的进行代理抓包测试一下的，但是折腾了许久不论是BurpSuite还是Yakit都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。 小程序解包 现在在桌面端的微信和老版本的微信有点不太一样了">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Macro 4.0 样本分析">
-<meta property="og:url" content="https://equinox-shame.github.io/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="WeChat 小程序解包">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言 最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。 而本文将对宏样本有关内容内容进行简单的学习分析。  本次样本Hash：615a6f806f2f8db67536c5d8636787ceda9d0de0bae38f">
+<meta property="og:description" content="前言 偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改羊了个羊的时光，本来想试着同样的使用Proxifier来更方便的进行代理抓包测试一下的，但是折腾了许久不论是BurpSuite还是Yakit都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。 小程序解包 现在在桌面端的微信和老版本的微信有点不太一样了">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/SMyjC2euFYNZXf9.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/v2SOga79EL3MfP8.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/f1UxkV7bLHPjYWw.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/22/EmjHPXU3p5wxneG.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/JEGzik3cBQF8Dxl.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/hiwSsJEyGFUpu9P.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/5SrYQ2pZVwskEhM.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/TsE3RA71SfyM58O.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/JOcQDSnvplEosG2.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/WroLyOZeuUnt3KD.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/6VNQ4ipwIA2ujtW.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png">
-<meta property="article:published_time" content="2023-10-23T13:22:37.348Z">
-<meta property="article:modified_time" content="2023-10-23T13:49:13.086Z">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/bRi8Msp6lFJPNwA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/IWzc74kHVmn25LR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/a5tLKiYrTVzBCpd.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/kEfPWRVxCLJZYHq.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/R3TmME8pcYXoUQg.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/03/1RE5aswtKzPkYrb.png">
+<meta property="article:published_time" content="2023-11-03T09:08:36.498Z">
+<meta property="article:modified_time" content="2023-11-03T09:07:53.120Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Macro 4.0 样本分析 - Autumnal</title>
+  <title>WeChat 小程序解包 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -222,7 +210,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Macro 4.0 样本分析"></span>
+            <span id="subtitle" data-typed-text="WeChat 小程序解包"></span>
           
         </div>
 
@@ -233,8 +221,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-23 21:22" pubdate>
-          2023年10月23日 晚上
+        <time datetime="2023-11-03 17:08" pubdate>
+          2023年11月3日 下午
         </time>
       </span>
     
@@ -245,7 +233,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.3k 字
+          1.1k 字
         
       </span>
     
@@ -293,108 +281,42 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Macro 4.0 样本分析</h1>
+            <h1 style="display: none">WeChat 小程序解包</h1>
             
             
               <div class="markdown-body">
                 
                 <h2 id="前言">前言</h2>
-<p>最近闲来无事逛博客准备学一下Yara后续的一些食用方法，偶然间翻到了一个宏恶意样本，在此之前还没有接触过对应的宏样本，只是知道一般这类样本是通过嵌入宏来进行执行代码，和之前的WPS、Office的漏洞相似并且不执行宏问题是不大的。</p>
-<p>而本文将对宏样本有关内容内容进行简单的学习分析。</p>
+<p>偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改<code>羊了个羊</code>的时光，本来想试着同样的使用<code>Proxifier</code>来更方便的进行代理抓包测试一下的，但是折腾了许久不论是<code>BurpSuite</code>还是<code>Yakit</code>都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。</p>
+<h2 id="小程序解包">小程序解包</h2>
+<p>现在在桌面端的微信和老版本的微信有点不太一样了，最初低版本的时候微信小程序在加载后还是以<code>json</code>等明文信息包存储的，到如今微信小程序则是以<code>wxapkg</code>为后缀的加密数据包了，这给我们的逆向带来了一定麻烦，幸运的是我们有对应现成的解析小程序的工具。</p>
+<p>在开始之前我们打开一个小程序后在对饮规定微信缓存中找到对应路径下的加密后的小程序文件：</p>
+<p><img src="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>在<code>Applet</code>目录下便是我们小程序缓存的位置，之后找到我们的小程序</p>
 <blockquote>
-<p>本次样本Hash：<strong>615a6f806f2f8db67536c5d8636787ceda9d0de0bae38fabdddc5d4b62b10dc9</strong></p>
+<p>平时使用的小程序越多，对应的文件也就越多，如果找不到自己想要测试的小程序包，可以根据修改日期来找，或者直接简单粗暴，删除所有的缓存文件，再重新打开你想要测试的小程序</p>
 </blockquote>
-<h2 id="Excel-4-0-Marco">Excel 4.0 Marco</h2>
-<p>宏最初适用于对重复性任务进行自动化以及用户自定义函数进行编程，在Excel的早期版本中，这些程序是用宏语言编写的，其语句具有公式语法，并驻留在专用宏工作表的单元格中（在 Windows 中以文件扩展名<code>.xml</code>存储）。XLM是Excel到Excel 4.0的默认宏语言。</p>
-<p>我们可以在Excel的信任中心中打开对应的Excel 4.0 宏（其默认受到限制，以保护用户）。</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/22/uQqawzt41LJkCGH.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
-<p>比如我们插入一个宏，在下面的<code>Sheet</code>栏<code>右键-&gt;插入</code>，可以看到有我们的<code>Macro 4.0</code>，插入后我们可以看到多了一个<code>Sheet</code>命名为宏，我们可以对其进行修改来掩饰对宏的特点，或是直接隐藏<code>Sheet</code>，做到“无痕”</p>
-<p><img src="https://s2.loli.net/2023/10/22/SMyjC2euFYNZXf9.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>我们可以在单元格输入以下内容，可能会提示公式错误，但是不管就是</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml">=EXEC(&quot;calc.exe&quot;)<br>=HALT()<br><br></code></pre></td></tr></table></figure>
-<div align="center"><img src="https://s2.loli.net/2023/10/22/hlbrn2zp6xR4aeD.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" /></div>
-<h3 id="自动加载代码">自动加载代码</h3>
-<p>现在主流的自动加载的方式分别是<code>Auto_Open</code>和<code>Auto_Close</code></p>
-<ul>
-<li><code>Auto_Open</code>会在用户打开文档的时候自动运行</li>
-<li><code>Auto_Close</code>会在用户关闭文档的时候自动运行</li>
-</ul>
-<p>上述两种方式自动运行都需要用户允许执行宏代码。</p>
-<p>将单元格名称改为<code>Auto_Open</code>，就实现了宏的自动加载。</p>
-<p><img src="https://s2.loli.net/2023/10/22/v2SOga79EL3MfP8.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>对于宏通常分为两种格式：<code>xlsm</code>（启动宏的工作簿）、<code>xlsb</code>（二进制工作簿）</p>
-<p><img src="https://s2.loli.net/2023/10/22/f1UxkV7bLHPjYWw.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>我们可以将对应的表另存为<code>xlsm</code>格式，之后打开便会自动执行上面代码，如果我们设置了安全性，可以看到会出现安全警告信息，提示宏被禁用，如果我们启用宏便会执行对应代码。</p>
-<p><img src="https://s2.loli.net/2023/10/22/EmjHPXU3p5wxneG.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>对于这种宏代码我们无法通过<code>Alt+F11</code>来进行查看对应的源代码</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/1rHD9ThjFviqSEG.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
-<p>但是我们可以将源文件的后缀修改为<code>.zip</code>打开，在对应的<code>macrosheets</code>中的<code>xml</code>文件里可以看到对应的宏代码</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/Ple4wf2XFvymkBK.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" /></div>
-<p><img src="https://s2.loli.net/2023/10/23/JEGzik3cBQF8Dxl.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>但是这种查看方式，只适用于<code>xlsm</code>格式的文件，如果是<code>xlsb</code>的文件，就没办法看了。可以看到里面都是<code>bin</code>文件，查看不了里面的具体内容。</p>
-<p><img src="https://s2.loli.net/2023/10/23/hiwSsJEyGFUpu9P.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>对于<code>xlsm</code>来说，里面的内容都是基于XML的，可以直接打开进行阅读，而<code>xlsb</code>的文件内容则是二进制文件，是没办法直接阅读的。</p>
-<h2 id="分析工具-——-oletools">分析工具 —— oletools</h2>
-<p><code>oletools</code>可以帮助我们快速的对ole文件进行分析，并对宏代码进行查看</p>
-<blockquote>
-<p>Office 文档（如：.doc、.ppt、.xls等）很多是复合文档（OLE文件），所有文件数据都是存储在一个或多个流中。</p>
-<p>每个流都有一个相似的数据结构，用于存储元数据数据结构。这些元数据有用户和系统的信息、文件属性、格式信息、文本内容、媒体内容。宏代码信息也是以这种方式存储在复合文档中的。</p>
-</blockquote>
-<h3 id="下载方式">下载方式</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install oletools<br></code></pre></td></tr></table></figure>
-<h3 id="食用方式">食用方式</h3>
-<p>分析恶意样本文件：</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">oleid：分析OLE文件以检测通常在恶意文件中发现的特定特征。<br>olevba：从<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档（OLE和OpenXML）中提取和分析VBA Macro源代码。<br>MacroRaptor：检测恶意的VBA宏<br>msodde：检测并从<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档，RTF和CSV中提取DDE / DDEAUTO链接<br>pyxswf：检测，提取和分析可能嵌入在<span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span>文档（例如Word，Excel）和RTF等文件中的Flash对象（SWF），这对于恶意软件分析特别有用。<br>oleobj：从OLE文件中提取嵌入式对象。<br>rtfobj：从RTF文件中提取嵌入式对象。<br></code></pre></td></tr></table></figure>
-<p>分析ole文件结构的工具：</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">olebrowse：一个简单的GUI，可浏览OLE文件（例如<span class="hljs-keyword">MS</span> <span class="hljs-title">Word</span>，Excel，Powerpoint文档），以查看和提取单个数据流。<br>olemeta：从OLE文件中提取所有标准属性（元数据）。<br>oletimes：提取所有流和存储的创建和修改时间戳。<br>oledir：显示OLE文件的所有目录条目，包括空闲和孤立的条目。<br>olemap：显示OLE文件中所有扇区的映射。<br></code></pre></td></tr></table></figure>
-<h3 id="一些问题">一些问题</h3>
-<p>我们使用<code>oleid</code>来对之前所测试的宏文件进行查看时，其无法被识别</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">oleid xxx.xlsm # 查看文件是否含有宏代码<br></code></pre></td></tr></table></figure>
-<p><img src="https://s2.loli.net/2023/10/23/5SrYQ2pZVwskEhM.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<blockquote>
-<p>不知道什么原因，尝试写了一个<code>ALERT()</code>好像也没识别出来，此处使用的为<code>Office 365</code>，在对应项目下也看到许多差不多的<code>issue</code>，可能是项目不完善？</p>
-</blockquote>
-<h2 id="样本">样本</h2>
-<p>此样本为Excel Macro4.0的<code>xlsb</code>版本，这意味着其是有一个加密的<code>bin</code>文件我们无法直接获取源宏代码来对其进行分析处理，其默认的表一为一个提示信息，要我们打开宏</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/CO9P1XA3lHNbKez.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></div>
-<p>显然是个明眼人都知道不要打开宏，不然就完蛋了，当我们尝试使用<code>Alt+F11</code>来查看对应的宏代码的时候发现其没有宏代码</p>
-<p><img src="https://s2.loli.net/2023/10/23/TsE3RA71SfyM58O.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>当我们查看隐藏的Sheet表单时可以其内部藏有两个，我们将其取消，可以发现里面少了几列</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/uUX23vBpDzLQahc.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></div>
-<p>当我们想要移动对应列将其展开时，会提示有数据保护，我们无法查看对应的内容信息，接下来我们重点便是获取对应的宏代码文件</p>
-<h3 id="宏获取">宏获取</h3>
-<h4 id="方法一">方法一</h4>
-<p>我们参考以下文章，可以大概了解到ole分析工具不起作用了，因为找不到任何ole对象</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://malware.news/t/xlsb-analyzing-a-microsoft-excel-binary-spreadsheet/46442">XLSB: Analyzing a Microsoft Excel Binary Spreadsheet - Malware Analysis - Malware Analysis, News and Indicators</a></p>
-</blockquote>
-<p>我们将其另存为<code>xlsm</code>格式，从而绕过受保护的工作表，这也会让 xml 文件从<code>.bin</code>转转换为<code>.xml</code>，我们找到里面的 xml 文件后，找到<code>sheetProtection</code>将其删除后替换源文件中的 xml，之后重新修改后缀为<code>xlsm</code>即可绕过</p>
-<p><img src="https://s2.loli.net/2023/10/23/JOcQDSnvplEosG2.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后调整列，看到的是空白内容，但是当我们修改对应字体颜色为黑色时便可以看到对应插入的宏代码</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/rGW2ZR1qcgeOFdQ.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" /></div>
-<p>查看单元格名称时也可以看到对应的<code>Auto_Open</code>特征</p>
-<p><img src="https://s2.loli.net/2023/10/23/WroLyOZeuUnt3KD.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h4 id="方法二">方法二</h4>
-<p>使用工具Cerbero Suite</p>
-<blockquote>
-<p>这里没下破解版本，就不展示了，这个可以直接看到对应插入的宏代码，而不需要我们进行绕过处理</p>
-</blockquote>
-<h4 id="方法三">方法三</h4>
-<p>使用<code>XLMMacroDeobfuscator</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install XLMMacroDeobfuscator --force<br></code></pre></td></tr></table></figure>
-<p>之后我们使用以下命令即可提取对应的宏代码</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">xlmdeobfuscator --file xxx.xlsm<br></code></pre></td></tr></table></figure>
-<p><img src="https://s2.loli.net/2023/10/23/6VNQ4ipwIA2ujtW.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="宏分析">宏分析</h3>
-<p>大致上我们可以看到其通过网络连接进行下载了多个文件，但是通过抓取对应流量包发现请求相应信息的相应状态码均为<code>404</code>，与此同时其下载的文件和时间戳有点关系，不知道是不是因为时间有点久了所以对应服务器找不到相应的文件下载。</p>
-<p>在此之后也没有了什么值得分析了东西了…</p>
-<div align="center"><img src="https://s2.loli.net/2023/10/23/mIpnKJgjxe92WkQ.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" /></div>
-<h2 id="参考资料">参考资料</h2>
-<p>[What is Excel 4.0 Macro? - Stack Overflow](<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The">https://stackoverflow.com/questions/41402120/what-is-excel-4-0-macro#:~:text=The</a> purpose of MS Excel 4.0 Macro sheets,is most extensively used by malicious parties (hackers).)</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Cody_Ren/article/details/103886098">office 复合文档数据结构解析“初探”_ole dll 分析 52pojie-CSDN博客</a></p>
-<p>[Macro 4.0总结 - b1ackie’blog (<a target="_blank" rel="noopener" href="http://b1ack1e.github.io">b1ack1e.github.io</a>)](<a target="_blank" rel="noopener" href="https://b1ack1e.github.io/2021/12/13/Macro">https://b1ack1e.github.io/2021/12/13/Macro</a> 4.0总结/)</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60574457/article/details/119279798">信息安全 | 利用oletools-python分析恶意文档样本_海绵行动的博客-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://malware.news/t/xlsb-analyzing-a-microsoft-excel-binary-spreadsheet/46442">XLSB: Analyzing a Microsoft Excel Binary Spreadsheet - Malware Analysis - Malware Analysis, News and Indicators</a></p>
+<p><img src="https://s2.loli.net/2023/11/03/bRi8Msp6lFJPNwA.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们找到后可以在目录中找到个<code>wxapkg</code>，这个便是我们此次分析的关键，这种文件本质上其实也是一个压缩包，其包含了小程序的所有代码，资源和配置文件等以及一个特性的描述文件<code>app.json</code></p>
+<p>我们借助大佬写的工具来傻瓜式解密：</p>
+<p><img src="https://s2.loli.net/2023/11/03/IWzc74kHVmn25LR.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们选择对应的小程序包，解密后可以得到一个后缀为<code>wxapkg</code>的文件，此时我们还需要对其进行解压，我们借助<code>Github</code>上的一个项目来完成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs url">https://github.com/system-cpu/wxappUnpacker<br></code></pre></td></tr></table></figure>
+<p>需要注意的是需要<code>node</code>环境，要自己提前安装，我们将对应工具下载后，切换至对应工具目录并执行以下命令安装对应依赖</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install esprima<br>npm install css-tree<br>npm install cssbeautify<br>npm install vm2<br>npm install uglify-es<br>npm install js-beautify<br></code></pre></td></tr></table></figure>
+<p>之后我们在工具目录下使用下面命令对对应小程序解包即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">node wuWxapkg.js xxx<br></code></pre></td></tr></table></figure>
+<p>我们可以看到以下信息：</p>
+<p><img src="https://s2.loli.net/2023/11/03/a5tLKiYrTVzBCpd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>之后我们可以看到对应目录下存在有一个文件夹，我们使用微信开发者工具将其打开便可以看到此项目了</p>
+<img src="https://s2.loli.net/2023/11/03/kEfPWRVxCLJZYHq.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>我们点击加号创建一个项目，然后不使用云服务。</p>
+<img src="https://s2.loli.net/2023/11/03/R3TmME8pcYXoUQg.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>之后我们便可以对其进行分析处理了：</p>
+<p><img src="https://s2.loli.net/2023/11/03/1RE5aswtKzPkYrb.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="抓包？">抓包？</h2>
+<p>回到之前所提出的抓包的问题，总感觉哪里奇奇怪怪的，安装了证书+配置了Proxifier的代理以及相关规则，然后Proxifier下面的提示信息也表明对应的小程序走了对应的代理，但就是两个抓包的程序点动静没有…</p>
+<p>目前看起来还是使用Fiddler来抓包好？也不知道是不是微信版本过高的问题导致的，也没低版本来进行测试…</p>
 
                 
               </div>
@@ -413,7 +335,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
+  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
   
   
 
@@ -433,8 +355,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Macro 4.0 样本分析</div>
-      <div>https://equinox-shame.github.io/2023/10/23/Macro 4.0 样本分析/</div>
+      <div>WeChat 小程序解包</div>
+      <div>https://equinox-shame.github.io/2023/11/03/WeChat 小程序解包/</div>
     </div>
     <div class="license-meta">
       
@@ -446,7 +368,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月23日</div>
+          <div>2023年11月3日</div>
         </div>
       
       
@@ -478,18 +400,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/" title="WeChat 小程序解包">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">WeChat 小程序解包</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/11/Yara%20%E8%A7%84%E5%88%99/" title="Yara 规则">
-                        <span class="hidden-mobile">Yara 规则</span>
+                      <a href="/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" title="Macro 4.0 样本分析">
+                        <span class="hidden-mobile">Macro 4.0 样本分析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

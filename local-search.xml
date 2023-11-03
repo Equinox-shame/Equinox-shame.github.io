@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>WeChat 小程序解包</title>
+    <link href="/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/"/>
+    <url>/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/</url>
+    
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改<code>羊了个羊</code>的时光，本来想试着同样的使用<code>Proxifier</code>来更方便的进行代理抓包测试一下的，但是折腾了许久不论是<code>BurpSuite</code>还是<code>Yakit</code>都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。</p><h2 id="小程序解包">小程序解包</h2><p>现在在桌面端的微信和老版本的微信有点不太一样了，最初低版本的时候微信小程序在加载后还是以<code>json</code>等明文信息包存储的，到如今微信小程序则是以<code>wxapkg</code>为后缀的加密数据包了，这给我们的逆向带来了一定麻烦，幸运的是我们有对应现成的解析小程序的工具。</p><p>在开始之前我们打开一个小程序后在对饮规定微信缓存中找到对应路径下的加密后的小程序文件：</p><p><img src="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png" alt=""></p><p>在<code>Applet</code>目录下便是我们小程序缓存的位置，之后找到我们的小程序</p><blockquote><p>平时使用的小程序越多，对应的文件也就越多，如果找不到自己想要测试的小程序包，可以根据修改日期来找，或者直接简单粗暴，删除所有的缓存文件，再重新打开你想要测试的小程序</p></blockquote><p><img src="https://s2.loli.net/2023/11/03/bRi8Msp6lFJPNwA.png" alt=""></p><p>我们找到后可以在目录中找到个<code>wxapkg</code>，这个便是我们此次分析的关键，这种文件本质上其实也是一个压缩包，其包含了小程序的所有代码，资源和配置文件等以及一个特性的描述文件<code>app.json</code></p><p>我们借助大佬写的工具来傻瓜式解密：</p><p><img src="https://s2.loli.net/2023/11/03/IWzc74kHVmn25LR.png" alt=""></p><p>我们选择对应的小程序包，解密后可以得到一个后缀为<code>wxapkg</code>的文件，此时我们还需要对其进行解压，我们借助<code>Github</code>上的一个项目来完成</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs url">https://github.com/system-cpu/wxappUnpacker<br></code></pre></td></tr></table></figure><p>需要注意的是需要<code>node</code>环境，要自己提前安装，我们将对应工具下载后，切换至对应工具目录并执行以下命令安装对应依赖</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install esprima<br>npm install css-tree<br>npm install cssbeautify<br>npm install vm2<br>npm install uglify-es<br>npm install js-beautify<br></code></pre></td></tr></table></figure><p>之后我们在工具目录下使用下面命令对对应小程序解包即可。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">node wuWxapkg.js xxx<br></code></pre></td></tr></table></figure><p>我们可以看到以下信息：</p><p><img src="https://s2.loli.net/2023/11/03/a5tLKiYrTVzBCpd.png" alt=""></p><p>之后我们可以看到对应目录下存在有一个文件夹，我们使用微信开发者工具将其打开便可以看到此项目了</p><img src="https://s2.loli.net/2023/11/03/kEfPWRVxCLJZYHq.png" style="zoom: 67%;" /><p>我们点击加号创建一个项目，然后不使用云服务。</p><img src="https://s2.loli.net/2023/11/03/R3TmME8pcYXoUQg.png" style="zoom:67%;" /><p>之后我们便可以对其进行分析处理了：</p><p><img src="https://s2.loli.net/2023/11/03/1RE5aswtKzPkYrb.png" alt=""></p><h2 id="抓包？">抓包？</h2><p>回到之前所提出的抓包的问题，总感觉哪里奇奇怪怪的，安装了证书+配置了Proxifier的代理以及相关规则，然后Proxifier下面的提示信息也表明对应的小程序走了对应的代理，但就是两个抓包的程序点动静没有…</p><p>目前看起来还是使用Fiddler来抓包好？也不知道是不是微信版本过高的问题导致的，也没低版本来进行测试…</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Reverse Practice</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Macro 4.0 样本分析</title>
     <link href="/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/"/>
     <url>/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/</url>
