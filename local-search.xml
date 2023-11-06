@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>Nmap 使用</title>
+    <link href="/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/"/>
+    <url>/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Nmap基本功能">Nmap基本功能</h2><h3 id="基本功能">基本功能</h3><ul><li>主机发现</li><li>端口扫描</li><li>应用程序与版本信息检测</li><li>操作系统检测</li></ul><h3 id="附加功能">附加功能</h3><ul><li>规避FW/IDS</li><li>NSE脚本定制与应用</li></ul><h2 id="扫描方式">扫描方式</h2><h3 id="默认扫描">默认扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">nmap &lt;目标地址&gt;<br></code></pre></td></tr></table></figure><h3 id="全面扫描">全面扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">namp -A -T 4 -v &lt;目标地址&gt;<br></code></pre></td></tr></table></figure><h2 id="主机发现">主机发现</h2><p><img src="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png" alt=""></p><h2 id="端口扫描">端口扫描</h2><p><img src="https://s2.loli.net/2023/11/05/JbTwNQedI5qr9yz.png" alt=""></p><p>其中<code>-sF</code>、<code>-sN</code>、<code>-sX</code>为隐蔽扫描，适合于Linux系统的目标机端口扫描</p><h2 id="应用程序与版本信息侦测">应用程序与版本信息侦测</h2><p><img src="https://s2.loli.net/2023/11/05/x3K12wStDBJvzyH.png" alt=""></p><h2 id="操作系统侦测">操作系统侦测</h2><h3 id="常用的网路协议栈指纹识别">常用的网路协议栈指纹识别</h3><p><strong>TTL</strong>：Time To Live，数据包存活时间</p><blockquote><p>常见操作系统TTL：</p><p>Windows 9x/NT/2000 lntelTTL=128<br>Digital Unix 4.0 Alpha  TTL=60<br>Linux 2.2.x Intel   TTL=64<br>Netware 4.11 Intel          TTL= 128<br>AIX 4.3.x IBM/RS6000        TTL= 60<br>Cisco 12.0 2514             TTL= 255<br>Solaris 8 lntel/Sparc       TTL= 64</p></blockquote><p><strong>DF位</strong>：Don’t Fragment，禁止分片</p><p><strong>Window Size</strong>：TCP 接收或是发送窗口的大小，决定了接收信息的机器在收到多少数据包后发送 ACK 包</p><p><strong>ACK 序号</strong>：不同 OS 处理 ACK 序号不同，大多数 OS 会把回应的 ACK 包的序号设置为发送的包的初始需要，Windows 和一些打印机则会发送序号为初始序号加一的 ACK 包</p><p><strong>对 FIN 包的响应</strong>：发送一个只有 FIN 标志位的 TCP 数据包给一个打开的端口，Linux等系统不响应;有些系统如Windows、Cisco、HP/UX等，发回一个RST</p><p><strong>ISN（初始化序列号）</strong>：不同的 OS 在选择 TCP ISN 时采用不同的方法，一些 UNIX 系统采用传统的 64K 递增方法；较新的 Solaris、IRIX、FreeBSD、Digital Unix、Cray等系统采用随机增量的方法；Linux 2.0、OpenVMS、AIX 等系统采用真随机方法；Windows系统采用一种时间相关的模型；还有一些系统使用常数，如3Com集线器使用Ox803，Apple LaserWriter打印机使用OxC7001</p><p><strong>主机使用的端口</strong>：一些 OS 会开放特殊的端口，如 Windows的137、139；一些网络设备，如入侵检测系统、防火墙等也开放自己特殊的端口</p><h3 id="操作系统检测">操作系统检测</h3><p><img src="https://s2.loli.net/2023/11/06/1veiHl3RE8qcx5D.png" alt=""></p><h2 id="规避防火墙">规避防火墙</h2><h3 id="常用命令">常用命令</h3><p><img src="https://s2.loli.net/2023/11/06/t4CMASnQD1jfzZc.png" alt=""></p><h3 id="T-使用">-T 使用</h3><p>使用-T(0~5)可以启用时序选项，—般来说，数字越大，速度越快，精度越低</p><p>-TO（偏执的)：非常慢的扫描，用于IDS逃避</p><p>-T1 (鬼祟的)：缓慢的扫描，用于IDS逃避</p><p>-T2 (文雅的)：降低速度以降低对带宽的消耗，此选项一般不常用</p><p>-T3（普通的)：默认，根据目标的反应自动调整时间</p><p>-T4 (野蛮的)：快速扫描，常用扫描方式，需要在很好的网络环境下使用</p><p>-T5 (疯狂的)：极速扫描，以牺牲准确度来提升扫描速度</p><h3 id="–spoof-mac">–spoof-mac</h3><p>所用命令: <code>nmap --spoof-mac 0 &lt;目标IP&gt;</code>，其中参数 0 表示随机分配一个MA地址<br>也可以手动指定MAC地址，如:nmap --spoof-mac aa:bb:cc:dd:ee:ff &lt;目标IP&gt;</p><h3 id="NSE脚本">NSE脚本</h3><p><img src="https://s2.loli.net/2023/11/06/uO8sEhaqz4eMRdP.png" alt=""></p><h3 id="–script-brute">–script brute</h3><p>提供暴力破解的方式，可以对数据库、SMB、SNMP等进行简单的密码的暴力破解</p><h3 id="–script-vuln">–script vuln</h3><p>检测是否存在常见漏洞</p><h2 id="扫描结果保存与输出">扫描结果保存与输出</h2><p>三种格式的输出</p><p>normal:标准模式（选项-oN)</p><p>xml文档:(选项-oX)</p><p>grep文件（选项-oG)</p><p>注: -oA选项可将扫描结果以标准格式、XML、Grep格式一次性全部保存</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Web</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>WeChat 小程序解包</title>
     <link href="/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/"/>
     <url>/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/</url>

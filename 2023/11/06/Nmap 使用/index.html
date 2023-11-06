@@ -16,31 +16,30 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改羊了个羊的时光，本来想试着同样的使用Proxifier来更方便的进行代理抓包测试一下的，但是折腾了许久不论是BurpSuite还是Yakit都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。 小程序解包 现在在桌面端的微信和老版本的微信有点不太一样了">
+    <meta name="description" content="Nmap基本功能 基本功能  主机发现 端口扫描 应用程序与版本信息检测 操作系统检测  附加功能  规避FW&#x2F;IDS NSE脚本定制与应用  扫描方式 默认扫描 1nmap &lt;目标地址&gt; 全面扫描 1namp -A -T 4 -v &lt;目标地址&gt; 主机发现  端口扫描  其中-sF、-sN、-sX为隐蔽扫描，适合于Linux系统的目标机端口扫描 应用程序与版本信息侦测  操">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WeChat 小程序解包">
-<meta property="og:url" content="https://equinox-shame.github.io/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/index.html">
+<meta property="og:title" content="Nmap 使用">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="前言 偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改羊了个羊的时光，本来想试着同样的使用Proxifier来更方便的进行代理抓包测试一下的，但是折腾了许久不论是BurpSuite还是Yakit都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。 小程序解包 现在在桌面端的微信和老版本的微信有点不太一样了">
+<meta property="og:description" content="Nmap基本功能 基本功能  主机发现 端口扫描 应用程序与版本信息检测 操作系统检测  附加功能  规避FW&#x2F;IDS NSE脚本定制与应用  扫描方式 默认扫描 1nmap &lt;目标地址&gt; 全面扫描 1namp -A -T 4 -v &lt;目标地址&gt; 主机发现  端口扫描  其中-sF、-sN、-sX为隐蔽扫描，适合于Linux系统的目标机端口扫描 应用程序与版本信息侦测  操">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/bRi8Msp6lFJPNwA.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/IWzc74kHVmn25LR.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/a5tLKiYrTVzBCpd.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/kEfPWRVxCLJZYHq.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/R3TmME8pcYXoUQg.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/03/1RE5aswtKzPkYrb.png">
-<meta property="article:published_time" content="2023-11-03T09:08:36.498Z">
-<meta property="article:modified_time" content="2023-11-03T09:07:53.120Z">
+<meta property="og:image" content="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/05/JbTwNQedI5qr9yz.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/05/x3K12wStDBJvzyH.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/1veiHl3RE8qcx5D.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/t4CMASnQD1jfzZc.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/uO8sEhaqz4eMRdP.png">
+<meta property="article:published_time" content="2023-11-06T01:45:28.782Z">
+<meta property="article:modified_time" content="2023-11-06T01:45:58.876Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>WeChat 小程序解包 - Autumnal</title>
+  <title>Nmap 使用 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -210,7 +209,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="WeChat 小程序解包"></span>
+            <span id="subtitle" data-typed-text="Nmap 使用"></span>
           
         </div>
 
@@ -221,8 +220,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-03 17:08" pubdate>
-          2023年11月3日 下午
+        <time datetime="2023-11-06 09:45" pubdate>
+          2023年11月6日 上午
         </time>
       </span>
     
@@ -233,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.4k 字
         
       </span>
     
@@ -281,42 +280,83 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">WeChat 小程序解包</h1>
+            <h1 style="display: none">Nmap 使用</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="前言">前言</h2>
-<p>偶然间看到了渗透微信小程序的文章，想到了自己许久前抓包写脚本修改<code>羊了个羊</code>的时光，本来想试着同样的使用<code>Proxifier</code>来更方便的进行代理抓包测试一下的，但是折腾了许久不论是<code>BurpSuite</code>还是<code>Yakit</code>都没点动静，监听的端口一个包也没有，只有测试请求的一个连接，就很奇怪…于是转头去看看小程序的解包然后调试以及逆向了，于是有了本文。</p>
-<h2 id="小程序解包">小程序解包</h2>
-<p>现在在桌面端的微信和老版本的微信有点不太一样了，最初低版本的时候微信小程序在加载后还是以<code>json</code>等明文信息包存储的，到如今微信小程序则是以<code>wxapkg</code>为后缀的加密数据包了，这给我们的逆向带来了一定麻烦，幸运的是我们有对应现成的解析小程序的工具。</p>
-<p>在开始之前我们打开一个小程序后在对饮规定微信缓存中找到对应路径下的加密后的小程序文件：</p>
-<p><img src="https://s2.loli.net/2023/11/03/bfgCoasq1ryTQYu.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>在<code>Applet</code>目录下便是我们小程序缓存的位置，之后找到我们的小程序</p>
+                <h2 id="Nmap基本功能">Nmap基本功能</h2>
+<h3 id="基本功能">基本功能</h3>
+<ul>
+<li>主机发现</li>
+<li>端口扫描</li>
+<li>应用程序与版本信息检测</li>
+<li>操作系统检测</li>
+</ul>
+<h3 id="附加功能">附加功能</h3>
+<ul>
+<li>规避FW/IDS</li>
+<li>NSE脚本定制与应用</li>
+</ul>
+<h2 id="扫描方式">扫描方式</h2>
+<h3 id="默认扫描">默认扫描</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">nmap &lt;目标地址&gt;<br></code></pre></td></tr></table></figure>
+<h3 id="全面扫描">全面扫描</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">namp -A -T 4 -v &lt;目标地址&gt;<br></code></pre></td></tr></table></figure>
+<h2 id="主机发现">主机发现</h2>
+<p><img src="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="端口扫描">端口扫描</h2>
+<p><img src="https://s2.loli.net/2023/11/05/JbTwNQedI5qr9yz.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其中<code>-sF</code>、<code>-sN</code>、<code>-sX</code>为隐蔽扫描，适合于Linux系统的目标机端口扫描</p>
+<h2 id="应用程序与版本信息侦测">应用程序与版本信息侦测</h2>
+<p><img src="https://s2.loli.net/2023/11/05/x3K12wStDBJvzyH.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="操作系统侦测">操作系统侦测</h2>
+<h3 id="常用的网路协议栈指纹识别">常用的网路协议栈指纹识别</h3>
+<p><strong>TTL</strong>：Time To Live，数据包存活时间</p>
 <blockquote>
-<p>平时使用的小程序越多，对应的文件也就越多，如果找不到自己想要测试的小程序包，可以根据修改日期来找，或者直接简单粗暴，删除所有的缓存文件，再重新打开你想要测试的小程序</p>
+<p>常见操作系统TTL：</p>
+<p>Windows 9x/NT/2000 lntel	TTL=128<br>
+Digital Unix 4.0 Alpha	  TTL=60<br>
+Linux 2.2.x Intel		   TTL=64<br>
+Netware 4.11 Intel          TTL= 128<br>
+AIX 4.3.x IBM/RS6000        TTL= 60<br>
+Cisco 12.0 2514             TTL= 255<br>
+Solaris 8 lntel/Sparc       TTL= 64</p>
 </blockquote>
-<p><img src="https://s2.loli.net/2023/11/03/bRi8Msp6lFJPNwA.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>我们找到后可以在目录中找到个<code>wxapkg</code>，这个便是我们此次分析的关键，这种文件本质上其实也是一个压缩包，其包含了小程序的所有代码，资源和配置文件等以及一个特性的描述文件<code>app.json</code></p>
-<p>我们借助大佬写的工具来傻瓜式解密：</p>
-<p><img src="https://s2.loli.net/2023/11/03/IWzc74kHVmn25LR.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>我们选择对应的小程序包，解密后可以得到一个后缀为<code>wxapkg</code>的文件，此时我们还需要对其进行解压，我们借助<code>Github</code>上的一个项目来完成</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs url">https://github.com/system-cpu/wxappUnpacker<br></code></pre></td></tr></table></figure>
-<p>需要注意的是需要<code>node</code>环境，要自己提前安装，我们将对应工具下载后，切换至对应工具目录并执行以下命令安装对应依赖</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install esprima<br>npm install css-tree<br>npm install cssbeautify<br>npm install vm2<br>npm install uglify-es<br>npm install js-beautify<br></code></pre></td></tr></table></figure>
-<p>之后我们在工具目录下使用下面命令对对应小程序解包即可。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">node wuWxapkg.js xxx<br></code></pre></td></tr></table></figure>
-<p>我们可以看到以下信息：</p>
-<p><img src="https://s2.loli.net/2023/11/03/a5tLKiYrTVzBCpd.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>之后我们可以看到对应目录下存在有一个文件夹，我们使用微信开发者工具将其打开便可以看到此项目了</p>
-<img src="https://s2.loli.net/2023/11/03/kEfPWRVxCLJZYHq.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
-<p>我们点击加号创建一个项目，然后不使用云服务。</p>
-<img src="https://s2.loli.net/2023/11/03/R3TmME8pcYXoUQg.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
-<p>之后我们便可以对其进行分析处理了：</p>
-<p><img src="https://s2.loli.net/2023/11/03/1RE5aswtKzPkYrb.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="抓包？">抓包？</h2>
-<p>回到之前所提出的抓包的问题，总感觉哪里奇奇怪怪的，安装了证书+配置了Proxifier的代理以及相关规则，然后Proxifier下面的提示信息也表明对应的小程序走了对应的代理，但就是两个抓包的程序点动静没有…</p>
-<p>目前看起来还是使用Fiddler来抓包好？也不知道是不是微信版本过高的问题导致的，也没低版本来进行测试…</p>
+<p><strong>DF位</strong>：Don’t Fragment，禁止分片</p>
+<p><strong>Window Size</strong>：TCP 接收或是发送窗口的大小，决定了接收信息的机器在收到多少数据包后发送 ACK 包</p>
+<p><strong>ACK 序号</strong>：不同 OS 处理 ACK 序号不同，大多数 OS 会把回应的 ACK 包的序号设置为发送的包的初始需要，Windows 和一些打印机则会发送序号为初始序号加一的 ACK 包</p>
+<p><strong>对 FIN 包的响应</strong>：发送一个只有 FIN 标志位的 TCP 数据包给一个打开的端口，Linux等系统不响应;有些系统如Windows、Cisco、HP/UX等，发回一个RST</p>
+<p><strong>ISN（初始化序列号）</strong>：不同的 OS 在选择 TCP ISN 时采用不同的方法，一些 UNIX 系统采用传统的 64K 递增方法；较新的 Solaris、IRIX、FreeBSD、Digital Unix、Cray等系统采用随机增量的方法；Linux 2.0、OpenVMS、AIX 等系统采用真随机方法；Windows系统采用一种时间相关的模型；还有一些系统使用常数，如3Com集线器使用Ox803，Apple LaserWriter打印机使用OxC7001</p>
+<p><strong>主机使用的端口</strong>：一些 OS 会开放特殊的端口，如 Windows的137、139；一些网络设备，如入侵检测系统、防火墙等也开放自己特殊的端口</p>
+<h3 id="操作系统检测">操作系统检测</h3>
+<p><img src="https://s2.loli.net/2023/11/06/1veiHl3RE8qcx5D.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="规避防火墙">规避防火墙</h2>
+<h3 id="常用命令">常用命令</h3>
+<p><img src="https://s2.loli.net/2023/11/06/t4CMASnQD1jfzZc.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="T-使用">-T 使用</h3>
+<p>使用-T(0~5)可以启用时序选项，—般来说，数字越大，速度越快，精度越低</p>
+<p>-TO（偏执的)：非常慢的扫描，用于IDS逃避</p>
+<p>-T1 (鬼祟的)：缓慢的扫描，用于IDS逃避</p>
+<p>-T2 (文雅的)：降低速度以降低对带宽的消耗，此选项一般不常用</p>
+<p>-T3（普通的)：默认，根据目标的反应自动调整时间</p>
+<p>-T4 (野蛮的)：快速扫描，常用扫描方式，需要在很好的网络环境下使用</p>
+<p>-T5 (疯狂的)：极速扫描，以牺牲准确度来提升扫描速度</p>
+<h3 id="–spoof-mac">–spoof-mac</h3>
+<p>所用命令: <code>nmap --spoof-mac 0 &lt;目标IP&gt;</code>，其中参数 0 表示随机分配一个MA地址<br>
+也可以手动指定MAC地址，如:nmap --spoof-mac aa:bb:cc:dd:ee:ff &lt;目标IP&gt;</p>
+<h3 id="NSE脚本">NSE脚本</h3>
+<p><img src="https://s2.loli.net/2023/11/06/uO8sEhaqz4eMRdP.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="–script-brute">–script brute</h3>
+<p>提供暴力破解的方式，可以对数据库、SMB、SNMP等进行简单的密码的暴力破解</p>
+<h3 id="–script-vuln">–script vuln</h3>
+<p>检测是否存在常见漏洞</p>
+<h2 id="扫描结果保存与输出">扫描结果保存与输出</h2>
+<p>三种格式的输出</p>
+<p>normal:标准模式（选项-oN)</p>
+<p>xml文档:(选项-oX)</p>
+<p>grep文件（选项-oG)</p>
+<p>注: -oA选项可将扫描结果以标准格式、XML、Grep格式一次性全部保存</p>
 
                 
               </div>
@@ -335,7 +375,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Reverse-Practice/" class="category-chain-item">Reverse Practice</a>
+  <a href="/categories/Web/" class="category-chain-item">Web</a>
   
   
 
@@ -355,8 +395,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>WeChat 小程序解包</div>
-      <div>https://equinox-shame.github.io/2023/11/03/WeChat 小程序解包/</div>
+      <div>Nmap 使用</div>
+      <div>https://equinox-shame.github.io/2023/11/06/Nmap 使用/</div>
     </div>
     <div class="license-meta">
       
@@ -368,7 +408,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月3日</div>
+          <div>2023年11月6日</div>
         </div>
       
       
@@ -400,18 +440,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/" title="Nmap 使用">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Nmap 使用</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/23/Macro%204.0%20%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" title="Macro 4.0 样本分析">
-                        <span class="hidden-mobile">Macro 4.0 样本分析</span>
+                      <a href="/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/" title="WeChat 小程序解包">
+                        <span class="hidden-mobile">WeChat 小程序解包</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
