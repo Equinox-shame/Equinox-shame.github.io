@@ -16,30 +16,42 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Nmap基本功能 基本功能  主机发现 端口扫描 应用程序与版本信息检测 操作系统检测  附加功能  规避FW&#x2F;IDS NSE脚本定制与应用  扫描方式 默认扫描 1nmap &lt;目标地址&gt; 全面扫描 1namp -A -T 4 -v &lt;目标地址&gt; 主机发现  端口扫描  其中-sF、-sN、-sX为隐蔽扫描，适合于Linux系统的目标机端口扫描 应用程序与版本信息侦测  操">
+    <meta name="description" content="前言 最近群里一位师傅开远程桌面暴露3389端口时被人打了，然后上传了一个勒索程序，并触发了，在该师傅一番抢救后留下了一个样本，丢到微步上看了看之前好像还没人提交，猜测应该是某种方式内嵌的一个样本。然后找该师傅要了个被杀毒处理后剩下的东西看了看。   分析之前样本就被Windows Defender识别为 Neshta.A，但是换到火绒下又是 Neshta.C，有点摸不着头脑，同时网上相关资料也比">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nmap 使用">
-<meta property="og:url" content="https://equinox-shame.github.io/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:title" content="Neshta 样本分析">
+<meta property="og:url" content="https://equinox-shame.github.io/2023/11/30/Neshta%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="Nmap基本功能 基本功能  主机发现 端口扫描 应用程序与版本信息检测 操作系统检测  附加功能  规避FW&#x2F;IDS NSE脚本定制与应用  扫描方式 默认扫描 1nmap &lt;目标地址&gt; 全面扫描 1namp -A -T 4 -v &lt;目标地址&gt; 主机发现  端口扫描  其中-sF、-sN、-sX为隐蔽扫描，适合于Linux系统的目标机端口扫描 应用程序与版本信息侦测  操">
+<meta property="og:description" content="前言 最近群里一位师傅开远程桌面暴露3389端口时被人打了，然后上传了一个勒索程序，并触发了，在该师傅一番抢救后留下了一个样本，丢到微步上看了看之前好像还没人提交，猜测应该是某种方式内嵌的一个样本。然后找该师傅要了个被杀毒处理后剩下的东西看了看。   分析之前样本就被Windows Defender识别为 Neshta.A，但是换到火绒下又是 Neshta.C，有点摸不着头脑，同时网上相关资料也比">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/05/JbTwNQedI5qr9yz.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/05/x3K12wStDBJvzyH.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/06/1veiHl3RE8qcx5D.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/06/t4CMASnQD1jfzZc.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/06/uO8sEhaqz4eMRdP.png">
-<meta property="article:published_time" content="2023-11-06T01:45:28.782Z">
-<meta property="article:modified_time" content="2023-11-06T01:45:58.876Z">
+<meta property="og:image" content="https://s2.loli.net/2023/11/27/fqAeXjtH9osnGVB.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/26/RH4dBYtqAVcaQb1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/26/NKRyLOZtkwdrl8c.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/27/E36k8GiKS2flXHJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/27/Cpag3I7TGtvNsL8.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/njUuN9lL37bkPc1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/PcVFxOHd5JmaeUt.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/OWR6AcNxTfd1Xrz.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/7Ab6uItZjrLnzdg.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/WtxuE2Y7ypXN1Ao.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/gPKpSv3OdmY4FDu.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/v8m5wNiYWbpjnQI.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/tXDLRYFbn17WlUa.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/jchWoqJFTnpEmSt.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/p2hgDnw34ZfQ8Li.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/AEwmpabhQX4fze2.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/ELHrKBX1kxOMlJ8.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/30/PwyrJGA4kaeUoYO.png">
+<meta property="article:published_time" content="2023-11-30T13:55:43.293Z">
+<meta property="article:modified_time" content="2023-11-30T13:53:54.196Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/27/fqAeXjtH9osnGVB.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Nmap 使用 - Autumnal</title>
+  <title>Neshta 样本分析 - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -209,7 +221,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Nmap 使用"></span>
+            <span id="subtitle" data-typed-text="Neshta 样本分析"></span>
           
         </div>
 
@@ -220,8 +232,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-06 09:45" pubdate>
-          2023年11月6日 上午
+        <time datetime="2023-11-30 21:55" pubdate>
+          2023年11月30日 晚上
         </time>
       </span>
     
@@ -232,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          3k 字
         
       </span>
     
@@ -280,83 +292,113 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Nmap 使用</h1>
+            <h1 style="display: none">Neshta 样本分析</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Nmap基本功能">Nmap基本功能</h2>
-<h3 id="基本功能">基本功能</h3>
-<ul>
-<li>主机发现</li>
-<li>端口扫描</li>
-<li>应用程序与版本信息检测</li>
-<li>操作系统检测</li>
-</ul>
-<h3 id="附加功能">附加功能</h3>
-<ul>
-<li>规避FW/IDS</li>
-<li>NSE脚本定制与应用</li>
-</ul>
-<h2 id="扫描方式">扫描方式</h2>
-<h3 id="默认扫描">默认扫描</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">nmap &lt;目标地址&gt;<br></code></pre></td></tr></table></figure>
-<h3 id="全面扫描">全面扫描</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">namp -A -T 4 -v &lt;目标地址&gt;<br></code></pre></td></tr></table></figure>
-<h2 id="主机发现">主机发现</h2>
-<p><img src="https://s2.loli.net/2023/11/05/pw4Qeoi7VyJBDS5.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="端口扫描">端口扫描</h2>
-<p><img src="https://s2.loli.net/2023/11/05/JbTwNQedI5qr9yz.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>其中<code>-sF</code>、<code>-sN</code>、<code>-sX</code>为隐蔽扫描，适合于Linux系统的目标机端口扫描</p>
-<h2 id="应用程序与版本信息侦测">应用程序与版本信息侦测</h2>
-<p><img src="https://s2.loli.net/2023/11/05/x3K12wStDBJvzyH.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="操作系统侦测">操作系统侦测</h2>
-<h3 id="常用的网路协议栈指纹识别">常用的网路协议栈指纹识别</h3>
-<p><strong>TTL</strong>：Time To Live，数据包存活时间</p>
+                <h2 id="前言">前言</h2>
+<p>最近群里一位师傅开远程桌面暴露<code>3389端口</code>时被人打了，然后上传了一个勒索程序，并触发了，在该师傅一番抢救后留下了一个样本，丢到微步上看了看之前好像还没人提交，猜测应该是某种方式内嵌的一个样本。然后找该师傅要了个被杀毒处理后剩下的东西看了看。</p>
+<p><img src="https://s2.loli.net/2023/11/27/fqAeXjtH9osnGVB.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <blockquote>
-<p>常见操作系统TTL：</p>
-<p>Windows 9x/NT/2000 lntel	TTL=128<br>
-Digital Unix 4.0 Alpha	  TTL=60<br>
-Linux 2.2.x Intel		   TTL=64<br>
-Netware 4.11 Intel          TTL= 128<br>
-AIX 4.3.x IBM/RS6000        TTL= 60<br>
-Cisco 12.0 2514             TTL= 255<br>
-Solaris 8 lntel/Sparc       TTL= 64</p>
+<p>分析之前样本就被Windows Defender识别为 Neshta.A，但是换到火绒下又是 Neshta.C，有点摸不着头脑，同时网上相关资料也比较少，只能自己分析看看了</p>
 </blockquote>
-<p><strong>DF位</strong>：Don’t Fragment，禁止分片</p>
-<p><strong>Window Size</strong>：TCP 接收或是发送窗口的大小，决定了接收信息的机器在收到多少数据包后发送 ACK 包</p>
-<p><strong>ACK 序号</strong>：不同 OS 处理 ACK 序号不同，大多数 OS 会把回应的 ACK 包的序号设置为发送的包的初始需要，Windows 和一些打印机则会发送序号为初始序号加一的 ACK 包</p>
-<p><strong>对 FIN 包的响应</strong>：发送一个只有 FIN 标志位的 TCP 数据包给一个打开的端口，Linux等系统不响应;有些系统如Windows、Cisco、HP/UX等，发回一个RST</p>
-<p><strong>ISN（初始化序列号）</strong>：不同的 OS 在选择 TCP ISN 时采用不同的方法，一些 UNIX 系统采用传统的 64K 递增方法；较新的 Solaris、IRIX、FreeBSD、Digital Unix、Cray等系统采用随机增量的方法；Linux 2.0、OpenVMS、AIX 等系统采用真随机方法；Windows系统采用一种时间相关的模型；还有一些系统使用常数，如3Com集线器使用Ox803，Apple LaserWriter打印机使用OxC7001</p>
-<p><strong>主机使用的端口</strong>：一些 OS 会开放特殊的端口，如 Windows的137、139；一些网络设备，如入侵检测系统、防火墙等也开放自己特殊的端口</p>
-<h3 id="操作系统检测">操作系统检测</h3>
-<p><img src="https://s2.loli.net/2023/11/06/1veiHl3RE8qcx5D.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="规避防火墙">规避防火墙</h2>
-<h3 id="常用命令">常用命令</h3>
-<p><img src="https://s2.loli.net/2023/11/06/t4CMASnQD1jfzZc.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="T-使用">-T 使用</h3>
-<p>使用-T(0~5)可以启用时序选项，—般来说，数字越大，速度越快，精度越低</p>
-<p>-TO（偏执的)：非常慢的扫描，用于IDS逃避</p>
-<p>-T1 (鬼祟的)：缓慢的扫描，用于IDS逃避</p>
-<p>-T2 (文雅的)：降低速度以降低对带宽的消耗，此选项一般不常用</p>
-<p>-T3（普通的)：默认，根据目标的反应自动调整时间</p>
-<p>-T4 (野蛮的)：快速扫描，常用扫描方式，需要在很好的网络环境下使用</p>
-<p>-T5 (疯狂的)：极速扫描，以牺牲准确度来提升扫描速度</p>
-<h3 id="–spoof-mac">–spoof-mac</h3>
-<p>所用命令: <code>nmap --spoof-mac 0 &lt;目标IP&gt;</code>，其中参数 0 表示随机分配一个MA地址<br>
-也可以手动指定MAC地址，如:nmap --spoof-mac aa:bb:cc:dd:ee:ff &lt;目标IP&gt;</p>
-<h3 id="NSE脚本">NSE脚本</h3>
-<p><img src="https://s2.loli.net/2023/11/06/uO8sEhaqz4eMRdP.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="–script-brute">–script brute</h3>
-<p>提供暴力破解的方式，可以对数据库、SMB、SNMP等进行简单的密码的暴力破解</p>
-<h3 id="–script-vuln">–script vuln</h3>
-<p>检测是否存在常见漏洞</p>
-<h2 id="扫描结果保存与输出">扫描结果保存与输出</h2>
-<p>三种格式的输出</p>
-<p>normal:标准模式（选项-oN)</p>
-<p>xml文档:(选项-oX)</p>
-<p>grep文件（选项-oG)</p>
-<p>注: -oA选项可将扫描结果以标准格式、XML、Grep格式一次性全部保存</p>
+<h2 id="7z-程序分析">7z 程序分析</h2>
+<blockquote>
+<p>样本哈希：8acf5c0049c39a19d42c66c1769874726789160438cec6ceeeb877ce805529d3</p>
+</blockquote>
+<p>样本其本身是一个 7z 压缩的自解压程序，但是中间会释放一个可执行程序。根据这个特征又是MZP勒索了…但是本样本却是Neshta木马…</p>
+<p><img src="https://s2.loli.net/2023/11/26/RH4dBYtqAVcaQb1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>经过多次在虚拟机里测试，尝试运行此自解压程序，同时开启<code>Process Monitor</code>来监控对应程序操作，也没观察到对应释放的操作过程，这就有点奇怪了…</p>
+<p>但是输入错误的密码可以大致窥探到内压缩的程序：</p>
+<p><img src="https://s2.loli.net/2023/11/26/NKRyLOZtkwdrl8c.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>感觉上可能也就vbs以及bat程序有威胁？</p>
+<blockquote>
+<p>但是也不知道密码是个啥…</p>
+</blockquote>
+<p>无奈之举，只能硬看大几个兆的文件，来找不同了，比较遗憾的是盯了许久没有多大进度有点破防了，乖乖的从沙箱分析提取出的程序进行下载了…最抽象的是从沙箱下载下来的同名文件使用<code>Bindiff</code>来确定对应的差异，对应存在的不同点的函数只是简单的返回个数字…</p>
+<p><img src="https://s2.loli.net/2023/11/27/E36k8GiKS2flXHJ.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>就很奇怪？有点琢磨不透这个东西到底是怎么释放的文件，同时也找不到<code>svchost.com</code>这个玩意…</p>
+<p>再次下载沙箱的东西，准备分析一下本体<code>svchost.com</code>干了啥东西…</p>
+<p>对于<code>svchost.com</code>这个文件就出现的比较早了，最早提交分析是 2021年12月 出现的，那就是说明这个东西依然在利用</p>
+<blockquote>
+<p>对应哈希：cab9a40acca9666c85d6f1712e97622b7982a14622b017210bfa155431de75b5</p>
+</blockquote>
+<p><img src="https://s2.loli.net/2023/11/27/Cpag3I7TGtvNsL8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="svchost-com-程序分析"><a target="_blank" rel="noopener" href="http://svchost.com">svchost.com</a> 程序分析</h2>
+<p>这是一个<code>Delphi</code>写的东西，拿IDA分析一下，一些函数没办法识别出来，看对应的库函数有点难受。查了一下资料，有推荐使用<code>DEDE</code>来进行反编译逆向，这个工具可能有些年头了，又找了一下找到个<code>IDR</code>来进行<code>Delphi</code>的反编译</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/crypto2011/IDR">crypto2011/IDR: Interactive Delphi Reconstructor (github.com)</a></p>
+</blockquote>
+<p>用了用发现甚至不如IDA…只能显示汇编，于是在IDA里折腾了…</p>
+<p>首先要做的便是让IDA导入<code>Delphi</code>的一些库</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq"><span class="hljs-keyword">File</span> -&gt; <span class="hljs-keyword">Load</span> <span class="hljs-keyword">File</span> -&gt; FLIRT Signature <span class="hljs-keyword">File</span><br></code></pre></td></tr></table></figure>
+<p>之后我们加入对应的库</p>
+<img src="https://s2.loli.net/2023/11/30/njUuN9lL37bkPc1.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>之后重新加载一下就可以看到一部分的库函数，虽然还是比较难看，但聊胜于无</p>
+<p>对于<code>Delphi</code>所编写的程序，一般来说这块在分析时不用太关心，猜测为设置对应的异常处理</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">v4 = &amp;savedregs;<br>v3 = (LPDWORD)&amp;loc_408220;<br>ExceptionList = NtCurrentTeb()-&gt;NtTib.ExceptionList;<br>__writefsdword(<span class="hljs-number">0</span>, (<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span>)&amp;ExceptionList);<br></code></pre></td></tr></table></figure>
+<p>之后比较显眼的便是下面的几个函数：</p>
+<p><img src="https://s2.loli.net/2023/11/30/PcVFxOHd5JmaeUt.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="DecodeData">DecodeData</h3>
+<p><img src="https://s2.loli.net/2023/11/30/OWR6AcNxTfd1Xrz.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其调用了一个伪随机来进行异或解密数据，可以直接调试拿一下数据，之后便有了后面的注释信息</p>
+<h3 id="sub-404AE8">sub_404AE8</h3>
+<p>此函数用来进入判断是否为大文件进而释放的，其本质上是获取了一个启动路径信息，之后进入到内部的<code>sub_406FE4</code>进行下一轮的分支判断</p>
+<h3 id="sub-406FE4">sub_406FE4</h3>
+<p>此函数用来获取到对应文件的扩展名(如：.exe、.pdf)，之后进行比较判断当前执行的程序是否为exe，如果是则进入分支内部</p>
+<p><img src="https://s2.loli.net/2023/11/30/7Ab6uItZjrLnzdg.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="sub-407D9C">sub_407D9C</h3>
+<p>此函数大致判断了对应执行的文件是否为一个大文件(核心本体大小为40.5kb，如果大于此则为大文件)，即通过文件的大小来判断是否嵌入在其他程序上，如果是则将其进行释放，反之则将其感染(于<code>sub_4079A0</code>进行)</p>
+<h3 id="sub-4071D0">sub_4071D0</h3>
+<p>具体实现感染的部分，将自身PE进行嵌入</p>
+<p><img src="https://s2.loli.net/2023/11/30/WtxuE2Y7ypXN1Ao.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>比较有意思的是其似乎还会获取对应的<code>ico</code>图标来将自身修改后的程序进行一个伪装，之前测试的时候似乎出现了程序图标加载不出来的问题，或许是这块调试的时候突然被<code>Windows Defender</code>干掉了的原因？</p>
+<h3 id="sub-4079A0">sub_4079A0</h3>
+<p>这一部分主要便是感染了，会在内存中将<code>svchost.com</code>进行解密出来，并将其进行读入内存创建对应的注册表项目</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">HKEY_LOCAL_MACHINE<span class="hljs-symbol">\S</span>OFTWARE<span class="hljs-symbol">\C</span>lasses<span class="hljs-symbol">\e</span>xefile<span class="hljs-symbol">\s</span>hell<span class="hljs-symbol">\o</span>pen<span class="hljs-symbol">\c</span>ommand C:<span class="hljs-symbol">\\</span>Windows<span class="hljs-symbol">\\</span>svchost.com &quot;<span class="hljs-variable">%1&quot; %</span>*<br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/11/30/gPKpSv3OdmY4FDu.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="sub-40759C">sub_40759C</h3>
+<p><img src="https://s2.loli.net/2023/11/30/v8m5wNiYWbpjnQI.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这块便是在对应用户处创建一个<code>tmp5023.tmp</code>文件，随后创建一个互斥量来对逻辑盘信息进行遍历(<code>sub_406D40</code>)，而其选择感染的逻辑盘中也有选择：</p>
+<p><img src="https://s2.loli.net/2023/11/30/tXDLRYFbn17WlUa.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其会避开A、B盘以及CD-ROM驱动器</p>
+<p>之后进入到<code>WebForm::_16623</code>内部进行获取对应盘下的所有文件了，通过拼接盘号以及<code>*.*</code>来进行获取内容</p>
+<p><img src="https://s2.loli.net/2023/11/30/jchWoqJFTnpEmSt.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="sub-405634">sub_405634</h3>
+<p><img src="https://s2.loli.net/2023/11/30/p2hgDnw34ZfQ8Li.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其会获取对应路径文件，同时递归往下进行查找对应的内容</p>
+<p><img src="https://s2.loli.net/2023/11/30/AEwmpabhQX4fze2.png" srcset="/img/loading.gif" lazyload alt="image-20231130145336041"></p>
+<h3 id="sub-406E0C">sub_406E0C</h3>
+<p>此函数下会创建一个tmp5023.tmp</p>
+<p><img src="https://s2.loli.net/2023/11/30/ELHrKBX1kxOMlJ8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>而在<code>sub_406E94</code>对其进行读取对应的 8 个字节</p>
+<p><img src="https://s2.loli.net/2023/11/30/PwyrJGA4kaeUoYO.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>有点搞不懂读入的对应文件内容是具体什么含义，感觉可能是时间戳之类的东西</p>
+<h2 id="样本技术信息">样本技术信息</h2>
+<p>此样本本质上通过植入自身文件来进行感染，属于感染型样本。整体感觉上此程序更像是一个恶意程序启动器，以及判断文件是否被感染</p>
+<p>其会释放以下文件：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">xxx.exe  	 <span class="hljs-comment"># 原先被感染的干净程序</span><br>tmp5023.tmp  <span class="hljs-comment"># 暂时还不知道干什么用 </span><br>svchost.com  <span class="hljs-comment"># 检测是否为PE文件以及进行感染和释放</span><br>%<span class="hljs-keyword">User</span> <span class="hljs-title">Temp</span>%\<span class="hljs-number">3582</span>-<span class="hljs-number">490</span>\    <span class="hljs-comment"># 创建此文件夹</span><br></code></pre></td></tr></table></figure>
+<p>之后会创建以下进程：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">%<span class="hljs-keyword">User</span> <span class="hljs-title">Temp</span>%\<span class="hljs-number">3582</span>-<span class="hljs-number">490</span>\xxx.exe      <span class="hljs-comment"># xxx.exe为恶意程序进程</span><br></code></pre></td></tr></table></figure>
+<p>创建互斥体：<code>MutexPolesskayaGlush</code>用来确保一次只会运行一个副本</p>
+<p>主要感染对象：exe文件</p>
+<p>避免感染含有以下字符串的对象：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs haml">PROGRA~1<br><span class="hljs-tag">%<span class="hljs-selector-tag">Windows</span></span>%<br><span class="hljs-tag">%<span class="hljs-selector-tag">Temp</span></span>%<br></code></pre></td></tr></table></figure>
+<p>避免感染下列文件大小：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">小于 <span class="hljs-number">41</span>,<span class="hljs-number">472</span> 字节或大于 <span class="hljs-number">10</span>,<span class="hljs-number">000,000</span> 字节的文件<br></code></pre></td></tr></table></figure>
+<p>避免感染以下驱动器的文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">A</span>:<span class="hljs-string">\</span><br><span class="hljs-string">B:\</span><br><span class="hljs-string">CD-ROM</span><br></code></pre></td></tr></table></figure>
+<h2 id="解决方案">解决方案</h2>
+<p>在<code>HKEY_MACHINE\SOFTWARE\Classes\exefile\shell\open\</code>注册表项中的默认选项进行以下修改：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">From: (Default) = %Windows%\svchost.com <span class="hljs-string">&quot;%1&quot;</span> %*<span class="hljs-string">&quot;</span><br><span class="hljs-string">To：(Default) = &quot;</span>%1<span class="hljs-string">&quot; %*&quot;</span><br></code></pre></td></tr></table></figure>
+<p>删除对应的恶意软件、以及临时文件目录下的</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode">s<span class="hljs-attr">vchost.com</span><br><span class="hljs-attr">tmp5023</span>.tmp<br></code></pre></td></tr></table></figure>
+<p>同时安装对应的杀毒软件进行全盘扫描，将对应恶意程序进行清除</p>
+<h2 id="参考">参考</h2>
+<p><a target="_blank" rel="noopener" href="https://www.trendmicro.com.cn/vinfo/cn/threat-encyclopedia/malware/pe_neshta.a">PE_NESHTA.A - 威胁百科全书 - Trend Micro CN</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/PE_NESHTA.A-O/?_ga=2.8686908.864178295.1701322896-1254639615.1700750343">PE_NESHTA.A-O - Threat Encyclopedia (trendmicro.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.pcrisk.com/removal-guides/16249-neshta-malware">Neshta Malware - Malware removal instructions (updated) (pcrisk.com)</a></p>
 
                 
               </div>
@@ -375,7 +417,7 @@ Solaris 8 lntel/Sparc       TTL= 64</p>
     
       <span class="category-chain">
         
-  <a href="/categories/Web/" class="category-chain-item">Web</a>
+  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
   
   
 
@@ -395,8 +437,8 @@ Solaris 8 lntel/Sparc       TTL= 64</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Nmap 使用</div>
-      <div>https://equinox-shame.github.io/2023/11/06/Nmap 使用/</div>
+      <div>Neshta 样本分析</div>
+      <div>https://equinox-shame.github.io/2023/11/30/Neshta样本分析/</div>
     </div>
     <div class="license-meta">
       
@@ -408,7 +450,7 @@ Solaris 8 lntel/Sparc       TTL= 64</p>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月6日</div>
+          <div>2023年11月30日</div>
         </div>
       
       
@@ -440,18 +482,12 @@ Solaris 8 lntel/Sparc       TTL= 64</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/30/Neshta%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" title="Neshta 样本分析">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Neshta 样本分析</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/03/WeChat%20%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%8C%85/" title="WeChat 小程序解包">
-                        <span class="hidden-mobile">WeChat 小程序解包</span>
+                      <a href="/2023/11/06/Nmap%20%E4%BD%BF%E7%94%A8/" title="Nmap 使用">
+                        <span class="hidden-mobile">Nmap 使用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
