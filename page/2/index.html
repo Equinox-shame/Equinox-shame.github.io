@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/08/31/Python%20%E6%89%93%E5%8C%85%E5%90%8E%E7%9A%84Dump/" target="_self">
+          Python 打包后 DUMP 的那些事
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/08/31/Python%20%E6%89%93%E5%8C%85%E5%90%8E%E7%9A%84Dump/" target="_self">
+        <div>
+          前言 随着CTF的发展，Python逆向题目在出题人手下越来越不走常规路，常常搞一些魔改或是加密，对于打包完后的结果我们并不一定每次都可以成功的对其进行解包。我们常见的 exe 或是 elf 的 DUMP 目的是提取对应的字节码，而Python打包后的东西与前两者不太一样，对此我们考虑使用 Python 内置的虚拟机来进行完成我们的DUMP。 要想完成相关代码的提取我们首先需要知道要提取什么，在此
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-08-31 21:23" pubdate>
+              2023-08-31
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/08/30/WMCTF2023/" target="_self">
           WMCTF2023 - 部分RE
         </a>
@@ -680,60 +734,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2023-07-01 15:36" pubdate>
               2023-07-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/06/11/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%85%E5%AD%98%E5%BB%B6%E8%BF%9F%E5%88%86%E9%85%8D/" target="_self">
-          Windows内核实验 ——— 内存延迟分配
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/11/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%85%E5%AD%98%E5%BB%B6%E8%BF%9F%E5%88%86%E9%85%8D/" target="_self">
-        <div>
-          前言 在Windows中对虚拟内存分配存在有一个机制，当我们分配的虚拟内存没有使用之前是不会映射物理内存的，此次实验中我们将构造一个新的节表，将一个变量写到此段表开辟的页头部，通过赋值来观察其是否映射到了物理内存中 实验内容 与之前相同，我们写一个简单的中断提取后构造一个节表，在节表中定义一个变量，将变量赋值给我们的全局变量，通过打印全局变量来观察Windows的内存是否映射到物理内存中 1234
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-06-11 15:29" pubdate>
-              2023-06-11
             </time>
           </div>
         
