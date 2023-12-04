@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/12/04/kytrgNPfnA1BLSD.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/04/OG9ytdQPR3eCiYA.png">
 <meta property="article:published_time" content="2023-12-04T03:06:21.820Z">
-<meta property="article:modified_time" content="2023-12-04T03:06:54.626Z">
+<meta property="article:modified_time" content="2023-12-04T04:24:41.950Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2023/12/03/nXPLmagfxFzdMuo.png">
@@ -308,7 +308,7 @@
 <p><img src="https://s2.loli.net/2023/12/03/aPW6ydHorAJNTzi.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>之后通过<code>sub_2090</code>来进行一定处理，同时观察<code>sub_1F9C</code>查询对应<code>sub_1E6E</code>中的<code>__modti3</code>可以大致看出来实现了一个快速幂的操作</p>
 <p><img src="https://s2.loli.net/2023/12/03/vUYls8FyxKJ5zoQ.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p>前面的<code>for</code>循环将</p>
+<p>前面的<code>for</code>循环将随机数每8个组合成一个<code>QWORD</code>数据</p>
 <p><img src="https://s2.loli.net/2023/12/03/rV3kUnqJTBfRQ8v.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>同时对于此我们可以联想到通信间的数据加密，同时RSA在实现过程中也存在有<code>(m * n) % p</code>的操作刚好与<code>__modti3</code>相同，我们可以识别出来对应采用的是一个RSA的公钥加密体系，其开头传送的便为32位的一个公钥信息</p>
 <p>对此我们已经获取到了32位的数据：<code>5fcef0e867349fc68f40763a6b0bde0101000100000000000000000000000000</code></p>
