@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/07/01/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E6%95%B0%E6%8D%AETLB/" target="_self">
+          Windows内核实验 ——— 数据TLB
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/01/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E6%95%B0%E6%8D%AETLB/" target="_self">
+        <div>
+          前言 回到我们之前提到的三级内存映射关系，对于我们之前查询地址的操作可以通过判断TLB中是否有对应的缓存来进行读取，当存在有对应数据时我们便从TLB进行直接获取，若不存在则是通过访问cr3进而访问对应的PDE、PTE信息，内存访问的大致流程为：   TLB直接记录了虚拟内存到物理内存的访问关系，对于TLB我们无法直接通过汇编语句来进行获取  实验过程 在此次实验中需要注意：  代码顺序执行，即不产
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-07-01 15:36" pubdate>
+              2023-07-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/06/11/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%86%85%E5%AD%98%E5%BB%B6%E8%BF%9F%E5%88%86%E9%85%8D/" target="_self">
           Windows内核实验 ——— 内存延迟分配
         </a>
@@ -671,60 +725,6 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
         <div>
           程序分析 初步分析 我们拿到程序后先进行查壳，可以发现是无壳32位程序，直接使用IDA打开  TLS 在程序跑起来之前会执行该TLS内的东西，我们可以看到有一个反调试，同时对一串字符串进行RC4解密 123456789unsigned int sub_401050()&#123;  size_t v0; // eax  if ( !IsDebuggerPresent() )    aY[5] =
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-05-06 22:56" pubdate>
-              2023-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/" target="_self">
-          d3Recover 复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/" target="_self">
-        <div>
-          前言 属于是赛后看WP才发现自己忘记将数据恢复在ASCII范围内，导致一直出来的都是奇怪东西…  呜呜，送上门的分都没拿到  解题过程 题目给了两个程序，都是Python打包后的，其中V2版本没有去除掉符号表，V1去除掉了，通过观察V2相关东西，同样的可以找到一个Base64后的字符串，并可以直接进行解密  解密可以拿到But maybe I can help you recover the so
         </div>
       </a>
 
