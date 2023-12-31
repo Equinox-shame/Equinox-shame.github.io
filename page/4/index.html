@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
+          d3sky 复现
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/06/d3sky%20%E5%A4%8D%E7%8E%B0/" target="_self">
+        <div>
+          程序分析 初步分析 我们拿到程序后先进行查壳，可以发现是无壳32位程序，直接使用IDA打开  TLS 在程序跑起来之前会执行该TLS内的东西，我们可以看到有一个反调试，同时对一串字符串进行RC4解密 123456789unsigned int sub_401050()&#123;  size_t v0; // eax  if ( !IsDebuggerPresent() )    aY[5] =
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-05-06 22:56" pubdate>
+              2023-05-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/05/06/d3Recover%20%E5%A4%8D%E7%8E%B0/" target="_self">
           d3Recover 复现
         </a>
@@ -680,60 +734,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2023-03-01 21:54" pubdate>
               2023-03-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/02/27/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20Dual%20Personality%20%E5%A4%8D%E7%8E%B0/" target="_self">
-          西湖论剑 Dual Personality 复现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/27/%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20Dual%20Personality%20%E5%A4%8D%E7%8E%B0/" target="_self">
-        <div>
-          前置知识 本题主要涉及到了Heaven’s Gate的一种技术，在32位WoW64进程中执行64位代码的过程，以及直接调用64位下win32的API函数 其主要过程便是修改CS的值。将其切换到64位模式，然后使用jmp far来进行远跳转到达64位汇编代码处  CS(代码段选择器)在32位下值为 0x23 ，64位为 0x33 通常情况下一个 0x33 以及 jmp far 是我们判断的主要依据
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-02-27 21:43" pubdate>
-              2023-02-27
             </time>
           </div>
         

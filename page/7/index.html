@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2022/07/29/DASCTF%202022.07%20E4sy_Mix%20%E5%A4%8D%E7%8E%B0/" target="_self">
+          DASCTF 2022.07 E4sy_Mix 复现
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/29/DASCTF%202022.07%20E4sy_Mix%20%E5%A4%8D%E7%8E%B0/" target="_self">
+        <div>
+          前言 这个题说难似乎也不是很难，但就是十分的麻烦，将虚拟机VM与XTEA魔改进行了结合，同时写对应脚本也比较费时间…总感觉这个题出出来是用来拖Re的解题时间的(可能对于一些佬来说不是) 加密 我们将程序拖入到IDA中可以清晰地看到其加密逻辑，程序分别进行了三个阶段，将我们的输入进行处理 ——&gt; XTEA加密 ——&gt; VM  因此对于逆向而言我们需要的是先去解密对应的VM虚拟机部分，我们
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-07-29 17:26" pubdate>
+              2022-07-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2022/07/22/UNCTF%20-%202019%20EasyVm/" target="_self">
           UNCTF - 2019 EasyVm
         </a>
@@ -695,60 +749,6 @@
       <span class="category-chain">
         
   <a href="/categories/School-Learning/" class="category-chain-item">School Learning</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/07/01/UPX%20%E8%84%B1%E5%A3%B3%E7%BB%83%E4%B9%A0/" target="_self">
-          upx 手动脱壳
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/01/UPX%20%E8%84%B1%E5%A3%B3%E7%BB%83%E4%B9%A0/" target="_self">
-        <div>
-          前言 最近遇到好多UPX类型的题目，大多都是直接使用upx -d进行脱壳的，没有真正去理解如何完成脱壳的一个过程。同时也存在一些题目直接使用upx -d进行脱壳后会出现无法运行的情况，特此写下此文章以供后者学习。 准备部分 我们先准备好upx.exe文件，同时编写一个简单的程序，利用upx.exe对其进行加壳，此处采用一个简单的Hello world来进行练习，代码如下： 123456#inclu
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-07-01 23:43" pubdate>
-              2022-07-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
   
   
 
