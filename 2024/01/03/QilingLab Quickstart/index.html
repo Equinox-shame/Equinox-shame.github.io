@@ -1,0 +1,937 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 此Lab用于快速熟悉Qiling框架的主要功能，其拥有两个版本x86-64以及aarch64两个版本，获取可以访问下面的页面  Shielder - QilingLab – Release  其包含11个挑战： 1234567891011Challenge 1: Store 1337 at pointer 0x1337.Challenge 2: Make the &amp;#x27;uname&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QilingLab Quickstart">
+<meta property="og:url" content="https://equinox-shame.github.io/2024/01/03/QilingLab%20Quickstart/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="前言 此Lab用于快速熟悉Qiling框架的主要功能，其拥有两个版本x86-64以及aarch64两个版本，获取可以访问下面的页面  Shielder - QilingLab – Release  其包含11个挑战： 1234567891011Challenge 1: Store 1337 at pointer 0x1337.Challenge 2: Make the &amp;#x27;uname&amp;#x">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/01/02/8pe9STkGdJRoabA.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/02/JSt8soib6kDlnxq.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/02/EMW3XFeCyHGDUjs.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/02/cYmr3KSAE8onLTV.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/02/P63E7enVJ2CQXGB.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/NGDbVPp2JFaWO8m.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/AEL7oxYmNcC4a1h.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/8eqsmbYW7Sx9cMu.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/S8ipg2ZbU51cXIa.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/5lz2BGeUxJdvcAT.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/XUgS1jF43WcMsLB.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/03/i2O3G9CVJqPzBQf.png">
+<meta property="article:published_time" content="2024-01-03T13:45:30.473Z">
+<meta property="article:modified_time" content="2024-01-03T13:45:11.106Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2024/01/02/8pe9STkGdJRoabA.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>QilingLab Quickstart - Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="QilingLab Quickstart"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-03 21:45" pubdate>
+          2024年1月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          21k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">QilingLab Quickstart</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言">前言</h2>
+<p>此Lab用于快速熟悉<code>Qiling</code>框架的主要功能，其拥有两个版本<code>x86-64</code>以及<code>aarch64</code>两个版本，获取可以访问下面的页面</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.shielder.com/blog/2021/07/qilinglab-release/">Shielder - QilingLab – Release</a></p>
+</blockquote>
+<p>其包含11个挑战：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">Challenge 1: Store 1337 at pointer 0x1337.<br>Challenge 2: Make the &#x27;uname&#x27; syscall return the correct values.<br>Challenge 3: Make &#x27;/dev/urandom&#x27; and &#x27;getrandom&#x27; &quot;collide&quot;.<br>Challenge 4: Enter inside the &quot;forbidden&quot; loop.<br>Challenge 5: Guess every call to rand().<br>Challenge 6: Avoid the infinite loop.<br>Challenge 7: Don&#x27;t waste time waiting for &#x27;sleep&#x27;.<br>Challenge 8: Unpack the struct and write at the target address.<br>Challenge 9: Fix some string operation to make the iMpOsSiBlE come true.<br>Challenge 10: Fake the &#x27;cmdline&#x27; line file to return the right content.<br>Challenge 11: Bypass CPUID/MIDR_EL1 checks.<br></code></pre></td></tr></table></figure>
+<p>使用IDA打开看到的也是没有去除对应的符号信息，也没有混淆，可以比较直观的看到对应的检测：</p>
+<p><img src="https://s2.loli.net/2024/01/02/8pe9STkGdJRoabA.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="基本用法">基本用法</h2>
+<p>根据互联网上的资料以及项目中对应的说明文档，我们需要使用到<code>rootfs</code>中的东西，其为Qiling框架测试所需要的文件</p>
+<p>我们使用以下命令进行clone Qiling项目的框架(使用<code>--recursiv</code>来循环拉取子项目)：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">git clone https://github.com/qilingframework/qiling.git --recursiv<br></code></pre></td></tr></table></figure>
+<p>之后我们在后续中使用到的脚本模板如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> qiling <span class="hljs-keyword">import</span> *<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">challenge1</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    <span class="hljs-keyword">pass</span><br><br><span class="hljs-keyword">if</span> __name__  == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    path = [<span class="hljs-string">&#x27;qilinglab-x86_64&#x27;</span>] <span class="hljs-comment"># 我们的目标</span><br>    rootfs = <span class="hljs-string">&quot;./qiling/examples/rootfs/x8664_linux&quot;</span> <span class="hljs-comment"># 在你clone下来的仓库里</span><br>    ql = Qiling(path, rootfs)<br>    challenge1(ql) <span class="hljs-comment"># 在ql.run()之前，做好我们的hook工作</span><br>    ql.run()<br></code></pre></td></tr></table></figure>
+<h2 id="Challenge1：修改内存">Challenge1：修改内存</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> __fastcall <span class="hljs-title">challenge1</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">if</span> ( MEMORY[<span class="hljs-number">0x1337</span>] == <span class="hljs-number">1337</span> )<br>    *a1 = <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看出来需要我们在地址为0x1337处存放一个值为1337，对此我们需要使用以下代码来进行映射一块内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">ql.mem.<span class="hljs-built_in">map</span>(<span class="hljs-number">0x1000</span>, <span class="hljs-number">0x1000</span>, info=<span class="hljs-string">&#x27;[challenge1]&#x27;</span>)<br><span class="hljs-comment"># ql.mem.map(addr: int, size: int, perms: int = UC_PROT_ALL, info: Optional[str] = None) -&gt; None</span><br><span class="hljs-comment">#addr：映射基地址</span><br><span class="hljs-comment">#size：以字节为单位的映射大小</span><br><span class="hljs-comment">#info：为映射范围设置字符串标签，以便于识别</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>因为 Qiling 框架底层上还是使用的 Unicorn 那一套，所以还是需要按 4k 进行对齐</p>
+<p>内存操作相关参考：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/memory/#mapping-memory-pages">Memory - Qiling Framework Documentation</a></p>
+</blockquote>
+<p>我们需要写入内存的时候使用以下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ql.mem.write(address, data)<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，当我们写入数据的时候需要将对应的数据进行打包，在这个挑战中我们需要将其打包为16位数据无符号，即两字节：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ql.pack16()  <span class="hljs-comment"># unsigned short 类型数据</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>当我们需要使用有符号的时候在对应数字后面加一个s即可，如<code>ql.pack16s</code>则是有符号的short类型数据</p>
+<p>打包与解包参考：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/struct/">Pack and Unpack - Qiling Framework Documentation</a></p>
+</blockquote>
+<p>对应解题脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge1</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.mem.<span class="hljs-built_in">map</span>(<span class="hljs-number">0x1000</span>,<span class="hljs-number">0x1000</span>,info=<span class="hljs-string">&quot;[Challenge 1]&quot;</span>)<br>    ql.mem.write(<span class="hljs-number">0x1337</span>, ql.pack16(<span class="hljs-number">1337</span>))<br></code></pre></td></tr></table></figure>
+<p>可以看到已经成功解决(此时运行于 Windows 环境下)</p>
+<p><img src="https://s2.loli.net/2024/01/02/JSt8soib6kDlnxq.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>可以在main函数的运行代码处加上下面的代码来开启于关闭对应调试模式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ql.verbose = <span class="hljs-number">0</span> <span class="hljs-comment"># 0: no debug info, 1: debug info</span><br></code></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="Challenge2：修改系统调用">Challenge2：修改系统调用</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> __int64 __fastcall <span class="hljs-title">challenge2</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> v2; <span class="hljs-comment">// [rsp+10h] [rbp-1D0h]</span><br>  <span class="hljs-keyword">int</span> v3; <span class="hljs-comment">// [rsp+14h] [rbp-1CCh]</span><br>  <span class="hljs-keyword">int</span> v4; <span class="hljs-comment">// [rsp+18h] [rbp-1C8h]</span><br>  <span class="hljs-keyword">int</span> v5; <span class="hljs-comment">// [rsp+1Ch] [rbp-1C4h]</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">utsname</span> <span class="hljs-title">name</span>;</span> <span class="hljs-comment">// [rsp+20h] [rbp-1C0h] BYREF</span><br>  <span class="hljs-keyword">char</span> s[<span class="hljs-number">10</span>]; <span class="hljs-comment">// [rsp+1A6h] [rbp-3Ah] BYREF</span><br>  <span class="hljs-keyword">char</span> v8[<span class="hljs-number">24</span>]; <span class="hljs-comment">// [rsp+1B0h] [rbp-30h] BYREF</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v9; <span class="hljs-comment">// [rsp+1C8h] [rbp-18h]</span><br><br>  v9 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">uname</span>(&amp;name) )<br>  &#123;<br>    <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;uname&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    <span class="hljs-built_in">strcpy</span>(s, <span class="hljs-string">&quot;QilingOS&quot;</span>);<br>    s[<span class="hljs-number">9</span>] = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">strcpy</span>(v8, <span class="hljs-string">&quot;ChallengeStart&quot;</span>);<br>    v8[<span class="hljs-number">15</span>] = <span class="hljs-number">0</span>;<br>    v2 = <span class="hljs-number">0</span>;<br>    v3 = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> ( v4 &lt; <span class="hljs-built_in">strlen</span>(s) )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( name.sysname[v4] == s[v4] )<br>        ++v2;<br>      ++v4;<br>    &#125;<br>    <span class="hljs-keyword">while</span> ( v5 &lt; <span class="hljs-built_in">strlen</span>(v8) )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( name.version[v5] == v8[v5] )<br>        ++v3;<br>      ++v5;<br>    &#125;<br>    <span class="hljs-keyword">if</span> ( v2 == <span class="hljs-built_in">strlen</span>(s) &amp;&amp; v3 == <span class="hljs-built_in">strlen</span>(v8) &amp;&amp; v2 &gt; <span class="hljs-number">5</span> )<br>      *a1 = <span class="hljs-number">1</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> __readfsqword(<span class="hljs-number">0x28</span>u) ^ v9;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>系统通过<code>uname</code>来进行获取系统信息，通过对比系统信息来进行校验。我们可以在<code>uname</code>所获取的信息为一个<code>utsname</code>的结构体，我们可以在IDA中进行看到对应的结构信息</p>
+<p><img src="https://s2.loli.net/2024/01/02/EMW3XFeCyHGDUjs.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对应的我们可以在系统调用返回的时候进行Hook，打到我们想要的功能</p>
+<blockquote>
+<p>劫持系统调用参考文档：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/hijack/">Hijack - Qiling Framework Documentation</a></p>
+<p>HOOK操作参考文档：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/hook/">Hook - Qiling Framework Documentation</a></p>
+<p>寄存器相关的操作参考文档：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/register/">Register - Qiling Framework Documentation</a></p>
+</blockquote>
+<p>在上述的代码中我们进行简单的调试可以看到对应<code>uname</code>获取信息后存储在<code>rdi</code>寄存器中，那么我们的目标便是修改<code>uname</code>执行完毕后的<code>rdi</code>所指向的地址空间</p>
+<p><img src="https://s2.loli.net/2024/01/02/cYmr3KSAE8onLTV.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>那么对应的Hook代码如下(运行于Linux下)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> qiling <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.const <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.os.const <span class="hljs-keyword">import</span> *<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_rdi</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    rdi = ql.arch.regs.rdi  <span class="hljs-comment"># 获取寄存器的值</span><br>    ql.mem.write(rdi, <span class="hljs-string">b&#x27;QilingOS\x00&#x27;</span>) <span class="hljs-comment"># 写入数据</span><br>    ql.mem.write(rdi + <span class="hljs-number">65</span> * <span class="hljs-number">3</span>, <span class="hljs-string">b&#x27;ChallengeStart\x00&#x27;</span>) <span class="hljs-comment"># 根据uname的结构体，写入数据</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge2</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    <span class="hljs-comment"># hook系统调用返回</span><br>    <span class="hljs-comment"># QL_INTERCEPT.EXIT  在退出系统调用后</span><br>    ql.os.set_syscall(<span class="hljs-string">&#x27;uname&#x27;</span>, hook_rdi, QL_INTERCEPT.EXIT)<br></code></pre></td></tr></table></figure>
+<p>之后我们可以尝试运行对应脚本，观察输出(后续运行均于 Window WSL 下)</p>
+<p><img src="https://s2.loli.net/2024/01/02/P63E7enVJ2CQXGB.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Challenge3：劫持文件系统-系统调用">Challenge3：劫持文件系统&amp;系统调用</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> __int64 __fastcall <span class="hljs-title">challenge3</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v2; <span class="hljs-comment">// [rsp+10h] [rbp-60h]</span><br>  <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// [rsp+14h] [rbp-5Ch]</span><br>  <span class="hljs-keyword">int</span> fd; <span class="hljs-comment">// [rsp+18h] [rbp-58h]</span><br>  <span class="hljs-keyword">char</span> v5; <span class="hljs-comment">// [rsp+1Fh] [rbp-51h] BYREF</span><br>  <span class="hljs-keyword">char</span> buf[<span class="hljs-number">32</span>]; <span class="hljs-comment">// [rsp+20h] [rbp-50h] BYREF</span><br>  <span class="hljs-keyword">char</span> v7[<span class="hljs-number">40</span>]; <span class="hljs-comment">// [rsp+40h] [rbp-30h] BYREF</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v8; <span class="hljs-comment">// [rsp+68h] [rbp-8h]</span><br><br>  v8 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  fd = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;/dev/urandom&quot;</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-built_in">read</span>(fd, buf, <span class="hljs-number">0x20</span>uLL);<br>  <span class="hljs-built_in">read</span>(fd, &amp;v5, <span class="hljs-number">1uLL</span>);<br>  <span class="hljs-built_in">close</span>(fd);<br>  <span class="hljs-built_in">getrandom</span>(v7, <span class="hljs-number">32LL</span>, <span class="hljs-number">1LL</span>);<br>  v2 = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">31</span>; ++i )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( buf[i] == v7[i] &amp;&amp; buf[i] != v5 )<br>      ++v2;<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( v2 == <span class="hljs-number">32</span> )<br>    *a1 = <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> __readfsqword(<span class="hljs-number">0x28</span>u) ^ v8;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到对应程序从<code>/dev/urandom</code>获取了随机数，之后再通过<code>getrandom()</code>来获取随机数，之后要求满足上述对应的关系，同时有一个随机数和其他的都不一样</p>
+<p>Qiling提供了QlFsMappedObject去自定义文件系统，例：read，write等</p>
+<blockquote>
+<p>同样可以参考系统劫持的文档：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/hijack/">Hijack - Qiling Framework Documentation</a></p>
+</blockquote>
+<p>那么对于这道题的核心便是我们自己手动实现一个read，并且Hook函数getrandom</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> qiling <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.const <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.os.const <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.os.mapper <span class="hljs-keyword">import</span> QlFsMappedObject<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">my_uradom</span>(<span class="hljs-params">QlFsMappedObject</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read</span>(<span class="hljs-params">self, size</span>):</span><br>        <span class="hljs-keyword">if</span> size == <span class="hljs-number">1</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x50&#x27;</span> <span class="hljs-comment"># 设置为 v5 的随机值</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x00&#x27;</span> * size  <span class="hljs-comment"># 设置为 buf 的随机值  </span><br>        <br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">close</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_getrandom</span>(<span class="hljs-params">ql:Qiling, buf, size, flags</span>):</span><br>    ql.mem.write(buf, <span class="hljs-string">b&#x27;\x00&#x27;</span> * size) <span class="hljs-comment"># 设置为 v7 的随机值</span><br>    ql.os.set_syscall_return(<span class="hljs-number">0</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge3</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.os.set_syscall(<span class="hljs-string">&#x27;getrandom&#x27;</span>, hook_getrandom, QL_INTERCEPT.CALL) <span class="hljs-comment"># hook getrandom</span><br>    ql.add_fs_mapper(<span class="hljs-string">&#x27;/dev/urandom&#x27;</span>, my_uradom())<br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2024/01/03/NGDbVPp2JFaWO8m.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Challenge4：Hook地址">Challenge4：Hook地址</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">__int64 <span class="hljs-title">challenge4</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0LL</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在IDA的反编译中我们无法看到对应的伪代码，但是当我们切换到汇编界面的时候可以看到对应的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs asm">.text:0000560C8A000E1D public challenge4<br>.text:0000560C8A000E1D challenge4 proc near                    ; CODE XREF: start+18F↓p<br>.text:0000560C8A000E1D<br>.text:0000560C8A000E1D var_18= qword ptr -18h<br>.text:0000560C8A000E1D var_8= dword ptr -8<br>.text:0000560C8A000E1D var_4= dword ptr -4<br>.text:0000560C8A000E1D<br>.text:0000560C8A000E1D ; __unwind &#123; // 560C8A000000<br>.text:0000560C8A000E1D push    rbp<br>.text:0000560C8A000E1E mov     rbp, rsp<br>.text:0000560C8A000E21 mov     [rbp+var_18], rdi<br>.text:0000560C8A000E25 mov     [rbp+var_8], 0<br>.text:0000560C8A000E2C mov     [rbp+var_4], 0<br>.text:0000560C8A000E33 jmp     short loc_560C8A000E40<br>.text:0000560C8A000E33<br>.text:0000560C8A000E35 ; ---------------------------------------------------------------------------<br>.text:0000560C8A000E35<br>.text:0000560C8A000E35 loc_560C8A000E35:                       ; CODE XREF: challenge4+29↓j<br>.text:0000560C8A000E35 mov     rax, [rbp+var_18]<br>.text:0000560C8A000E39 mov     byte ptr [rax], 1<br>.text:0000560C8A000E3C add     [rbp+var_4], 1<br>.text:0000560C8A000E3C<br>.text:0000560C8A000E40<br>.text:0000560C8A000E40 loc_560C8A000E40:                       ; CODE XREF: challenge4+16↑j<br>.text:0000560C8A000E40 mov     eax, [rbp+var_8]<br>.text:0000560C8A000E43 cmp     [rbp+var_4], eax<br>.text:0000560C8A000E46 jl      short loc_560C8A000E35<br>.text:0000560C8A000E46<br>.text:0000560C8A000E48 nop<br>.text:0000560C8A000E49 pop     rbp<br>.text:0000560C8A000E4A retn<br>.text:0000560C8A000E4A ; &#125; // starts at 560C8A000E1D<br>.text:0000560C8A000E4A<br>.text:0000560C8A000E4A challenge4 endp<br></code></pre></td></tr></table></figure>
+<p>可以明显的看到程序会给<code>eax</code>赋值为 0，之后在<code>jl</code>处不执行对应的跳转，对应的我们在加载偏移为<code>0xE43</code>处将<code>eax</code>的值进行Hook，修改为 1，之后让其进入循环，将我们的<code>Check</code>赋值为 1</p>
+<p>对应的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_eax</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.arch.regs.eax = <span class="hljs-number">1</span> <span class="hljs-comment"># 设置 eax 为1</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge4</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path) <span class="hljs-comment"># 获取libc的基址</span><br>    hook_addr = libc_base + <span class="hljs-number">0xE43</span><br>    ql.hook_address(hook_eax, hook_addr) <span class="hljs-comment"># hook_address(回调函数, hook 地址)</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>在使用<code>ql.path</code>时候有个天坑，当使用此方法时需要注意你初始化Qiling的文件路径，下面为正确示范：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">path = [<span class="hljs-string">&quot;qilinglab-x86_64&quot;</span>]<br>rootfs = <span class="hljs-string">&quot;./qiling/examples/rootfs/x8664_linux&quot;</span><br>ql = Qiling(path, rootfs)<br></code></pre></td></tr></table></figure>
+<p>下面为错误示范：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">path = [<span class="hljs-string">&quot;./qilinglab-x86_64&quot;</span>]<br>rootfs = <span class="hljs-string">&quot;./qiling/examples/rootfs/x8664_linux&quot;</span><br>ql = Qiling(path, rootfs)<br></code></pre></td></tr></table></figure>
+</blockquote>
+<p>运行脚本后结果如下：</p>
+<p><img src="https://s2.loli.net/2024/01/03/AEL7oxYmNcC4a1h.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Challenge5：Hook外部函数">Challenge5：Hook外部函数</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> __int64 __fastcall <span class="hljs-title">challenge5</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> v1; <span class="hljs-comment">// eax</span><br>  <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// [rsp+18h] [rbp-48h]</span><br>  <span class="hljs-keyword">int</span> j; <span class="hljs-comment">// [rsp+1Ch] [rbp-44h]</span><br>  <span class="hljs-keyword">int</span> v5[<span class="hljs-number">14</span>]; <span class="hljs-comment">// [rsp+20h] [rbp-40h]</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v6; <span class="hljs-comment">// [rsp+58h] [rbp-8h]</span><br><br>  v6 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  v1 = <span class="hljs-built_in">time</span>(<span class="hljs-number">0LL</span>);<br>  <span class="hljs-built_in">srand</span>(v1);<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">4</span>; ++i )<br>  &#123;<br>    v5[i] = <span class="hljs-number">0</span>;<br>    v5[i + <span class="hljs-number">8</span>] = <span class="hljs-built_in">rand</span>();<br>  &#125;<br>  <span class="hljs-keyword">for</span> ( j = <span class="hljs-number">0</span>; j &lt;= <span class="hljs-number">4</span>; ++j )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( v5[j] != v5[j + <span class="hljs-number">8</span>] )<br>    &#123;<br>      *a1 = <span class="hljs-number">0</span>;<br>      <span class="hljs-keyword">return</span> __readfsqword(<span class="hljs-number">0x28</span>u) ^ v6;<br>    &#125;<br>  &#125;<br>  *a1 = <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> __readfsqword(<span class="hljs-number">0x28</span>u) ^ v6;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以明显的看出来需要我们将<code>rand()</code>进行Hook处理，将对应的返回值修改为 0，对此我们可以使用下面的代码来进行Hook处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ql.set_api(Hook函数名, 回调函数, QL_INTERCEPT.CALL)<br></code></pre></td></tr></table></figure>
+<p>对此我们的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_rand</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.reg.rax = <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">challenge5</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.set_api(<span class="hljs-string">&#x27;rand&#x27;</span>, hook_rand)<br></code></pre></td></tr></table></figure>
+<p>运行后因为Challenge6为死循环，会卡住对应的输出。所以没有相关的回显</p>
+<h2 id="Challenge6：突破死循环">Challenge6：突破死循环</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">challenge6</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>    ;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们切换至汇编可以看到其逻辑：</p>
+<p><img src="https://s2.loli.net/2024/01/03/8eqsmbYW7Sx9cMu.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们需要做的便是在其循环处修改<code>al</code>的值，让其跳出循环，解题脚本与<a href="##Challenge4%EF%BC%9AHook%E5%9C%B0%E5%9D%80">Challenge4</a>相似：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_while_true</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.reg.rax = <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">challenge6</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    ql.hook_address(hook_while_true, libc_base + <span class="hljs-number">0xF16</span>)<br></code></pre></td></tr></table></figure>
+<p>此题也没有回显，因为在Challenge7中存在有一个Sleep函数，会拖很久的时间</p>
+<p><img src="https://s2.loli.net/2024/01/03/S8ipg2ZbU51cXIa.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Challenge7：解决睡觉难题">Challenge7：解决睡觉难题</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> __fastcall <span class="hljs-title">challenge7</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  *a1 = <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">sleep</span>(<span class="hljs-number">0xFFFFFFFF</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到其有一个超长的 Sleep 函数，对于这个我们有几种修改方式：</p>
+<ol>
+<li>
+<p>修改<code>sleep</code>的参数值，减少睡眠时间</p>
+</li>
+<li>
+<p>通过 Hook 自己实现 API sleep</p>
+</li>
+<li>
+<p>修改系统调用<code>nanosleep()</code>直接返回，因为<code>sleep()</code>底层调用的<code>nanosleep()</code></p>
+<blockquote>
+<p># man 3 sleep</p>
+<p>NOTES On Linux, sleep() is implemented via nanosleep(2).  See the nanosleep(2)</p>
+<p>man page for a discussion of the clock used.</p>
+</blockquote>
+</li>
+</ol>
+<p>对于方法一，我们可以看到是传入了<code>edi</code>作为对应<code>sleep</code>的参数，那么我们修改参数其实就是要修改<code>edi</code>的值，脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_edi</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.arch.regs.rdi = <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge7</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    <span class="hljs-comment"># Hook 地址</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0xF3C</span><br>    ql.hook_address(hook_edi, hook_addr)<br>    <br>    <span class="hljs-comment"># Hook 函数执行前</span><br>    ql.set_api(<span class="hljs-string">&#x27;sleep&#x27;</span>, hook_edi, QL_INTERCEPT.ENTER)<br></code></pre></td></tr></table></figure>
+<p>对于方法二，我们将对应的<code>sleep</code>函数进行掉包成我们自己的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_sleep</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    <span class="hljs-keyword">return</span>  <span class="hljs-comment">#直接返回</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge7</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.set_api(<span class="hljs-string">&#x27;sleep&#x27;</span>, hook_sleep)<br></code></pre></td></tr></table></figure>
+<p>对于方法三 Hook 系统调用即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_nanosleep</span>(<span class="hljs-params">ql: Qiling, *args, **kwargs</span>):</span><br>    <span class="hljs-keyword">return</span>  <span class="hljs-comment">#直接返回</span><br>    <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge7</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>	ql.os.set_syscall(<span class="hljs-string">&#x27;nanosleep&#x27;</span>, hook_nanosleep)<br></code></pre></td></tr></table></figure>
+<h2 id="Challenge-8-解析结构体，往正确地址写入值">Challenge 8: 解析结构体，往正确地址写入值</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> __fastcall <span class="hljs-title">challenge8</span><span class="hljs-params">(__int64 a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  _DWORD *v1; <span class="hljs-comment">// [rsp+18h] [rbp-8h]</span><br><br>  v1 = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">0x18</span>uLL);<br>  *v1 = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">0x1E</span>uLL);<br>  v1[<span class="hljs-number">2</span>] = <span class="hljs-number">1337</span>;<br>  v1[<span class="hljs-number">3</span>] = <span class="hljs-number">1039980266</span>;<br>  <span class="hljs-built_in">strcpy</span>(*v1, <span class="hljs-string">&quot;Random data&quot;</span>);<br>  *(v1 + <span class="hljs-number">2</span>) = a1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>大概可以看出来是一个结构体数据，我们在IDA中创建一个结构体，将<code>v1</code>的类型设置为我们所创建的结构体数据</p>
+<p><img src="https://s2.loli.net/2024/01/03/5lz2BGeUxJdvcAT.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>之后修改<code>v1</code>的类型，可以看到整个代码好看多了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> __fastcall <span class="hljs-title">challenge8</span><span class="hljs-params">(__int64 a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  struc_1 *v1; <span class="hljs-comment">// [rsp+18h] [rbp-8h]</span><br><br>  v1 = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">24uLL</span>);<br>  v1-&gt;some_string = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">0x1E</span>uLL);<br>  v1-&gt;magic = <span class="hljs-number">0x3DFCD6EA00000539</span>LL;<br>  <span class="hljs-built_in">strcpy</span>(v1-&gt;some_string, <span class="hljs-string">&quot;Random data&quot;</span>);<br>  v1-&gt;check_addr = a1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>对应需要用到结构体的解包相关知识以及字节顺序、大小、对齐方式三种</p>
+<blockquote>
+<p>结构体解包文档参考：<a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/struct/">Pack and Unpack - Qiling Framework Documentation</a></p>
+<p>字节顺序、大小、对齐方式参考文档：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/struct.html#module-struct">struct — Interpret bytes as packed binary data — Python 3.12.1 documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/struct.html#format-characters">struct — Interpret bytes as packed binary data — Python 3.12.1 documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/struct.html#byte-order-size-and-alignment">struct — Interpret bytes as packed binary data — Python 3.12.1 documentation</a></p>
+</blockquote>
+<p>我们简单的调试一下可以看到对应的<code>rax</code>可以看到其保存了结构体的首地址信息，那么我们需要将<code>rax+0x10</code>处的地址里的数据进行写入为 1</p>
+<p>同时我们可以开启调试模式来进行观察所找到的数据是否正确(即开启<code>ql.verbose = 1</code>)，对应脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_mem</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    rax = ql.arch.regs.rax <span class="hljs-comment"># 结构体首地址</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] rax: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(rax)&#125;</span>\u001b[0m&quot;</span>)<br><br>    data = ql.mem.read(rax, <span class="hljs-number">24</span>) <span class="hljs-comment"># 读取结构体数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] data: <span class="hljs-subst">&#123;data.<span class="hljs-built_in">hex</span>()&#125;</span>\u001b[0m&quot;</span>)<br><br>    str_addr, magic_num, check_addr = struct.unpack(<span class="hljs-string">&quot;QQQ&quot;</span>, data) <span class="hljs-comment"># 解析结构体数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] str_addr: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(str_addr)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.mem.read(str_addr, <span class="hljs-number">0x10</span>) <span class="hljs-comment"># 读取字符串数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] str: <span class="hljs-subst">&#123;ql.mem.string(str_addr)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] magic_num: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(magic_num)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] check_addr: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(check_addr)&#125;</span>\u001b[0m&quot;</span>)<br>    <br>    ql.mem.write(check_addr, <span class="hljs-string">b&#x27;\x01&#x27;</span>) <span class="hljs-comment"># 将check_addr的值设置为1</span><br>    check = ql.mem.read(check_addr, <span class="hljs-number">8</span>) <span class="hljs-comment"># 读取check_addr的值</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] check: <span class="hljs-subst">&#123;check.<span class="hljs-built_in">hex</span>()&#125;</span>\u001b[0m&quot;</span>)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge8</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0x00FB5</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] hook_addr: <span class="hljs-subst">&#123;hook_addr&#125;</span>\u001b[0m&quot;</span>)<br>    ql.hook_address(hook_mem, hook_addr) <br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>输出时以<code>\u001b[31m</code>开头，<code>\u001b[0m</code>结尾会将中间内容转换为红色，更多颜色可以参考 ANSI 码，此处不多描述</p>
+</blockquote>
+<p>之后我们可以看到以下界面：</p>
+<p><img src="https://s2.loli.net/2024/01/03/XUgS1jF43WcMsLB.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>总感觉 Qiling 自带的 Debug 有点没用？</p>
+<p>总的来说开启了 Debug 后还是得自己插桩写入 log，同时 log 也没点颜色…得自己设置一个颜色才好看的多，还方便找</p>
+</blockquote>
+<p>对于上面的内容其实还一种解题方式，可以在内存中搜索对应数据信息，因为题目给的<code>magic</code>数字以及对应标志字符串<code>Random data</code>可以很快的帮助我们在内存里面找到对应的信息，脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">search_mem_to_find_struct</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    MAGIC = ql.pack64(<span class="hljs-number">0x3DFCD6EA00000539</span>)<br>    candidate_addrs = ql.mem.search(MAGIC)<br><br>    <span class="hljs-keyword">for</span> addr <span class="hljs-keyword">in</span> candidate_addrs:<br>        <span class="hljs-comment"># 有可能有多个地址，所以通过其他特征进一步确认</span><br>        stru_addr = addr - <span class="hljs-number">8</span><br>        stru = ql.mem.read(stru_addr, <span class="hljs-number">24</span>)<br>        string_addr, _, check_addr = struct.unpack(<span class="hljs-string">&#x27;QQQ&#x27;</span>, stru)<br>        <span class="hljs-keyword">if</span> ql.mem.string(string_addr) == <span class="hljs-string">&#x27;Random data&#x27;</span>:<br>            ql.mem.write(check_addr, <span class="hljs-string">b&#x27;\x01&#x27;</span>)<br>            <span class="hljs-keyword">break</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge8</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    base = ql.mem.get_lib_base(ql.path)<br>    ql.hook_address(search_mem_to_find_struct, base + <span class="hljs-number">0xFB5</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="Challenge-9-修改字符串函数">Challenge 9: 修改字符串函数</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> __fastcall <span class="hljs-title">challenge9</span><span class="hljs-params">(<span class="hljs-keyword">bool</span> *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">char</span> *i; <span class="hljs-comment">// [rsp+18h] [rbp-58h]</span><br>  <span class="hljs-keyword">char</span> dest[<span class="hljs-number">32</span>]; <span class="hljs-comment">// [rsp+20h] [rbp-50h] BYREF</span><br>  <span class="hljs-keyword">char</span> src[<span class="hljs-number">40</span>]; <span class="hljs-comment">// [rsp+40h] [rbp-30h] BYREF</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v4; <span class="hljs-comment">// [rsp+68h] [rbp-8h]</span><br><br>  v4 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  <span class="hljs-built_in">strcpy</span>(src, <span class="hljs-string">&quot;aBcdeFghiJKlMnopqRstuVWxYz&quot;</span>);<br>  src[<span class="hljs-number">27</span>] = unk_562F9A0016C0;<br>  <span class="hljs-built_in">strcpy</span>(dest, src);<br>  <span class="hljs-keyword">for</span> ( i = dest; *i; ++i )<br>    *i = <span class="hljs-built_in">tolower</span>(*i);<br>  *a1 = <span class="hljs-built_in">strcmp</span>(src, dest) == <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以直观的看到对应的我们需要将一个转小写的函数<code>tolower()</code>进行 Hook 将其内容不做处理通过下面的<code>strcmp()</code>函数，当然我们也可以 Hook <code>strcmp()</code>这个函数，让其直接返回 0</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_tolower</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-comment"># 不执行tolower函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge9</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.os.set_api(<span class="hljs-string">&#x27;tolower&#x27;</span>, hook_tolower, QL_INTERCEPT.CALL)<br></code></pre></td></tr></table></figure>
+<h2 id="Challenge10-劫持文件系统，返回指定命令行">Challenge10: 劫持文件系统，返回指定命令行</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> __int64 __fastcall <span class="hljs-title">challenge10</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// [rsp+10h] [rbp-60h]</span><br>  <span class="hljs-keyword">int</span> fd; <span class="hljs-comment">// [rsp+14h] [rbp-5Ch]</span><br>  <span class="hljs-keyword">ssize_t</span> v4; <span class="hljs-comment">// [rsp+18h] [rbp-58h]</span><br>  <span class="hljs-keyword">char</span> buf[<span class="hljs-number">72</span>]; <span class="hljs-comment">// [rsp+20h] [rbp-50h] BYREF</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v6; <span class="hljs-comment">// [rsp+68h] [rbp-8h]</span><br><br>  v6 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  fd = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;/proc/self/cmdline&quot;</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-keyword">if</span> ( fd != <span class="hljs-number">-1</span> )<br>  &#123;<br>    v4 = <span class="hljs-built_in">read</span>(fd, buf, <span class="hljs-number">0x3F</span>uLL);<br>    <span class="hljs-keyword">if</span> ( v4 &gt; <span class="hljs-number">0</span> )<br>    &#123;<br>      <span class="hljs-built_in">close</span>(fd);<br>      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; v4 &gt; i; ++i )<br>      &#123;<br>        <span class="hljs-keyword">if</span> ( !buf[i] )<br>          buf[i] = <span class="hljs-number">32</span>;<br>      &#125;<br>      buf[v4] = <span class="hljs-number">0</span>;<br>      <span class="hljs-keyword">if</span> ( !<span class="hljs-built_in">strcmp</span>(buf, <span class="hljs-string">&quot;qilinglab&quot;</span>) )<br>        *a1 = <span class="hljs-number">1</span>;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> __readfsqword(<span class="hljs-number">0x28</span>u) ^ v6;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个感觉上又回到了<a href="##Challenge3">Challenge3</a>，同样是要求我们 Hook 文件系统，那么还是一样的我们可以自己实现一个<code>cmdline</code>的读取与关闭</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">My_cmdline</span>(<span class="hljs-params">QlFsMappedObject</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read</span>(<span class="hljs-params">self, size</span>):</span><br>        <span class="hljs-keyword">if</span> size == <span class="hljs-number">63</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;qilinglab&#x27;</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x00&#x27;</span> * size    <br>    <br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">close</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge10</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.add_fs_mapper(<span class="hljs-string">&#x27;/proc/self/cmdline&#x27;</span>, My_cmdline)<br></code></pre></td></tr></table></figure>
+<p>还有其他的省事的办法，比如可以将我们自己的文件通过<code>ql.add_fs_mapper(源文本, Hook的自定义文本)</code>来进行替换</p>
+<h2 id="Challenge-11-指令Hook">Challenge 11: 指令Hook</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> __fastcall <span class="hljs-title">challenge11</span><span class="hljs-params">(_BYTE *a1)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v6; <span class="hljs-comment">// [rsp+1Ch] [rbp-34h]</span><br>  <span class="hljs-keyword">int</span> v7; <span class="hljs-comment">// [rsp+24h] [rbp-2Ch]</span><br>  <span class="hljs-keyword">char</span> s[<span class="hljs-number">4</span>]; <span class="hljs-comment">// [rsp+2Bh] [rbp-25h] BYREF</span><br>  <span class="hljs-keyword">char</span> v9[<span class="hljs-number">4</span>]; <span class="hljs-comment">// [rsp+2Fh] [rbp-21h] BYREF</span><br>  <span class="hljs-keyword">char</span> v10[<span class="hljs-number">4</span>]; <span class="hljs-comment">// [rsp+33h] [rbp-1Dh] BYREF</span><br>  <span class="hljs-keyword">unsigned</span> __int64 v11; <span class="hljs-comment">// [rsp+38h] [rbp-18h]</span><br><br>  v11 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  _RAX = <span class="hljs-number">0x40000000</span>LL;<br>  __asm &#123; cpuid &#125;  <span class="hljs-comment">// 获取CPU信息</span><br>  v6 = _RCX;<br>  v7 = _RDX;<br>  <span class="hljs-keyword">if</span> ( __PAIR64__(_RBX, _RCX) == <span class="hljs-number">0x696C6951614C676E</span>LL &amp;&amp; _RDX == <span class="hljs-number">538976354</span> )<br>    *a1 = <span class="hljs-number">1</span>;<br>  <span class="hljs-built_in">sprintf</span>(s, <span class="hljs-string">&quot;%c%c%c%c&quot;</span>, _RBX, (_RBX &gt;&gt; <span class="hljs-number">8</span>), (_RBX &gt;&gt; <span class="hljs-number">16</span>), (_RBX &gt;&gt; <span class="hljs-number">24</span>));<br>  <span class="hljs-built_in">sprintf</span>(v9, <span class="hljs-string">&quot;%c%c%c%c&quot;</span>, v6, (v6 &gt;&gt; <span class="hljs-number">8</span>), (v6 &gt;&gt; <span class="hljs-number">16</span>), (v6 &gt;&gt; <span class="hljs-number">24</span>));<br>  <span class="hljs-built_in">sprintf</span>(v10, <span class="hljs-string">&quot;%c%c%c%c&quot;</span>, v7, (v7 &gt;&gt; <span class="hljs-number">8</span>), (v7 &gt;&gt; <span class="hljs-number">16</span>), (v7 &gt;&gt; <span class="hljs-number">24</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过观察汇编我们可以看到对应的相当是实现对寄存器的修改，那么相当于是我们需要对<code>cpuid</code>这个指令进行 Hook 处理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs asm">.text:0000562F9A001175 C7 45 CC 00 00 00 00          mov     [rbp+var_34], 0<br>.text:0000562F9A00117C C7 45 D0 00 00 00 00          mov     [rbp+var_30], 0<br>.text:0000562F9A001183 C7 45 D4 00 00 00 00          mov     [rbp+var_2C], 0<br>.text:0000562F9A00118A B8 00 00 00 40                mov     eax, 40000000h<br>.text:0000562F9A00118F 0F A2                         cpuid<br>.text:0000562F9A001191 89 D0                         mov     eax, edx<br>.text:0000562F9A001193 89 DE                         mov     esi, ebx<br>.text:0000562F9A001195 89 75 D0                      mov     [rbp+var_30], esi<br>.text:0000562F9A001198 89 4D CC                      mov     [rbp+var_34], ecx<br>.text:0000562F9A00119B 89 45 D4                      mov     [rbp+var_2C], eax<br>.text:0000562F9A00119E 81 7D D0 51 69 6C 69          cmp     [rbp+var_30], 696C6951h<br>.text:0000562F9A0011A5 75 19                         jnz     short loc_562F9A0011C0<br>.text:0000562F9A0011A5<br>.text:0000562F9A0011A7 81 7D CC 6E 67 4C 61          cmp     [rbp+var_34], 614C676Eh<br>.text:0000562F9A0011AE 75 10                         jnz     short loc_562F9A0011C0<br>.text:0000562F9A0011AE<br>.text:0000562F9A0011B0 81 7D D4 62 20 20 20          cmp     [rbp+var_2C], 20202062h<br>.text:0000562F9A0011B7 75 07                         jnz     short loc_562F9A0011C0<br>.text:0000562F9A0011B7<br>.text:0000562F9A0011B9 48 8B 45 B8                   mov     rax, [rbp+var_48]<br>.text:0000562F9A0011BD C6 00 01                      mov     byte ptr [rax], 1<br>.text:0000562F9A0011BD<br>.text:0000562F9A0011C0 loc_562F9A0011C0:                       ; CODE XREF: challenge11+4C↑j<br>.text:0000562F9A0011C0 8B 45 D0                      mov     eax, [rbp+var_30]<br>.text:0000562F9A0011C3 C1 F8 18                      sar     eax, 18h<br>.text:0000562F9A0011C6 89 C7                         mov     edi, eax<br>.text:0000562F9A0011C8 8B 45 D0                      mov     eax, [rbp+var_30]<br>.text:0000562F9A0011CB C1 F8 10                      sar     eax, 10h<br>.text:0000562F9A0011CE 89 C6                         mov     esi, eax<br>.text:0000562F9A0011D0 8B 45 D0                      mov     eax, [rbp+var_30]<br>.text:0000562F9A0011D3 C1 F8 08                      sar     eax, 8<br>.text:0000562F9A0011D6 89 C1                         mov     ecx, eax<br>.text:0000562F9A0011D8 8B 55 D0                      mov     edx, [rbp+var_30]<br>.text:0000562F9A0011DB 48 8D 45 DB                   lea     rax, [rbp+s]<br>.text:0000562F9A0011DF 41 89 F9                      mov     r9d, edi<br>.text:0000562F9A0011E2 41 89 F0                      mov     r8d, esi<br>.text:0000562F9A0011E5 48 8D 35 F2 04 00 00          lea     rsi, format                     ; &quot;%c%c%c%c&quot;<br>.text:0000562F9A0011EC 48 89 C7                      mov     rdi, rax                        ; s<br>.text:0000562F9A0011EF B8 00 00 00 00                mov     eax, 0<br>.text:0000562F9A0011F4 E8 37 F8 FF FF                call    _sprintf<br></code></pre></td></tr></table></figure>
+<p>按照之前修改寄存器的方式进行绕过，则我们可以写出如下脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_cpuid</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    ql.arch.regs.ebx = <span class="hljs-number">0x696C6951</span><br>    ql.arch.regs.ecx = <span class="hljs-number">0x614C676E</span><br>    ql.arch.regs.edx = <span class="hljs-number">0x20202062</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge11</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0x1191</span><br>    ql.hook_address(hook_cpuid, hook_addr)<br></code></pre></td></tr></table></figure>
+<p>但是实际上我们还可以对<code>cpuid</code>处指令进行 Hook，对应实现代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_cpuid</span>(<span class="hljs-params">ql: Qiling, address, size</span>):</span><br>    <span class="hljs-keyword">if</span> ql.mem.read(address, size) == <span class="hljs-string">b&#x27;\x0F\xA2&#x27;</span>: <span class="hljs-comment"># 对应的 cpuid 指令字节码</span><br>        ql.arch.regs.ebx = <span class="hljs-number">0x696C6951</span><br>        ql.arch.regs.ecx = <span class="hljs-number">0x614C676E</span><br>        ql.arch.regs.edx = <span class="hljs-number">0x20202062</span><br>        ql.arch.regs.rip += <span class="hljs-number">2</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge11</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.hook_code(hook_cpuid)<br></code></pre></td></tr></table></figure>
+<p>运行后我们可以看到以下内容：</p>
+<p><img src="https://s2.loli.net/2024/01/03/i2O3G9CVJqPzBQf.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>至此我们的全部挑战已经完成，对应的完整脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> qiling <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.const <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.os.const <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> qiling.os.mapper <span class="hljs-keyword">import</span> QlFsMappedObject<br><span class="hljs-keyword">import</span> struct<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge1</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.mem.<span class="hljs-built_in">map</span>(<span class="hljs-number">0x1000</span>,<span class="hljs-number">0x1000</span>,info=<span class="hljs-string">&quot;[Challenge 1]&quot;</span>)<br>    ql.mem.write(<span class="hljs-number">0x1337</span>, ql.pack16(<span class="hljs-number">1337</span>))<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_rdi</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    rdi = ql.arch.regs.rdi  <span class="hljs-comment"># 获取寄存器的值</span><br>    ql.mem.write(rdi, <span class="hljs-string">b&#x27;QilingOS\x00&#x27;</span>) <span class="hljs-comment"># 写入数据</span><br>    ql.mem.write(rdi + <span class="hljs-number">65</span> * <span class="hljs-number">3</span>, <span class="hljs-string">b&#x27;ChallengeStart\x00&#x27;</span>) <span class="hljs-comment"># 根据uname的结构体，写入数据</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge2</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    <span class="hljs-comment"># hook系统调用返回</span><br>    <span class="hljs-comment"># QL_INTERCEPT.EXIT  在退出系统调用后</span><br>    ql.os.set_syscall(<span class="hljs-string">&#x27;uname&#x27;</span>, hook_rdi, QL_INTERCEPT.EXIT)<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">My_uradom</span>(<span class="hljs-params">QlFsMappedObject</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read</span>(<span class="hljs-params">self, size</span>):</span><br>        <span class="hljs-keyword">if</span> size == <span class="hljs-number">1</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x50&#x27;</span> <span class="hljs-comment"># 设置为 v5 的随机值</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x00&#x27;</span> * size  <span class="hljs-comment"># 设置为 buf 的随机值  </span><br>        <br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">close</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_getrandom</span>(<span class="hljs-params">ql:Qiling, buf, size, flags</span>):</span><br>    ql.mem.write(buf, <span class="hljs-string">b&#x27;\x00&#x27;</span> * size) <span class="hljs-comment"># 设置为 v7 的随机值</span><br>    ql.os.set_syscall_return(<span class="hljs-number">0</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge3</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.os.set_syscall(<span class="hljs-string">&#x27;getrandom&#x27;</span>, hook_getrandom, QL_INTERCEPT.CALL) <span class="hljs-comment"># hook getrandom</span><br>    ql.add_fs_mapper(<span class="hljs-string">&#x27;/dev/urandom&#x27;</span>, My_uradom())<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_eax</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.arch.regs.eax = <span class="hljs-number">1</span> <span class="hljs-comment"># 设置 eax 为1</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge4</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path) <span class="hljs-comment"># 获取libc的基址</span><br>    ql.log.info(<span class="hljs-string">f&quot;ql_path: <span class="hljs-subst">&#123;ql.path&#125;</span>&quot;</span>)<br>    ql.log.info(<span class="hljs-string">f&quot;libc_base: <span class="hljs-subst">&#123;libc_base&#125;</span>&quot;</span>)<br>    hook_addr =  libc_base + <span class="hljs-number">0xE43</span><br>    ql.hook_address(hook_eax, hook_addr) <br>           <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_rand</span>(<span class="hljs-params">ql:Qiling, *args</span>):</span><br>    ql.arch.regs.rax = <span class="hljs-number">0</span> <span class="hljs-comment"># 设置 rax 为 0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge5</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.os.set_api(<span class="hljs-string">&#x27;rand&#x27;</span>, hook_rand, QL_INTERCEPT.CALL)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_while_true</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.arch.regs.rax = <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">challenge6</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    ql.hook_address(hook_while_true, libc_base + <span class="hljs-number">0xF16</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_sleep</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    ql.os.set_syscall_return(<span class="hljs-number">0</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_edi</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    ql.arch.regs.rdi = <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge7</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0xF3C</span><br>    ql.hook_address(hook_edi, hook_addr)<br>    <span class="hljs-comment"># ql.os.set_syscall(&#x27;nanosleep&#x27;, hook_sleep, QL_INTERCEPT.CALL)</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_mem</span>(<span class="hljs-params">ql:Qiling</span>):</span><br>    rax = ql.arch.regs.rax <span class="hljs-comment"># 结构体首地址</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] rax: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(rax)&#125;</span>\u001b[0m&quot;</span>)<br><br>    data = ql.mem.read(rax, <span class="hljs-number">24</span>) <span class="hljs-comment"># 读取结构体数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] data: <span class="hljs-subst">&#123;data.<span class="hljs-built_in">hex</span>()&#125;</span>\u001b[0m&quot;</span>)<br><br>    str_addr, magic_num, check_addr = struct.unpack(<span class="hljs-string">&quot;QQQ&quot;</span>, data) <span class="hljs-comment"># 解析结构体数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] str_addr: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(str_addr)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.mem.read(str_addr, <span class="hljs-number">0x10</span>) <span class="hljs-comment"># 读取字符串数据</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] str: <span class="hljs-subst">&#123;ql.mem.string(str_addr)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] magic_num: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(magic_num)&#125;</span>\u001b[0m&quot;</span>)<br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] check_addr: <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(check_addr)&#125;</span>\u001b[0m&quot;</span>)<br><br>    ql.mem.write(check_addr, <span class="hljs-string">b&#x27;\x01&#x27;</span>) <span class="hljs-comment"># 将check_addr的值设置为1</span><br>    check = ql.mem.read(check_addr, <span class="hljs-number">8</span>) <span class="hljs-comment"># 读取check_addr的值</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] check: <span class="hljs-subst">&#123;check.<span class="hljs-built_in">hex</span>()&#125;</span>\u001b[0m&quot;</span>)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge8</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0x00FB5</span><br>    ql.log.info(<span class="hljs-string">f&quot;\u001b[31m[+] hook_addr: <span class="hljs-subst">&#123;hook_addr&#125;</span>\u001b[0m&quot;</span>)<br>    ql.hook_address(hook_mem, hook_addr) <br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_tolower</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-comment"># 不执行tolower函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge9</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.os.set_api(<span class="hljs-string">&#x27;tolower&#x27;</span>, hook_tolower, QL_INTERCEPT.CALL)<br><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">My_cmdline</span>(<span class="hljs-params">QlFsMappedObject</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read</span>(<span class="hljs-params">self, size</span>):</span><br>        <span class="hljs-keyword">if</span> size == <span class="hljs-number">63</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;qilinglab&#x27;</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">b&#x27;\x00&#x27;</span> * size    <br>    <br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">close</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge10</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    ql.add_fs_mapper(<span class="hljs-string">&#x27;/proc/self/cmdline&#x27;</span>, My_cmdline)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hook_cpuid</span>(<span class="hljs-params">ql: Qiling, *args</span>):</span><br>    ql.arch.regs.ebx = <span class="hljs-number">0x696C6951</span><br>    ql.arch.regs.ecx = <span class="hljs-number">0x614C676E</span><br>    ql.arch.regs.edx = <span class="hljs-number">0x20202062</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Challenge11</span>(<span class="hljs-params">ql: Qiling</span>):</span><br>    libc_base = ql.mem.get_lib_base(ql.path)<br>    hook_addr = libc_base + <span class="hljs-number">0x1191</span><br>    ql.hook_address(hook_cpuid, hook_addr)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-comment"># Windows</span><br>    <span class="hljs-comment"># path = [&quot;qilinglab-x86_64&quot;]</span><br>    <span class="hljs-comment"># rootfs = &quot;.\\qiling\\examples\\rootfs\\x8664_linux&quot;</span><br><br>    <span class="hljs-comment"># Linux</span><br>    path = [<span class="hljs-string">&quot;qilinglab-x86_64&quot;</span>]<br>    rootfs = <span class="hljs-string">&quot;./qiling/examples/rootfs/x8664_linux&quot;</span><br>    ql = Qiling(path, rootfs)<br><br>    Challenge1(ql)<br>    Challenge2(ql)<br>    Challenge3(ql)<br>    Challenge4(ql)<br>    Challenge5(ql)<br>    challenge6(ql)<br>    Challenge7(ql)<br>    Challenge8(ql)<br>    Challenge9(ql)<br>    Challenge10(ql)<br>    Challenge11(ql)<br><br>    ql.verbose = <span class="hljs-number">0</span> <span class="hljs-comment"># 0: no debug info, 1: debug info</span><br>    ql.run()<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>写的比较丑陋，大家看看就行</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>总的来说<code>Qiling Lab</code>相当于是带着学习入门使用的一个过程，带着我们学习了内存的修改、地址的Hook、文件系统的劫持、系统函数，外部函数的Hook修改。基本上把<code>Qiling</code>框架所常用的都用到了。</p>
+<p>在此学习过程中更多的时候还是需要参考官方的手册文档来进行，通过多练来达到熟悉的作用。</p>
+<blockquote>
+<p>菜 就多练<br>
+输不起 就别玩<br>
+以前是以前<br>
+现在是现在<br>
+你要是一直拿以前当做现在<br>
+哥们儿 你怎么不拿你刚出生的时候对比啊</p>
+<p>​									——广君</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Lab/" class="category-chain-item">Lab</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>QilingLab Quickstart</div>
+      <div>https://equinox-shame.github.io/2024/01/03/QilingLab Quickstart/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/31/%E5%9C%A8%E8%BF%B7%E8%8C%AB%E4%B8%AD%E5%89%8D%E8%A1%8C/" title="在摇摆中拟合出人生曲线 —— 致我的2023">
+                        <span class="hidden-mobile">在摇摆中拟合出人生曲线 —— 致我的2023</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
