@@ -230,6 +230,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2023/06/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%9B%B6%E5%9C%B0%E5%9D%80%E8%AF%BB%E5%86%99/" target="_self">
+          Windows内核实验 ——— 零地址读写
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/05/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E9%9B%B6%E5%9C%B0%E5%9D%80%E8%AF%BB%E5%86%99/" target="_self">
+        <div>
+          前言 我们都知道在C语言中0地址是无法进行读写的，会造成读写异常。本质上来说是因为0地址是一个不存在的物理页面，但是我们可以尝试进行对其修改，将其PTE进行修改，进而我们可以对其进行读写操作 实验过程 我们可以先通过!pte 0来测试零地址是不可读写的  可以观察到下面的not valid，证明其不可读写的特性。但是我们之前提到了对PTE修改的计算公式，我们可以利用该计算方式来修改零地址处的PTE
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-05 00:29" pubdate>
+              2023-06-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2023/06/04/Windows%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20PAE%E5%88%86%E9%A1%B5/" target="_self">
           Windows内核实验 ——— PAE分页
         </a>
@@ -680,60 +734,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2023-04-05 23:23" pubdate>
               2023-04-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Windows-Kernel/" class="category-chain-item">Windows Kernel</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/03/28/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%A4%9A%E6%A0%B8%E5%A4%8D%E6%9D%82%E6%80%A7/" target="_self">
-          Windows 内核实验 ——— 多核复杂性
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/28/Windows%20%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%20%E2%80%94%20%E5%A4%9A%E6%A0%B8%E5%A4%8D%E6%9D%82%E6%80%A7/" target="_self">
-        <div>
-          前言 在上一次中断提权实验中，我们采用的是单核，但是我们日常中使用的都是多核，那么同样的在多核中存在有一些特性，本次实验将关注于多核下的一些特性，同样因笔者知识有限，同样可能存在些不正确与不严谨的部分，还请多多指正 实验过程 我们还是一样的环境，因此不需要额外的搭建新的虚拟机，我们将原来的单处理器单内核进行修改  保存后我们启动虚拟机，还是同样的使用 WinDbg 来对其进行调试  我们中断下来时
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-03-28 23:35" pubdate>
-              2023-03-28
             </time>
           </div>
         
