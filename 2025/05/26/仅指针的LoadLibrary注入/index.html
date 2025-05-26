@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://s2.loli.net/2025/05/26/D8diKF7CVaj6A9k.png">
 <meta property="og:image" content="https://s2.loli.net/2025/05/26/q9dr2YFDV5MH6xy.png">
 <meta property="article:published_time" content="2025-05-26T13:36:39.842Z">
-<meta property="article:modified_time" content="2025-05-26T13:39:56.711Z">
+<meta property="article:modified_time" content="2025-05-26T13:44:23.810Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2025/05/26/mE8uW9Zy2e1JdqO.png">
@@ -287,7 +287,7 @@
 <p><img src="https://s2.loli.net/2025/05/26/mE8uW9Zy2e1JdqO.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>于此同时使用<code>LoadLibrary</code>时会在对应的字符串后自动添加上<code>.dll</code>对此我们只需要在系统 DLL 中找到一个字符串进行转载我们预先设计好的一个 DLL 即可完成注入工作，而减少了写入的操作</p>
 <p>基于此给出以下的注入流程：</p>
-<img src="https://s2.loli.net/2025/05/26/j8rYwy1Ixu5oSRW.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<img src="https://s2.loli.net/2025/05/26/j8rYwy1Ixu5oSRW.png" srcset="/img/loading.gif" lazyload style="zoom:67%; display: block; margin: 0 auto;">
 <h2 id="具体实现">具体实现</h2>
 <p>对于实现而言我们需要在 A 程序中找到一个静态字符串，以 <code>0</code> 为例，我们在<code>ntdll.dll</code>中进行寻找一个静态的<code>ASCII字符串</code>满足<code>0x30 0x00</code>的结构形式，那么我们对应获取 B 程序的 <code>PID</code> 进而获取对应的句柄创建远程线程进行加载便完成了对应的注入工作</p>
 <blockquote>
