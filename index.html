@@ -282,6 +282,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2025/05/26/%E4%BB%85%E6%8C%87%E9%92%88%E7%9A%84LoadLibrary%E6%B3%A8%E5%85%A5/" target="_self">
+          仅指针的 LoadLibrary 注入
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/05/26/%E4%BB%85%E6%8C%87%E9%92%88%E7%9A%84LoadLibrary%E6%B3%A8%E5%85%A5/" target="_self">
+        <div>
+          注入原理 自 Windows Vista 以来，ASLR 随机化 每次启动时的基址。系统 DLL 在所有进程中加载到一致的基址以优化重定位性能。 因此，像 ntdll + 0x4 这样的偏移量应该指向所有进程中的相同字节 如下图所示，使用Process Hacker进行查看ntdll在不同应用程序下对应的基地址是相同的：  于此同时使用LoadLibrary时会在对应的字符串后自动添加上.dll对
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-05-26 21:36" pubdate>
+              2025-05-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Malicious-Code-Analysis/" class="category-chain-item">Malicious Code Analysis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2024/06/11/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" target="_self">
           内网渗透学习笔记
         </a>
@@ -693,60 +747,6 @@
       <span class="category-chain">
         
   <a href="/categories/Reverse/" class="category-chain-item">Reverse</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/11/30/Neshta%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" target="_self">
-          Neshta 样本分析
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/11/30/Neshta%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" target="_self">
-        <div>
-          前言 最近群里一位师傅开远程桌面暴露3389端口时被人打了，然后上传了一个勒索程序，并触发了，在该师傅一番抢救后留下了一个样本，丢到微步上看了看之前好像还没人提交，猜测应该是某种方式内嵌的一个样本。然后找该师傅要了个被杀毒处理后剩下的东西看了看。   分析之前样本就被Windows Defender识别为 Neshta.A，但是换到火绒下又是 Neshta.C，有点摸不着头脑，同时网上相关资料也比
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-11-30 21:55" pubdate>
-              2023-11-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Malware-Reverse/" class="category-chain-item">Malware Reverse</a>
   
   
 
