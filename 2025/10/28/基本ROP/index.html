@@ -16,24 +16,24 @@
   <meta name="author" content="梓曰">
   <meta name="keywords" content="">
   
-    <meta name="description" content="基本ROP Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvb">
+    <meta name="description" content="Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvbuf(std">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Autumnal">
+<meta property="og:title" content="基本ROP">
 <meta property="og:url" content="https://equinox-shame.github.io/2025/10/28/%E5%9F%BA%E6%9C%ACROP/index.html">
 <meta property="og:site_name" content="Autumnal">
-<meta property="og:description" content="基本ROP Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvb">
+<meta property="og:description" content="Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvbuf(std">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2025/10/09/XCqWHSb9ALxlJh3.png">
 <meta property="og:image" content="https://img2022.cnblogs.com/blog/2706180/202201/2706180-20220127203642840-2033345372.png">
 <meta property="article:published_time" content="2025-10-28T08:26:34.506Z">
-<meta property="article:modified_time" content="2025-10-13T00:34:11.769Z">
+<meta property="article:modified_time" content="2025-10-28T08:30:24.797Z">
 <meta property="article:author" content="梓曰">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2025/10/09/XCqWHSb9ALxlJh3.png">
   
   
   
-  <title>Autumnal</title>
+  <title>基本ROP - Autumnal</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="基本ROP"></span>
           
         </div>
 
@@ -274,13 +274,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">基本ROP</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>基本ROP</h1>
-<h2 id="Ret2Text">Ret2Text</h2>
+                <h2 id="Ret2Text">Ret2Text</h2>
 <p>ret2text 即控制程序执行程序本身已有的的代码 (即 <code>.text </code>段中的代码) ，通常题目中存在有后门函数</p>
 <p>对应例子：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v4; <span class="hljs-comment">// [sp+1Ch] [bp-64h]@1</span><br><br>  <span class="hljs-built_in">setvbuf</span>(stdout, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-built_in">setvbuf</span>(_bss_start, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;There is something amazing here, do you know anything?&quot;</span>);<br>  <span class="hljs-built_in">gets</span>((<span class="hljs-keyword">char</span> *)&amp;v4);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Maybe I will tell you next time !&quot;</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -359,6 +358,27 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
 </div>
 
@@ -368,7 +388,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>基本ROP</div>
       <div>https://equinox-shame.github.io/2025/10/28/基本ROP/</div>
     </div>
     <div class="license-meta">
@@ -417,8 +437,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" title="中级ROP">
+                        <span class="hidden-mobile">中级ROP</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

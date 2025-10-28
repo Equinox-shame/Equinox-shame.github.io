@@ -283,14 +283,14 @@
       <h1 class="index-header">
         
         <a href="/2025/10/28/%E5%9F%BA%E6%9C%ACROP/" target="_self">
-          
+          基本ROP
         </a>
       </h1>
 
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/10/28/%E5%9F%BA%E6%9C%ACROP/" target="_self">
         <div>
-          基本ROP Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v4; // [sp+1Ch] [bp-64h]@1  setvb
+          Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v4; // [sp+1Ch] [bp-64h]@1  setvbuf(std
         </div>
       </a>
 
@@ -303,6 +303,27 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -316,14 +337,14 @@
       <h1 class="index-header">
         
         <a href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" target="_self">
-          
+          中级ROP
         </a>
       </h1>
 
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" target="_self">
         <div>
-          中级ROP Ret2CSU 在64位程序中，当函数参数少于7个时， 参数从左到右放入寄存器: rdi, rsi, rdx, rcx, r8, r9，在大多时候下，当参数过多的时候，我们很难找到部署寄存器值的 gadget，此时可以利用 x64 下的 __libc_csu_init 中的 gadgets  这个函数是用来对 libc 进行初始化操作的，而一般的程序都会调用 libc 函数，所以这个函
+          Ret2CSU 在64位程序中，当函数参数少于7个时， 参数从左到右放入寄存器: rdi, rsi, rdx, rcx, r8, r9，在大多时候下，当参数过多的时候，我们很难找到部署寄存器值的 gadget，此时可以利用 x64 下的 __libc_csu_init 中的 gadgets  这个函数是用来对 libc 进行初始化操作的，而一般的程序都会调用 libc 函数，所以这个函数一定会存在
         </div>
       </a>
 
@@ -336,6 +357,27 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -349,14 +391,14 @@
       <h1 class="index-header">
         
         <a href="/2025/10/28/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
-          
+          格式化字符串
         </a>
       </h1>
 
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/10/28/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
         <div>
-          格式化字符串 格式化字符串函数 常见的有格式化字符串函数有  输入  scanf   输出     函数 基本介绍     printf 输出到 stdout   fprintf 输出到指定 FILE 流   vprintf 根据参数列表格式化输出到 stdout   vfprintf 根据参数列表格式化输出到指定 FILE 流   sprintf 输出到字符串   snprintf 输出指定字节
+          格式化字符串函数 常见的有格式化字符串函数有  输入  scanf   输出     函数 基本介绍     printf 输出到 stdout   fprintf 输出到指定 FILE 流   vprintf 根据参数列表格式化输出到 stdout   vfprintf 根据参数列表格式化输出到指定 FILE 流   sprintf 输出到字符串   snprintf 输出指定字节数到字符串
         </div>
       </a>
 
@@ -369,6 +411,27 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -382,14 +445,14 @@
       <h1 class="index-header">
         
         <a href="/2025/10/28/get_started_3dsctf_2016/" target="_self">
-          
+          get_started_3dsctf_2016
         </a>
       </h1>
 
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/10/28/get_started_3dsctf_2016/" target="_self">
         <div>
-          get_started_3dsctf_2016 修改 .bss 为 RWX 使其绕过 NX 保护 使用 checksec 可以发现，仅有一个禁止栈执行 1234567[*] &#x27;/home/zera/Desktop/get_started_3dsctf_2016&#x27;    Arch:       i386-32-little    RELRO:      Partial RELRO
+          本文通过此题主要记录修改 .bss 为 RWX 使其绕过 NX 保护的方法 使用 checksec 可以发现，仅有一个禁止栈执行 1234567[*] &#x27;/home/zera/Desktop/get_started_3dsctf_2016&#x27;    Arch:       i386-32-little    RELRO:      Partial RELRO    Stack:
         </div>
       </a>
 
@@ -402,6 +465,27 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pwn/" class="category-chain-item">Pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
